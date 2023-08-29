@@ -7,7 +7,7 @@ export default function Hero() {
     <div className='flex items-center'>
         <Video />
         <div className='px-5 mx-10 z-50 space-y-5'>
-            <h1 className='font-mono font-bold text-4xl'>Your new paradigm to ticketing</h1>
+            <h1 className='font-mont font-bold text-4xl'>Your new paradigm to ticketing</h1>
             <div className='flex space-x-2'>
                 <a href="https://open.spotify.com/"
                   target="_blank" 

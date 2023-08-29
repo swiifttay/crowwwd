@@ -9,7 +9,7 @@ export default function CustomHeader() {
   const [searchActivated, setsearchActivated] = useState(false);
 
   return (
-    <div className='w-full font-mono sticky p-4 justify-between flex flex-grow bg-none z-50 top-0 text-xl'>
+    <div className='w-full font-mont sticky p-4 justify-between flex flex-grow bg-none z-50 top-0 text-xl'>
         <div className='hover:text-gray-300 cursor-pointer px-5'>Explore</div>
         <div className="relative group">
             <a href="" className=" hover:text-gray-300">About Us</a>
