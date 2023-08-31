@@ -1,16 +1,13 @@
 package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
-import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.ErrorResponse;
+import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -19,15 +16,10 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<Response> register(@RequestBody RegisterRequest request) {
-        Response response = authenticationService.register(request);
+    public ResponseEntity<Response> register(@RequestBody User request) {
 
-        //If response is instance of Error Response, it means that duplicated username or Internal Server Error
-        if (response instanceof ErrorResponse errorResponse) {
-            return "Bad Request: Duplicated user email".equals(errorResponse.getError())
-                    ? ResponseEntity.badRequest().body(errorResponse)
-                    : ResponseEntity.internalServerError().body(errorResponse);
-        }
+        //If error found, exception will be thrown
+        Response response = authenticationService.register(request);
 
         //Else, return ok response
         return ResponseEntity.ok(response);

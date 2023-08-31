@@ -1,65 +1,72 @@
 package com.cs203.g1t4.backend.service;
 
 import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
-import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.ErrorResponse;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.user.AuthenticationResponse;
 import com.cs203.g1t4.backend.models.User;
+import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
+import com.cs203.g1t4.backend.models.exceptions.MissingFieldsException;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public Response register(RegisterRequest request) {
+    public Response register(User request) {
 
-        //If parts of the request is empty/not filled, return AuthenticationErrorResponse for Internal Server Error
-        if (request.getEmail() == null || request.getPassword() == null) {
-            return ErrorResponse.builder()
-                    .error("Internal Server Error")
-                    .message("One or more User fields are empty")
-                    .build();
+        //If any missing fields (Exception of userCreationDate, isPreferredMarketing and spotifyAccount)
+        if (request.getFirstName() == null || request.getLastName() == null || request.getUsername() == null ||
+            request.getPassword() == null || request.getPhoneNo() == null || request.getNationality() == null ||
+            request.getCountryOfResidence() == null || request.getCountryCode() == null ||
+            request.getGender() == null || request.getDateOfBirth() == null || request.getAddress() == null ||
+            request.getPostalCode() == null) {
+            throw new MissingFieldsException();
         }
 
+
+            //If duplicated username, throw new DuplicatedUsernameException
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new DuplicatedUsernameException(request.getUsername());
+        }
+
+        /*
+         * Can be optimized: Perhaps consider a clone method for user which creates
+         * the entire user object and just set the variables to be changed
+         */
         User user = User.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .phoneNo(request.getPhoneNo())
+                .userCreationDate(LocalDateTime.now())
+                .nationality(request.getNationality())
+                .countryOfResidence(request.getCountryOfResidence())
+                .countryCode(request.getCountryCode())
+                .gender(request.getGender())
+                .dateOfBirth(request.getDateOfBirth())
+                .address(request.getAddress())
+                .postalCode(request.getPostalCode())
+                .isPreferredMarketing(request.isPreferredMarketing())
+                .spotifyAccount(request.getSpotifyAccount())
                 .build();
 
-        //If repository does not find a user of the same email in the repository, handle as usual
-        try {
-
-            //If user cannot be found in the repository, save user
-            repository.save(user);
-
-        } catch (DuplicateKeyException e) {
-
-            //Else, return a AuthenticationErrorResponse for Bad Request
-            return ErrorResponse.builder()
-                    .error("Bad Request: Duplicated user email")
-                    .message("The email is already found in the database, please proceed to login instead!")
-                    .build();
-
-        } catch (Exception e) {
-
-            return ErrorResponse.builder()
-                    .error("Unknown Error")
-                    .message("An unknown error has occurred! Do try again!")
-                    .build();
-        }
+        userRepository.save(user);
 
         //If Everything goes smoothly, response will be created using AuthenticationResponse with token
         return SuccessResponse.builder()
@@ -69,17 +76,17 @@ public class AuthenticationService {
 
     public Response authenticate(AuthenticationRequest request) {
 
-        if (request.getEmail() == null || request.getPassword() == null) {
+        if (request.getUsername() == null || request.getPassword() == null) {
             return ErrorResponse.builder()
                     .error("Internal Server Error")
                     .message("One or more User fields are empty")
-                    .build              ();
+                    .build();
         }
 
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
+                            request.getUsername(),
                             request.getPassword()
                     )
             );
@@ -102,7 +109,7 @@ public class AuthenticationService {
         }
 
         //If authenticated, create jwt token and return an AuthenticationResponse
-        User user = repository.findByEmail(request.getEmail())
+        User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
