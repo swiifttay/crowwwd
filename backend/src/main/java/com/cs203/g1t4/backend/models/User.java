@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-public class User implements UserDetails {
+public class User implements UserDetails { // Implements UserDetails so that the security.core library can be used
     @Id
     private String id;
 
@@ -33,6 +33,7 @@ public class User implements UserDetails {
     @NotBlank
     private String lastName;
 
+    @Getter
     @NotBlank
     private String username;
 
@@ -74,6 +75,7 @@ public class User implements UserDetails {
     @Getter
     private String postalCode;
 
+    @Getter
     private boolean isPreferredMarketing;
 
     @Getter
@@ -84,17 +86,6 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(() -> "USER");
-        return roles;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -152,16 +143,20 @@ public class User implements UserDetails {
         this.postalCode = postalCode;
     }
 
-    public boolean isPreferredMarketing() {
-        return isPreferredMarketing;
-    }
-
     public void setPreferredMarketing(boolean preferredMarketing) {
         isPreferredMarketing = preferredMarketing;
     }
 
     public void setSpotifyAccount(String spotifyAccount) {
         this.spotifyAccount = spotifyAccount;
+    }
+
+    // Methods to extend UserDetails
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> roles = new ArrayList<>();
+        roles.add(() -> "USER");
+        return roles;
     }
 
     @Override
