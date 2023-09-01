@@ -5,8 +5,6 @@ import Navbar from "../components/Navbar";
 
 function Login() {
   return (
-    <RootLayout>
-      <Navbar />
       <div className="flex flex-col items-center justify-center min-h-screen py-2">
         <main className="flex relative flex-col items-center justify-center w-full flex-1 px-20 text-center lg:left-1/4 sm:w-[95vw] xs:w-[90vw]">
           <div className="text-4xl font-bold mb-4">Welcome to Crowd Sync</div>
@@ -46,7 +44,6 @@ function Login() {
           </div>
         </main>
       </div>
-    </RootLayout>
   );
 }
 

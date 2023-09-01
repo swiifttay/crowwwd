@@ -4,14 +4,14 @@ import Image from "next/image";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import Link from "next/link";
-import RootLayout from "@/app/layout";
+// import RootLayout from "@/app/layout";
 import Logo from "/public/images/Logo.png";
 
 export default function Navbar() {
   const [searchActivated, setSearchActivated] = useState(false);
 
   return (
-    <RootLayout>
+    // <RootLayout>
       <div className="w-full font-semibold sticky p-[20px] md:px-[128px] justify-between flex flex-grow text-xl items-center z-50">
         <div className="hover:text-gray-300 cursor-pointer">Explore</div>
         <div className="relative group">
@@ -49,6 +49,6 @@ export default function Navbar() {
           </div>
         </Link>
       </div>
-    </RootLayout>
+    // </RootLayout>
   );
 }

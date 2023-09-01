@@ -1,20 +1,12 @@
 import Image from "next/image";
 import RootLayout from "@/app/layout";
-import backgroundImg from "../../public/images/Singer.jpg";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 
 function Signup() {
   return (
-    <RootLayout>
-      <Navbar />
       <div
         className="flex flex-col items-center justify-center min-h-screen py-2"
-        style={{
-          backgroundImage: `url(${backgroundImg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
       >
         <main className="flex relative flex-col items-center justify-center w-full flex-1 px-20 text-center lg:left-1/4 sm:w-[95vw] xs:w-[90vw]">
           <div className="text-4xl font-bold mb-4">Join Crowd Sync</div>
@@ -73,7 +65,6 @@ function Signup() {
           </div>
         </main>
       </div>
-    </RootLayout>
   );
 }
 

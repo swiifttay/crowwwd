@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { CustomHeader } from "./components";
+import Navbar from "./components/Navbar";
 
 const mont = localFont({
   src: [
@@ -41,6 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <div>
+      <Navbar />
       <div className={mont.className}>{children}</div>
     </div>
   );
