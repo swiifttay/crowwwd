@@ -28,3 +28,8 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+/* To check size of containers. Dont remove. */
+.guide {
+  border: 1px solid white;
+}

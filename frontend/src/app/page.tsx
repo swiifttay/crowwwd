@@ -3,7 +3,7 @@ import { Navbar, Video, Hero } from "./components/index";
 
 export default function Home() {
   return (
-    <main className="overflow-hidden">
+    <main className="">
       <Hero />
     </main>
   );

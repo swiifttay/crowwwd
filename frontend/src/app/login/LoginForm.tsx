@@ -1,7 +1,7 @@
 import React from "react";
-import DataEntry from "./DataEntry";
+import DataEntry from "../components/Login/DataEntry";
 
-export default function DataForm() {
+export default function LoginForm() {
   return (
     <form className="mt-8 w-full max-w-sm">
       <DataEntry
