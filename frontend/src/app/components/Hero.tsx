@@ -1,5 +1,5 @@
 import React from "react";
-import { Video } from "@/components";
+import { Video } from "@/app/components";
 import Image from "next/image";
 
 export default function Hero() {

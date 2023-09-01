@@ -2,7 +2,7 @@ import Image from "next/image";
 import RootLayout from "@/app/layout";
 import backgroundImg from "../../public/images/Singer.jpg";
 import Link from "next/link";
-import CustomHeader from "@/components/CustomHeader";
+import CustomHeader from "../components/CustomHeader";
 
 function Signup() {
   return (

@@ -1,9 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 
-//const inter = Inter({ subsets: ["latin"] });
 const mont = localFont({
   src: [
     {
@@ -30,11 +28,6 @@ const mont = localFont({
   variable: "--font-mont",
 });
 
-// "../../public/fonts/Mont/Mont-Regular.otf",
-//   weight: "400",
-//   style: "normal",
-//   variable: "--font-mont"
-
 export const metadata: Metadata = {
   title: "Crowwwd",
   description: "Created by the top 203 team",
@@ -46,10 +39,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    // <html lang="en">
-    //   {/* <body className={inter.className}>{children}</body> */}
-    //   <body className={mont.className}>{children}</body>
-    // </html>
     <div>
       <div className={mont.className}>{children}</div>
     </div>

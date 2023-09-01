@@ -5,7 +5,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import Link from "next/link";
 import RootLayout from "@/app/layout";
-import Logo from "../../public/images/Logo.png";
+import Logo from "/public/images/Logo.png";
 
 export default function CustomHeader() {
   const [searchActivated, setSearchActivated] = useState(false);
