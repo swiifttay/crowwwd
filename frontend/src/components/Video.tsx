@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export default function Video() {
   return (
@@ -13,7 +13,7 @@ export default function Video() {
           <source src="/videos/Landingvid.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
+      </div>
     </div>
-    </div>
-  )
+  );
 }
