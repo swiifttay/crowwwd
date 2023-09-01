@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import DataForm from "./components/DataForm";
+import DataForm from "../components/Login/DataForm";
 
 function Login() {
   return (
