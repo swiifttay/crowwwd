@@ -2,10 +2,12 @@ import Image from "next/image";
 import RootLayout from "@/app/layout";
 import backgroundImg from "../../public/images/Singer.jpg";
 import Link from "next/link";
+import CustomHeader from "@/components/CustomHeader";
 
 function Login() {
   return (
     <RootLayout>
+      <CustomHeader />
       <div
         className="flex flex-col items-center justify-center min-h-screen py-2"
         style={{

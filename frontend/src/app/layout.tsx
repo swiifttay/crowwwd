@@ -21,6 +21,11 @@ const mont = localFont({
       weight: "700",
       style: "bold",
     },
+    {
+      path:"../../public/fonts/Mont/Mont-SemiBold.otf",
+      weight: "400",
+      style:"semibold",
+    }
   ],
   variable: "--font-mont",
 });
