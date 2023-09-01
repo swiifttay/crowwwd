@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
-
+import Link from 'next/link';
 
 export default function CustomHeader() {
   const [searchActivated, setsearchActivated] = useState(false);
@@ -21,10 +21,10 @@ export default function CustomHeader() {
               </ul>
             </div>
           </div>
-        <MagnifyingGlassIcon className='h-7 hover:text-gray-300 cursor-pointer'
-          />
-        <div className='hover:text-gray-300 cursor-pointer px-5'>Login/Register</div>
-
+        <MagnifyingGlassIcon className='h-7 hover:text-gray-300 cursor-pointer' />
+        <Link href="/login">
+          <div className='hover:text-gray-300 cursor-pointer px-5'>Login/Register</div>
+        </Link>
     </div>
   )
 }
