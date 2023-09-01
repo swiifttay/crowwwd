@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import LoginForm from "./LoginForm";
+import AccountSwitch from "../components/Login/AccountSwitch";
 
 function Login() {
   return (
@@ -17,17 +18,8 @@ function Login() {
         <p className="text-lg">Please log in to access your account.</p>
 
         <LoginForm />
-
-        {/* sign up button link */}
-        <div className="mt-8 text-md flex space-x-2">
-          <div className="text-theme-grey">New to CROWD SYNC?</div>
-          <Link
-            href="/register"
-            className="text-theme-blue hover:text-theme-light-blue"
-          >
-            Sign up.
-          </Link>
-        </div>
+        <AccountSwitch message="New to CROWD SYNC?" link="/register" prompt="Sign up." />
+        
       </main>
     </div>
   );
