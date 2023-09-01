@@ -7,7 +7,7 @@ import Link from "next/link";
 import RootLayout from "@/app/layout";
 import Logo from "/public/images/Logo.png";
 
-export default function CustomHeader() {
+export default function Navbar() {
   const [searchActivated, setSearchActivated] = useState(false);
 
   return (
