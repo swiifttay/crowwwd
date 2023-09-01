@@ -17,6 +17,13 @@ const config: Config = {
       fontFamily: {
         mont: "var(--font-mont)",
       },
+
+      colors: {
+        'midnight': '#07172F',
+        'theme-blue': '#0047FF',
+        'theme-light-blue': '#1D90F4',
+        'theme-grey': '#868B99',
+      }
     },
   },
   plugins: [],
