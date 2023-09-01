@@ -22,10 +22,10 @@ const mont = localFont({
       style: "bold",
     },
     {
-      path:"../../public/fonts/Mont/Mont-SemiBold.otf",
+      path: "../../public/fonts/Mont/Mont-SemiBold.otf",
       weight: "400",
-      style:"semibold",
-    }
+      style: "semibold",
+    },
   ],
   variable: "--font-mont",
 });
