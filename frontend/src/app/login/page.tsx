@@ -3,7 +3,7 @@ import Link from "next/link";
 import LoginForm from "./LoginForm";
 import AccountSwitch from "../components/Login/AccountSwitch";
 
-function Login() {
+export default function Login() {
   return (
     <div className="items-center min-h-screen max-h-screen">
       <Image
@@ -24,7 +24,5 @@ function Login() {
     </div>
   );
 }
-
-export default Login;
 
 //lg:left-1/4 sm:w-[95vw] xs:w-[90vw]

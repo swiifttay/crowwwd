@@ -1,18 +1,44 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import DataEntry from "../components/Login/DataEntry";
 
 export default function LoginForm() {
+  const [enteredUsername, setEnteredUsername] = useState("");
+  const [enteredPassword, setEnteredPassword] = useState("");
+
+  const submitHandler = (e: any) => {
+    e.preventDefault();
+
+    const formData = {
+      username: enteredUsername,
+      password: enteredPassword,
+    };
+
+    console.log(formData);
+  };
+
+  const updateTextHandler = (enteredText: string, id: string) => {
+    if (id == "username") {
+      setEnteredUsername(enteredText);
+    } else {
+      setEnteredPassword(enteredText);
+    }
+  };
+
   return (
-    <form className="mt-8 w-full max-w-sm">
+    <form className="mt-8 w-full max-w-sm" onSubmit={submitHandler}>
       <DataEntry
         type="text"
         id="username"
         placeholder="Enter your username/email"
+        onTextChange={updateTextHandler}
       />
       <DataEntry
         type="password"
         id="password"
         placeholder="Enter your password"
+        onTextChange={updateTextHandler}
       />
 
       <button

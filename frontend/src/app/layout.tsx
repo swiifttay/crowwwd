@@ -40,9 +40,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <Navbar />
-      <div className={mont.className}>{children}</div>
-    </div>
+    <html>
+        <body>
+          <Navbar />
+          <div className={mont.className}>{children}</div>
+        </body>
+    </html>
   );
 }

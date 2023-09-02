@@ -5,7 +5,7 @@ import AccountSwitch from "../components/Login/AccountSwitch";
 
 export default function Register() {
   return (
-    <div className="flex flex-col items-center justify-center h-full py-2">
+    <div className="items-center min-h-screen max-h-screen">
       <Image
         src="/images/login-bg.jpg"
         alt="login-bg"
