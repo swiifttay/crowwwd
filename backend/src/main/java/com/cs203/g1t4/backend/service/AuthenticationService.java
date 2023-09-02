@@ -7,6 +7,7 @@ import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.user.AuthenticationResponse;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidCredentialsException;
 import com.cs203.g1t4.backend.models.exceptions.MissingFieldsException;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class AuthenticationService {
         }
 
 
-            //If duplicated username, throw new DuplicatedUsernameException
+        //If duplicated username, throw new DuplicatedUsernameException
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new DuplicatedUsernameException(request.getUsername());
         }
@@ -76,11 +77,9 @@ public class AuthenticationService {
 
     public Response authenticate(AuthenticationRequest request) {
 
+        //Checks
         if (request.getUsername() == null || request.getPassword() == null) {
-            return ErrorResponse.builder()
-                    .error("Internal Server Error")
-                    .message("One or more User fields are empty")
-                    .build();
+            throw new MissingFieldsException();
         }
 
         try {
@@ -93,24 +92,13 @@ public class AuthenticationService {
 
         } catch (BadCredentialsException e) {
 
-            //Handles Exception if username/Password is incorrect, returns an AuthenticationErrorResponse
-            return ErrorResponse.builder()
-                    .error("Invalid Credentials")
-                    .message("Email/Password is incorrect")
-                    .build();
-
-        } catch (Exception e) {
-
-            return ErrorResponse.builder()
-                    .error("Unknown Error")
-                    .message("An unknown error has occurred! Do try again!")
-                    .build();
+            //Throws an InvalidCredentialsException, if username or password is incorrect.
+            throw new InvalidCredentialsException();
 
         }
 
-        //If authenticated, create jwt token and return an AuthenticationResponse
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow();
+        //If authenticated, create jwt token and return an AuthenticationResponse containing jwt token
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

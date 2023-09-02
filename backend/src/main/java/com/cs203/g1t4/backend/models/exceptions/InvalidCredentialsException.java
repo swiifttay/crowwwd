@@ -8,7 +8,7 @@ public class InvalidCredentialsException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    InvalidCredentialsException(String username) {
+    public InvalidCredentialsException() {
         super("Username or Password is incorrect. Please try again");
     }
 }

@@ -27,16 +27,10 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<Response> authenticate(@RequestBody AuthenticationRequest request) {
+
+        //If error found, exception will be thrown
         Response response = authenticationService.authenticate(request);
 
-        //If AuthenticationErrorResponse found, handle as respective errors
-        if (response instanceof ErrorResponse errorResponse) {
-            return "Invalid Credentials".equals(errorResponse.getError())
-                    ? ResponseEntity.badRequest().body(errorResponse)
-                    : ResponseEntity.internalServerError().body(errorResponse);
-        }
-
-        //Else, return token to user
         return ResponseEntity.ok(response);
     }
 }
