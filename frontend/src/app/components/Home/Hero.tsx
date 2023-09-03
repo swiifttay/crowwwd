@@ -17,12 +17,7 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="hover:cursor-pointer"
           >
-            <Image
-              src="/icons8-spotify-50.png"
-              alt="spotify icon"
-              width={50}
-              height={50}
-            />
+            <img src="/images/icons8-spotify.svg" alt="spotify image" />
           </a>
           <a
             href="https://twitter.com/home"
@@ -30,12 +25,7 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="hover:cursor-pointer"
           >
-            <Image
-              src="/icons8-twitterx-50.png"
-              alt="twitterx icon"
-              width={50}
-              height={50}
-            />
+            <img src="/images/icons8-twitterx.svg" alt="twitter x image" />
           </a>
           <a
             href="https://www.instagram.com/"
@@ -43,12 +33,7 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="hover:cursor-pointer"
           >
-            <Image
-              src="/icons8-instagram-50.png"
-              alt="instagram icon"
-              width={50}
-              height={50}
-            />
+            <img src="/images/icons8-instagram.svg" alt="instagram image" />
           </a>
         </div>
       </div>
