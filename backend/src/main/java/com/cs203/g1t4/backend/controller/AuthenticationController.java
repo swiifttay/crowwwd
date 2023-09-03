@@ -1,7 +1,6 @@
 package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
-import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.ErrorResponse;
 import com.cs203.g1t4.backend.models.User;
@@ -17,7 +16,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<Response> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<Response> register(@RequestBody User request) {
 
         //If error found, exception will be thrown
         Response response = authenticationService.register(request);

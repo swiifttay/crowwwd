@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String username;
+        final String email;
         if (Arrays.asList(SecurityConfiguration.whiteListedRoutes).contains(request.getServletPath()) ||
                 authHeader == null ||
                 !authHeader.startsWith("Bearer ")) {
@@ -42,9 +42,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         jwt = authHeader.substring(7);
-        username = jwtService.extractUsername(jwt);
-        if ((username != null) && (SecurityContextHolder.getContext().getAuthentication() == null)) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        email = jwtService.extractEmail(jwt);
+        if ((email != null) && (SecurityContextHolder.getContext().getAuthentication() == null)) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
