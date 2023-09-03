@@ -1,9 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import Navbar from "./components/Navbar";
 
-//const inter = Inter({ subsets: ["latin"] });
 const mont = localFont({
   src: [
     {
@@ -21,14 +20,14 @@ const mont = localFont({
       weight: "700",
       style: "bold",
     },
+    {
+      path: "../../public/fonts/Mont/Mont-SemiBold.otf",
+      weight: "400",
+      style: "semibold",
+    },
   ],
   variable: "--font-mont",
 });
-
-// "../../public/fonts/Mont/Mont-Regular.otf",
-//   weight: "400",
-//   style: "normal",
-//   variable: "--font-mont"
 
 export const metadata: Metadata = {
   title: "Crowwwd",
@@ -41,9 +40,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      {/* <body className={inter.className}>{children}</body> */}
-      <body className={mont.className}>{children}</body>
+    <html>
+        <body>
+          <Navbar />
+          <div className={mont.className}>{children}</div>
+        </body>
     </html>
   );
 }

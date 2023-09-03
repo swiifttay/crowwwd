@@ -1,12 +1,10 @@
-import Image from 'next/image'
-import {Customheader, Video, Hero} from '@/components'
+import Image from "next/image";
+import { Navbar, Video, Hero } from "./components/Home/index";
 
 export default function Home() {
   return (
-    <main className='overflow-hidden'>
-      <Customheader />
+    <main className="">
       <Hero />
-
     </main>
-  )
+  );
 }
