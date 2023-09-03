@@ -2,37 +2,31 @@
 
 import React, { useState } from "react";
 import DataEntry from "../components/Login/DataEntry";
-import {login} from "../axios/apiService";
+import { authenticate } from "../axios/apiService";
+import axios from "axios";
 
 export default function LoginForm() {
-  const [enteredUsername, setEnteredUsername] = useState("");
-  const [enteredPassword, setEnteredPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const submitHandler = async (e: any) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = {
-      username: enteredUsername,
-      password: enteredPassword,
-    };
-
-    console.log(formData);
-
-
     try {
-      const response = await login(enteredUsername, enteredPassword)
-      
-    } catch (error){
-      console.log(error);
+      const response = await authenticate(username, password);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.status);
+        console.error(error.response);
+      }
     }
-
   };
 
   const updateTextHandler = (enteredText: string, id: string) => {
     if (id == "username") {
-      setEnteredUsername(enteredText);
+      setUsername(enteredText);
     } else {
-      setEnteredPassword(enteredText);
+      setPassword(enteredText);
     }
   };
 
