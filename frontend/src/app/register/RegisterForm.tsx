@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import DataEntry from "../components/Login/DataEntry";
+import {register} from "../axios/apiService";
 
 export default function RegisterForm() {
   const [enteredFirstName, setEnteredFirstName] = useState("");
@@ -9,7 +10,7 @@ export default function RegisterForm() {
   const [enteredUsername, setEnteredUsername] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
 
-  const submitHandler = (e: any) => {
+  const submitHandler = async (e: any) => {
     e.preventDefault();
 
     const formData = {
@@ -20,6 +21,14 @@ export default function RegisterForm() {
     };
 
     console.log(formData);
+
+    try {
+      const response = await register(enteredFirstName, enteredLastName, enteredUsername, enteredPassword);
+    } catch (error){
+      console.log(error);
+      console.log("error caught");
+    }
+    
   };
 
   const updateTextHandler = (enteredText: string, id: string) => {

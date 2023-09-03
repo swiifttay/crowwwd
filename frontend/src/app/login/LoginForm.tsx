@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 import DataEntry from "../components/Login/DataEntry";
+import {login} from "../axios/apiService";
 
 export default function LoginForm() {
   const [enteredUsername, setEnteredUsername] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
 
-  const submitHandler = (e: any) => {
+  const submitHandler = async (e: any) => {
     e.preventDefault();
 
     const formData = {
@@ -16,6 +17,15 @@ export default function LoginForm() {
     };
 
     console.log(formData);
+
+
+    try {
+      const response = await login(enteredUsername, enteredPassword)
+      
+    } catch (error){
+      console.log(error);
+    }
+
   };
 
   const updateTextHandler = (enteredText: string, id: string) => {
