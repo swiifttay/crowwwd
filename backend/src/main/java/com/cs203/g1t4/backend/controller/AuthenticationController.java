@@ -1,10 +1,7 @@
 package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
-import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.data.response.common.ErrorResponse;
-import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +14,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<Response> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<Response> register(@RequestBody User request) {
 
         //If error found, exception will be thrown
         Response response = authenticationService.register(request);
@@ -32,6 +29,17 @@ public class AuthenticationController {
         //If error found, exception will be thrown
         Response response = authenticationService.authenticate(request);
 
+        //Else, return ok response
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/findUsername/{username}")
+    public ResponseEntity<Response> findUsername(@PathVariable String username) {
+
+        //If error found, exception will be thrown
+        Response response = authenticationService.findUsername(username);
+
+        //Else, return ok response
         return ResponseEntity.ok(response);
     }
 }
