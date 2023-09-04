@@ -6,34 +6,20 @@ import { register } from "../axios/apiService";
 import axios, { AxiosError } from "axios";
 
 export default function RegisterForm() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [registerDetails, setRegisterDetails] = useState({
+    firstName: "", lastName: "", username: "", password: "",
+  })
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    try {
-      const response = await register(firstName, lastName, username, password);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error.status);
-        console.error(error.response);
-      }
-    }
+    console.log(registerDetails);
+    register(registerDetails);
   };
 
-  const updateTextHandler = (enteredText: string, id: string) => {
-    if (id == "firstName") {
-      setFirstName(enteredText);
-    } else if (id == "lastName") {
-      setLastName(enteredText);
-    } else if (id == "username") {
-      setUsername(enteredText);
-    } else {
-      setPassword(enteredText);
-    }
+  const updateTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRegisterDetails(prevState => {
+      return {...prevState, [e.target.id]: e.target.value}
+    })
   };
 
   return (
