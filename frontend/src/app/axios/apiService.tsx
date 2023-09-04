@@ -2,12 +2,12 @@ import axios from 'axios';
 
 const api = axios.create({
     //TODO: backend to provide
-    baseURL:'/api/v1'
+    baseURL:'http://localhost:8080/api/'
 })
 
-export const login = async (username:string, password:string) => {
+export const authenticate = async (username:string, password:string) => {
     try {
-        const response = await api.post('/login', {username, password});
+        const response = await api.post('/authenticate', {username, password});
         return response.data;
     } catch (error){
         // error will be handled in LoginForm.tsx

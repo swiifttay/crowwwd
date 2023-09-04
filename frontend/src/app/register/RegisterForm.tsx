@@ -1,45 +1,38 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import DataEntry from "../components/Login/DataEntry";
-import {register} from "../axios/apiService";
+import { register } from "../axios/apiService";
+import axios, { AxiosError } from "axios";
 
 export default function RegisterForm() {
-  const [enteredFirstName, setEnteredFirstName] = useState("");
-  const [enteredLastName, setEnteredLastName] = useState("");
-  const [enteredUsername, setEnteredUsername] = useState("");
-  const [enteredPassword, setEnteredPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const submitHandler = async (e: any) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = {
-      firstName: enteredFirstName,
-      lastName: enteredLastName,
-      username: enteredUsername,
-      password: enteredPassword,
-    };
-
-    console.log(formData);
-
     try {
-      const response = await register(enteredFirstName, enteredLastName, enteredUsername, enteredPassword);
-    } catch (error){
-      console.log(error);
-      console.log("error caught");
+      const response = await register(firstName, lastName, username, password);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.status);
+        console.error(error.response);
+      }
     }
-    
   };
 
   const updateTextHandler = (enteredText: string, id: string) => {
     if (id == "firstName") {
-      setEnteredFirstName(enteredText);
+      setFirstName(enteredText);
     } else if (id == "lastName") {
-      setEnteredLastName(enteredText);
+      setLastName(enteredText);
     } else if (id == "username") {
-      setEnteredUsername(enteredText);
-    } else if (id == "password") {
-      setEnteredPassword(enteredText);
+      setUsername(enteredText);
+    } else {
+      setPassword(enteredText);
     }
   };
 
