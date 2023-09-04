@@ -1,26 +1,42 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-    //TODO: backend to provide
-    baseURL:'http://localhost:8080/api/'
-})
+  //TODO: backend to provide
+  baseURL: "http://localhost:8080/api/",
+});
 
-export const authenticate = async (username:string, password:string) => {
-    try {
-        const response = await api.post('/authenticate', {username, password});
-        return response.data;
-    } catch (error){
-        // error will be handled in LoginForm.tsx
-        throw error;
+export const authenticate = async (credentials: {
+  username: string;
+  password: string;
+}) => {
+  try {
+    const response = await api.post("/authenticate", { credentials });
+    const { token } = response.data;
+    localStorage.setItem("token", token);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    } else {
+      console.log(error);
     }
-}
+  }
+};
 
-export const register = async (firstName:string, lastName: string, username:string, password:string) => {
-    try {
-        const response = await api.post('/register', {firstName, lastName, username, password});
-        return response.data;
-    } catch (error){
-        // error will be handled in RegisterForm.tsx
-        throw error;
+export const register = async (registerDetails: {
+  firstName: string;
+  lastName: string;
+  username: string;
+  password: string;
+}) => {
+  try {
+    const response = await api.post("/register", registerDetails);
+    const { token } = response.data;
+    localStorage.setItem("token", token);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
     }
-}
+  }
+};
