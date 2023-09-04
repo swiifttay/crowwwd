@@ -31,7 +31,7 @@ export default function RegisterForm() {
       setLastName(enteredText);
     } else if (id == "username") {
       setUsername(enteredText);
-    } else if (id == "password") {
+    } else {
       setPassword(enteredText);
     }
   };

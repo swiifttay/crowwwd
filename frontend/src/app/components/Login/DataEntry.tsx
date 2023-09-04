@@ -1,9 +1,4 @@
-"use client";
-
-import React, { useState } from "react";
-
 export default function DataEntry(props: any) {
-  const [enteredText, setEnteredText] = useState("");
 
   const textChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.onTextChange(e.currentTarget.value, props.id);
