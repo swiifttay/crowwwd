@@ -1,7 +1,6 @@
 package com.cs203.g1t4.backend.service;
 
 import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
-import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.user.AuthenticationResponse;
@@ -27,7 +26,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public Response register(RegisterRequest request) {
+    public Response register(User request) {
 
         //If any missing fields (Exception of userCreationDate, isPreferredMarketing and spotifyAccount)
         if (request.getFirstName() == null || request.getLastName() == null || request.getUsername() == null ||
