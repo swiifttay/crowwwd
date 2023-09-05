@@ -1,26 +1,47 @@
 "use client";
 
 import RootLayout from "@/app/layout";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { COUNTRIES } from "../components/CountryPicker/countries";
 import CountrySelector from "../components/CountryPicker/selector";
 import intlTelInput from "../components/TeleInput/src/js/intlTelInput";
 import {inputFields} from "./config";
+import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css';
+import '../components/TeleInput/validation.css';
 
 function Info() {
   const myRef = React.createRef<HTMLDivElement>();
 
   const [isOpen, setIsOpen] = useState(false);
-  // Default this to a country's code to preselect it
-  const [country, setCountry] = useState("AF");
+  const [country, setCountry] = useState("SG");
 
-  const input = document.querySelector('#phone');
-  intlTelInput(input, {utilsScript: "../components/TeleInput/src/js/utils.js"})
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [valid, setValid] = useState(true);
+
+  const handleChange = (value) => {
+    setPhoneNumber(value);
+    setValid(validatePhoneNumber(value));
+  }
+
+  const validatePhoneNumber = (phoneNumber) => {
+    const phoneNumberPattern = /^\d(10)$/;
+    return phoneNumberPattern.test(phoneNumber);
+  }
 
   return (
       <div className="flex flex-col items-center justify-center min-h-screen py-2">
         <main className="flex relative flex-col justify-center w-full flex-1 px-20 text-center">
           <form className="mt-8 w-full max-w-sm">
+          <div className='phone-input-container'>
+              <PhoneInput
+                country={"us"}
+                value={phoneNumber}
+                onChange={handleChange}
+                inputProps={{required: true,}}
+              />
+              {!valid && <p className='error-message'>Please</p>}
+              </div>
             <div className="">
               {inputFields.map(({type, id, placeholder}, index) => (
                 <input 
@@ -44,6 +65,7 @@ function Info() {
                 ) as SelectMenuOption
               }
             />
+
 
             <button
               type="submit"
