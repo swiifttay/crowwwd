@@ -4,6 +4,7 @@ import RootLayout from "@/app/layout";
 import React, { useState } from "react";
 import { COUNTRIES } from "../components/CountryPicker/countries";
 import CountrySelector from "../components/CountryPicker/selector";
+import intlTelInput from "../components/TeleInput/src/js/intlTelInput";
 
 function Info() {
   const myRef = React.createRef<HTMLDivElement>();
@@ -11,6 +12,9 @@ function Info() {
   const [isOpen, setIsOpen] = useState(false);
   // Default this to a country's code to preselect it
   const [country, setCountry] = useState("AF");
+
+  const input = document.querySelector('#phone');
+  intlTelInput(input, {utilsScript: "../components/TeleInput/src/js/utils.js"})
 
   return (
       <div className="flex flex-col items-center justify-center min-h-screen py-2">
