@@ -51,14 +51,14 @@ export default function CountrySelector({
           type="button"
           className={`${
             disabled ? "bg-neutral-100" : "bg-white"
-          } relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+          } relative w-full h-10 border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
           aria-haspopup="listbox"
           aria-expanded="true"
           aria-labelledby="listbox-label"
           onClick={onToggle}
           disabled={disabled}
         >
-          <span className="truncate flex items-center">
+          <span className="truncate flex items-center text-black">
             <img
               alt={`${selectedValue.value}`}
               src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedValue.value}.svg`}
@@ -94,19 +94,19 @@ export default function CountrySelector({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.1 }}
-              className="absolute z-10 mt-1 w-full bg-theme-midnight shadow-lg max-h-80 rounded-md text-base ring-1 ring-purple-500 ring-opacity-5 focus:outline-none sm:text-sm"
+              className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-80 rounded-md text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
               tabIndex={-1}
               role="listbox"
               aria-labelledby="listbox-label"
               aria-activedescendant="listbox-option-3"
             >
-              <div className="sticky top-0 z-10 bg-theme-midnight">
-                <li className=" text-purple-200 cursor-default select-none relative py-2 px-3">
+              <div className="sticky top-0 z-10 bg-white">
+                <li className=" text-gray-900 cursor-default select-none relative py-2 px-3">
                   <input
                     type="search"
                     name="search"
                     autoComplete={"off"}
-                    className="focus:ring-theme-midnight focus:border-theme-midnight block w-full sm:text-sm border-theme-midnight rounded-md"
+                    className="focus:ring-blue-500 focus:border-blue-500 focus:outline-none block w-full sm:text-sm border-gray-300 rounded-md"
                     placeholder={"Search a country"}
                     onChange={(e) => setQuery(e.target.value)}
                   />
