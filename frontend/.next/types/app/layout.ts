@@ -1,4 +1,4 @@
-// File: C:\Users\Joel\Desktop\school\crowwwd\frontend\src\app\layout.tsx
+// File: /Users/dexterlim24/Desktop/BSc Comp Sci/CS203/crowwwd/frontend/src/app/layout.tsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

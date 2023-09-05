@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { COUNTRIES } from "../components/CountryPicker/countries";
 import CountrySelector from "../components/CountryPicker/selector";
 import intlTelInput from "../components/TeleInput/src/js/intlTelInput";
+import {inputFields} from "./config";
 
 function Info() {
   const myRef = React.createRef<HTMLDivElement>();
@@ -21,36 +22,15 @@ function Info() {
         <main className="flex relative flex-col justify-center w-full flex-1 px-20 text-center">
           <form className="mt-8 w-full max-w-sm">
             <div className="">
-              <input
-                type="text"
-                id="title"
-                className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-white mb-4"
-                placeholder="Title"
-              />
-              <input
-                type="text"
-                id="firstName"
-                className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-white mb-4"
-                placeholder="First Name"
-              />
-              <input
-                type="text"
-                id="lastName"
-                className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-white mb-4"
-                placeholder="Last Name"
-              />
-              <input
-                type="text"
-                id="nationality"
-                className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-white mb-4"
-                placeholder="Nationality"
-              />
-              <input
-                type="text"
-                id="Country"
-                className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-white mb-4"
-                placeholder="Country of Residence"
-              />
+              {inputFields.map(({type, id, placeholder}, index) => (
+                <input 
+                  key={index}
+                  type={type}
+                  id = {id}
+                  className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-white mb-4"
+                  placeholder={placeholder}
+                />
+              ))}
             </div>
             <CountrySelector
               id={"countries"}
