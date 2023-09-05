@@ -22,7 +22,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-    public static final String[] whiteListedRoutes = new String[]{"/api/v1/auth/register", "/api/v1/auth/authenticate", "/error"};
+    public static final String[] whiteListedRoutes = new String[] { "/api/v1/auth/register",
+            "/api/v1/auth/authenticate", "/error" };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
@@ -42,7 +43,20 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.cors(withDefaults()).csrf().disable()
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/**", "/error").permitAll().anyRequest().authenticated();
+                    auth.requestMatchers(
+                        "/api/**", 
+                        "/error", 
+                        "/v2/api-docs",
+                        "/v3/api-docs",
+                        "/v3/api-docs/**",
+                        "/swagger-resources",
+                        "swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/swagger-ui/**",
+                        "webjars/**",
+                        "/swagger-ui.html").permitAll().anyRequest()
+                            .authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
