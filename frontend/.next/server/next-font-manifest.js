@@ -1,1 +1,0 @@
-self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/dexterlim24/Desktop/BSc Comp Sci/CS203/crowwwd/frontend/src/app/layout\":[\"static/media/44ffe4cba64320ad-s.p.otf\",\"static/media/31524b38c2903741-s.p.otf\",\"static/media/ba7f69dbf6079937-s.p.otf\",\"static/media/6aea7eb91247a980-s.p.otf\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
