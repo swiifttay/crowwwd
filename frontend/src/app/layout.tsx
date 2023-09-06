@@ -41,10 +41,10 @@ export default function RootLayout({
 }) {
   return (
     <html>
-        <body>
-          <Navbar />
-          <div className={mont.className}>{children}</div>
-        </body>
+      <body>
+        <Navbar />
+        <div className={mont.className}>{children}</div>
+      </body>
     </html>
   );
 }

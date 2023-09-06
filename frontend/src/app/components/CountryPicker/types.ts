@@ -1,3 +1,3 @@
-import {COUNTRIES} from "./countries";
+import { COUNTRIES } from "./countries";
 
-export type SelectMenuOption = typeof COUNTRIES[number]
+export type SelectMenuOption = (typeof COUNTRIES)[number];

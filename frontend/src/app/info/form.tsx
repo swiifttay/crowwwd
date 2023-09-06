@@ -134,7 +134,12 @@ export default function AddressForm() {
         <Grid item xs={12}>
           <FormControlLabel
             control={
-              <Checkbox color="primary" name="saveAddress" value="yes" className="text-white"/>
+              <Checkbox
+                color="primary"
+                name="saveAddress"
+                value="yes"
+                className="text-white"
+              />
             }
             label="Use this address for payment details"
             className="text-white font-mont"
