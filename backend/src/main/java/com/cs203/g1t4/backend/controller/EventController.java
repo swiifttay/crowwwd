@@ -57,4 +57,19 @@ public class EventController {
         return ResponseEntity.ok(response);
     }
 
+    // Else, return ok response
+    return ResponseEntity.ok(response);
+  }
+  
+  @GetMapping("/getAllEvents")
+  public ResponseEntity<Response> getAllEventsAfterToday() {
+
+    // Update Profile using updateProfile method in profileService
+    // Throws a InvalidTokenException if username cannot be found in repository
+    Response response = eventService.getAllEventsAfterToday();
+
+    // Else, return ok response
+    return ResponseEntity.ok(response);
+  }
+
 }
