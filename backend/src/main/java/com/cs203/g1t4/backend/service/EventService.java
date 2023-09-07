@@ -1,5 +1,6 @@
 package com.cs203.g1t4.backend.service;
 
+import com.cs203.g1t4.backend.models.exceptions.InvalidEventIdException;
 import org.springframework.stereotype.Service;
 
 import com.cs203.g1t4.backend.data.response.Response;
@@ -14,11 +15,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
-        public Response findEventById(String eventId) {
 
-        //Finds user from repository, or else throw Invalid token exception
+    public Response findEventById(String eventId) {
+
+        //Finds event from repository, or else throw InvalidEventIdException()
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new InvalidTokenException());
+                .orElseThrow(() -> new InvalidEventIdException(eventId));
 
         //Returns the event with id if successful
         return SingleEventResponse.builder()

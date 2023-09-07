@@ -1,10 +1,7 @@
 package com.cs203.g1t4.backend.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.EventService;
@@ -18,7 +15,7 @@ public class EventController {
 
   private final EventService eventService;
 
-  @PutMapping("/getEvent/{eventId}")
+  @GetMapping("/getEvent/{eventId}")
   public ResponseEntity<Response> updateProfile(@PathVariable String eventId) {
 
     // Update Profile using updateProfile method in profileService
