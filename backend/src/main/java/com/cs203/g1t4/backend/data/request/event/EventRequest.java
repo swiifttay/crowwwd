@@ -1,6 +1,5 @@
 package com.cs203.g1t4.backend.data.request.event;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddEventRequest {
+public class EventRequest {
 
     private String id;
     private String name;
