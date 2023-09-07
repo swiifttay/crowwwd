@@ -123,6 +123,19 @@ public class EventService {
         }
     }
 
+    public Response findEventById(String eventId) {
+
+        //Finds event from repository, or else throw InvalidEventIdException()
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new InvalidEventIdException(eventId));
+
+        //Returns the event with id if successful
+        return SingleEventResponse.builder()
+                .event(event)
+                .build();
+    }
+
+
     public Response getAllEventsAfterToday() {
         // get today's date
         LocalDateTime today = LocalDateTime.now();
