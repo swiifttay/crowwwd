@@ -1,15 +1,19 @@
 package com.cs203.g1t4.backend.controller;
 
-import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.service.AuthenticationService;
 import com.cs203.g1t4.backend.service.CommonService;
 import com.cs203.g1t4.backend.service.ProfileService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -46,4 +50,6 @@ public class ProfileController {
         //If successful, the response is encapsulated with a HTTP code of 200(ok) and contains the User object
         return ResponseEntity.ok(response);
     }
+
+    // fix urself git pls
 }
