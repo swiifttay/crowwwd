@@ -16,5 +16,7 @@ public interface EventRepository extends MongoRepository<Event, String>{
     Optional<List<Event>> findAllByTicketSalesDate(ArrayList<LocalDateTime> ticketSalesDate);
 
     Optional<Event> findByArtistIdAndName(String ArtistId, String eventName);
+
+    void deleteById(String eventId);
  
 }

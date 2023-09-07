@@ -14,27 +14,37 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventController {
 
-  private final EventService eventService;
+    private final EventService eventService;
 
-  @PostMapping("/addEvent")
-  public ResponseEntity<Response> addEvent(@RequestBody AddEventRequest request) {
+    @PostMapping("/addEvent")
+    public ResponseEntity<Response> addEvent(@RequestBody AddEventRequest request) {
 
-    // Add Events using addEvent method in profileService
-    Response response = eventService.addEvent(request);
+        // Add Events using addEvent method in profileService
+        Response response = eventService.addEvent(request);
 
-    // Else, return ok response
-    return ResponseEntity.ok(response);
-  }
+        // Else, return ok response
+        return ResponseEntity.ok(response);
+    }
 
-  @GetMapping("/getEvent/{eventId}")
-  public ResponseEntity<Response> getEventById(@PathVariable String eventId) {
+    @DeleteMapping("/deleteEvent/{eventId}")
+    public ResponseEntity<Response> deleteEvent(@PathVariable String eventId) {
 
-    // Update Profile using updateProfile method in profileService
-    // Throws a InvalidTokenException if username cannot be found in repository
-    Response response = eventService.findEventById(eventId);
+        // Add Events using addEvent method in profileService
+        Response response = eventService.deleteEventById(eventId);
 
-    // Else, return ok response
-    return ResponseEntity.ok(response);
-  }
+        // Else, return ok response
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getEvent/{eventId}")
+    public ResponseEntity<Response> getEventById(@PathVariable String eventId) {
+
+        // Update Profile using updateProfile method in profileService
+        // Throws a InvalidTokenException if username cannot be found in repository
+        Response response = eventService.findEventById(eventId);
+
+        // Else, return ok response
+        return ResponseEntity.ok(response);
+    }
 
 }
