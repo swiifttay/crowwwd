@@ -1,5 +1,6 @@
 package com.cs203.g1t4.backend.controller;
 
+import com.cs203.g1t4.backend.data.request.event.AddEventRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +16,18 @@ public class EventController {
 
   private final EventService eventService;
 
+  @PostMapping("/addEvent")
+  public ResponseEntity<Response> addEvent(@RequestBody AddEventRequest request) {
+
+    // Add Events using addEvent method in profileService
+    Response response = eventService.addEvent(request);
+
+    // Else, return ok response
+    return ResponseEntity.ok(response);
+  }
+
   @GetMapping("/getEvent/{eventId}")
-  public ResponseEntity<Response> updateProfile(@PathVariable String eventId) {
+  public ResponseEntity<Response> getEventById(@PathVariable String eventId) {
 
     // Update Profile using updateProfile method in profileService
     // Throws a InvalidTokenException if username cannot be found in repository
