@@ -69,7 +69,7 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        //If Everything goes smoothly, response will be created using AuthenticationResponse with token
+        //If Everything goes smoothly, SuccessResponse will be created
         return SuccessResponse.builder()
                 .response("User has been created successfully")
                 .build();

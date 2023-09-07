@@ -14,5 +14,7 @@ import com.cs203.g1t4.backend.models.Event;
 public interface EventRepository extends MongoRepository<Event, String>{
     Optional<Event> findByName(String name);
     Optional<List<Event>> findAllByTicketSalesDate(ArrayList<LocalDateTime> ticketSalesDate);
+
+    Optional<Event> findByArtistIdAndName(String ArtistId, String eventName);
  
 }
