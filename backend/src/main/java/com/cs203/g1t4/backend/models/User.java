@@ -25,60 +25,44 @@ public class User implements UserDetails { // Implements UserDetails so that the
     @Id
     private String id;
 
-    @Getter
     @NotBlank
     private String firstName;
 
-    @Getter
     @NotBlank
     private String lastName;
 
-    @Getter
     @NotBlank
     private String username;
 
-    @Getter
     @NotBlank
     @Email
     private String email;
 
-    @Getter
     @NotBlank
     @Size(max = 120)
     private String password;
 
-    @Getter
     @NotBlank
     private String phoneNo;
 
-    @Getter
     private LocalDateTime userCreationDate;
 
-    @Getter
     private String nationality;
 
-    @Getter
     private String countryOfResidence;
 
-    @Getter
     private String countryCode;
 
-    @Getter
     private String gender;
 
-    @Getter
     private String dateOfBirth;
 
-    @Getter
     private String address;
 
-    @Getter
     private String postalCode;
 
-    @Getter
     private boolean isPreferredMarketing;
 
-    @Getter
     private String spotifyAccount;
 
     public User(String email, String password) {
