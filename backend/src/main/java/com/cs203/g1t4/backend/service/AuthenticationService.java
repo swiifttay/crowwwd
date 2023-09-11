@@ -30,13 +30,14 @@ public class AuthenticationService {
     public Response register(RegisterRequest request) {
 
         //If any missing fields (Exception of userCreationDate, isPreferredMarketing and spotifyAccount)
-        if (request.getFirstName() == null || request.getLastName() == null || request.getUsername() == null ||
-            request.getPassword() == null || request.getPhoneNo() == null || request.getNationality() == null ||
-            request.getCountryOfResidence() == null || request.getCountryCode() == null ||
-            request.getGender() == null || request.getDateOfBirth() == null || request.getAddress() == null ||
-            request.getPostalCode() == null) {
-            throw new MissingFieldsException();
-        }
+        //SECTION CAN BE REMOVED DUE TO ADDITION OF @VALID ANNOTATION
+//        if (request.getFirstName() == null || request.getLastName() == null || request.getUsername() == null ||
+//            request.getPassword() == null || request.getPhoneNo() == null || request.getNationality() == null ||
+//            request.getCountryOfResidence() == null || request.getCountryCode() == null ||
+//            request.getGender() == null || request.getDateOfBirth() == null || request.getAddress() == null ||
+//            request.getPostalCode() == null) {
+//            throw new MissingFieldsException();
+//        }
 
 
         //If duplicated username, throw new DuplicatedUsernameException
@@ -77,10 +78,11 @@ public class AuthenticationService {
 
     public Response authenticate(AuthenticationRequest request) {
 
-        //Checks
-        if (request.getUsername() == null || request.getPassword() == null) {
-            throw new MissingFieldsException();
-        }
+        //If any missing fields
+        //SECTION CAN BE REMOVED DUE TO ADDITION OF @VALID ANNOTATION
+//        if (request.getUsername() == null || request.getPassword() == null) {
+//            throw new MissingFieldsException();
+//        }
 
         try {
             authenticationManager.authenticate(

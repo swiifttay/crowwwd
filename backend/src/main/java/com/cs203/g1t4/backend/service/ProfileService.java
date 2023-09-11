@@ -8,10 +8,7 @@ import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.user.AuthenticationResponse;
 import com.cs203.g1t4.backend.data.response.user.SingleUserResponse;
 import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
-import com.cs203.g1t4.backend.models.exceptions.InvalidCredentialsException;
-import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
-import com.cs203.g1t4.backend.models.exceptions.MissingFieldsException;
+import com.cs203.g1t4.backend.models.exceptions.*;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +25,7 @@ import java.time.LocalDateTime;
 public class ProfileService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     public Response updateProfile(UpdateProfileRequest request, String username) {
         /*
@@ -35,13 +33,15 @@ public class ProfileService {
          * throw new MissingFieldsException
          *
          * Room for change considering that user may not want to make changes to all fields all the time
+         *
+         * SECTION CAN BE REMOVED DUE TO ADDITION OF @VALID ANNOTATION
          */
-        if (request.getFirstName() == null || request.getLastName() == null || request.getPhoneNo() == null ||
-            request.getNationality() == null || request.getCountryOfResidence() == null ||
-            request.getCountryCode() == null || request.getGender() == null || request.getDateOfBirth() == null ||
-            request.getAddress() == null || request.getPostalCode() == null) {
-            throw new MissingFieldsException();
-        }
+//        if (request.getFirstName() == null || request.getLastName() == null || request.getPhoneNo() == null ||
+//            request.getNationality() == null || request.getCountryOfResidence() == null ||
+//            request.getCountryCode() == null || request.getGender() == null || request.getDateOfBirth() == null ||
+//            request.getAddress() == null || request.getPostalCode() == null) {
+//            throw new MissingFieldsException();
+//        }
 
         //Finds user from repository, or else throw Invalid token exception
         User oldUser = userRepository.findByUsername(username)
@@ -86,8 +86,33 @@ public class ProfileService {
         //Consider 2 cases:
         //Case 1: User wishes to change his password and fills up his password
         //Case 2: User does not wish to change his password and leaves his password as null.
-        if (request.getPassword() != null) {
-            newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        if ((request.getOldPassword() != null && request.getNewPassword() != null && request.getRepeatNewPassword() != null)) {
+
+            //Checks if old password is correct
+            try {
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                oldUser.getUsername(),
+                                request.getOldPassword()
+                        )
+                );
+
+            } catch (BadCredentialsException e) {
+
+                //Throws an PasswordDoNotMatchException()
+                throw new PasswordDoNotMatchException();
+
+            }
+
+            //Checks if newPassword and repeatNewPassword matches
+            if (request.getNewPassword().equals(request.getRepeatNewPassword())) {
+                newUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+            } else {
+
+                //Throws an PasswordDoNotMatchException()
+                throw new PasswordDoNotMatchException();
+            }
         }
 
         //Saves user to repository
