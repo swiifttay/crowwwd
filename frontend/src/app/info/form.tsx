@@ -1,30 +1,48 @@
-import * as React from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { mont } from "../layout";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import "./style.css";
 
 export default function AddressForm() {
   const inputStyles = {
     color: "white",
-    fontFamily: "var(--font-mont)",
+  };
+
+  const sxStyles = {
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "theme-light-grey",
+      },
+      "&:hover fieldset": {
+        borderColor: "white",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "white",
+      },
+    },
+    "& label.Mui-focused": {
+      color: "white",
+    },
   };
 
   return (
     <>
-      <Typography variant="h6" className="font-mont text-white" gutterBottom>
+      <Typography
+        variant="h6"
+        className="font-mont text-white mb-5"
+        gutterBottom
+      >
         Personal Information
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <TextField
+            sx={sxStyles}
             required
-            color="success"
             id="firstName"
             label="First Name"
-            style={{ color: "white" }}
             fullWidth
             autoComplete="given-name"
             variant="outlined"
@@ -34,6 +52,7 @@ export default function AddressForm() {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            sx={sxStyles}
             required
             id="lastName"
             name="lastName"
@@ -47,6 +66,7 @@ export default function AddressForm() {
         </Grid>
         <Grid item xs={12}>
           <TextField
+            sx={sxStyles}
             required
             id="mobileNum"
             name="mobileNum"
@@ -60,24 +80,13 @@ export default function AddressForm() {
         </Grid>
         <Grid item xs={12}>
           <TextField
+            sx={sxStyles}
             required
-            id="address1"
-            name="address1"
-            label="Address line 1"
+            id="address"
+            name="address"
+            label="Address line"
             fullWidth
-            autoComplete="shipping address-line1"
-            variant="outlined"
-            InputProps={{ style: inputStyles }}
-            InputLabelProps={{ style: inputStyles }}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="address2"
-            name="address2"
-            label="Address line 2"
-            fullWidth
-            autoComplete="shipping address-line2"
+            autoComplete="shipping address-line"
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
@@ -85,6 +94,7 @@ export default function AddressForm() {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            sx={sxStyles}
             required
             id="city"
             name="city"
@@ -98,6 +108,7 @@ export default function AddressForm() {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            sx={sxStyles}
             id="state"
             name="state"
             label="State/Province/Region"
@@ -109,6 +120,7 @@ export default function AddressForm() {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            sx={sxStyles}
             required
             id="zip"
             name="zip"
@@ -122,6 +134,7 @@ export default function AddressForm() {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            sx={sxStyles}
             required
             id="country"
             name="country"

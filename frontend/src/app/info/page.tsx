@@ -1,11 +1,9 @@
 "use client";
 
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import Paper from "@mui/material/Paper";
-import * as React from "react";
-import AddressForm from "./form";
 import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Paper from "@mui/material/Paper";
+import AddressForm from "./form";
 
 function Info() {
   const handleClick = () => {};
@@ -13,31 +11,29 @@ function Info() {
   return (
     <div className="flex flex-col items-center justify-center w-full flex-1 px-20 min-h-screen text-center pt-20 py-2">
       <>
-      <CssBaseline />
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-          className="rounded-lg bg-gradient-to-b from-theme-darkblue to-theme-midnight"
-        >
-          <AddressForm />
-          <Button
-            variant="contained"
-            onClick={handleClick}
-            sx={{ mt: 3, ml: 1 }}
-            className="font-mont bg-theme-light-blue"
+        <Container component="main" maxWidth="sm">
+          <Paper
+            variant="outlined"
+            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+            className="rounded-lg bg-gradient-to-b from-theme-dark-blue to-theme-midnight"
           >
-            Save
-          </Button>
-        </Paper>
-      </Container>
-    </>
+            <AddressForm />
+            <Button
+              variant="contained"
+              onClick={handleClick}
+              sx={{ mt: 3, ml: 1 }}
+              className="font-mont bg-theme-light-blue"
+            >
+              Save
+            </Button>
+          </Paper>
+        </Container>
+      </>
     </div>
   );
 }
 
 export default Info;
-
 
 // "use client";
 

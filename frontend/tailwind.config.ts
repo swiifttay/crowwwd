@@ -20,10 +20,11 @@ const config: Config = {
 
       colors: {
         "theme-midnight": "#07172F",
+        "theme-dark-blue": "#001C66",
         "theme-blue": "#0047FF",
         "theme-light-blue": "#1D90F4",
         "theme-grey": "#868B99",
-        "theme-darkblue": "#001C66"
+        "theme-light-grey": "#C2C5CC",
       },
     },
   },
