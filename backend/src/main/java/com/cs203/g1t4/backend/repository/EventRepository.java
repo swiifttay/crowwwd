@@ -1,13 +1,11 @@
 package com.cs203.g1t4.backend.repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.cs203.g1t4.backend.models.Event;
-import org.springframework.data.mongodb.repository.Query;
+import com.cs203.g1t4.backend.models.event.Event;
 
 
 public interface EventRepository extends MongoRepository<Event, String>{

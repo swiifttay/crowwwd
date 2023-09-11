@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.models;
+package com.cs203.g1t4.backend.models.event;
 
 
 import org.springframework.data.annotation.Id;
