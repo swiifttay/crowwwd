@@ -1,17 +1,11 @@
 package com.cs203.g1t4.backend.models.event;
 
-
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-@Getter
-@Document("event")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -21,23 +15,12 @@ public class OutputEvent {
   private String name;
   private String eventImageName; // imageName to look for in S3 Bucket
   private String description;
-
-  @NotBlank
-  private List<LocalDateTime> dates; // date and time of the actual concert
-  
-  @NotBlank
+  private List<String> dates; // date and time of the actual concert
   private String venue;
-  
-  @NotBlank
   private List<String> categories;
-  
-  @NotBlank
+  //To be changed to Artist
   private String artistId;
-  
-  @NotBlank
   private String seatingImagePlan; // imageName to look for in S3 Bucket
-  
-  @NotBlank
-  private List<LocalDateTime> ticketSalesDate; // date and time at which the ticket sales will be available
+  private List<String> ticketSalesDate; // date and time at which the ticket sales will be available
   
 }

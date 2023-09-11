@@ -10,10 +10,6 @@ import com.cs203.g1t4.backend.models.event.Event;
 
 public interface EventRepository extends MongoRepository<Event, String>{
 
-    // Find events by its Name: May not be exactly accurate as different artist can have events of the same name
-    Optional<Event> findByName(String eventName);
-
-    // Find events by its Name: May not be exactly accurate as different artist can have events of the same name
     Optional<Event> findById(String eventId);
 
     Optional<Event> findByArtistIdAndName(String ArtistId, String eventName);
@@ -21,10 +17,10 @@ public interface EventRepository extends MongoRepository<Event, String>{
 //    Optional<List<Event>> findAllByTicketSalesDate(ArrayList<LocalDateTime> ticketSalesDate);
 
     // TO FIND ALL THE EVENTS OCCURING AFTER TODAY'S DATE
-    Optional<List<Event>> findByDatesGreaterThan(LocalDateTime date);
+    List<Event> findByDatesGreaterThan(LocalDateTime date);
 
     // To find all the events occuring between the two given dates
-    Optional<List<Event>> findByDatesBetween(LocalDateTime start, LocalDateTime end);
+    List<Event> findByDatesBetween(LocalDateTime start, LocalDateTime end);
 
 
 

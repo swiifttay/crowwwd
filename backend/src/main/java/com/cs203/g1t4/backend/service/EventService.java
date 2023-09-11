@@ -3,6 +3,7 @@ package com.cs203.g1t4.backend.service;
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.event.EventResponse;
+import com.cs203.g1t4.backend.models.event.OutputEvent;
 import com.cs203.g1t4.backend.models.exceptions.*;
 
 import java.time.LocalDate;
@@ -145,27 +146,36 @@ public class EventService {
     public Response findEventById(String eventId) {
 
         //Finds event from repository, or else throw InvalidEventIdException()
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new InvalidEventIdException(eventId));
+        OutputEvent outputEvent = eventRepository.findById(eventId)
+                .orElseThrow(() -> new InvalidEventIdException(eventId)).returnOutputEvent();
 
         //Returns the event with id if successful
         return SingleEventResponse.builder()
-                .event(event)
+                .outputEvent(outputEvent)
                 .build();
     }
 
+    private List<OutputEvent> returnFormattedList(List<Event> eventList) {
+        List<OutputEvent> outList = new ArrayList<>();
+        for (Event event : eventList) {
+            OutputEvent outputEvent = event.returnOutputEvent();
+            //Implement finding artist class here and adding to oe here
+
+            outList.add(outputEvent);
+        }
+        return outList;
+    }
 
     public Response getAllEventsAfterToday() {
         // get today's date
         LocalDateTime today = LocalDateTime.now();
 
-        // get all the events after today, or else throw No Event exception
-        List<Event> event = eventRepository.findByDatesGreaterThan(today)
-            .orElseThrow(() -> new NoEventException());
+        // get all the events after today, or else returns an empty List<Event>
+        List<OutputEvent> events = returnFormattedList(eventRepository.findByDatesGreaterThan(today));
 
         // Returns the events with date after today if successful
         return EventResponse.builder()
-            .events(event)
+            .events(events)
             .build();
     }
 
@@ -176,12 +186,11 @@ public class EventService {
         LocalDateTime endDateRangeLDT = LocalDate.parse(endDateRange).atTime(LocalTime.MAX);
 
         // get all the events between those two dates
-        List<Event> event = eventRepository.findByDatesBetween(beginDateRangeLDT, endDateRangeLDT)
-                .orElseThrow(() -> new NoEventException());
+        List<OutputEvent> events = returnFormattedList(eventRepository.findByDatesBetween(beginDateRangeLDT, endDateRangeLDT));
 
         // Return the events with date after today if successful
         return EventResponse.builder()
-                .events(event)
+                .events(events)
                 .build();
     }
 
