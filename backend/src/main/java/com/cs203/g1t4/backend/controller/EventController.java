@@ -1,6 +1,8 @@
 package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +19,7 @@ public class EventController {
     private final EventService eventService;
 
     @PostMapping("/addEvent")
-    public ResponseEntity<Response> addEvent(@RequestBody EventRequest request) {
+    public ResponseEntity<Response> addEvent(@Valid @RequestBody EventRequest request) {
 
         // Add Events using addEvent method in profileService
         Response response = eventService.addEvent(request);
@@ -37,7 +39,7 @@ public class EventController {
     }
 
     @PutMapping("/updateEvent/{eventId}")
-    public ResponseEntity<Response> updateEvent(@PathVariable String eventId, @RequestBody EventRequest request) {
+    public ResponseEntity<Response> updateEvent(@PathVariable String eventId, @Valid @RequestBody EventRequest request) {
 
         // Add Events using addEvent method in profileService
         Response response = eventService.updateEventById(eventId, request);

@@ -141,13 +141,14 @@ public class EventService {
         LocalDateTime today = LocalDateTime.now();
 
         // get all the events after today, or else throw No Event exception
-        List<Event> event = eventRepository.findAllAfterDate(today)
-            .orElseThrow(() -> new NoEventException());
+//        List<Event> event = eventRepository.findAllAfterDate(today)
+//            .orElseThrow(() -> new NoEventException());
 
         // Returns the events with date after today if successful
-        return EventResponse.builder()
-            .events(event)
-            .build();
+//        return EventResponse.builder()
+//            .events(event)
+//            .build();
+        return null;
 
     }
 

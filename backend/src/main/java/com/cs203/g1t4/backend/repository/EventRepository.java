@@ -19,10 +19,10 @@ public interface EventRepository extends MongoRepository<Event, String>{
 
     Optional<Event> findByArtistIdAndName(String ArtistId, String eventName);
 
-    Optional<List<Event>> findAllByTicketSalesDate(ArrayList<LocalDateTime> ticketSalesDate);
+//    Optional<List<Event>> findAllByTicketSalesDate(ArrayList<LocalDateTime> ticketSalesDate);
 
     // TO FIND ALL THE EVENTS OCCURING AFTER TODAY'S DATE
-    Optional<List<Event>> findAllAfterDate(LocalDateTime date);
+//    Optional<List<Event>> findAllAfterDate(LocalDateTime date);
 
     //TODO: WRITE THE QUERY FOR FINDING RANGE
     // Optional<List<Event>> findAllByTicketSalesDate(ArrayList<LocalDateTime> ticketSalesDate);
