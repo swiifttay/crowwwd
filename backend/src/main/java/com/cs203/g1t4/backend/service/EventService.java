@@ -65,14 +65,15 @@ public class EventService {
 
         //Checks if there is an event with the specified eventID in the repository
         //If event cannot be found, throws new InvalidEventIdException if no such event found
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
+        OutputEvent outputEvent = eventRepository.findById(eventId)
+                .orElseThrow(() -> new InvalidEventIdException(eventId)).returnOutputEvent();
 
         //If event can be found, delete it from repository
         eventRepository.deleteById(eventId);
 
         //If Everything goes smoothly, return the event in SingleEventResponse
         return SingleEventResponse.builder()
-                .event(event)
+                .outputEvent(outputEvent)
                 .build();
     }
 
@@ -108,7 +109,7 @@ public class EventService {
 
         //If Everything goes smoothly, return the event in SingleEventResponse
         return SingleEventResponse.builder()
-                .event(newEvent)
+                .outputEvent(newEvent.returnOutputEvent())
                 .build();
     }
 
