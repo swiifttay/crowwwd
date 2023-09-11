@@ -1,12 +1,13 @@
 package com.cs203.g1t4.backend.repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.cs203.g1t4.backend.models.Event;
-
+import org.springframework.data.mongodb.repository.Query;
 
 
 public interface EventRepository extends MongoRepository<Event, String>{
@@ -22,7 +23,12 @@ public interface EventRepository extends MongoRepository<Event, String>{
 //    Optional<List<Event>> findAllByTicketSalesDate(ArrayList<LocalDateTime> ticketSalesDate);
 
     // TO FIND ALL THE EVENTS OCCURING AFTER TODAY'S DATE
-//    Optional<List<Event>> findAllAfterDate(LocalDateTime date);
+    Optional<List<Event>> findByDatesGreaterThan(LocalDateTime date);
+
+    // To find all the events occuring between the two given dates
+    Optional<List<Event>> findByDatesBetween(LocalDateTime start, LocalDateTime end);
+
+
 
     //TODO: WRITE THE QUERY FOR FINDING RANGE
     // Optional<List<Event>> findAllByTicketSalesDate(ArrayList<LocalDateTime> ticketSalesDate);

@@ -2,12 +2,17 @@ package com.cs203.g1t4.backend.service;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
+import com.cs203.g1t4.backend.data.response.event.EventResponse;
 import com.cs203.g1t4.backend.models.exceptions.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.cs203.g1t4.backend.data.response.Response;
@@ -153,18 +158,32 @@ public class EventService {
 
     public Response getAllEventsAfterToday() {
         // get today's date
-//        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime today = LocalDateTime.now();
 
         // get all the events after today, or else throw No Event exception
-//        List<Event> event = eventRepository.findAllAfterDate(today)
-//            .orElseThrow(() -> new NoEventException());
+        List<Event> event = eventRepository.findByDatesGreaterThan(today)
+            .orElseThrow(() -> new NoEventException());
 
         // Returns the events with date after today if successful
-//        return EventResponse.builder()
-//            .events(event)
-//            .build();
-        return null;
+        return EventResponse.builder()
+            .events(event)
+            .build();
+    }
 
+    public Response getEventBetweenDateRange(String beginDateRange, String endDateRange) {
+        
+        // convert the start and end date to LocalDateTime class between 00:00 of start and 23:59 of end
+        LocalDateTime beginDateRangeLDT = LocalDate.parse(beginDateRange).atStartOfDay();
+        LocalDateTime endDateRangeLDT = LocalDate.parse(endDateRange).atTime(LocalTime.MAX);
+
+        // get all the events between those two dates
+        List<Event> event = eventRepository.findByDatesBetween(beginDateRangeLDT, endDateRangeLDT)
+                .orElseThrow(() -> new NoEventException());
+
+        // Return the events with date after today if successful
+        return EventResponse.builder()
+                .events(event)
+                .build();
     }
 
 }

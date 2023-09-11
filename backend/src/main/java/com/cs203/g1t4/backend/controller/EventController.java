@@ -61,11 +61,20 @@ public class EventController {
     @GetMapping("/getAllEvents")
         public ResponseEntity<Response> getAllEventsAfterToday() {
 
-        // Update Profile using updateProfile method in profileService
-        // Throws a InvalidTokenException if username cannot be found in repository
-        Response response = eventService.getAllEventsAfterToday();
+            // Update Profile using updateProfile method in profileService
+            // Throws a InvalidTokenException if username cannot be found in repository
+            Response response = eventService.getAllEventsAfterToday();
+
+            // Else, return ok response
+            return ResponseEntity.ok(response);
+        }
+
+    @GetMapping("/getEventsBetween/start/{start}/end/{end}")
+    public ResponseEntity<Response> getEventsBetween(@PathVariable String start, @PathVariable String end) {
+        // Find the Event that is between the start date and end date
+        Response response = eventService.getEventBetweenDateRange(start, end);
 
         // Else, return ok response
         return ResponseEntity.ok(response);
-        }
+    }
 }
