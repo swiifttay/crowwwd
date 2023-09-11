@@ -8,7 +8,7 @@ import Logo from "/public/images/Logo.png";
 export default function Navbar() {
   return (
     //I changed sticky to fixed here
-    <div className="w-full font-semibold fixed p-[20px] md:px-[128px] justify-between flex flex-grow text-xl items-center z-50">
+    <div className="w-full font-bold relative text-lg p-[20px] md:px-[128px] justify-between flex flex-grow items-center z-50">
       <div className="hover:text-gray-300 cursor-pointer">Explore</div>
       <div className="relative group">
         <a href="" className=" hover:text-gray-300">

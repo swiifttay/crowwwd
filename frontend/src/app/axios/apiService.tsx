@@ -40,3 +40,8 @@ export const register = async (registerDetails: {
     }
   }
 };
+
+export const eventsList = async () => {
+  const response = await api.get("/v1/getAllEvents");
+  return response;
+}

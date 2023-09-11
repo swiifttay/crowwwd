@@ -7,19 +7,20 @@ import { CardActionArea } from '@mui/material';
 
 export default function EventCard() {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card className="rounded-lg" >
       <CardActionArea>
         <CardMedia
           component="img"
           height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
+          image="/images/tortoise.jpg"
           alt="green iguana"
+          className="object-cover h-60"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Lizard
+          <Typography className="font-mont" gutterBottom variant="h6" component="div">
+            Chimpanzee
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography className="font-mont" variant="body2" color="text.secondary">
             Lizards are a widespread group of squamate reptiles, with over 6,000
             species, ranging across all continents except Antarctica
           </Typography>
@@ -28,3 +29,5 @@ export default function EventCard() {
     </Card>
   );
 }
+
+//sx={{ maxWidth: 360 }}
