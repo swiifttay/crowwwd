@@ -11,8 +11,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -36,13 +36,13 @@ public class Event {
   
   @Getter
   @NotBlank
-  private ArrayList<LocalDateTime> dates; // date and time of the actual concert
+  private List<LocalDateTime> dates; // date and time of the actual concert
   
   @NotBlank
   private String venue;
   
   @NotBlank
-  private ArrayList<String> categories;
+  private List<String> categories;
   
   @NotBlank
   private String artistId;
@@ -51,6 +51,6 @@ public class Event {
   private String seatingImagePlan; // imageName to look for in S3 Bucket
   
   @NotBlank
-  private ArrayList<LocalDateTime> ticketSalesDate; // date and time at which the ticket sales will be available
+  private List<LocalDateTime> ticketSalesDate; // date and time at which the ticket sales will be available
   
 }

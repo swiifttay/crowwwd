@@ -5,18 +5,19 @@ import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.models.exceptions.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.data.response.event.EventResponse;
 import com.cs203.g1t4.backend.data.response.event.SingleEventResponse;
 import com.cs203.g1t4.backend.models.Event;
-import com.cs203.g1t4.backend.models.exceptions.NoEventException;
 import com.cs203.g1t4.backend.repository.EventRepository;
 
 import lombok.RequiredArgsConstructor;
+
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 @Service
 @RequiredArgsConstructor
@@ -28,17 +29,23 @@ public class EventService {
         //Checks if EventRequest isValid
         eventRequestChecker(request, null);
 
-        //If all goes well, create the events class
+        //Create a ArrayList<LocalDateTime> from String[] dates
+        List<LocalDateTime> datesList = convertArrToList(request.getDates());
+
+        //Create a ArrayList<LocalDateTime> from String[] ticketSalesDate
+        List<LocalDateTime> ticketSalesDateList = convertArrToList(request.getTicketSalesDate());
+
+        //If all goes well, create the event object
         Event event = Event.builder()
                 .name(request.getName())
                 .eventImageName(request.getEventImageName())
                 .description(request.getDescription())
-                .dates(request.getDates())
+                .dates(datesList)
                 .venue(request.getVenue())
-                .categories(request.getCategories())
+                .categories(Arrays.asList(request.getCategories()))
                 .artistId(request.getArtistId())
                 .seatingImagePlan(request.getSeatingImagePlan())
-                .ticketSalesDate(request.getTicketSalesDate())
+                .ticketSalesDate(ticketSalesDateList)
                 .build();
 
         eventRepository.save(event);
@@ -73,17 +80,23 @@ public class EventService {
         //Checks if EventRequest isValid
         eventRequestChecker(request, oldEvent);
 
+        //Create a ArrayList<LocalDateTime> from String[] dates
+        List<LocalDateTime> datesList = convertArrToList(request.getDates());
+
+        //Create a ArrayList<LocalDateTime> from String[] ticketSalesDate
+        List<LocalDateTime> ticketSalesDateList = convertArrToList(request.getTicketSalesDate());
+
         //If event can be found, delete it from repository
         Event newEvent = Event.builder()
                 .id(oldEvent.getId())
                 .name(request.getName())
                 .eventImageName(request.getEventImageName())
                 .description(request.getDescription())
-                .dates(request.getDates())
-                .categories(request.getCategories())
+                .dates(datesList)
+                .categories(Arrays.asList(request.getCategories()))
                 .artistId(request.getArtistId())
                 .seatingImagePlan(request.getSeatingImagePlan())
-                .ticketSalesDate(request.getTicketSalesDate())
+                .ticketSalesDate(ticketSalesDateList)
                 .build();
 
         eventRepository.save(newEvent);
@@ -94,19 +107,21 @@ public class EventService {
                 .build();
     }
 
-    public void eventRequestChecker(EventRequest request, Event oldEvent) {
-
-        // Check 1: If any missing fields (Exception of eventImageName and seatingImagePlan)
-        if (request.getName() == null || request.getDescription() == null || request.getDates() == null ||
-                request.getVenue() == null || request.getCategories() == null || request.getArtistId() == null ||
-                request.getTicketSalesDate() == null) {
-            throw new MissingFieldsException();
+    public List<LocalDateTime> convertArrToList(String[] arr) {
+        List<LocalDateTime> list = new ArrayList<>();
+        for (String s: arr) {
+            LocalDateTime curr = LocalDateTime.parse(s, ISO_LOCAL_DATE_TIME);
+            list.add(curr);
         }
+        return list;
+    }
+
+    public void eventRequestChecker(EventRequest request, Event oldEvent) {
 
         // Consideration: Check if artist exists in the first place in the ArtistRepository
 
         /*
-         * Check 2: Checks the request if there are other events that are created by the same artist and eventName
+         * Check: Checks the request if there are other events that are created by the same artist and eventName
          *
          * Considers 2 possibilities to check for DuplicatedEventName:
          * 1. If addEvent(), the oldEvent is null
@@ -138,7 +153,7 @@ public class EventService {
 
     public Response getAllEventsAfterToday() {
         // get today's date
-        LocalDateTime today = LocalDateTime.now();
+//        LocalDateTime today = LocalDateTime.now();
 
         // get all the events after today, or else throw No Event exception
 //        List<Event> event = eventRepository.findAllAfterDate(today)

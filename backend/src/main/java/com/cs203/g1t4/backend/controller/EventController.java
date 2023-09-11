@@ -2,7 +2,6 @@ package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +11,7 @@ import com.cs203.g1t4.backend.service.EventService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/event")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class EventController {
 
