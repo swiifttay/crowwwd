@@ -33,8 +33,9 @@ public class Event {
   
   @NotBlank
   private String description;
-  
-  @Getter
+
+  private LocalDateTime earliestDate;
+
   @NotBlank
   private List<LocalDateTime> dates; // date and time of the actual concert
   
