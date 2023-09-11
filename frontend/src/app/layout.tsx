@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Navbar from "./components/Navbar";
 
-const mont = localFont({
+export const mont = localFont({
   src: [
     {
       path: "../../public/fonts/Mont/Mont-Regular.otf",

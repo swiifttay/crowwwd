@@ -12,13 +12,13 @@ function Info() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full flex-1 px-20 min-h-screen text-center pt-20 py-2">
-      <React.Fragment>
+      <>
       <CssBaseline />
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper
           variant="outlined"
           sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-          className="bg-theme-midnight rounded-lg"
+          className="rounded-lg bg-gradient-to-b from-theme-darkblue to-theme-midnight"
         >
           <AddressForm />
           <Button
@@ -31,7 +31,7 @@ function Info() {
           </Button>
         </Paper>
       </Container>
-    </React.Fragment>
+    </>
     </div>
   );
 }

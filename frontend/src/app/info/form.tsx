@@ -4,15 +4,16 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import { mont } from "../layout";
 
 export default function AddressForm() {
   const inputStyles = {
     color: "white",
-    fontFamily: "font-mont",
+    fontFamily: "var(--font-mont)",
   };
 
   return (
-    <React.Fragment>
+    <>
       <Typography variant="h6" className="font-mont text-white" gutterBottom>
         Personal Information
       </Typography>
@@ -20,12 +21,13 @@ export default function AddressForm() {
         <Grid item xs={12} sm={6}>
           <TextField
             required
+            color="success"
             id="firstName"
-            label="First name"
+            label="First Name"
             style={{ color: "white" }}
             fullWidth
             autoComplete="given-name"
-            variant="standard"
+            variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
           />
@@ -35,10 +37,10 @@ export default function AddressForm() {
             required
             id="lastName"
             name="lastName"
-            label="Last name"
+            label="Last Name"
             fullWidth
             autoComplete="family-name"
-            variant="standard"
+            variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
           />
@@ -51,7 +53,7 @@ export default function AddressForm() {
             label="Mobile number"
             fullWidth
             autoComplete="mobile-number"
-            variant="standard"
+            variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
           />
@@ -64,7 +66,7 @@ export default function AddressForm() {
             label="Address line 1"
             fullWidth
             autoComplete="shipping address-line1"
-            variant="standard"
+            variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
           />
@@ -76,7 +78,7 @@ export default function AddressForm() {
             label="Address line 2"
             fullWidth
             autoComplete="shipping address-line2"
-            variant="standard"
+            variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
           />
@@ -89,7 +91,7 @@ export default function AddressForm() {
             label="City"
             fullWidth
             autoComplete="shipping address-level2"
-            variant="standard"
+            variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
           />
@@ -100,7 +102,7 @@ export default function AddressForm() {
             name="state"
             label="State/Province/Region"
             fullWidth
-            variant="standard"
+            variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
           />
@@ -113,7 +115,7 @@ export default function AddressForm() {
             label="Zip / Postal code"
             fullWidth
             autoComplete="shipping postal-code"
-            variant="standard"
+            variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
           />
@@ -126,7 +128,7 @@ export default function AddressForm() {
             label="Country"
             fullWidth
             autoComplete="shipping country"
-            variant="standard"
+            variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
           />
@@ -146,6 +148,6 @@ export default function AddressForm() {
           />
         </Grid>
       </Grid>
-    </React.Fragment>
+    </>
   );
 }
