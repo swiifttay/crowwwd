@@ -3,7 +3,7 @@ import { Navbar, Video, Hero } from "./components/Home/index";
 
 export default function Home() {
   return (
-    <main className="">
+    <main className="guide">
       <Hero />
     </main>
   );
