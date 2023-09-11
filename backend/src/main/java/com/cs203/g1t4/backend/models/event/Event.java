@@ -1,7 +1,5 @@
 package com.cs203.g1t4.backend.models.event;
 
-
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

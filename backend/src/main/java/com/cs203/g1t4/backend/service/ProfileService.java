@@ -1,11 +1,8 @@
 package com.cs203.g1t4.backend.service;
 
-import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
-import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
-import com.cs203.g1t4.backend.data.response.user.AuthenticationResponse;
 import com.cs203.g1t4.backend.data.response.user.SingleUserResponse;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.*;
@@ -16,9 +13,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.management.remote.JMXAuthenticator;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor

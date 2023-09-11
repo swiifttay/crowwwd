@@ -1,9 +1,7 @@
 package com.cs203.g1t4.backend.models.event;
 
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor

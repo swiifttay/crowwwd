@@ -1,6 +1,5 @@
 package com.cs203.g1t4.backend.data.request.user;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
