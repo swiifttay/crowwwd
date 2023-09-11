@@ -1,10 +1,7 @@
 package com.cs203.g1t4.backend.controller;
 
-import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
 import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.service.AuthenticationService;
 import com.cs203.g1t4.backend.service.CommonService;
 import com.cs203.g1t4.backend.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +30,7 @@ public class ProfileController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/findProfile/{id}")
+    @GetMapping("/findProfile")
     public ResponseEntity<Response> findProfile(@RequestHeader("Authorization") String token) {
 
         //Obtain username stored in token using returnOldUsername method in commonService
@@ -43,7 +40,7 @@ public class ProfileController {
         //Throws a InvalidTokenException if username cannot be found in repository
         Response response = profileService.findProfile(username);
 
-        //If successful, the response is encapsulated with a HTTP code of 200(ok) and contains the User object
+        //If successful, the response is encapsulated with HTTP code of 200(ok) and contains the User object
         return ResponseEntity.ok(response);
     }
 }
