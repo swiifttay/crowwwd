@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,22 +24,11 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     public Response register(RegisterRequest request) {
-
-        //If any missing fields (Exception of userCreationDate, isPreferredMarketing and spotifyAccount)
-        //SECTION CAN BE REMOVED DUE TO ADDITION OF @VALID ANNOTATION
-//        if (request.getFirstName() == null || request.getLastName() == null || request.getUsername() == null ||
-//            request.getPassword() == null || request.getPhoneNo() == null || request.getNationality() == null ||
-//            request.getCountryOfResidence() == null || request.getCountryCode() == null ||
-//            request.getGender() == null || request.getDateOfBirth() == null || request.getAddress() == null ||
-//            request.getPostalCode() == null) {
-//            throw new MissingFieldsException();
-//        }
-
 
         //If duplicated username, throw new DuplicatedUsernameException
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
@@ -54,7 +44,7 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .username(request.getUsername())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(bCryptPasswordEncoder.encode(request.getPassword()))
                 .phoneNo(request.getPhoneNo())
                 .userCreationDate(LocalDateTime.now())
                 .nationality(request.getNationality())
@@ -78,12 +68,7 @@ public class AuthenticationService {
 
     public Response authenticate(AuthenticationRequest request) {
 
-        //If any missing fields
-        //SECTION CAN BE REMOVED DUE TO ADDITION OF @VALID ANNOTATION
-//        if (request.getUsername() == null || request.getPassword() == null) {
-//            throw new MissingFieldsException();
-//        }
-
+        //Rethink logic and fix it for better understandability
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
