@@ -22,133 +22,53 @@ import java.util.List;
 @Data
 @Builder
 public class User implements UserDetails { // Implements UserDetails so that the security.core library can be used
+    // GETTER and SETTER removed as they are provided for by the Data annotation
     @Id
     private String id;
 
-    @Getter
     @NotBlank
     private String firstName;
 
-    @Getter
     @NotBlank
     private String lastName;
 
-    @Getter
     @NotBlank
     private String username;
 
-    @Getter
     @NotBlank
     @Email
     private String email;
 
-    @Getter
     @NotBlank
     @Size(max = 120)
     private String password;
 
-    @Getter
     @NotBlank
     private String phoneNo;
 
-    @Getter
     private LocalDateTime userCreationDate;
 
-    @Getter
     private String nationality;
 
-    @Getter
     private String countryOfResidence;
 
-    @Getter
     private String countryCode;
 
-    @Getter
     private String gender;
 
-    @Getter
     private String dateOfBirth;
 
-    @Getter
     private String address;
 
-    @Getter
     private String postalCode;
 
-    @Getter
     private boolean isPreferredMarketing;
 
-    @Getter
     private String spotifyAccount;
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
-    }
-
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public void setUserCreationDate(LocalDateTime userCreationDate) {
-        this.userCreationDate = userCreationDate;
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
-
-    public void setCountryOfResidence(String countryOfResidence) {
-        this.countryOfResidence = countryOfResidence;
-    }
-
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public void setPreferredMarketing(boolean preferredMarketing) {
-        isPreferredMarketing = preferredMarketing;
-    }
-
-    public void setSpotifyAccount(String spotifyAccount) {
-        this.spotifyAccount = spotifyAccount;
     }
 
     // Methods to extend UserDetails
