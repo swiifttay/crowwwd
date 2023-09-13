@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Navbar from "./components/Navbar";
 
-const mont = localFont({
+export const mont = localFont({
   src: [
     {
       path: "../../public/fonts/Mont/Mont-Regular.otf",
@@ -41,9 +41,8 @@ export default function RootLayout({
 }) {
   return (
     <html>
-        <body>
-          <Navbar />
-          <div className={mont.className}>{children}</div>
+        <body className={`${mont.className} flex flex-col items-center w-full`}>
+          <div className="flex flex-col items-center max-w-6xl w-full"><Navbar />{children}</div>
         </body>
     </html>
   );

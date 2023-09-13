@@ -1,45 +1,48 @@
-import ActionAreaCard from "../components/Explore/EventCard";
+"use client";
+
 import FilterBar from "../components/Explore/FilterBar";
 import FilterEvents from "../components/Explore/FilterEvents";
 import "../globals.css";
 import { Grid } from "@mui/material";
 
-import {useState, useEffect} from "react";
-import { eventsList } from "../axios/apiService";
+import { useState, useEffect } from "react";
+import { concertsList } from "../axios/apiService";
+import FilterSearch from "../components/Explore/FilterSearch";
 
-export interface Event {
+export interface Concert {
   name: string;
   eventImageName: string;
   description: string;
-  venu: string
+  venu: string;
   categories: [string];
   artistId: string;
   seatingImagePlan: string;
 }
 
 export default function Explore() {
+  const [concerts, setConcerts] = useState<Concert[]>([]);
 
-  // const [events, setEvents] = useState([]);
+  useEffect(() => {
+    fetchConcerts();
+  }, []);
 
-  // useEffect(() => {
-  //   fetchEvents();
-  // })
-
-  // const fetchEvents = async () => {
-  //   const response = await eventsList();
-  //   setEvents(response);
-  // }
+  const fetchConcerts = async () => {
+    const response: Concert[] = await concertsList();
+    setConcerts(response);
+  };
 
   return (
     <main className="flex h-max">
-      <div id="event-items" className="flex flex-row mt-40 w-full">
+      <div id="event-items" className="mt-40 w-full">
         <Grid container>
+          <Grid item xs={12}>
+            <FilterSearch />
+          </Grid>
           <Grid item sm={3} md={2}>
             <FilterBar />
           </Grid>
           <Grid item sm={9} md={10} className="justify-center">
-            <FilterEvents />
-            {/* <FilterEvents eventList={eventList} /> */}
+            <FilterEvents concertsList={concerts} />
           </Grid>
         </Grid>
       </div>

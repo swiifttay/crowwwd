@@ -12,15 +12,15 @@ export default function EventCard() {
         <CardMedia
           component="img"
           height="140"
-          image="/images/tortoise.jpg"
+          image="/images/chimpanzee.jpg"
           alt="green iguana"
           className="object-cover h-60"
         />
-        <CardContent>
-          <Typography className="font-mont" gutterBottom variant="h6" component="div">
+        <CardContent className=" bg-gradient-radial from-theme-blue-10 to-theme-blue-20">
+          <Typography className="font-mont text-white" gutterBottom variant="h6" component="div">
             Chimpanzee
           </Typography>
-          <Typography className="font-mont" variant="body2" color="text.secondary">
+          <Typography className="font-mont text-white" variant="body2" color="text.secondary">
             Lizards are a widespread group of squamate reptiles, with over 6,000
             species, ranging across all continents except Antarctica
           </Typography>

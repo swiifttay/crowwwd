@@ -15,7 +15,7 @@
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 7, 23, 47;
-    --background-end-rgb: 0, 0, 0;
+    --background-end-rgb: 7, 23, 47;
   }
 }
 
@@ -33,3 +33,5 @@ body {
 .guide {
   border: 1px solid white;
 }
+
+/*7, 23, 47*/
