@@ -1,5 +1,6 @@
 package com.cs203.g1t4.backend.models.event;
 
+import com.cs203.g1t4.backend.models.Artist;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,7 +14,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Getter
 @Document("event")
@@ -52,34 +52,32 @@ public class Event {
     @NotBlank
     private List<LocalDateTime> ticketSalesDate; // date and time at which the ticket sales will be available
 
-    public OutputEvent returnOutputEvent() {
-
-        //Create List<String> from List<LocalDateTime> dates
-        List<String> dateStrList = new ArrayList<>();
-        for (LocalDateTime localDateTime : dates) {
-            dateStrList.add(localDateTime.toString());
-        }
-
-        //Create List<String> from List<LocalDateTime> ticketSalesDate
-        List<String> ticketSalesDateStrList = new ArrayList<>();
-        for (LocalDateTime localDateTime : ticketSalesDate) {
-            ticketSalesDateStrList.add(localDateTime.toString());
-        }
+    public OutputEvent returnOutputEvent(Artist artist) {
 
         OutputEvent out = OutputEvent.builder()
                 .id(id)
                 .name(name)
                 .eventImageName(eventImageName)
                 .description(description)
-                .dates(dateStrList)
+                .dates(convertLocalDateTimeListToStrList(dates))
                 .venue(venue)
                 .categories(categories)
-                .artistId(artistId)
+                .artist(artist)
                 .seatingImagePlan(seatingImagePlan)
-                .ticketSalesDate(ticketSalesDateStrList)
+                .ticketSalesDate(convertLocalDateTimeListToStrList(ticketSalesDate))
                 .build();
 
         return out;
     }
+
+    public List<String> convertLocalDateTimeListToStrList(List<LocalDateTime> list) {
+        List<String> strList = new ArrayList<>();
+        for (LocalDateTime localDateTime: list) {
+            strList.add(localDateTime.toString());
+        }
+        return strList;
+    }
+
+
 
 }
