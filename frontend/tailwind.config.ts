@@ -11,7 +11,7 @@ const config: Config = {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "hero": "radial-gradient(circle at center, rgba(5, 16, 33, 0.7) 20%, rgba(7, 23, 47, 1) 70%), url('/images/home-6.jpg')",
+        "hero": "radial-gradient(circle at center, rgba(5, 16, 33, 0.4) 20%, rgba(7, 23, 47, 1) 55%), url('/images/home-1.jpg')",
       },
 
       fontFamily: {

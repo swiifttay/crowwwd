@@ -41,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html>
-        <body className={`${mont.className} flex flex-col items-center w-full`}>
+        <body className={`${mont.className} flex flex-col items-center w-full h-fit`}>
           <div className="flex flex-col items-center max-w-6xl w-full"><Navbar />{children}</div>
         </body>
     </html>

@@ -2,9 +2,9 @@
 
 import { Grid } from "@mui/material";
 import EventCard from "./EventCard";
-import { Concert } from "@/app/explore/page";
+import { Event } from "@/app/explore/page";
 
-export default function FilterEvents(concertsList : {concertsList: Concert[]}) {
+export default function FilterEvents(concertsList : {concertsList: Event[]}) {
 
   return (
     <Grid container spacing={3}>
