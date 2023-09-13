@@ -7,8 +7,11 @@ import axios, { AxiosError } from "axios";
 
 export default function RegisterForm() {
   const [registerDetails, setRegisterDetails] = useState({
-    firstName: "", lastName: "", username: "", password: "",
-  })
+    firstName: "",
+    lastName: "",
+    username: "",
+    password: "",
+  });
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,9 +20,9 @@ export default function RegisterForm() {
   };
 
   const updateTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRegisterDetails(prevState => {
-      return {...prevState, [e.target.id]: e.target.value}
-    })
+    setRegisterDetails((prevState) => {
+      return { ...prevState, [e.target.id]: e.target.value };
+    });
   };
 
   return (
