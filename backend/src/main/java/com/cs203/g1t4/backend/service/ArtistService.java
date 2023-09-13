@@ -20,8 +20,8 @@ public class ArtistService {
 
     public Response addArtist(ArtistRequest request) {
 
+
         Artist artist = Artist.builder()
-                .id(request.getId())
                 .name(request.getName())
                 .description(request.getDescription())
                 .website(request.getWebsite())

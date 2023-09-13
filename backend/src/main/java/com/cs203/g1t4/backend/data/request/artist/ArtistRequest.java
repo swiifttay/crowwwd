@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ArtistRequest {
     @NotNull
-    private String id;
-    @NotNull
     private String name;
     @NotNull
     private String website;
