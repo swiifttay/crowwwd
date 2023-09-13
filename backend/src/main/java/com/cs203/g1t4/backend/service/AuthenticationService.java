@@ -8,7 +8,6 @@ import com.cs203.g1t4.backend.data.response.user.AuthenticationResponse;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidCredentialsException;
-import com.cs203.g1t4.backend.models.exceptions.MissingFieldsException;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

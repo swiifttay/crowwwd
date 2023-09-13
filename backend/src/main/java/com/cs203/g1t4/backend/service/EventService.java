@@ -115,15 +115,6 @@ public class EventService {
                 .build();
     }
 
-    public List<LocalDateTime> convertArrToList(String[] arr) {
-        List<LocalDateTime> list = new ArrayList<>();
-        for (String s: arr) {
-            LocalDateTime curr = LocalDateTime.parse(s, ISO_LOCAL_DATE_TIME);
-            list.add(curr);
-        }
-        return list;
-    }
-
     public Response findEventById(String eventId) {
 
         //Use of private method getOutputEventFromEventId() to generate OutputEvent Object from eventId
@@ -186,6 +177,15 @@ public class EventService {
                 throw new DuplicatedEventException(request.getArtistId(), request.getName());
             }
         }
+    }
+
+    private List<LocalDateTime> convertArrToList(String[] arr) {
+        List<LocalDateTime> list = new ArrayList<>();
+        for (String s: arr) {
+            LocalDateTime curr = LocalDateTime.parse(s, ISO_LOCAL_DATE_TIME);
+            list.add(curr);
+        }
+        return list;
     }
 
     private OutputEvent getOutputEventFromEventId(String eventId) {
