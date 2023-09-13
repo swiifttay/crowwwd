@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;      //From ApplicationConfig.java
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -43,7 +43,7 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .username(request.getUsername())
                 .email(request.getEmail())
-                .password(bCryptPasswordEncoder.encode(request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNo(request.getPhoneNo())
                 .userCreationDate(LocalDateTime.now())
                 .nationality(request.getNationality())
