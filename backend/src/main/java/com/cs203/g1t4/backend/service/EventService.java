@@ -27,7 +27,6 @@ import com.cs203.g1t4.backend.repository.EventRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
@@ -227,13 +226,11 @@ public class EventService {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
 
         // Get the event image name
-        String eventImageName;
+        String eventImageName = event.getEventImageName();
 
         // Check if this is to update image of the event or to input a new one
-        if (event.getEventImageName() == null) {
+        if (eventImageName == null) {
             eventImageName = multipartFile.getOriginalFilename();
-        } else {
-            eventImageName = event.getEventImageName();
         }
 
         // Put the image into the bucket

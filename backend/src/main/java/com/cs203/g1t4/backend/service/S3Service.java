@@ -1,32 +1,20 @@
 package com.cs203.g1t4.backend.service;
 
-import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.cs203.g1t4.backend.models.exceptions.InvalidImageException;
-import org.joda.time.Seconds;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.ion.IonException;
 
-
-import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
 @Service
 public class S3Service {
-
-    private final AmazonS3 s3;
-
-    public S3Service (AmazonS3 s3, AmazonS3 s3Client) {
-        this.s3 = s3;
-    }
+    @Autowired
+    private AmazonS3 s3;
 
     public void putObject(String bucketName, String key, MultipartFile file) {
 
@@ -45,7 +33,6 @@ public class S3Service {
             throw new InvalidImageException();
         }
     }
-
 
     public String getObjectURL(String bucketName, String key) {
         Calendar calendar = Calendar.getInstance();

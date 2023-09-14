@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
@@ -53,4 +54,26 @@ public class ArtistController {
 
         return ResponseEntity.ok(response);
     }
+
+
+    @PostMapping("{artistId}/artist-image")
+    public ResponseEntity<Response> uploadArtistImage(
+            @PathVariable("artistId") String artistId,
+            @RequestBody MultipartFile multipartFile) {
+
+        // Upload the artist image
+        Response response = artistService.uploadArtistImage(artistId, multipartFile);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("{artistId}/artist-image")
+    public ResponseEntity<Response> getArtistImage(@PathVariable("artistId") String artistId) {
+
+        // Upload the artist image
+        Response response = artistService.getArtistImage(artistId);
+
+        return ResponseEntity.ok(response);
+    }
+
 }
