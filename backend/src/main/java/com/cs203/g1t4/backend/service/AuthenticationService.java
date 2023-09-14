@@ -26,36 +26,11 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;      //From ApplicationConfig.java
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final CommonService commonService;
 
     public Response register(RegisterRequest request) {
 
-        //If duplicated username, throw new DuplicatedUsernameException
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new DuplicatedUsernameException(request.getUsername());
-        }
-
-        /*
-         * Can be optimized: Perhaps consider a clone method for user which creates
-         * the entire user object and just set the variables to be changed
-         */
-        User user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .phoneNo(request.getPhoneNo())
-                .userCreationDate(LocalDateTime.now())
-                .nationality(request.getNationality())
-                .countryOfResidence(request.getCountryOfResidence())
-                .countryCode(request.getCountryCode())
-                .gender(request.getGender())
-                .dateOfBirth(request.getDateOfBirth())
-                .address(request.getAddress())
-                .postalCode(request.getPostalCode())
-                .isPreferredMarketing(request.isPreferredMarketing())
-                .spotifyAccount(request.getSpotifyAccount())
-                .build();
+        User user = commonService.getUserClassFromRequest(request, null);
 
         userRepository.save(user);
 
@@ -85,7 +60,7 @@ public class AuthenticationService {
 
         //If authenticated, create jwt token and return an AuthenticationResponse containing jwt token
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();

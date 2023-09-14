@@ -20,6 +20,7 @@ public class ProfileService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;      //From ApplicationConfig.java
     private final AuthenticationManager authenticationManager;
+    private final CommonService commonService;
 
     public Response updateProfile(UpdateProfileRequest request, String username) {
 
@@ -27,80 +28,15 @@ public class ProfileService {
         User oldUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());
 
-        //Create new user based on fields of request with id, username, password and userCreationDate taken from oldUser
-        User newUser = User.builder()
-                .id(oldUser.getId())
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .username(oldUser.getUsername())
-                .email(request.getEmail())
-                .password(oldUser.getPassword())
-                .phoneNo(request.getPhoneNo())
-                .userCreationDate(oldUser.getUserCreationDate())
-                .nationality(request.getNationality())
-                .countryOfResidence(request.getCountryOfResidence())
-                .countryCode(request.getCountryCode())
-                .gender(request.getGender())
-                .dateOfBirth(request.getDateOfBirth())
-                .address(request.getAddress())
-                .postalCode(request.getPostalCode())
-                .isPreferredMarketing(request.isPreferredMarketing())
-                .spotifyAccount(request.getSpotifyAccount())
-                .build();
-
-        //Consider 2 cases:
-        //Case 1: User wishes to change his username and fills up his username
-        //Case 2: User does not wish to change his username and leaves his username as null.
-        if (request.getUsername() != null) {
-
-            //If new username is duplicated, throw new DuplicatedUsernameException
-            if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-                throw new DuplicatedUsernameException(request.getUsername());
-            }
-
-            //If new username is not duplicated, change newUser
-            newUser.setUsername(request.getUsername());
-
-        }
-
-        //Consider 2 cases:
-        //Case 1: User wishes to change his password and fills up his password
-        //Case 2: User does not wish to change his password and leaves his password as null.
-        if ((request.getOldPassword() != null && request.getNewPassword() != null && request.getRepeatNewPassword() != null)) {
-
-            //Checks if old password is correct
-            try {
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                oldUser.getUsername(),
-                                request.getOldPassword()
-                        )
-                );
-
-            } catch (BadCredentialsException e) {
-
-                //Throws an PasswordDoNotMatchException()
-                throw new PasswordDoNotMatchException();
-
-            }
-
-            //Checks if newPassword and repeatNewPassword matches
-            if (request.getNewPassword().equals(request.getRepeatNewPassword())) {
-                newUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
-
-            } else {
-
-                //Throws an PasswordDoNotMatchException()
-                throw new PasswordDoNotMatchException();
-            }
-        }
+        //Uses getUserClassFromRequest from commonService to generate user class from request
+        User newUser = commonService.getUserClassFromRequest(request, oldUser);
 
         //Saves user to repository
         userRepository.save(newUser);
 
         //If Everything goes smoothly, response will be created using AuthenticationResponse with token
         return SuccessResponse.builder()
-                .response("User has been created successfully")
+                .response("User has been updated successfully")
                 .build();
     }
 
