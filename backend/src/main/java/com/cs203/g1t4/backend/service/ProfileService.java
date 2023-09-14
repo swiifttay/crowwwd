@@ -18,24 +18,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProfileService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;      //From ApplicationConfig.java
     private final AuthenticationManager authenticationManager;
 
     public Response updateProfile(UpdateProfileRequest request, String username) {
-        /*
-         * If any missing fields (Exception of userCreationDate, isPreferredMarketing and spotifyAccount) present
-         * throw new MissingFieldsException
-         *
-         * Room for change considering that user may not want to make changes to all fields all the time
-         *
-         * SECTION CAN BE REMOVED DUE TO ADDITION OF @VALID ANNOTATION
-         */
-//        if (request.getFirstName() == null || request.getLastName() == null || request.getPhoneNo() == null ||
-//            request.getNationality() == null || request.getCountryOfResidence() == null ||
-//            request.getCountryCode() == null || request.getGender() == null || request.getDateOfBirth() == null ||
-//            request.getAddress() == null || request.getPostalCode() == null) {
-//            throw new MissingFieldsException();
-//        }
 
         //Finds user from repository, or else throw Invalid token exception
         User oldUser = userRepository.findByUsername(username)

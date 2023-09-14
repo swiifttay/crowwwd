@@ -8,7 +8,6 @@ import com.cs203.g1t4.backend.data.response.user.AuthenticationResponse;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidCredentialsException;
-import com.cs203.g1t4.backend.models.exceptions.MissingFieldsException;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +23,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;      //From ApplicationConfig.java
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -44,7 +43,7 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .username(request.getUsername())
                 .email(request.getEmail())
-                .password(bCryptPasswordEncoder.encode(request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNo(request.getPhoneNo())
                 .userCreationDate(LocalDateTime.now())
                 .nationality(request.getNationality())
