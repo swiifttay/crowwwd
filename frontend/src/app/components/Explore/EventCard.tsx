@@ -21,8 +21,7 @@ export default function EventCard() {
             Chimpanzee
           </Typography>
           <Typography className="font-mont text-white" variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+            Some text that makes sense about chimps here
           </Typography>
         </CardContent>
       </CardActionArea>

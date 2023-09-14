@@ -51,7 +51,7 @@ export default function Explore() {
   };
 
   //---------- Date Range Filter ----------
-  const handleCalendarChange = (e) => {
+  const handleDateChange = (e) => {
     setSelectedDateRange(e.target.value);
   };
 
@@ -76,15 +76,15 @@ export default function Explore() {
   };
 
   return (
-    <main className="relative h-max guide">
+    <main className="relative h-max w-full guide">
       <h1 className="sticky font-bold text-5xl guide px-20 py-10">
         Upcoming Events
       </h1>
       <div id="event-items" className="w-full">
         <Grid container>
-          <Grid item xs={12}><FilterSearch onChange={handleInputChange} /></Grid>
-          <Grid item sm={3} md={2}><FilterBar onChange={handleCheckboxChange} /></Grid>
-          <Grid item sm={9} md={10} className="justify-center"><FilterEvents concertsList={events} /></Grid>
+          <Grid item xs={12}><FilterSearch onQuery={handleInputChange} /></Grid>
+          <Grid item sm={3} md={2}><FilterBar onSelectCat={handleCheckboxChange} onSelectDateRange={handleDateChange} className="z-50" /></Grid>
+          <Grid item sm={9} md={10} className="justify-center z-10"><FilterEvents concertsList={events} /></Grid>
         </Grid>
       </div>
     </main>
