@@ -43,6 +43,6 @@ export const register = async (registerDetails: {
 };
 
 export const concertsList = async () => {
-  const response : Concert[] = await api.get("/v1/getAllEvents");
+  const response: Concert[] = await api.get("/v1/getAllEvents");
   return response;
-}
+};

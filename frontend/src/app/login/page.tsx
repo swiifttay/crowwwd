@@ -18,8 +18,11 @@ export default function Login() {
         <p className="text-lg">Please log in to access your account.</p>
 
         <LoginForm />
-        <AccountSwitch message="New to CROWD SYNC?" link="/register" prompt="Sign up." />
-        
+        <AccountSwitch
+          message="New to CROWD SYNC?"
+          link="/register"
+          prompt="Sign up."
+        />
       </main>
     </div>
   );

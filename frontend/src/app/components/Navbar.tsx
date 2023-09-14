@@ -9,7 +9,9 @@ export default function Navbar() {
   return (
     //I changed sticky to fixed here
     <div className="w-full font-mont font-bold relative text-lg p-[20px] md:px-[128px] justify-between flex flex-grow items-center z-50">
-      <a href="/explore" className="hover:text-gray-300 cursor-pointer">Explore</a>
+      <a href="/explore" className="hover:text-gray-300 cursor-pointer">
+        Explore
+      </a>
       <div className="relative group">
         <a href="" className=" hover:text-gray-300">
           About Us

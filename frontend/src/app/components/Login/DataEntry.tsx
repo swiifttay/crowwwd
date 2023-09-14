@@ -1,5 +1,4 @@
 export default function DataEntry(props: any) {
-
   const textChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.onTextChange(e);
   };
