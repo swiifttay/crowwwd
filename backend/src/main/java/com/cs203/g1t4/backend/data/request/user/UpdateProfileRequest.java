@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateProfileRequest {
+public class UpdateProfileRequest implements UserRequest {
     @NotNull
     private String firstName;
     @NotNull
