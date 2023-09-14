@@ -93,4 +93,14 @@ public class EventController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("{eventId}/event-image")
+    public ResponseEntity<Response> getEventImage(@PathVariable("eventId") String eventId) {
+
+        // Upload the event image
+        Response response = eventService.getEventImage(eventId);
+
+        return ResponseEntity.ok(response);
+    }
+
 }

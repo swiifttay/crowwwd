@@ -227,19 +227,19 @@ public class EventService {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
 
         // Get the event image name
-        String eventImageId;
+        String eventImageName;
 
         // Check if this is to update image of the event or to input a new one
         if (event.getEventImageName() == null) {
-            eventImageId = multipartFile.getOriginalFilename();
+            eventImageName = multipartFile.getOriginalFilename();
         } else {
-            eventImageId = event.getEventImageName();
+            eventImageName = event.getEventImageName();
         }
 
         // Put the image into the bucket
         s3Service.putObject(
                 bucketName,
-                "event-images/%s/%s".formatted(eventId, eventImageId),
+                "event-images/%s/%s".formatted(eventId, eventImageName),
                 multipartFile
         );
 
@@ -247,7 +247,7 @@ public class EventService {
         Event newEvent = Event.builder()
                 .id(event.getId())
                 .name(event.getName())
-                .eventImageName(eventImageId)
+                .eventImageName(eventImageName)
                 .description(event.getDescription())
                 .dates(event.getDates())
                 .categories(event.getCategories())
@@ -266,21 +266,28 @@ public class EventService {
     }
 
 
-//    TODO: Create a getEventImageLink to add to the response event
-//    public byte[] getEventImage(String eventId) {
-//        var event = eventRepository.findById(eventId)
-//                .orElseThrow(() -> new InvalidEventIdException(eventId));
-//
-////        if (event.getEventImageName().isBlank()) {
-////            throw new ResourceNotFoundException(
-////                    "customer with id [%s] profile image not found".formatted(customerId));
-////        }
-//
-//        byte[] eventImage = s3Service.getObject(
-//                bucketName,
-//                "profile-images/%s/%s".formatted(eventId, event.getEventImageName())
-//        );
-//        return eventImage;
-//    }
+
+
+    public SuccessResponse getEventImage(String eventId) {
+        // Get information on which event to edit from
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
+
+        String eventImageName = event.getEventImageName();
+        // check if there is any Image to return
+        if (eventImageName.isBlank()) {
+            throw new InvalidEventIdException(eventId);
+        }
+
+        // Get the Event Image URL
+        String eventImageURL = s3Service.getObjectURL(bucketName,
+                "event-images/%s/%s".formatted(eventId, eventImageName));
+
+        // Implement catch error in the event no image is saved.
+
+        // Return
+        return SuccessResponse.builder()
+                .response("Event Image URL: " + eventImageURL)
+                .build();
+    }
 
 }
