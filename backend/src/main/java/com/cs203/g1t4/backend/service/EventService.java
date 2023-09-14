@@ -7,14 +7,17 @@ import com.cs203.g1t4.backend.models.Artist;
 import com.cs203.g1t4.backend.models.event.OutputEvent;
 import com.cs203.g1t4.backend.models.exceptions.*;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import com.cs203.g1t4.backend.repository.ArtistRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.cs203.g1t4.backend.data.response.Response;
@@ -23,6 +26,8 @@ import com.cs203.g1t4.backend.models.event.Event;
 import com.cs203.g1t4.backend.repository.EventRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
@@ -31,6 +36,10 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 public class EventService {
     private final EventRepository eventRepository;
     private final ArtistRepository artistRepository;
+    private final S3Service s3Service;
+
+    @Value("${env.AWS_BUCKET_NAME}")
+    private String bucketName;
 
     public Response addEvent(EventRequest request) {
 
@@ -211,5 +220,67 @@ public class EventService {
         }
         return outList;
     }
+
+    public SuccessResponse uploadEventImage(String eventId,
+                                           MultipartFile multipartFile) {
+        // Get information on which event to edit from
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
+
+        // Get the event image name
+        String eventImageId;
+
+        // Check if this is to update image of the event or to input a new one
+        if (event.getEventImageName() == null) {
+            eventImageId = multipartFile.getOriginalFilename();
+        } else {
+            eventImageId = event.getEventImageName();
+        }
+
+        // Put the image into the bucket
+        s3Service.putObject(
+                bucketName,
+                "event-images/%s/%s".formatted(eventId, eventImageId),
+                multipartFile
+        );
+
+        //Update information on the Event Image Name if it changed previously
+        Event newEvent = Event.builder()
+                .id(event.getId())
+                .name(event.getName())
+                .eventImageName(eventImageId)
+                .description(event.getDescription())
+                .dates(event.getDates())
+                .categories(event.getCategories())
+                .artistId(event.getArtistId())
+                .seatingImagePlan(event.getSeatingImagePlan())
+                .ticketSalesDate(event.getTicketSalesDate())
+                .build();
+
+        // Save to repository
+        eventRepository.save(newEvent);
+
+        // Return the success response if the image was saved successfully
+        return SuccessResponse.builder()
+                .response("Event image has been uploaded successfully")
+                .build();
+    }
+
+
+//    TODO: Create a getEventImageLink to add to the response event
+//    public byte[] getEventImage(String eventId) {
+//        var event = eventRepository.findById(eventId)
+//                .orElseThrow(() -> new InvalidEventIdException(eventId));
+//
+////        if (event.getEventImageName().isBlank()) {
+////            throw new ResourceNotFoundException(
+////                    "customer with id [%s] profile image not found".formatted(customerId));
+////        }
+//
+//        byte[] eventImage = s3Service.getObject(
+//                bucketName,
+//                "profile-images/%s/%s".formatted(eventId, event.getEventImageName())
+//        );
+//        return eventImage;
+//    }
 
 }

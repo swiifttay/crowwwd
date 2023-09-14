@@ -1,6 +1,8 @@
 package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
+import com.cs203.g1t4.backend.data.response.DefaultResponse;
+import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,9 @@ import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.EventService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -75,6 +80,17 @@ public class EventController {
         Response response = eventService.getEventBetweenDateRange(start, end);
 
         // Else, return ok response
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("{eventId}/event-image")
+    public ResponseEntity<Response> uploadEventImage(
+            @PathVariable("eventId") String eventId,
+            @RequestBody MultipartFile multipartFile) {
+
+        // Upload the event image
+        Response response = eventService.uploadEventImage(eventId, multipartFile);
+
         return ResponseEntity.ok(response);
     }
 }

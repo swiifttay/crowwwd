@@ -22,6 +22,9 @@ public interface EventRepository extends MongoRepository<Event, String>{
     // To find all the events occuring between the two given dates
     List<Event> findByDatesBetween(LocalDateTime start, LocalDateTime end);
 
+    // To update the event image name
+//    void updateEventImageNameById(String eventId, String imageName);
+
 
 
     //TODO: WRITE THE QUERY FOR FINDING RANGE
