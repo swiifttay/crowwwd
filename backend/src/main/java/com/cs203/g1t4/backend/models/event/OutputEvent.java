@@ -17,7 +17,8 @@ public class OutputEvent {
   private List<String> dates; // date and time of the actual concert
   private String venue;
   private List<String> categories;
-  private String artistName;
+  private Artist artist;
+  private String seatingImagePlan; // imageName to look for in S3 Bucket
   private List<String> ticketSalesDate; // date and time at which the ticket sales will be available
   
 }

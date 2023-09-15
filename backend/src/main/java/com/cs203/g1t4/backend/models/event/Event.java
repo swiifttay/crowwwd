@@ -60,7 +60,8 @@ public class Event {
                 .dates(convertLocalDateTimeListToStrList(dates))
                 .venue(venue)
                 .categories(categories)
-                .artistName(artist.getName())
+                .artist(artist)
+                .seatingImagePlan(seatingImagePlan)
                 .ticketSalesDate(convertLocalDateTimeListToStrList(ticketSalesDate))
                 .build();
     }
