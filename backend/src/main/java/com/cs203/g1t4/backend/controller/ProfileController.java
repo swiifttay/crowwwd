@@ -1,33 +1,32 @@
 package com.cs203.g1t4.backend.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.CommonService;
 import com.cs203.g1t4.backend.service.ProfileService;
 
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class ProfileController {
 
     private final ProfileService profileService;
     private final CommonService commonService;
 
     @PutMapping("/updateProfile")
-    public ResponseEntity<Response> updateProfile(@RequestBody UpdateProfileRequest request, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Response> updateProfile(@RequestBody UpdateProfileRequest request, @AuthenticationPrincipal UserDetails userDetails) {
 
-        //Obtain username stored in token using returnOldUsername method in commonService
-        String username = commonService.returnOldUsername(token);
+        // Get the username from the userDetails of the authenticated user
+        String username = userDetails.getUsername();
 
         //Update Profile using updateProfile method in profileService
         //Throws a InvalidTokenException if username cannot be found in repository
@@ -37,11 +36,11 @@ public class ProfileController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/findProfile/{id}")
-    public ResponseEntity<Response> findProfile(@RequestHeader("Authorization") String token) {
+    @GetMapping("/findProfile")
+    public ResponseEntity<Response> findProfile(@AuthenticationPrincipal UserDetails userDetails) {
 
-        //Obtain username stored in token using returnOldUsername method in commonService
-        String username = commonService.returnOldUsername(token);
+        // Get the username from the userDetails of the authenticated user
+        String username = userDetails.getUsername();
 
         //Find Profile based on the username by findProfile method in profileService
         //Throws a InvalidTokenException if username cannot be found in repository
@@ -50,6 +49,4 @@ public class ProfileController {
         //If successful, the response is encapsulated with a HTTP code of 200(ok) and contains the User object
         return ResponseEntity.ok(response);
     }
-
-    // fix urself git pls
 }
