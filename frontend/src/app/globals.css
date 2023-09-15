@@ -34,4 +34,8 @@ body {
   border: 1px solid white;
 }
 
+.mont {
+  font-family: var(--font-mont);
+}
+
 /*7, 23, 47*/

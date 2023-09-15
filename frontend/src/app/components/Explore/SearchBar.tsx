@@ -9,7 +9,7 @@ export function SearchBar() {
       <input
         type="text"
         placeholder="Search Events"
-        name="q"
+        name="search"
         autoComplete="off"
         className="bg-transparent flex-1 border-none lg:py-5 px-8 text-lg text-white placeholder-slate-400 p focus:outline-none"
       ></input>

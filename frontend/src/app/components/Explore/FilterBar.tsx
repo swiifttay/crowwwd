@@ -22,7 +22,7 @@ export default function FilterBar() {
     return () => {
       document.removeEventListener("keydown", hideOnEscape, true);
       document.removeEventListener("click", hideOnClickOutside, true);
-    }
+    };
   }, []);
 
   const hideOnEscape = (e: any) => {
@@ -39,11 +39,18 @@ export default function FilterBar() {
 
   return (
     <div className="flex w-11/12 md:w-5/6 my-3 py-3 items-center justify-between">
-      <div ref={wrapperRef} className="flex relative py-2 px-4 bg-red-600 rounded-full text-sm">
-        <BsFilter className="text-2xl" />
-        <button onClick={() => {setIsOpen(!isOpen)}}>Category</button>
+      <div ref={wrapperRef} className="flex relative">
+        <button
+
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+          className="flex py-2 px-4 bg-red-600 rounded-full text-sm hover:ease-in-out duration-300 hover:-translate-y-1 hover:scale-105"
+        >
+          <BsFilter className="text-lg" /> Select Category
+        </button>
         {isOpen && (
-          <div className="w-2 h-10 top-7 left-5 absolute">
+          <div className="w-2 h-10 top-10 left-5 absolute">
             <FilterCategory />
           </div>
         )}

@@ -7,18 +7,17 @@ import { TextField, Grid } from "@mui/material";
 
 import { useState, useEffect } from "react";
 import { concertsList as eventsList } from "../axios/apiService";
-import FilterSearch from "../components/Explore/FilterSearch";
 import { SearchBar } from "../components/Explore/SearchBar";
 
 
 export interface Event {
+  eventId: string;
   name: string;
   eventImageName: string;
-  description: string;
   venue: string;
-  categories: [string];
-  artistId: string;
-  seatingImagePlan: string;
+  categories: string[];
+  artistName: string;
+  dates: string[];
 }
 
 export default function Explore() {
@@ -88,18 +87,11 @@ export default function Explore() {
       </div>
 
       <div id="event-items" className="flex flex-col items-center">
-        {/* <Grid container>
-          <Grid item sm={3} md={2}> */}
             <FilterBar
               onSelectCat={handleCheckboxChange}
               onSelectDateRange={handleDateChange}
               className="z-50"
             />
-          {/* </Grid> */}
-          {/* <Grid item sm={9} md={10} className="justify-center z-10"> */}
-            {/* <FilterEvents concertsList={events} /> */}
-          {/* </Grid>
-        </Grid> */}
       </div>
     </main>
   );
