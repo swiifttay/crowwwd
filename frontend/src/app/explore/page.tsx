@@ -8,6 +8,7 @@ import { TextField, Grid } from "@mui/material";
 import { useState, useEffect } from "react";
 import { concertsList as eventsList } from "../axios/apiService";
 import { SearchBar } from "../components/Explore/SearchBar";
+import Card from "../components/Explore/Card";
 
 
 export interface Event {
@@ -73,8 +74,12 @@ export default function Explore() {
       );
     }
 
-    return filteredEvents.map(({ name, eventImageName }) => {});
+    return filteredEvents.map(({ name, eventImageName, venue, categories, artistName, dates }) => {
+      <Card />
+    });
   };
+
+  const displayedItems = filteredResults;
 
   return (
     <main className="h-screen relative w-full bg-space bg-cover bg-center">
