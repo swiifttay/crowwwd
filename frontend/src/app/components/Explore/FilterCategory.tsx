@@ -3,8 +3,7 @@
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import { createTheme, FormGroup, ThemeProvider, Typography } from "@mui/material";
+import { createTheme, FormGroup, Typography } from "@mui/material";
 
 const theme = createTheme({
   palette: {
@@ -16,14 +15,7 @@ const theme = createTheme({
 
 export default function FilterCategory() {
   return (
-    <FormControl className="w-full" variant="filled">
-      <FormLabel
-        color="success"
-        id="filter-category"
-        className="font-mont text-sm text-center text-white"
-      >
-        Categories
-      </FormLabel>
+    <FormControl className="absolute" variant="filled">
       <FormGroup
         defaultValue="pop"
       >

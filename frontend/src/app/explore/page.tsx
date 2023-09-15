@@ -3,11 +3,13 @@
 import FilterBar from "../components/Explore/FilterBar";
 import FilterEvents from "../components/Explore/FilterEvents";
 import "../globals.css";
-import { Grid } from "@mui/material";
+import { TextField, Grid } from "@mui/material";
 
 import { useState, useEffect } from "react";
 import { concertsList as eventsList } from "../axios/apiService";
 import FilterSearch from "../components/Explore/FilterSearch";
+import { SearchBar } from "../components/Explore/SearchBar";
+
 
 export interface Event {
   name: string;
@@ -72,20 +74,32 @@ export default function Explore() {
       );
     }
 
-    return filteredEvents.map(({name, eventImageName}) => {})
+    return filteredEvents.map(({ name, eventImageName }) => {});
   };
 
   return (
-    <main className="relative h-max w-full guide">
-      <h1 className="sticky font-bold text-5xl guide px-20 py-10">
-        Upcoming Events
-      </h1>
-      <div id="event-items" className="w-full">
-        <Grid container>
-          <Grid item xs={12}><FilterSearch onQuery={handleInputChange} /></Grid>
-          <Grid item sm={3} md={2}><FilterBar onSelectCat={handleCheckboxChange} onSelectDateRange={handleDateChange} className="z-50" /></Grid>
-          <Grid item sm={9} md={10} className="justify-center z-10"><FilterEvents concertsList={events} /></Grid>
-        </Grid>
+    <main className="h-screen relative w-full bg-space bg-cover bg-center">
+
+      <div id="title" className="flex px-9 flex-wrap items-center justify-center">
+        <h1 className="flex-1 sticky mr-2 md:ml-10 py-10 text-center md:text-start font-bold text-5xl ">
+          Latest Events
+        </h1>
+        <SearchBar />
+      </div>
+
+      <div id="event-items" className="flex flex-col items-center">
+        {/* <Grid container>
+          <Grid item sm={3} md={2}> */}
+            <FilterBar
+              onSelectCat={handleCheckboxChange}
+              onSelectDateRange={handleDateChange}
+              className="z-50"
+            />
+          {/* </Grid> */}
+          {/* <Grid item sm={9} md={10} className="justify-center z-10"> */}
+            {/* <FilterEvents concertsList={events} /> */}
+          {/* </Grid>
+        </Grid> */}
       </div>
     </main>
   );

@@ -7,7 +7,7 @@ import Logo from "/public/images/Logo.png";
 
 export default function Navbar() {
   return (
-    <div className="w-full font-bold text-base py-[20px] md:px-[128px] justify-between flex items-center z-50 guide">
+    <div className="w-full font-bold text-base py-[20px] md:px-[128px] justify-between flex items-center z-50">
       <a href="/explore" className="hover:text-gray-300 cursor-pointer">Explore</a>
       <div className="relative group">
         <a href="" className=" hover:text-gray-300">

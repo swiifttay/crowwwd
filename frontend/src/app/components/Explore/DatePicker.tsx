@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
@@ -29,6 +29,10 @@ export default function DatePicker() {
   useEffect(() => {
     document.addEventListener("keydown", hideOnEscape, true);
     document.addEventListener("click", hideOnClickOutside, true);
+    return () => {
+      document.removeEventListener("keydown", hideOnEscape, true);
+      document.removeEventListener("click", hideOnClickOutside, true);
+    }
   }, []);
 
   const hideOnEscape = (e: any) => {
@@ -42,34 +46,32 @@ export default function DatePicker() {
       setIsOpen(false);
     }
   };
-  // const handleSelect = (ranges: RangeKeyDict) => {
-  //   setSelectedRange(ranges.selection);
-  // };
+
   return (
-    <>
+    <div className="rounded-3xl bg-theme-blue text-sm py-2 px-4 text-center focus:ring-0">
       <input
-        value={`${format(range[0].startDate, "MM/dd/yyyy")} to ${format(
+        value={`${format(range[0].startDate, "MM/dd/yyyy")}  -  ${format(
           range[0].endDate,
           "MM/dd/yyyy"
         )}`}
         readOnly
-        className="inputBox"
         onClick={() => setIsOpen((isOpen) => !isOpen)}
-        className="rounded-md bg-theme-blue text-sm p-2"
+        className="bg-transparent border-none focus:ring-0"
       />
 
-      <div ref={refOne}>
+      <div ref={refOne} className="inline-block relative">
         {isOpen && (
           <DateRange
             onChange={(item: any) => setRange([item.selection])}
             editableDateInputs={true}
             moveRangeOnFirstSelection={false}
             ranges={range}
-            months={2}
+            months={1}
             direction="horizontal"
+            className="absolute right-full bg-none focus:ring-0"
           />
         )}
       </div>
-    </>
+    </div>
   );
 }

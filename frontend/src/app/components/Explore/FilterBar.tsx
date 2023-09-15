@@ -4,23 +4,51 @@ import { BsFilter } from "react-icons/bs";
 import FilterCategory from "./FilterCategory";
 import DatePicker from "./DatePicker";
 
-import { useState } from "react";
+import { ChangeEvent, RefObject, useEffect, useRef, useState } from "react";
 
-export default function FilterBar({handelCheckboxChange, handleDateChange}) {
+function useOutsideAlerter(ref: RefObject<HTMLElement>) {}
 
+export default function FilterBar() {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    document.addEventListener("keydown", hideOnEscape, true);
+    document.addEventListener("click", hideOnClickOutside, true);
+    return () => {
+      document.removeEventListener("keydown", hideOnEscape, true);
+      document.removeEventListener("click", hideOnClickOutside, true);
+    }
+  }, []);
+
+  const hideOnEscape = (e: any) => {
+    if (e.key === "Escape") {
+      setIsOpen(false);
+    }
+  };
+
+  const hideOnClickOutside = (e: any) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+      setIsOpen(false);
+    }
+  };
+
   return (
-    <div className="h-full mr-2 border-e-2 border-gray-500 px-4 w-fit">
-      <h1 className="py-3 justify-center flex flex-row text-base">
-        Add Filters
-        <BsFilter />
-      </h1>
-      <FilterCategory />
+    <div className="flex w-11/12 md:w-5/6 my-3 py-3 items-center justify-between">
+      <div ref={wrapperRef} className="flex relative py-2 px-4 bg-red-600 rounded-full text-sm">
+        <BsFilter className="text-2xl" />
+        <button onClick={() => {setIsOpen(!isOpen)}}>Category</button>
+        {isOpen && (
+          <div className="w-2 h-10 top-7 left-5 absolute">
+            <FilterCategory />
+          </div>
+        )}
+      </div>
       <DatePicker />
-
-
     </div>
   );
 }
