@@ -32,11 +32,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("timestamp", new Date());
         body.put("status", status.value());
         body.put("error", status.getClass());
-        String message = "";
+        StringBuilder message = new StringBuilder();
         for (ObjectError objectError : ex.getBindingResult().getAllErrors()){
-            message = message + objectError.getDefaultMessage();
+            message.append(objectError.getDefaultMessage());
         }
-        body.put("message", message);
+        body.put("message", message.toString());
         body.put("path", request.getDescription(false));
         return new ResponseEntity<>(body, headers, status);
 

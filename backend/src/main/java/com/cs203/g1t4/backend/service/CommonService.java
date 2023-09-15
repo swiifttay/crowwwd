@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class CommonService {
-    //    This defaultResponse is on purpose so that it @Autowires DefaultResponse class instead of Response implementation
+    //    This defaultResponse is on purpose so that it @Autowired DefaultResponse class instead of Response implementation
     private final Response defaultResponse;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -45,7 +45,7 @@ public class CommonService {
          * Case 2: User does not wish to change his username and leaves his username as null.
          *         -> Change username in user object to oldUsername
          * Case 3: [CreateProfile] Unique username provided
-         *         [UpdateProfile] User wishes to change his username and fills up his username, which does not exists
+         *         [UpdateProfile] User wishes to change his username and fills up his username, which do not exist
          *         -> Change username in user object to newUsername
          */
         //Case 1 handled by if-block
@@ -56,7 +56,7 @@ public class CommonService {
             throw new DuplicatedUsernameException(userRequest.getUsername());
 
         //Case 2 handled by else-if block
-        } else if (userRequest.getUsername() == null) {
+        } else if (oldUser != null && userRequest.getUsername() == null) {
 
             //Set username in String username to oldUsername
             username = oldUser.getUsername();
@@ -88,9 +88,8 @@ public class CommonService {
                 .build();
 
         //Checks if UserRequest object is a RegisterRequest Object
-        if (userRequest instanceof RegisterRequest) {
-            //If so, typecast UserRequest object to a RegisterRequest Object
-            RegisterRequest registerRequest = (RegisterRequest) userRequest;
+        //If so, typecast UserRequest object to a RegisterRequest Object
+        if (userRequest instanceof RegisterRequest registerRequest && oldUser == null) {
             //Set the password of the user to the encoded form from the request
             user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
             //Returns the User Object
@@ -116,8 +115,8 @@ public class CommonService {
          *         -> Change password in user object to encoded newPassword
          */
         //Case 1 handled by if-block
-        if ((updateProfileRequest.getOldPassword() == null &&
-            updateProfileRequest.getNewPassword() == null &&
+        if ((updateProfileRequest.getOldPassword() == null ||
+            updateProfileRequest.getNewPassword() == null ||
             updateProfileRequest.getRepeatNewPassword() == null)) {
 
             //Change password in user object to oldPassword

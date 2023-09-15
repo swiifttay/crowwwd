@@ -1,8 +1,6 @@
 package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
-import com.cs203.g1t4.backend.data.response.DefaultResponse;
-import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +10,6 @@ import com.cs203.g1t4.backend.service.EventService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 
 @RestController
 @RequestMapping("/api/v1")

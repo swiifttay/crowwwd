@@ -52,7 +52,7 @@ public class Event {
 
     public OutputEvent returnOutputEvent(Artist artist) {
 
-        OutputEvent out = OutputEvent.builder()
+        return OutputEvent.builder()
                 .id(id)
                 .name(name)
                 .eventImageName(eventImageName)
@@ -64,8 +64,6 @@ public class Event {
                 .seatingImagePlan(seatingImagePlan)
                 .ticketSalesDate(convertLocalDateTimeListToStrList(ticketSalesDate))
                 .build();
-
-        return out;
     }
 
     public List<String> convertLocalDateTimeListToStrList(List<LocalDateTime> list) {

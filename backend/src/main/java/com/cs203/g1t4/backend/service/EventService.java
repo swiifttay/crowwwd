@@ -7,14 +7,12 @@ import com.cs203.g1t4.backend.models.Artist;
 import com.cs203.g1t4.backend.models.event.OutputEvent;
 import com.cs203.g1t4.backend.models.exceptions.*;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import com.cs203.g1t4.backend.repository.ArtistRepository;
 import org.springframework.beans.factory.annotation.Value;

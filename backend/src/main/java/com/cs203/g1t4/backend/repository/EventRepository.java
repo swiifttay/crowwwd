@@ -16,10 +16,10 @@ public interface EventRepository extends MongoRepository<Event, String>{
 
 //    Optional<List<Event>> findAllByTicketSalesDate(ArrayList<LocalDateTime> ticketSalesDate);
 
-    // TO FIND ALL THE EVENTS OCCURING AFTER TODAY'S DATE
+    // TO FIND ALL THE EVENTS OCCURRING AFTER TODAY'S DATE
     List<Event> findByDatesGreaterThan(LocalDateTime date);
 
-    // To find all the events occuring between the two given dates
+    // To find all the events occurring between the two given dates
     List<Event> findByDatesBetween(LocalDateTime start, LocalDateTime end);
 
     // To update the event image name
