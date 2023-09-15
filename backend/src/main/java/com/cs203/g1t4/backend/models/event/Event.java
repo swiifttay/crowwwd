@@ -53,15 +53,14 @@ public class Event {
     public OutputEvent returnOutputEvent(Artist artist) {
 
         return OutputEvent.builder()
-                .id(id)
+                .eventId(id)
                 .name(name)
                 .eventImageName(eventImageName)
                 .description(description)
                 .dates(convertLocalDateTimeListToStrList(dates))
                 .venue(venue)
                 .categories(categories)
-                .artist(artist)
-                .seatingImagePlan(seatingImagePlan)
+                .artistName(artist.getName())
                 .ticketSalesDate(convertLocalDateTimeListToStrList(ticketSalesDate))
                 .build();
     }

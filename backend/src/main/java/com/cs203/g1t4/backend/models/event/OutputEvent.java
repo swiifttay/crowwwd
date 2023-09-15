@@ -10,15 +10,14 @@ import java.util.List;
 @Data
 @Builder
 public class OutputEvent {
-  private String id;
+  private String eventId;
   private String name;
   private String eventImageName; // imageName to look for in S3 Bucket
   private String description;
   private List<String> dates; // date and time of the actual concert
   private String venue;
   private List<String> categories;
-  private Artist artist;
-  private String seatingImagePlan; // imageName to look for in S3 Bucket
+  private String artistName;
   private List<String> ticketSalesDate; // date and time at which the ticket sales will be available
   
 }

@@ -133,7 +133,7 @@ public class EventService {
         //Create a ArrayList<LocalDateTime> from String[] ticketSalesDate
         List<LocalDateTime> ticketSalesDateList = convertArrToList(eventRequest.getTicketSalesDate());
 
-        //If event can be found, delete it from repository
+        //Build event
         Event event = Event.builder()
                 .name(eventRequest.getName())
                 .eventImageName(eventRequest.getEventImageName())
