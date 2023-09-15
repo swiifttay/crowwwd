@@ -42,28 +42,10 @@ public class EventService {
 
     public Response addEvent(EventRequest request) {
 
-        //Checks if EventRequest isValid
-        eventRequestChecker(request, null);
+        //Creates newEvent using private method getEventClassFromRequest(EventRequest request, Event oldEvent)
+        Event event = getEventClassFromRequest(request, null);
 
-        //Create a ArrayList<LocalDateTime> from String[] dates
-        List<LocalDateTime> datesList = convertArrToList(request.getDates());
-
-        //Create a ArrayList<LocalDateTime> from String[] ticketSalesDate
-        List<LocalDateTime> ticketSalesDateList = convertArrToList(request.getTicketSalesDate());
-
-        //If all goes well, create the event object
-        Event event = Event.builder()
-                .name(request.getName())
-                .eventImageName(request.getEventImageName())
-                .description(request.getDescription())
-                .dates(datesList)
-                .venue(request.getVenue())
-                .categories(Arrays.asList(request.getCategories()))
-                .artistId(request.getArtistId())
-                .seatingImagePlan(request.getSeatingImagePlan())
-                .ticketSalesDate(ticketSalesDateList)
-                .build();
-
+        //Saves event into database
         eventRepository.save(event);
 
         //If Everything goes smoothly, SuccessResponse will be created
@@ -93,27 +75,8 @@ public class EventService {
         //If event cannot be found, throws new InvalidEventIdException if no such event found
         Event oldEvent = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
 
-        //Checks if EventRequest isValid
-        eventRequestChecker(request, oldEvent);
-
-        //Create a ArrayList<LocalDateTime> from String[] dates
-        List<LocalDateTime> datesList = convertArrToList(request.getDates());
-
-        //Create a ArrayList<LocalDateTime> from String[] ticketSalesDate
-        List<LocalDateTime> ticketSalesDateList = convertArrToList(request.getTicketSalesDate());
-
-        //If event can be found, delete it from repository
-        Event newEvent = Event.builder()
-                .id(oldEvent.getId())
-                .name(request.getName())
-                .eventImageName(request.getEventImageName())
-                .description(request.getDescription())
-                .dates(datesList)
-                .categories(Arrays.asList(request.getCategories()))
-                .artistId(request.getArtistId())
-                .seatingImagePlan(request.getSeatingImagePlan())
-                .ticketSalesDate(ticketSalesDateList)
-                .build();
+        //Creates newEvent using private method getEventClassFromRequest(EventRequest request, Event oldEvent)
+        Event newEvent = getEventClassFromRequest(request, oldEvent);
 
         eventRepository.save(newEvent);
 
@@ -162,6 +125,34 @@ public class EventService {
                 .build();
     }
 
+    private Event getEventClassFromRequest(EventRequest eventRequest, Event oldEvent) {
+        //Checks if EventRequest isValid
+        eventRequestChecker(eventRequest, oldEvent);
+
+        //Create a ArrayList<LocalDateTime> from String[] dates
+        List<LocalDateTime> datesList = convertArrToList(eventRequest.getDates());
+
+        //Create a ArrayList<LocalDateTime> from String[] ticketSalesDate
+        List<LocalDateTime> ticketSalesDateList = convertArrToList(eventRequest.getTicketSalesDate());
+
+        //If event can be found, delete it from repository
+        Event event = Event.builder()
+                .name(eventRequest.getName())
+                .eventImageName(eventRequest.getEventImageName())
+                .description(eventRequest.getDescription())
+                .dates(datesList)
+                .categories(Arrays.asList(eventRequest.getCategories()))
+                .artistId(eventRequest.getArtistId())
+                .seatingImagePlan(eventRequest.getSeatingImagePlan())
+                .ticketSalesDate(ticketSalesDateList)
+                .build();
+
+        //If updateEvent (oldEvent != null), set eventId to oldEvent eventId.
+        if (oldEvent != null) { event.setId(oldEvent.getId()); }
+
+        return event;
+    }
+
     private void eventRequestChecker(EventRequest request, Event oldEvent) {
 
         // Check 1: Check if artist exists in the first place in the ArtistRepository
@@ -170,7 +161,7 @@ public class EventService {
         }
 
         /*
-         * Check 2  Checks the request if there are other events that are created by the same artist and eventName
+         * Check 2: Checks the request if there are other events that are created by the same artist and eventName
          *
          * Considers 2 scenarios to check for DuplicatedEventName:
          * 1. If addEvent(), the oldEvent is null
