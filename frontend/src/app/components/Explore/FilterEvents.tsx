@@ -15,16 +15,16 @@ export default function FilterEvents(concertsList : {concertsList: Event[]}) {
       })} */}
 
       <Grid item lg={4} md={4} sm={6} className="w-full">
-        <EventCard />
+
       </Grid>
       <Grid item lg={4} md={4} sm={6}>
-        <EventCard />
+        
       </Grid>
       <Grid item lg={4} md={4} sm={6}>
-        <EventCard />
+
       </Grid>
       <Grid item lg={4} md={4} sm={6}>
-        <EventCard />
+
       </Grid>
     </Grid>
   );

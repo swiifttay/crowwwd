@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { DateRange } from "react-date-range";
+import { DateRange, RangeKeyDict } from "react-date-range";
 import format from "date-fns/format";
 import { addDays } from "date-fns";
 
@@ -13,7 +13,11 @@ interface Range {
   key: string;
 }
 
-export default function DatePicker() {
+interface DatePickerProps {
+  onDateChange: (startDate: Date, endDate: Date) => void;
+}
+
+export default function DatePicker({ onDateChange }: DatePickerProps) {
   const [range, setRange] = useState<Range[]>([
     {
       startDate: new Date(),
@@ -47,6 +51,14 @@ export default function DatePicker() {
     }
   };
 
+  const handleDateSelectionChange = (ranges: RangeKeyDict) => {
+    const selectedRange = ranges["selection"];
+    if (selectedRange?.startDate && selectedRange?.endDate) {
+      setRange([selectedRange as Range]);
+      onDateChange(selectedRange.startDate, selectedRange.endDate);
+    }
+  }
+
   return (
     <div className="rounded-3xl bg-theme-blue text-sm py-2 px-4 text-center focus:ring-0">
       <input
@@ -56,13 +68,13 @@ export default function DatePicker() {
         )}`}
         readOnly
         onClick={() => setIsOpen((isOpen) => !isOpen)}
-        className="bg-transparent border-none focus:ring-0"
+        className="bg-transparent border-none focus:ring-0 h-full z-50"
       />
 
       <div ref={refOne} className="inline-block relative">
         {isOpen && (
           <DateRange
-            onChange={(item: any) => setRange([item.selection])}
+            onChange={handleDateSelectionChange}
             editableDateInputs={true}
             moveRangeOnFirstSelection={false}
             ranges={range}

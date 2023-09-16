@@ -43,7 +43,8 @@ export const register = async (registerDetails: {
 };
 
 export const concertsList = async () => {
-  const response : Event[] = await api.get("/v1/getAllEvents");
-  console.log(response);
-  return response;
+  const response = await api.get("/event/getAllEvents");
+  // console.log(response.data.events);
+  // console.log(response.data)
+  return response.data.events;
 }
