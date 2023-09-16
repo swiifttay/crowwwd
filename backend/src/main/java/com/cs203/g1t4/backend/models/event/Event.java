@@ -55,7 +55,6 @@ public class Event {
         return OutputEvent.builder()
                 .eventId(id)
                 .name(name)
-                .eventImageName(eventImageName)
                 .description(description)
                 .dates(convertLocalDateTimeListToStrList(dates))
                 .venue(venue)

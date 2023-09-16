@@ -102,6 +102,12 @@ public class EventService {
         // get all the events after today, or else returns an empty List<Event>
         List<OutputEvent> events = returnFormattedList(eventRepository.findByDatesGreaterThan(today));
 
+        // Get the URL to the image of each event
+        for (OutputEvent currentEvent : events) {
+            String eventImageURL = getEventImageUrl(currentEvent.getEventId());
+            currentEvent.setEventImageURL(eventImageURL);
+        }
+
         // Returns the events with date after today if successful
         return EventResponse.builder()
             .events(events)
@@ -252,9 +258,16 @@ public class EventService {
     }
 
 
-
-
     public SuccessResponse getEventImage(String eventId) {
+        String eventImageUrl = getEventImageUrl(eventId);
+
+        // Return
+        return SuccessResponse.builder()
+                .response("Event Image URL: " + eventImageUrl)
+                .build();
+    }
+
+    public String getEventImageUrl(String eventId) {
         // Get information on which event to edit from
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
 
@@ -271,9 +284,7 @@ public class EventService {
         // Implement catch error in the event no image is saved.
 
         // Return
-        return SuccessResponse.builder()
-                .response("Event Image URL: " + eventImageURL)
-                .build();
+        return eventImageURL;
     }
 
 }
