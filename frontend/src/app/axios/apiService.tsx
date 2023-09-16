@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Concert } from "../explore/page";
 
 const api = axios.create({
   //TODO: backend to provide
@@ -40,3 +41,8 @@ export const register = async (registerDetails: {
     }
   }
 };
+
+export const concertsList = async () => {
+  const response : Concert[] = await api.get("/v1/getAllEvents");
+  return response;
+}

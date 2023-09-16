@@ -21,6 +21,7 @@ import java.util.List;
 @Data
 @Builder
 public class User implements UserDetails { // Implements UserDetails so that the security.core library can be used
+    // GETTER and SETTER removed as they are provided for by the Data annotation
     @Id
     private String id;
 

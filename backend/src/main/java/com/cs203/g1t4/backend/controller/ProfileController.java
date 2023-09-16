@@ -4,23 +4,30 @@ import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.CommonService;
 import com.cs203.g1t4.backend.service.ProfileService;
+
+
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class ProfileController {
 
     private final ProfileService profileService;
     private final CommonService commonService;
 
     @PutMapping("/updateProfile")
-    public ResponseEntity<Response> updateProfile(@RequestBody UpdateProfileRequest request, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Response> updateProfile(@RequestBody UpdateProfileRequest request, @AuthenticationPrincipal UserDetails userDetails) {
 
-        //Obtain username stored in token using returnOldUsername method in commonService
-        String username = commonService.returnOldUsername(token);
+        // Get the username from the userDetails of the authenticated user
+        String username = userDetails.getUsername();
 
         //Update Profile using updateProfile method in profileService
         //Throws a InvalidTokenException if username cannot be found in repository
@@ -31,10 +38,10 @@ public class ProfileController {
     }
 
     @GetMapping("/findProfile")
-    public ResponseEntity<Response> findProfile(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<Response> findProfile(@AuthenticationPrincipal UserDetails userDetails) {
 
-        //Obtain username stored in token using returnOldUsername method in commonService
-        String username = commonService.returnOldUsername(token);
+        // Get the username from the userDetails of the authenticated user
+        String username = userDetails.getUsername();
 
         //Find Profile based on the username by findProfile method in profileService
         //Throws a InvalidTokenException if username cannot be found in repository
