@@ -124,6 +124,12 @@ public class EventService {
         // get all the events between those two dates
         List<OutputEvent> events = returnFormattedList(eventRepository.findByDatesBetween(beginDateRangeLDT, endDateRangeLDT));
 
+        // Get the URL to the image of each event
+        for (OutputEvent currentEvent : events) {
+            String eventImageURL = getEventImageUrl(currentEvent.getEventId());
+            currentEvent.setEventImageURL(eventImageURL);
+        }
+        
         // Return the events with date after today if successful
         return EventResponse.builder()
                 .events(events)
