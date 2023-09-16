@@ -21,7 +21,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-
+public class SecurityConfiguration {
+    
     public static final String[] whiteListedRoutes = new String[] { "/api/v1/auth/register",
             "/api/v1/auth/authenticate", "/error" };
 

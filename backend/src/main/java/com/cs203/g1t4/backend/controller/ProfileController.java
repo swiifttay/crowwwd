@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/profile")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class ProfileController {
