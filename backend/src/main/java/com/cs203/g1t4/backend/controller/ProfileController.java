@@ -6,6 +6,7 @@ import com.cs203.g1t4.backend.service.CommonService;
 import com.cs203.g1t4.backend.service.ProfileService;
 
 
+
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +47,7 @@ public class ProfileController {
         //Throws a InvalidTokenException if username cannot be found in repository
         Response response = profileService.findProfile(username);
 
-        //If successful, the response is encapsulated with a HTTP code of 200(ok) and contains the User object
+        //If successful, the response is encapsulated with HTTP code of 200(ok) and contains the User object
         return ResponseEntity.ok(response);
     }
 }
