@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.data.request.user;
+package com.cs203.g1t4.backend.data.request.artist;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,9 +10,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
+public class ArtistRequest {
     @NotNull
-    private String username;
+    private String name;
     @NotNull
-    private String password;
+    private String website;
+    @NotNull
+    private String artistImage;
+    @NotNull
+    private String description;
 }

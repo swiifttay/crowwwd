@@ -4,18 +4,19 @@ import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
 import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.AuthenticationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<Response> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<Response> register(@Valid @RequestBody RegisterRequest request) {
 
         //If error found, exception will be thrown
         Response response = authenticationService.register(request);
@@ -25,7 +26,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<Response> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<Response> authenticate(@Valid @RequestBody AuthenticationRequest request) {
 
         //If error found, exception will be thrown
         Response response = authenticationService.authenticate(request);
