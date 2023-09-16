@@ -23,6 +23,8 @@ public class Artist {
     @NotBlank
     private String artistImage;
 
+    private String artistImageURL;
+
     @NotBlank
     private String description;
 }

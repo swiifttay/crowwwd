@@ -129,7 +129,7 @@ public class EventService {
             String eventImageURL = getEventImageUrl(currentEvent.getEventId());
             currentEvent.setEventImageURL(eventImageURL);
         }
-        
+
         // Return the events with date after today if successful
         return EventResponse.builder()
                 .events(events)

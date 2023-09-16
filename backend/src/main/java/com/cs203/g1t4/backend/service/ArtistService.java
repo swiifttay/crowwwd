@@ -78,6 +78,10 @@ public class ArtistService {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new InvalidArtistIdException(artistId));
 
+        // To get the URL for the artistImage
+        String artistImageUrl = getArtistImageURL(artistId);
+        artist.setArtistImageURL(artistImageUrl);
+
         return SingleArtistResponse.builder()
                 .artist(artist)
                 .build();
@@ -87,6 +91,10 @@ public class ArtistService {
 
         List<Artist> artistList = artistRepository.findAll();
 
+        for (Artist currentArtist : artistList) {
+            String artistImageURL = getArtistImageURL(currentArtist.getId());
+            currentArtist.setArtistImageURL(artistImageURL);
+        }
         return ArtistResponse.builder()
                 .artists(artistList)
                 .build();
@@ -130,8 +138,7 @@ public class ArtistService {
 
 
 
-
-    public SuccessResponse getArtistImage(String artistId) {
+    public String getArtistImageURL (String artistId) {
         // Get information on which artist to edit from
         Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new InvalidArtistIdException(artistId));
 
@@ -141,7 +148,13 @@ public class ArtistService {
         String artistImageURL = s3Service.getObjectURL(bucketName,
                 "artist-images/%s/%s".formatted(artistId, artistImageName));
 
-        // Implement catch error in the event no image is saved.
+        return artistImageURL;
+
+    }
+
+    public SuccessResponse getArtistImage(String artistId) {
+
+        String artistImageURL = getArtistImageURL(artistId);
 
         // Return
         return SuccessResponse.builder()
