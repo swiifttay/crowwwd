@@ -10,6 +10,7 @@ import { SearchBar } from "../components/Explore/SearchBar";
 import { Card } from "../components/Explore/Card";
 import { Grid } from "@mui/material";
 import { setDate } from "date-fns";
+import { BiLoaderAlt } from "react-icons/bi";
 
 export interface Event {
   eventId: string;
@@ -22,6 +23,7 @@ export interface Event {
 }
 
 export default function Explore() {
+  const [isLoaded, setIsLoaded] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
   const [query, setQuery] = useState("");
   const [selectedCat, setSelectedCat] = useState<string[]>([]);
@@ -39,6 +41,7 @@ export default function Explore() {
     const eventList: Event[] = await concertsList();
     console.log(eventList);
     setEvents(eventList);
+    setIsLoaded(true);
   };
 
   //--------- Search Filter ----------
@@ -56,7 +59,7 @@ export default function Explore() {
 
   //---------- Categories Filter ----------
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
+    console.log(e.target.value);
     let cat = e.target.value;
     if (!selectedCat.includes(cat.toLocaleLowerCase()) && e.target.checked) {
       setSelectedCat((prev) => [...prev, cat.toLocaleLowerCase()]);
@@ -85,11 +88,12 @@ export default function Explore() {
       filteredEvents = queriedEvents;
     }
     if (selectedCat && selectedCat.length > 0) {
-      console.log(selectedCat)
+      console.log(selectedCat);
       filteredEvents = filteredEvents?.filter(({ categories }) =>
         categories.some((c) => {
           console.log(c.toLocaleLowerCase());
-          return selectedCat.includes(c.toLocaleLowerCase())})
+          return selectedCat.includes(c.toLocaleLowerCase());
+        })
       );
     }
     if (dateRange) {
@@ -132,9 +136,16 @@ export default function Explore() {
         onDateChange={handleDateChange}
       />
 
-      <Grid className="w-full" container spacing={3}>
-        {displayedItems}
-      </Grid>
+      {isLoaded ? (
+        <Grid className="w-full" container spacing={3}>
+          {displayedItems}
+        </Grid>
+      ) : (
+        <div className="my-5 w-full flex text-4xl text-center font-thin justify-center ">
+          <h1 className="px-3">Loading</h1>{" "}
+          <BiLoaderAlt className="animate-spin" />
+        </div>
+      )}
     </main>
   );
 }
