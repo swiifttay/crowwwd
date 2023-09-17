@@ -1,11 +1,13 @@
 import axios from "axios";
 import { Concert } from "../explore/page";
+import { User } from "../userprofile/page";
 
 const api = axios.create({
   //TODO: backend to provide
   baseURL: "http://localhost:8080/api/",
 });
 
+//Login
 export const authenticate = async (credentials: {
   username: string;
   password: string;
@@ -24,6 +26,7 @@ export const authenticate = async (credentials: {
   }
 };
 
+//Register
 export const register = async (registerDetails: {
   firstName: string;
   lastName: string;
@@ -42,7 +45,23 @@ export const register = async (registerDetails: {
   }
 };
 
+//Explore Page
 export const concertsList = async () => {
   const response: Concert[] = await api.get("/v1/getAllEvents");
   return response;
 };
+
+//User Profile Page
+
+export const getUserProfile =async () => {
+  try {
+    const response: User = await api.get("/profile/findProfile");
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    }
+  }
+  
+}

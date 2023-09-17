@@ -1,8 +1,51 @@
+"use client"
+
 import Image from "next/image";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
 import EventButtonLong from "./EventButtonLong";
+import { StringLiteral } from "typescript";
+import { getUserProfile } from "../axios/apiService";
+import { useEffect, useState } from "react";
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+  phoneNo: string;
+  userCreationDate: string;
+  nationality: string;
+  countryOfResidence: string;
+  countryCode:string;
+  gender:string;
+  dateOfBirth:string;
+  address: string;
+  postalCode: string;
+  isPreferredMarketing: string;
+  spotifyAccount: string;
+}
+
+
 export default function UserProfile() {
+
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    fetchUser();
+  }, [])
+  
+
+  const fetchUser = async () => {
+    const response = await getUserProfile();
+    setUser(response);
+  }
+  
+
+  
+  
   return (
     <div>
       <div className="flex flex-col justify-center items-center mt-4">
@@ -10,9 +53,9 @@ export default function UserProfile() {
           <div className="flex flex-col">
             <div className="flex gap-12">
               <div className="">
-                <div className="text-3xl font-bold mt-8 mb-4">Siyu Tay</div>
-                <div className="text-md">@siyu.tay</div>
-                <div className="text-md">siyu.tay@gmail.com</div>
+                <div className="text-3xl font-bold mt-8 mb-4">{user?.firstName} {user?.firstName}</div>
+                <div className="text-md">{user?.username}</div>
+                <div className="text-md">{user?.email}</div>
                 <div className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer">
                   Update Profile
                 </div>
