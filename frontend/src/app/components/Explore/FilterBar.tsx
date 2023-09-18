@@ -7,7 +7,6 @@ import DatePicker from "react-datepicker";
 import { useState } from "react";
 
 export default function FilterBar() {
-
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
 
@@ -18,9 +17,18 @@ export default function FilterBar() {
         <BsFilter />
       </h1>
       <FilterCategory />
-      <DatePicker selected={startDate} onChange={(date: Date | null) => {setStartDate(date)}}></DatePicker>
-      <DatePicker selected={endDate} onChange={(date: Date | null) => {setEndDate(date)}}></DatePicker>
-
+      <DatePicker
+        selected={startDate}
+        onChange={(date: Date | null) => {
+          setStartDate(date);
+        }}
+      ></DatePicker>
+      <DatePicker
+        selected={endDate}
+        onChange={(date: Date | null) => {
+          setEndDate(date);
+        }}
+      ></DatePicker>
     </div>
   );
 }

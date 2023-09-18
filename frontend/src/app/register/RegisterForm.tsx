@@ -6,9 +6,21 @@ import DataEntry from "../components/Login/DataEntry";
 
 export default function RegisterForm() {
   const [registerDetails, setRegisterDetails] = useState({
-    firstName: "", lastName: "", username: "", password: "", email: "", confirmPassword: "",
-    nationality:"a", countryOfResidence:"a", countryCode:"a", gender:"a", dateOfBirth:"a", address:"a", postalCode:"a", phoneNo:"a"
-  })
+    firstName: "",
+    lastName: "",
+    username: "",
+    password: "",
+    email: "",
+    confirmPassword: "",
+    nationality: "a",
+    countryOfResidence: "a",
+    countryCode: "a",
+    gender: "a",
+    dateOfBirth: "a",
+    address: "a",
+    postalCode: "a",
+    phoneNo: "a",
+  });
 
   const [msg, setMsg] = useState("");
 
@@ -17,12 +29,18 @@ export default function RegisterForm() {
 
     // console.log(registerDetails);
 
-    if (!isValid(registerDetails.email, registerDetails.password, registerDetails.confirmPassword)) {
+    if (
+      !isValid(
+        registerDetails.email,
+        registerDetails.password,
+        registerDetails.confirmPassword,
+      )
+    ) {
       if (registerDetails.password.length < 8) {
         setMsg("Password should be at least 8 characters");
       } else if (
         !registerDetails.email.match(
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
         )
       ) {
         setMsg("Email is invalid");
@@ -36,15 +54,15 @@ export default function RegisterForm() {
   };
 
   const updateTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRegisterDetails(prevState => {
-      return {...prevState, [e.target.id]: e.target.value}
-    })
+    setRegisterDetails((prevState) => {
+      return { ...prevState, [e.target.id]: e.target.value };
+    });
   };
 
   const isValid = (email, password, confirmPassword) => {
     if (
       !email.match(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
       )
     )
       return false;
@@ -52,7 +70,6 @@ export default function RegisterForm() {
     if (password.length < 8) return false;
     return true;
   };
-
 
   return (
     <form className="mt-8 w-full max-w-sm" onSubmit={submitHandler}>
@@ -101,9 +118,7 @@ export default function RegisterForm() {
       >
         Sign Up
       </button>
-      <div className="text-red-500 mt-2">
-        {msg}
-      </div>
+      <div className="text-red-500 mt-2">{msg}</div>
     </form>
   );
 }

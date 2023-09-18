@@ -10,8 +10,9 @@ const config: Config = {
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "hero": "radial-gradient(circle at center, rgba(5, 16, 33, 0.7) 20%, rgba(7, 23, 47, 1) 70%), url('/images/home-6.jpg')",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        hero: "radial-gradient(circle at center, rgba(5, 16, 33, 0.7) 20%, rgba(7, 23, 47, 1) 70%), url('/images/home-6.jpg')",
       },
 
       fontFamily: {

@@ -4,12 +4,17 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { createTheme, FormGroup, ThemeProvider, Typography } from "@mui/material";
+import {
+  createTheme,
+  FormGroup,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#07172F"
+      main: "#07172F",
     },
   },
 });
@@ -24,9 +29,7 @@ export default function FilterCategory() {
       >
         Categories
       </FormLabel>
-      <FormGroup
-        defaultValue="pop"
-      >
+      <FormGroup defaultValue="pop">
         <FormControlLabel
           className="justify-center cd frontendtext-sm"
           value="pop"
@@ -42,7 +45,7 @@ export default function FilterCategory() {
         <FormControlLabel
           className="justify-center"
           value="Indie"
-          control={<Checkbox size="small"  />}
+          control={<Checkbox size="small" />}
           label={<Typography className="font-mont text-xs">Indie</Typography>}
         />
       </FormGroup>
