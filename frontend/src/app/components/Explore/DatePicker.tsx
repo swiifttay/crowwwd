@@ -55,6 +55,7 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
     const selectedRange = ranges["selection"];
     if (selectedRange?.startDate && selectedRange?.endDate) {
       setRange([selectedRange as Range]);
+      console.log()
       onDateChange(selectedRange.startDate, selectedRange.endDate);
     }
   }

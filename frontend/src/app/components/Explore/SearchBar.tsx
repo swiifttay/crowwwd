@@ -18,7 +18,7 @@ export function SearchBar({ onInput }: InputHandler) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="h-24 md:h-28 w-84 max-w-md py-5 px-12 sm:py-2 border-none  flex items-center radius rounded-full bg-cover bg-center bg-hollow-purple"
+      className="h-24 md:h-24 w-84 max-w-md py-5 px-12 sm:py-2 border-none flex items-center radius rounded-full bg-cover bg-center bg-hollow-purple"
     >
       <input
         ref={inputRef}

@@ -4,9 +4,8 @@ import { BsFilter } from "react-icons/bs";
 import FilterCategory from "./FilterCategory";
 import DatePicker from "./DatePicker";
 
-import { RefObject, useEffect, useRef, useState, ChangeEvent } from "react";
+import { useEffect, useRef, useState, ChangeEvent } from "react";
 
-// function useOutsideAlerter(ref: RefObject<HTMLElement>) {}
 
 type SelectProps = {
   onCheck: (input: ChangeEvent<HTMLInputElement>) => void;
@@ -14,9 +13,6 @@ type SelectProps = {
 };
 
 export default function FilterBar({ onCheck, onDateChange }: SelectProps) {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
-
   const [isOpen, setIsOpen] = useState(false);
 
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -43,15 +39,15 @@ export default function FilterBar({ onCheck, onDateChange }: SelectProps) {
   };
 
   return (
-    <div className="flex px-3 w-full mt-4 items-center justify-between">
-      <div ref={wrapperRef} className="flex relative">
+    <div className="flex px-3 w-full mt-4 items-center justify-between ">
+      <div ref={wrapperRef} className="flex relative group">
         <button
           onClick={() => {
             setIsOpen(!isOpen);
           }}
-          className="flex py-2 px-4 bg-red-600 rounded-full text-sm hover:ease-in-out duration-300 hover:-translate-y-1 hover:scale-105 z-20"
+          className="flex py-2 px-4 bg-theme-blue rounded-full text-sm hover:ease-in-out duration-300 hover:-translate-y-1 hover:scale-105 z-20"
         >
-          <BsFilter className="text-lg" /> Select Category
+          <BsFilter className="text-lg group-focus:rotate-90" /> Select Category
         </button>
         {isOpen && (
           <div className="h-10 w-full top-5 absolute z-10">

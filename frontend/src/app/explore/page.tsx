@@ -1,15 +1,13 @@
 "use client";
 
 import FilterBar from "../components/Explore/FilterBar";
-import FilterEvents from "../components/Explore/FilterEvents";
 import "../globals.css";
 
-import { useState, useEffect, ChangeEvent, SyntheticEvent } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { concertsList } from "../axios/apiService";
 import { SearchBar } from "../components/Explore/SearchBar";
 import { Card } from "../components/Explore/Card";
 import { Grid } from "@mui/material";
-import { setDate } from "date-fns";
 import { BiLoaderAlt } from "react-icons/bi";
 
 export interface Event {
@@ -57,7 +55,7 @@ export default function Explore() {
       event.artist.name.toLocaleLowerCase().indexOf(query) !== -1
   );
 
-  //---------- Categories Filter ----------
+  //---------- Set Selected Categories ----------
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     let cat = e.target.value;
@@ -71,7 +69,7 @@ export default function Explore() {
     }
   };
 
-  //---------- Date Range Filter ----------
+  //---------- Set Selected Date Range ----------
   const handleDateChange = (startDate: Date, endDate: Date) => {
     setDateRange({ startDate, endDate });
   };
@@ -88,10 +86,8 @@ export default function Explore() {
       filteredEvents = queriedEvents;
     }
     if (selectedCat && selectedCat.length > 0) {
-      console.log(selectedCat);
       filteredEvents = filteredEvents?.filter(({ categories }) =>
         categories.some((c) => {
-          console.log(c.toLocaleLowerCase());
           return selectedCat.includes(c.toLocaleLowerCase());
         })
       );
@@ -104,11 +100,11 @@ export default function Explore() {
         });
       });
     }
-
+    
     return filteredEvents?.map((event: Event) => (
-      <Grid key={event.eventId} item lg={4} md={4} sm={6} className="w-full">
+      <div key={event.eventId} className="w-full md:col-span-4 sm:col-span-6 col-span-12" >
         <Card {...event} />
-      </Grid>
+      </div>
     ));
   };
 
@@ -125,7 +121,7 @@ export default function Explore() {
         id="title"
         className="flex flex-wrap w-full items-center justify-center px-3"
       >
-        <h1 className="flex-1 sticky mr-2 py-10 text-center md:text-start font-bold text-5xl">
+        <h1 className="flex-1 sticky mr-2 py-10 text-center md:text-start font-bold text-6xl">
           Latest Events
         </h1>
         <SearchBar onInput={handleInputChange} />
@@ -137,11 +133,11 @@ export default function Explore() {
       />
 
       {isLoaded ? (
-        <Grid className="w-full" container spacing={3}>
+        <div className="w-full px-3 grid md:grid-cols-12 gap-5" >
           {displayedItems}
-        </Grid>
+        </div>
       ) : (
-        <div className="my-5 w-full flex text-4xl text-center font-thin justify-center ">
+        <div className="my-5 w-full flex text-4xl text-center font-thin justify-center">
           <h1 className="px-3">Loading</h1>{" "}
           <BiLoaderAlt className="animate-spin" />
         </div>

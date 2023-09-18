@@ -3,7 +3,7 @@
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {FormGroup} from "@mui/material";
-import { ChangeEvent, SyntheticEvent } from "react";
+import { ChangeEvent } from "react";
 
 type CheckProps = {
   onCheck: (input: ChangeEvent<HTMLInputElement>) => void
