@@ -11,7 +11,7 @@ export const authenticate = async (credentials: {
   password: string;
 }) => {
   try {
-    const response = await api.post("/authenticate", { credentials });
+    const response = await api.post("/auth/authenticate", { credentials });
     const { token } = response.data;
     localStorage.setItem("token", token);
   } catch (error) {
@@ -28,10 +28,20 @@ export const register = async (registerDetails: {
   firstName: string;
   lastName: string;
   username: string;
+  email: string;
   password: string;
+
+  nationality: string;
+  countryOfResidence: string;
+  countryCode: string;
+  gender: string;
+  dateOfBirth: string;
+  address: string;
+  postalCode: string;
+  phoneNo: string;
 }) => {
   try {
-    const response = await api.post("/register", registerDetails);
+    const response = await api.post("/auth/register", registerDetails);
     const { token } = response.data;
     localStorage.setItem("token", token);
   } catch (error) {
@@ -43,6 +53,6 @@ export const register = async (registerDetails: {
 };
 
 export const concertsList = async () => {
-  const response : Concert[] = await api.get("/v1/getAllEvents");
+  const response: Concert[] = await api.get("/event/getAllEvents");
   return response;
-}
+};
