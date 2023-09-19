@@ -11,17 +11,25 @@ export const authenticate = async (credentials: {
   password: string;
 }) => {
   try {
-    const response = await api.post("/auth/authenticate", { credentials });
+    const response = await api.post("/auth/authenticate", credentials);
     const { token } = response.data;
     localStorage.setItem("token", token);
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.log(error.status);
-      console.error(error.response);
-    } else {
-      console.log(error);
-    }
-  }
+    return true;
+} catch (error) {
+  return false;
+  // if (axios.isAxiosError(error)) {
+  //   console.log("error status", error.response?.status);
+  //   // console.log(error);
+  //   if (error.response?.status === 400) {
+  //     console.log("bad error");
+  //   } else if (error.response?.status === 401) {
+  //     console.log("invalid cred error");
+  //     // return;
+  //   } else {
+  //     console.log("Other error status");
+  //   }
+  // }
+}
 };
 
 export const register = async (registerDetails: {

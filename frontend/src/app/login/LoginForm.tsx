@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import DataEntry from "../components/Login/DataEntry";
 import { authenticate } from "../axios/apiService";
+import { error } from "console";
 
 export default function LoginForm() {
   const [credentials, setCredentials] = useState({
@@ -10,10 +11,22 @@ export default function LoginForm() {
     password: "",
   });
 
+  const [isValidCredentials, setIsValidCredentials] = useState(false);
+
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(credentials);
-    authenticate(credentials);
+    // let isValid = true;
+    var isValid = await authenticate(credentials);
+
+    console.log(isValid);
+    if (!isValid) {
+      console.log("invalid");
+      setIsValidCredentials(false);
+    } else {
+      console.log("valid");
+      setIsValidCredentials(true);
+    }
   };
 
   const updateTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +40,7 @@ export default function LoginForm() {
       <DataEntry
         type="text"
         id="username"
-        placeholder="Enter your username/email"
+        placeholder="Enter your username"
         onTextChange={updateTextHandler}
       />
       <DataEntry
@@ -36,6 +49,10 @@ export default function LoginForm() {
         placeholder="Enter your password"
         onTextChange={updateTextHandler}
       />
+      {isValidCredentials ?
+        null :
+        <div>The username or password entered is incorrect.</div>
+      }
 
       <button
         type="submit"
