@@ -3,7 +3,7 @@ import { Navbar, Video, Hero } from "./components/Home/index";
 
 export default function Home() {
   return (
-    <main className="h-screen w-full px-24 my-20 bg-hero bg-cover items-center">
+    <main className="h-screen w-full px-24 bg-hero bg-cover items-center">
       <h1 className="font-bold text-7xl my-20">Your Ticket <br /> Paradigm</h1>
       {/* <Hero /> */}
       <div className="flex space-x-2 items-center">

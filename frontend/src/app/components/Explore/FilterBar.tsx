@@ -2,25 +2,60 @@
 
 import { BsFilter } from "react-icons/bs";
 import FilterCategory from "./FilterCategory";
-import DatePicker from "react-datepicker";
+import DatePicker from "./DatePicker";
 
-import { useState } from "react";
+import { useEffect, useRef, useState, ChangeEvent } from "react";
 
-export default function FilterBar() {
 
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+type SelectProps = {
+  onCheck: (input: ChangeEvent<HTMLInputElement>) => void;
+  onDateChange: (startDate: Date, endDate: Date) => void;
+};
+
+export default function FilterBar({ onCheck, onDateChange }: SelectProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    document.addEventListener("keydown", hideOnEscape, true);
+    document.addEventListener("click", hideOnClickOutside, true);
+    return () => {
+      document.removeEventListener("keydown", hideOnEscape, true);
+      document.removeEventListener("click", hideOnClickOutside, true);
+    };
+  }, []);
+
+  const hideOnEscape = (e: any) => {
+    if (e.key === "Escape") {
+      setIsOpen(false);
+    }
+  };
+
+  const hideOnClickOutside = (e: any) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+      setIsOpen(false);
+    }
+  };
 
   return (
-    <div className="h-full fixed mr-2 border-e-2 border-gray-500 px-12">
-      <h1 className="py-3 justify-center flex flex-row text-base">
-        Add Filters
-        <BsFilter />
-      </h1>
-      <FilterCategory />
-      <DatePicker selected={startDate} onChange={(date: Date | null) => {setStartDate(date)}}></DatePicker>
-      <DatePicker selected={endDate} onChange={(date: Date | null) => {setEndDate(date)}}></DatePicker>
-
+    <div className="flex px-3 w-full mt-4 items-center justify-between ">
+      <div ref={wrapperRef} className="flex relative group">
+        <button
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+          className="flex py-2 px-4 bg-theme-blue rounded-full text-sm hover:ease-in-out duration-300 hover:-translate-y-1 hover:scale-105 z-20"
+        >
+          <BsFilter className="text-lg group-focus:rotate-90" /> Select Category
+        </button>
+        {isOpen && (
+          <div className="h-10 w-full top-5 absolute z-10">
+            <FilterCategory onCheck={onCheck} />
+          </div>
+        )}
+      </div>
+      <DatePicker onDateChange={onDateChange} />
     </div>
   );
 }
