@@ -105,7 +105,9 @@ public class EventService {
 
         // Get the URL to the image of each event
         for (OutputEvent currentEvent : events) {
-            String eventImageURL = getEventImageUrl(currentEvent.getEventId());
+            // To get the URL for the eventImage
+            String eventImageURL = "https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
+                    .formatted(bucketName, currentEvent.getEventId(), currentEvent.getEventImageName());
             currentEvent.setEventImageURL(eventImageURL);
         }
 
@@ -126,7 +128,9 @@ public class EventService {
 
         // Get the URL to the image of each event
         for (OutputEvent currentEvent : events) {
-            String eventImageURL = getEventImageUrl(currentEvent.getEventId());
+            // To get the URL for the eventImage
+            String eventImageURL = "https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
+                    .formatted(bucketName, currentEvent.getEventId(), currentEvent.getEventImageName());
             currentEvent.setEventImageURL(eventImageURL);
         }
 
@@ -267,9 +271,10 @@ public class EventService {
             throw new InvalidEventIdException(eventId);
         }
 
-        // Get the Event Image URL
-        String eventImageURL = s3Service.getObjectURL(bucketName,
-                "event-images/%s/%s".formatted(eventId, eventImageName));
+
+        // To get the URL for the eventImage
+        String eventImageURL = "https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
+                .formatted(bucketName, event.getId(), event.getEventImageName());
 
         // Implement catch error in the event no image is saved.
 
