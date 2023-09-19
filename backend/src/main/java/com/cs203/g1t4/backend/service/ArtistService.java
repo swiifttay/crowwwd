@@ -78,8 +78,9 @@ public class ArtistService {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new InvalidArtistIdException(artistId));
 
+
         // To get the URL for the artistImage
-        String artistImageUrl = getArtistImageURL(artistId);
+        String artistImageUrl = "https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName,artistId, artist.getArtistImage());
         artist.setArtistImageURL(artistImageUrl);
 
         return SingleArtistResponse.builder()
@@ -92,8 +93,9 @@ public class ArtistService {
         List<Artist> artistList = artistRepository.findAll();
 
         for (Artist currentArtist : artistList) {
-            String artistImageURL = getArtistImageURL(currentArtist.getId());
-            currentArtist.setArtistImageURL(artistImageURL);
+            // To get the URL for the artistImage
+            String artistImageUrl = "https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName, currentArtist.getId(), currentArtist.getArtistImage());
+            currentArtist.setArtistImageURL(artistImageUrl);
         }
         return ArtistResponse.builder()
                 .artists(artistList)
@@ -136,19 +138,15 @@ public class ArtistService {
                 .build();
     }
 
-
-
     public String getArtistImageURL (String artistId) {
         // Get information on which artist to edit from
         Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new InvalidArtistIdException(artistId));
 
-        String artistImageName = artist.getArtistImage();
 
-        // Get the Artist Image URL
-        String artistImageURL = s3Service.getObjectURL(bucketName,
-                "artist-images/%s/%s".formatted(artistId, artistImageName));
+        // To get the URL for the artistImage
+        String artistImageUrl = "https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName, artist.getId(), artist.getArtistImage());
 
-        return artistImageURL;
+        return artistImageUrl;
 
     }
 
