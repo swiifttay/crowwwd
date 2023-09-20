@@ -3,11 +3,15 @@ package com.cs203.g1t4.backend.service;
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
+import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
 import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
 import com.cs203.g1t4.backend.models.Ticket;
 import com.cs203.g1t4.backend.models.User;
+import com.cs203.g1t4.backend.models.event.Event;
+import com.cs203.g1t4.backend.models.exceptions.InvalidEventIdException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTicketIdException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
+import com.cs203.g1t4.backend.repository.EventRepository;
 import com.cs203.g1t4.backend.repository.TicketRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,8 @@ import java.util.List;
 public class TicketService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
+
 
     public SuccessResponse createTicket(TicketRequest TicketRequest, String username) {
         // Get the buying user's id
@@ -41,6 +47,18 @@ public class TicketService {
         //If Everything goes smoothly, SuccessResponse will be created
         return SuccessResponse.builder()
                 .response("Ticket has been created successfully")
+                .build();
+    }
+
+    public Response deleteTicket(String ticketId) {
+
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new InvalidTicketIdException(ticketId));
+
+        ticketRepository.deleteById(ticketId);
+
+        return SingleTicketResponse.builder()
+                .ticket(ticket)
                 .build();
     }
 
@@ -71,6 +89,18 @@ public class TicketService {
                 .build();
     }
 
+    public Response getTicketById(String ticketId) {
+
+        // Obtain ticket from repository using its id
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new InvalidTicketIdException(ticketId));
+
+        //If Everything goes smoothly, SuccessResponse will be created
+        return SingleTicketResponse.builder()
+                .ticket(ticket)
+                .build();
+    }
+
     public Response getTicketsByUser(String username) {
         // Get the buying user's id
         User user = userRepository.findByUsername(username)
@@ -85,6 +115,17 @@ public class TicketService {
                 .build();
     }
 
+    public Response getTicketByEvent(String eventId) {
 
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new InvalidEventIdException(eventId));
+
+        List<Ticket> list = ticketRepository.findByEventId(eventId);
+
+        return TicketResponse.builder()
+                .tickets(list)
+                .build();
+
+    }
 
 }

@@ -36,6 +36,14 @@ public class TicketController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/deleteTicket/{ticketId}")
+    public ResponseEntity<Response> deleteTicket(@PathVariable String ticketId) {
+
+        Response response = ticketService.deleteTicket(ticketId);
+
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/updateTicket/{ticketId}")
     public ResponseEntity<Response> updateTicket(@PathVariable String ticketId, @Valid @RequestBody TicketRequest TicketRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
@@ -64,9 +72,19 @@ public class TicketController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/getAllTicketsByEvent/{eventId}")
+    public ResponseEntity<Response> getTicketsByEvent(@PathVariable String eventId) {
 
+        Response response = ticketService.getTicketByEvent(eventId);
 
+        return ResponseEntity.ok(response);
+    }
 
+    @GetMapping("/getTicket/{ticketId}")
+    public ResponseEntity<Response> getTicketById(@PathVariable String ticketId) {
+        Response response = ticketService.getTicketById(ticketId);
 
+        return ResponseEntity.ok(response);
+    }
 
 }
