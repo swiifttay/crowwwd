@@ -49,10 +49,9 @@ export default function LoginForm() {
         placeholder="Enter your password"
         onTextChange={updateTextHandler}
       />
-      {isValidCredentials ?
-        null :
+      {isValidCredentials ? null : (
         <div>The username or password entered is incorrect.</div>
-      }
+      )}
 
       <button
         type="submit"
