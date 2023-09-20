@@ -25,6 +25,11 @@ export const mont = localFont({
       weight: "400",
       style: "semibold",
     },
+    {
+      path: "../../public/fonts/Mont/Mont-Light.otf",
+      weight: "300",
+      style: "light",
+    },
   ],
   variable: "--font-mont",
 });
