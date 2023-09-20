@@ -5,7 +5,7 @@ import AccountSwitch from "../components/Login/AccountSwitch";
 
 export default function Login() {
   return (
-    <div className="items-center min-h-screen max-h-screen">
+    <div className="items-center max-h-screen">
       <Image
         src="/images/login-bg.jpg"
         alt="login-bg"

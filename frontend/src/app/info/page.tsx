@@ -9,7 +9,7 @@ function Info() {
   const handleClick = () => {};
 
   return (
-    <div className="flex flex-col items-center justify-center w-full flex-1 px-20 min-h-screen text-center pt-20 py-2">
+    <div className="flex flex-col items-center justify-center w-full text-center">
       <>
         <Container component="main" maxWidth="sm">
           <Paper
