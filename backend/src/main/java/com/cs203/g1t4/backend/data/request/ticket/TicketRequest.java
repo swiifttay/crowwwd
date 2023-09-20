@@ -1,6 +1,7 @@
 package com.cs203.g1t4.backend.data.request.ticket;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,16 +13,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TicketRequest {
 
-    @NotBlank
+    @NotNull
     private String eventId;
 
-    @NotBlank
+    @NotNull
     private String userIdAttending;
 
 
-    @NotBlank
+    @NotNull
     private String seatNo;
 
-    @NotBlank
+    @NotNull
     private boolean isSurpriseTicket;
 }
