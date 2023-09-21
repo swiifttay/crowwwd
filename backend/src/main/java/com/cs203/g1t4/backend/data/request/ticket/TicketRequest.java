@@ -19,9 +19,8 @@ public class TicketRequest {
     @NotNull
     private String userIdAttending;
 
-
-    @NotNull
-    private String seatNo;
+//    @NotNull
+//    private String seatNo;
 
     @NotNull
     private boolean isSurpriseTicket;
