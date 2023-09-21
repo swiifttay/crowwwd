@@ -56,6 +56,7 @@ public class Event {
                 .eventId(id)
                 .name(name)
                 .description(description)
+                .eventImageName(eventImageName)
                 .dates(convertLocalDateTimeListToStrList(dates))
                 .venue(venue)
                 .categories(categories)
