@@ -20,9 +20,10 @@ public class Artist {
     @NotBlank
     private String website;
 
-    @NotBlank
+//    @NotBlank
     private String artistImage;
 
+    @NotBlank
     private String artistImageURL;
 
     @NotBlank

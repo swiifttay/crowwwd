@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -78,10 +79,11 @@ public class ArtistService {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new InvalidArtistIdException(artistId));
 
+//
+//        // To get the URL for the artistImage
+//        String artistImageUrl = "https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName,artistId, artist.getArtistImage());
+//        artist.setArtistImageURL(artistImageUrl);
 
-        // To get the URL for the artistImage
-        String artistImageUrl = "https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName,artistId, artist.getArtistImage());
-        artist.setArtistImageURL(artistImageUrl);
 
         return SingleArtistResponse.builder()
                 .artist(artist)
@@ -160,4 +162,20 @@ public class ArtistService {
                 .build();
     }
 
+    public String fanRecordsCreationAndUpdate(Artist artist) {
+        // Get information on which artist to edit from
+        Optional<Artist> currentArtist = artistRepository.findByName(artist.getName());
+
+        // check if there is already the artist
+        if (currentArtist.isPresent()) {
+            return currentArtist.get().getId();
+        }
+
+        // save the artist in the repo
+        artistRepository.save(artist);
+        // Get information on which artist to edit from
+        currentArtist = artistRepository.findByName(artist.getName());
+
+        return currentArtist.get().getId();
+    }
 }

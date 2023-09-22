@@ -3,6 +3,7 @@ package com.cs203.g1t4.backend.service;
 import com.cs203.g1t4.backend.data.request.fanRecord.FanRecordRequest;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.fanRecord.FanRecordResponse;
+import com.cs203.g1t4.backend.models.Artist;
 import com.cs203.g1t4.backend.models.FanRecord;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.DuplicateFanRecordException;
@@ -60,5 +61,33 @@ public class FanRecordService {
                 .allFanRecords(allFanRecordsUnderUser)
                 .build();
 
+    }
+
+    // helper method
+    public void updateRecordsFromSpotify(List<String> topListsOfArtist, String username) {
+        // check if the user exists
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new InvalidTokenException());
+
+        String userId = user.getId();
+
+
+        for (String artistId : topListsOfArtist) {
+
+            // check if there is such a record already
+            Optional<FanRecord> duplicateFanRecord = fanRecordRepository.findFanRecordByUserIdAndArtistId(artistId, userId);
+
+            // if no records have been added, edit it
+            if (!duplicateFanRecord.isPresent()) {
+                FanRecord fanRecord = FanRecord.builder()
+                        .artistId(artistId)
+                        .userId(userId)
+                        .registerDate(LocalDateTime.now())
+                        .build();
+
+                fanRecordRepository.save(fanRecord);
+            }
+
+        }
     }
 }
