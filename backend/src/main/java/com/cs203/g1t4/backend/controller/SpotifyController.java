@@ -1,9 +1,12 @@
-package com.cs203.g1t4.backend.controller.spotify;
+package com.cs203.g1t4.backend.controller;
 
 
-import com.cs203.g1t4.backend.config.spotify.SpotifyConfig;
 import com.cs203.g1t4.backend.models.exceptions.InvalidSpotifyAccountException;
+import com.cs203.g1t4.backend.service.SpotifyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
@@ -16,17 +19,23 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/spotify")
-public class SpotifyConfigController {
+@RequiredArgsConstructor
+public class SpotifyController {
 
 
     @Autowired
-    private SpotifyConfig spotifyAPI;
+    private SpotifyApi spotifyAPI;
+
+
+    private final SpotifyService spotifyService;
 
 
     @GetMapping("/login")
     @ResponseBody
     public String spotifyLogin() {
-        AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyAPI.spotifyApiCreator().authorizationCodeUri()
+
+
+        AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyAPI.authorizationCodeUri()
                 .scope("user-read-private, user-read-email, user-top-read")
                 .show_dialog(true)
                 .build();
@@ -36,12 +45,11 @@ public class SpotifyConfigController {
     }
 
     @GetMapping(value = "/get-user-code")
-    public String getSpotifyUserCode(@RequestParam("code") String userCode /*, HttpServletResponse response*/) throws IOException {
+    public String getSpotifyUserCode(@RequestParam("code") String userCode) throws IOException {
         String code = userCode;
 
-        SpotifyApi spotifyApi = spotifyAPI.spotifyApiCreator();
 
-        AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code)
+        AuthorizationCodeRequest authorizationCodeRequest = spotifyAPI.authorizationCode(code)
                 .build();
 
         try {
@@ -49,18 +57,24 @@ public class SpotifyConfigController {
             final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 
             // Set access and refresh token for further "spotifyApi" object usage
-            spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-            spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+            spotifyAPI.setAccessToken(authorizationCodeCredentials.getAccessToken());
+            spotifyAPI.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 
         } catch (IOException | SpotifyWebApiException | org.apache.hc.core5.http.ParseException e) {
             throw new InvalidSpotifyAccountException();
         }
 
 
-//        response.sendRedirect("http://localhost:3000/top-artists");
-        return spotifyApi.getAccessToken();
+        return spotifyAPI.getAccessToken();
+    }
+
+
+    @PostMapping("/updateMyAccountFavouriteArtists")
+    public void overallFunction(@AuthenticationPrincipal UserDetails userDetails) {
+
         // TODO: change this to edit to update the fanRecords of the user
         // now you can call the API services from spotify
         // and do the relevant FanRecord related stuffs
+        spotifyService.spotifyGetMyTopArtists(spotifyAPI, userDetails.getUsername());
     }
 }
