@@ -68,7 +68,7 @@ public class TicketService {
                 .build();
     }
 
-    public SuccessResponse updateTicket(String ticketId, TicketRequest TicketRequest, String username) {
+    public Response updateTicket(String ticketId, TicketRequest TicketRequest, String username) {
         // Get the buying user's id
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());
@@ -90,8 +90,8 @@ public class TicketService {
         ticketRepository.save(ticket);
 
         //If Everything goes smoothly, SuccessResponse will be created
-        return SuccessResponse.builder()
-                .response("Ticket has been updated successfully")
+        return SingleTicketResponse.builder()
+                .ticket(ticket)
                 .build();
     }
 
