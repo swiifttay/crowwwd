@@ -13,13 +13,11 @@ public class SpotifyConfig {
     private static final URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:8080/api/spotify/get-user-code");
 
     // spotify client id and secret key
-//    @Value("${spotify.client.id}")
-    @Value("${env.SPOTIFY_CLIENT_ID}")
+    @Value("${spotify.client.id}")
     private String spotifyClientId;
 
 
-//    @Value("${spotify.client.secretkey}")
-    @Value("${env.SPOTIFY_SECRET_KEY")
+    @Value("${spotify.client.secretkey}")
     private String spotifySecretKey;
 
     @Bean
