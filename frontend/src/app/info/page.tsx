@@ -6,7 +6,7 @@ import Paper from "@mui/material/Paper";
 import AddressForm from "./form";
 
 function Info() {
-  const handleClick = () => {};
+  // const handleClick = () => {};
 
   return (
     <div className="flex flex-col items-center justify-center w-full text-center">
@@ -18,14 +18,14 @@ function Info() {
             className="rounded-lg bg-gradient-to-b from-theme-dark-blue to-theme-midnight"
           >
             <AddressForm />
-            <Button
+            {/* <Button
               variant="contained"
               onClick={handleClick}
               sx={{ mt: 3, ml: 1 }}
               className="font-mont bg-theme-light-blue"
             >
               Save
-            </Button>
+            </Button> */}
           </Paper>
         </Container>
       </>

@@ -1,3 +1,5 @@
+import Button from "@mui/material/Button";
+
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
@@ -31,20 +33,20 @@ export default function AddressForm() {
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-      if (!/^\d+$/.test(addressDetails.phoneNo)) {
-        setMsg("Mobile number should be digits");
-        return;
-      }
+    // if (!/^\d+$/.test(addressDetails.phoneNo)) {
+    //   setMsg("Mobile number should be digits");
+    //   return;
+    // }
 
-      if (addressDetails.phoneNo.length < 8) {
-        setMsg("Mobile number should be at least 8 characters");
-        return;
-      }
+    // if (addressDetails.phoneNo.length < 8) {
+    //   setMsg("Mobile number should be at least 8 characters");
+    //   return;
+    // }
 
-      if (!/^\d+$/.test(addressDetails.postalCode)) {
-        setMsg("Postal code should be digits");
-        return;
-      }
+    // if (!/^\d+$/.test(addressDetails.postalCode)) {
+    //   setMsg("Postal code should be digits");
+    //   return;
+    // }
 
     register(addressDetails);
   };
@@ -77,7 +79,7 @@ export default function AddressForm() {
   };
 
   return (
-    <form onSubmit={submitHandler}>
+    <>
       <Typography
         variant="h6"
         className="font-mont text-white mb-5"
@@ -217,8 +219,16 @@ export default function AddressForm() {
             className="text-white font-mont"
           />
         </Grid>
+        <Button
+          variant="contained"
+          onClick={submitHandler}
+          sx={{ mt: 3, ml: 1 }}
+          className="font-mont bg-theme-light-blue"
+        >
+          Save
+        </Button>
         <div className="text-red-500 mt-2">{msg}</div>
       </Grid>
-    </form>
+    </>
   );
 }
