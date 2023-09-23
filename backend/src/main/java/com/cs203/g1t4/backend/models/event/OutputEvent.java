@@ -12,6 +12,7 @@ import java.util.List;
 public class OutputEvent {
   private String eventId;
   private String name;
+  private String eventImageName;
   private String eventImageURL; // Image URL
   private String description;
   private List<String> dates; // date and time of the actual concert
