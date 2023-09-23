@@ -1,10 +1,13 @@
 package com.cs203.g1t4.backend.controller;
 
 
+import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.models.exceptions.InvalidSpotifyAccountException;
 import com.cs203.g1t4.backend.service.SpotifyService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/spotify")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class SpotifyController {
 
 
@@ -70,11 +74,10 @@ public class SpotifyController {
 
 
     @PostMapping("/updateMyAccountFavouriteArtists")
-    public void overallFunction(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Response> overallFunction(@AuthenticationPrincipal UserDetails userDetails) {
 
-        // TODO: change this to edit to update the fanRecords of the user
-        // now you can call the API services from spotify
-        // and do the relevant FanRecord related stuffs
-        spotifyService.spotifyGetMyTopArtists(spotifyAPI, userDetails.getUsername());
+        Response response = spotifyService.spotifyGetMyTopArtists(spotifyAPI, userDetails.getUsername());
+
+        return ResponseEntity.ok(response);
     }
 }

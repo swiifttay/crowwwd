@@ -1,5 +1,7 @@
 package com.cs203.g1t4.backend.service;
 
+import com.cs203.g1t4.backend.data.response.Response;
+import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -18,20 +21,23 @@ public class SpotifyService {
     private final ArtistService artistService;
     private final FanRecordService fanRecordService;
 
-    public void spotifyGetMyTopArtists(SpotifyApi spotifyApi, String username) {
+    public Response spotifyGetMyTopArtists(SpotifyApi spotifyApi, String username) {
 
         final GetUsersTopArtistsRequest getUsersTopArtistsRequest = spotifyApi.getUsersTopArtists()
                 .time_range("medium_term")
                 .limit(10)
-                .offset(5)
+                .offset(0)
                 .build();
 
         try {
+
+
             final Paging<Artist> artistPaging = getUsersTopArtistsRequest.execute();
             Artist[] artistArray = artistPaging.getItems();
 
+
             // determine the top 10 artists
-            int top10Artist = artistArray.length <= 10 ? artistArray.length : 10;
+            int top10Artist = Math.min(artistArray.length, 10);
 
             // convert these artists to our artist format
             List<String> topArtistIdSelections = new ArrayList<>();
@@ -49,17 +55,21 @@ public class SpotifyService {
                                 .artistImageURL(currentArtist.getImages()[0].getUrl())
                                 .build();
 
-
                 // check if this artist is in the database and if not, add it
                 // then return id
                 String currentArtistId = artistService.fanRecordsCreationAndUpdate(convertedArtist);
 
-                // add into the new list for creating fanrecords later
+                // add into the new list for creating fan records later
                 topArtistIdSelections.add(currentArtistId);
             }
 
             // get the conversion to fanRecords
             fanRecordService.updateRecordsFromSpotify(topArtistIdSelections, username);
+
+            //If Everything goes smoothly, response will be created using AuthenticationResponse with token
+            return SuccessResponse.builder()
+                    .response("Fan records have been updated successfully")
+                    .build();
 
         } catch (Exception e) {
             throw new InvalidTokenException();

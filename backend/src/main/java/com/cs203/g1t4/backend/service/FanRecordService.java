@@ -23,32 +23,33 @@ public class FanRecordService {
     private final FanRecordRepository fanRecordRepository;
     private final UserRepository userRepository;
 
-    public SuccessResponse createFanRecord(FanRecordRequest fanRecordRequest, String username) {
-        // check if the user exists
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new InvalidTokenException());
-
-        String userId = user.getId();
-
-        String artistId = fanRecordRequest.getArtistId();
-
-        // check if there is such a record already
-        Optional<FanRecord> duplicateFanRecord = fanRecordRepository.findFanRecordByUserIdAndArtistId(artistId, userId);
-
-        if (duplicateFanRecord.isPresent()) {
-            throw new DuplicateFanRecordException(artistId);
-        }
-
-        FanRecord fanRecord = FanRecord.builder()
-                .artistId(artistId)
-                .userId(userId)
-                .registerDate(LocalDateTime.now())
-                .build();
-
-        return SuccessResponse.builder()
-                .response("Fan Record successfully created")
-                .build();
-    }
+    // not allowed to create a fan record manually because they should be via the spotify api
+//    public SuccessResponse createFanRecord(FanRecordRequest fanRecordRequest, String username) {
+//        // check if the user exists
+//        User user = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new InvalidTokenException());
+//
+//        String userId = user.getId();
+//
+//        String artistId = fanRecordRequest.getArtistId();
+//
+//        // check if there is such a record already
+//        Optional<FanRecord> duplicateFanRecord = fanRecordRepository.findFanRecordByUserIdAndArtistId(artistId, userId);
+//
+//        if (duplicateFanRecord.isPresent()) {
+//            throw new DuplicateFanRecordException(artistId);
+//        }
+//
+//        FanRecord fanRecord = FanRecord.builder()
+//                .artistId(artistId)
+//                .userId(userId)
+//                .registerDate(LocalDateTime.now())
+//                .build();
+//
+//        return SuccessResponse.builder()
+//                .response("Fan Record successfully created")
+//                .build();
+//    }
 
     public FanRecordResponse findAllFanRecordsUnderUser(String username) {
         // get the user
@@ -87,7 +88,6 @@ public class FanRecordService {
 
                 fanRecordRepository.save(fanRecord);
             }
-
         }
     }
 }

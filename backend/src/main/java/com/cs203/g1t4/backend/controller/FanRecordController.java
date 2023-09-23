@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.*;
 public class FanRecordController {
     private final FanRecordService fanRecordService;
 
-    @PostMapping("/addFanRecord")
-    public ResponseEntity<Response> addFanRecord(@Valid @RequestBody FanRecordRequest fanRecordRequest, @AuthenticationPrincipal UserDetails userDetails) {
-
-        String username = userDetails.getUsername();
-
-        Response response = fanRecordService.createFanRecord(fanRecordRequest, username);
-
-        return ResponseEntity.ok(response);
-
-    }
+//    @PostMapping("/addFanRecord")
+//    public ResponseEntity<Response> addFanRecord(@Valid @RequestBody FanRecordRequest fanRecordRequest, @AuthenticationPrincipal UserDetails userDetails) {
+//
+//        String username = userDetails.getUsername();
+//
+//        Response response = fanRecordService.createFanRecord(fanRecordRequest, username);
+//
+//        return ResponseEntity.ok(response);
+//
+//    }
 
     @GetMapping("/myFanRecords")
     public ResponseEntity<Response> getAllUnderUser(@AuthenticationPrincipal UserDetails userDetails) {
@@ -37,12 +37,4 @@ public class FanRecordController {
         return ResponseEntity.ok(response);
     }
 
-//    @PostMapping("/updateMyFanRecords")
-//    public ResponseEntity<Response> updateMyFanRecords(@AuthenticationPrincipal UserDetails userDetails) {
-//        String username = userDetails.getUsername();
-//
-//        Response response = fanRecordService.updateMyFanRecords(username);
-//
-//        return ResponseEntity.ok(response);
-//    }
 }
