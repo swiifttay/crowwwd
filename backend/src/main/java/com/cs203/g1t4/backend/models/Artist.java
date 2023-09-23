@@ -20,11 +20,19 @@ public class Artist {
     @NotBlank
     private String website;
 
-    @NotBlank
+//    @NotBlank
     private String artistImage;
 
+//    @NotBlank
     private String artistImageURL;
 
-    @NotBlank
+//    @NotBlank
     private String description;
+
+//    public boolean equals(Artist another) {
+//        return this.name == another.getName()
+//                && this.website == another.getWebsite()
+//                && this.artistImageURL == another.getArtistImageURL()
+//                && this.description == another.getDescription();
+//    }
 }
