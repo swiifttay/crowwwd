@@ -3,9 +3,58 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import React, { useState } from "react";
+import { register } from "../axios/apiService";
 import "./style.css";
 
 export default function AddressForm() {
+  const [addressDetails, setAddressDetails] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNo: "",
+    address: "",
+    nationality: "", //city
+    countryCode: "", //state
+    postalCode: "",
+    countryOfResidence: "",
+
+    username: "A",
+    password: "A",
+    email: "A",
+    confirmPassword: "A",
+    gender: "A",
+    dateOfBirth: "A",
+  });
+
+  const [msg, setMsg] = useState("");
+
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+      if (!/^\d+$/.test(addressDetails.phoneNo)) {
+        setMsg("Mobile number should be digits");
+        return;
+      }
+
+      if (addressDetails.phoneNo.length < 8) {
+        setMsg("Mobile number should be at least 8 characters");
+        return;
+      }
+
+      if (!/^\d+$/.test(addressDetails.postalCode)) {
+        setMsg("Postal code should be digits");
+        return;
+      }
+
+    register(addressDetails);
+  };
+
+  const updateTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddressDetails((prevState) => {
+      return { ...prevState, [e.target.id]: e.target.value };
+    });
+  };
+
   const inputStyles = {
     color: "white",
   };
@@ -28,7 +77,7 @@ export default function AddressForm() {
   };
 
   return (
-    <>
+    <form onSubmit={submitHandler}>
       <Typography
         variant="h6"
         className="font-mont text-white mb-5"
@@ -48,6 +97,7 @@ export default function AddressForm() {
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
+            onChange={updateTextHandler}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -62,20 +112,22 @@ export default function AddressForm() {
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
+            onChange={updateTextHandler}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             sx={sxStyles}
             required
-            id="mobileNum"
-            name="mobileNum"
+            id="phoneNo"
+            name="phoneNo"
             label="Mobile number"
             fullWidth
             autoComplete="mobile-number"
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
+            onChange={updateTextHandler}
           />
         </Grid>
         <Grid item xs={12}>
@@ -90,13 +142,14 @@ export default function AddressForm() {
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
+            onChange={updateTextHandler}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             sx={sxStyles}
             required
-            id="city"
+            id="nationality" //in place of city, for now
             name="city"
             label="City"
             fullWidth
@@ -104,46 +157,50 @@ export default function AddressForm() {
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
+            onChange={updateTextHandler}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             sx={sxStyles}
-            id="state"
+            id="countryCode" //in place of state, for now
             name="state"
             label="State/Province/Region"
             fullWidth
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
+            onChange={updateTextHandler}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             sx={sxStyles}
             required
-            id="zip"
-            name="zip"
+            id="postalCode"
+            name="postalCode"
             label="Zip / Postal code"
             fullWidth
             autoComplete="shipping postal-code"
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
+            onChange={updateTextHandler}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             sx={sxStyles}
             required
-            id="country"
-            name="country"
+            id="countryOfResidence"
+            name="countryOfResidence"
             label="Country"
             fullWidth
             autoComplete="shipping country"
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
+            onChange={updateTextHandler}
           />
         </Grid>
         <Grid item xs={12}>
@@ -160,7 +217,8 @@ export default function AddressForm() {
             className="text-white font-mont"
           />
         </Grid>
+        <div className="text-red-500 mt-2">{msg}</div>
       </Grid>
-    </>
+    </form>
   );
 }
