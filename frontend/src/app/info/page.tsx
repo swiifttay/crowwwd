@@ -4,9 +4,9 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import AddressForm from "./form";
+import ParentComponent from "./ParentComponent";
 
 function Info() {
-  // const handleClick = () => {};
 
   return (
     <div className="flex flex-col items-center justify-center w-full text-center">
@@ -17,15 +17,8 @@ function Info() {
             sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
             className="rounded-lg bg-gradient-to-b from-theme-dark-blue to-theme-midnight"
           >
-            <AddressForm />
-            {/* <Button
-              variant="contained"
-              onClick={handleClick}
-              sx={{ mt: 3, ml: 1 }}
-              className="font-mont bg-theme-light-blue"
-            >
-              Save
-            </Button> */}
+            {/* <AddressForm /> */}
+            <ParentComponent />
           </Paper>
         </Container>
       </>
