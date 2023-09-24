@@ -198,14 +198,12 @@ public class ArtistService {
         // check if there is already the artist
         if (currentArtist.isPresent()) {
             String currentArtistId = updateArtistByName(artist);
-            return artist.getId();
+            return currentArtistId;
         }
 
         // save the artist in the repo
-        artistRepository.save(artist);
+        Artist newArtist = artistRepository.save(artist);
         // Get information on which artist to edit from
-        currentArtist = artistRepository.findByName(artist.getName());
-
-        return currentArtist.get().getId();
+        return newArtist.getId();
     }
 }

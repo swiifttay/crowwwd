@@ -76,7 +76,7 @@ public class FanRecordService {
         for (String artistId : topListsOfArtist) {
 
             // check if there is such a record already
-            Optional<FanRecord> duplicateFanRecord = fanRecordRepository.findFanRecordByUserIdAndArtistId(artistId, userId);
+            Optional<FanRecord> duplicateFanRecord = fanRecordRepository.findFanRecordByUserIdAndArtistId(userId, artistId);
 
             // if no records have been added, edit it
             if (!duplicateFanRecord.isPresent()) {
