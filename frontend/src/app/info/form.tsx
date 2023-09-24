@@ -9,10 +9,10 @@ import React, { useState } from "react";
 import { register } from "../axios/apiService";
 import "./style.css";
 
-export default function AddressForm() {
+export default function AddressForm({ registerDetails }) {
   const [addressDetails, setAddressDetails] = useState({
-    firstName: "",
-    lastName: "",
+    // firstName: "",
+    // lastName: "",
     phoneNo: "",
     address: "",
     nationality: "", //city
@@ -20,10 +20,13 @@ export default function AddressForm() {
     postalCode: "",
     countryOfResidence: "",
 
-    username: "A",
-    password: "A",
-    email: "A",
-    confirmPassword: "A",
+    ...registerDetails,
+
+    // username: registerDetails.username,
+    // password: registerDetails.password,
+    // email: registerDetails.email,
+    // confirmPassword: registerDetails.confirmPassword,
+
     gender: "A",
     dateOfBirth: "A",
   });
@@ -33,20 +36,20 @@ export default function AddressForm() {
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // if (!/^\d+$/.test(addressDetails.phoneNo)) {
-    //   setMsg("Mobile number should be digits");
-    //   return;
-    // }
+    if (!/^\d+$/.test(addressDetails.phoneNo)) {
+      setMsg("Mobile number should be digits");
+      return;
+    }
 
-    // if (addressDetails.phoneNo.length < 8) {
-    //   setMsg("Mobile number should be at least 8 characters");
-    //   return;
-    // }
+    if (addressDetails.phoneNo.length < 8) {
+      setMsg("Mobile number should be at least 8 characters");
+      return;
+    }
 
-    // if (!/^\d+$/.test(addressDetails.postalCode)) {
-    //   setMsg("Postal code should be digits");
-    //   return;
-    // }
+    if (!/^\d+$/.test(addressDetails.postalCode)) {
+      setMsg("Postal code should be digits");
+      return;
+    }
 
     register(addressDetails);
   };
@@ -100,6 +103,7 @@ export default function AddressForm() {
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
             onChange={updateTextHandler}
+            // value={registerDetails.firstName}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -219,16 +223,19 @@ export default function AddressForm() {
             className="text-white font-mont"
           />
         </Grid>
+
+      </Grid>
+      <form onSubmit={submitHandler}>
+      <div className="text-red-500 mt-2">{msg}</div>
         <Button
+          type="submit"
           variant="contained"
-          onClick={submitHandler}
           sx={{ mt: 3, ml: 1 }}
           className="font-mont bg-theme-light-blue"
         >
           Save
         </Button>
-        <div className="text-red-500 mt-2">{msg}</div>
-      </Grid>
+       </form>
     </>
   );
 }
