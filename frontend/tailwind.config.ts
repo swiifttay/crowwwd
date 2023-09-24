@@ -15,6 +15,7 @@ const config: Config = {
         "hollow-purple": "linear-gradient(to right, rgba(5, 16, 33, 0.5) 1%, rgba(0, 36, 128, 0.8) 90%), url('/images/hollow-purple.jpg')",
         "space": "radial-gradient(circle at bottom, rgba(7, 23, 47, 0.1) 10%, rgba(7, 23, 47, 1) 23%), url('/images/space.jpg')",
         "azure": "linear-gradient(to right, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.3) 90%), url('/images/azure.jpg')",
+        "footer": "linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%)"
       },
 
       fontFamily: {
