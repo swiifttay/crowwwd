@@ -20,7 +20,7 @@ export default function Login() {
         <LoginForm />
         <AccountSwitch
           message="New to CROWD SYNC?"
-          link="/register"
+          link="/fullRegister"
           prompt="Sign up."
         />
       </main>
