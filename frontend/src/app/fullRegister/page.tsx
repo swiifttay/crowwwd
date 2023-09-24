@@ -3,8 +3,24 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import AccountSwitch from "../components/Login/AccountSwitch";
-import { ActiveStepFormComponent } from "./ActiveStepFormComponent";
+// import { ActiveStepFormComponent } from "./ActiveStepFormComponent";
 
+import { useFormState, FormProvider } from "../components/Register/FormContext";
+import { SimpleDetailForm } from "../components/Register/SimpleDetailForm";
+import { ComplexDetailForm } from "../components/Register/ComplexDetailForm";
+
+
+function ActiveStepFormComponent() {
+  const { step } = useFormState();
+  switch (step) {
+    case 0:
+      return <SimpleDetailForm />;
+    case 1:
+      return <ComplexDetailForm />;
+    default:
+      return null;
+  }
+}
 
 export default function Home() {
   const [step, useStep] = useState(0);
@@ -23,8 +39,10 @@ export default function Home() {
         <div className="text-4xl font-bold mb-4">Join Crowd Sync</div>
         <p className="text-lg">Create your account to get started.</p>
 
-        <ActiveStepFormComponent />
-        
+        <FormProvider>
+          <ActiveStepFormComponent />
+        </FormProvider>
+
         <AccountSwitch
           message="Already have an account?"
           link="/login"

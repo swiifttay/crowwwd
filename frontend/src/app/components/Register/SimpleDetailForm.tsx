@@ -17,14 +17,14 @@ type TFormValues = {
 
 export function SimpleDetailForm() {
 
-  const [registerDetails, setRegisterDetails] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-    email: ""
-  });
+  // const [registerDetails, setRegisterDetails] = useState({
+  //   firstName: "",
+  //   lastName: "",
+  //   username: "",
+  //   password: "",
+  //   confirmPassword: "",
+  //   email: ""
+  // });
 
   const { onHandleNext, setFormData, formData } = useFormState();
   const { register, handleSubmit } = useForm<TFormValues>({
@@ -33,20 +33,19 @@ export function SimpleDetailForm() {
 
   const onHandleFormSubmit = (data: TFormValues) => {
 
-    isValid(registerDetails.email, registerDetails.password, registerDetails.confirmPassword);
+    isValid(data.email, data.password, data.confirmPassword);
     setFormData((prev: any) => ({ ...prev, ...data }));
-    console.log({data});
     onHandleNext();
   };
 
   const [msg, setMsg] = useState("");
 
 
-  const updateTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRegisterDetails((prevState) => {
-      return { ...prevState, [e.target.id]: e.target.value };
-    });
-  };
+  // const updateTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setRegisterDetails((prevState) => {
+  //     return { ...prevState, [e.target.id]: e.target.value };
+  //   });
+  // };
 
   const isValid = (email: string,
     password: string,
@@ -68,55 +67,69 @@ export function SimpleDetailForm() {
   };
 
   return (
-    <form className="mt-8 w-full max-w-sm" onSubmit={handleSubmit(onHandleFormSubmit)}>
+    <form
+      className="mt-8 w-full max-w-sm"
+      onSubmit={handleSubmit(onHandleFormSubmit)}
+    >
       <div className="flex space-x-2">
-        <DataEntry
+        <input
+          className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-theme-midnight"
           type="text"
           id="firstName"
           placeholder="First Name"
-          onTextChange={updateTextHandler}
+          // onTextChange={updateTextHandler}
+          {...register("firstName")}
         // value={registerDetails.firstName}
         />
-        <DataEntry
+        <input
+          className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-theme-midnight"
           type="text"
           id="lastName"
           placeholder="Last Name"
-          onTextChange={updateTextHandler}
+          // onTextChange={updateTextHandler}
+          {...register("lastName")}
         // value={registerDetails.lastName}
         />
       </div>
-      <DataEntry
+      <input
+        className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-theme-midnight"
         type="text"
         id="username"
         placeholder="Username"
-        onTextChange={updateTextHandler}
+        // onTextChange={updateTextHandler}
+        {...register("username")}
       // value={registerDetails.username}
       />
-      <DataEntry
+      <input
+        className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-theme-midnight"
         type="text"
         id="email"
         placeholder="Email"
-        onTextChange={updateTextHandler}
+        // onTextChange={updateTextHandler}
+        {...register("email")}
       // value={registerDetails.email}
       />
-      <DataEntry
+      <input
+        className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-theme-midnight"
         type="password"
         id="password"
         placeholder="Password"
-        onTextChange={updateTextHandler}
+        // onTextChange={updateTextHandler}
+        {...register("password")}
       // value={registerDetails.password}
       />
-      <DataEntry
+      <input
+        className="mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-theme-midnight"
         type="password"
         id="confirmPassword"
         placeholder="Confirm Password"
-        onTextChange={updateTextHandler}
+        // onTextChange={updateTextHandler}
+        {...register("confirmPassword")}
       // value={registerDetails.confirmPassword}
       />
 
       {/* <Link href="/info"> */}
-      <button className="mt-4 w-full bg-theme-blue text-white py-2 rounded-lg hover:bg-theme-light-blue"
-      onSubmit={handleSubmit(onHandleFormSubmit)}>
+      <button className="mt-4 w-full bg-theme-blue text-white py-2 rounded-lg hover:bg-theme-light-blue">
         Sign Up
       </button>
       {/* </Link> */}

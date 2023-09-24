@@ -25,7 +25,7 @@ type TFormValues = {
 
 export function ComplexDetailForm() {
 
-  const { onHandleNext, setFormData, formData } = useFormState();
+  const { setFormData, formData } = useFormState();
   const { register, handleSubmit } = useForm<TFormValues>({
     defaultValues: formData,
   });

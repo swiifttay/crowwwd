@@ -27,11 +27,10 @@ interface IProps {
 
 export function FormProvider({ children }: IProps) {
   const [formData, setFormData] = useState();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
 
   function onHandleNext() {
-    console.log("arrived");
-    setStep((prev) => prev + 1);
+    setStep(() => 1);
   }
 
 
@@ -47,3 +46,25 @@ export function FormProvider({ children }: IProps) {
 export function useFormState() {
   return useContext(FormContext);
 }
+
+// export function useFormState() {
+  
+  
+//   console.log("using");
+//   const [formData, setFormData] = useState();
+//   const [step, setStep] = useState(1);
+
+//   function onHandleNext() {
+//     console.log("arrived");
+//     setStep((prev) => prev + 1);
+//   }
+
+
+//   return (
+//     <FormContext.Provider
+//       value={{ formData, setFormData, onHandleNext, step }}
+//     >
+//       {children}
+//     </FormContext.Provider>
+//   );
+// }
