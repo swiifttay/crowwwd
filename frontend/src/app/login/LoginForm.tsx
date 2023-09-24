@@ -1,17 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
 import DataEntry from "../components/Login/DataEntry";
 import { authenticate } from "../axios/apiService";
 import { error } from "console";
 
 export default function LoginForm() {
+  const router = useRouter()
+
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
 
-  const [isValidCredentials, setIsValidCredentials] = useState(false);
+  const [isValidCredentials, setIsValidCredentials] = useState(true);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,6 +29,7 @@ export default function LoginForm() {
     } else {
       console.log("valid");
       setIsValidCredentials(true);
+      router.push("/explore")
     }
   };
 
