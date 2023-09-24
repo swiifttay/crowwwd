@@ -17,41 +17,27 @@ export const authenticate = async (credentials: {
     return true;
   } catch (error) {
     return false;
-    // if (axios.isAxiosError(error)) {
-    //   console.log("error status", error.response?.status);
-    //   // console.log(error);
-    //   if (error.response?.status === 400) {
-    //     console.log("bad error");
-    //   } else if (error.response?.status === 401) {
-    //     console.log("invalid cred error");
-    //     // return;
-    //   } else {
-    //     console.log("Other error status");
-    //   }
-    // }
   }
 };
 
-export const register = async (registerDetails: {
+export const registerAccount = async (registerDetails: {
   firstName: string;
   lastName: string;
   username: string;
   email: string;
   password: string;
-
-  nationality: string;
   countryOfResidence: string;
-  countryCode: string;
-  gender: string;
-  dateOfBirth: string;
+  // dateOfBirth: string;
+  city: string;
+  state: string;
   address: string;
   postalCode: string;
   phoneNo: string;
 }) => {
   try {
     const response = await api.post("/auth/register", registerDetails);
-    const { token } = response.data;
-    localStorage.setItem("token", token);
+    // const { token } = response.data;
+    // localStorage.setItem("token", token);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log(error.status);
@@ -59,6 +45,20 @@ export const register = async (registerDetails: {
     }
   }
 };
+
+export const usernameCheck = async (username: string) => {
+  try {
+    const response = await api.get("/auth/findUsername/${username}");
+    return false;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      if (error.response?.data.message.contains("exists")) {
+        return true;
+      }
+    }
+  }
+}
 
 export const concertsList = async () => {
   const response = await api.get("/event/getAllEvents");

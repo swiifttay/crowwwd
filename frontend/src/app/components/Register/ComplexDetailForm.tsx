@@ -8,9 +8,9 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
-import { register } from "../../axios/apiService";
+import { registerAccount } from "../../axios/apiService";
 
-
+import { useRouter } from 'next/navigation';
 import { useFormState } from "./FormContext";
 import { useForm } from "react-hook-form";
 
@@ -21,62 +21,50 @@ type TFormValues = {
   state: string;
   postalCode: string;
   countryOfResidence: string;
+  saveAddress: boolean;
+
+  // dateOfBirth: string;
 };
 
 export function ComplexDetailForm() {
+  const router = useRouter()
 
-  const { setFormData, formData } = useFormState();
+  const { onHandleBack, setFormData, formData } = useFormState();
   const { register, handleSubmit } = useForm<TFormValues>({
     defaultValues: formData,
   });
 
-  const onHandleFormSubmit = (data: TFormValues) => {
+  const [msg, setMsg] = useState("");
+
+  const onHandleFormSubmit = async (data: TFormValues) => {
+    console.log({data});
     // check for validity
-    if (!/^\d+$/.test(addressDetails.phoneNo)) {
+    if (!/^\d+$/.test(data.phoneNo)) {
       setMsg("Mobile number should be digits");
       return;
     }
 
-    if (addressDetails.phoneNo.length < 8) {
+    if (data.phoneNo.length < 8) {
       setMsg("Mobile number should be at least 8 characters");
       return;
     }
 
-    if (!/^\d+$/.test(addressDetails.postalCode)) {
+    if (!/^\d+$/.test(data.postalCode)) {
       setMsg("Postal code should be digits");
       return;
     }
 
-    setFormData((prev: any) => ({ ...prev, ...data }));
-    // onHandleNext();
-    register(formData);
+    setMsg("yay");
+    await setFormData((prev: any) => ({ ...prev, ...data }));
+    console.log({data});
+    await handleRegister();
   };
 
-  const [addressDetails, setAddressDetails] = useState({
-    phoneNo: "",
-    address: "",
-    city: "", //city
-    state: "", //state
-    postalCode: "",
-    countryOfResidence: "",
+  async function handleRegister() {
+    registerAccount(formData);
+    // router.push("/login");
 
-
-    // dateOfBirth: "A",
-  });
-
-  const [msg, setMsg] = useState("");
-
-  // const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-
-  // };
-
-  const updateTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAddressDetails((prevState) => {
-      return { ...prevState, [e.target.id]: e.target.value };
-    });
-  };
+  }
 
   const inputStyles = {
     color: "white",
@@ -105,53 +93,25 @@ export function ComplexDetailForm() {
         variant="h6"
         className="font-mont text-white mb-5"
         gutterBottom
-      >
-        Personal Information
+      > {
+          "Hi " + formData.username + ","
+        }
+        <br></br>
+        just a few more information!
       </Typography>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            sx={sxStyles}
-            required
-            id="firstName"
-            label="First Name"
-            fullWidth
-            autoComplete="given-name"
-            variant="outlined"
-            InputProps={{ style: inputStyles }}
-            InputLabelProps={{ style: inputStyles }}
-            onChange={updateTextHandler}
-            // value={registerDetails.firstName}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            sx={sxStyles}
-            required
-            id="lastName"
-            name="lastName"
-            label="Last Name"
-            fullWidth
-            autoComplete="family-name"
-            variant="outlined"
-            InputProps={{ style: inputStyles }}
-            InputLabelProps={{ style: inputStyles }}
-            onChange={updateTextHandler}
-          />
-        </Grid>
         <Grid item xs={12}>
           <TextField
             sx={sxStyles}
             required
             id="phoneNo"
-            name="phoneNo"
             label="Mobile number"
             fullWidth
             autoComplete="mobile-number"
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
-            onChange={updateTextHandler}
+            {...register("phoneNo")}
           />
         </Grid>
         <Grid item xs={12}>
@@ -159,42 +119,39 @@ export function ComplexDetailForm() {
             sx={sxStyles}
             required
             id="address"
-            name="address"
             label="Address line"
             fullWidth
             autoComplete="shipping address-line"
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
-            onChange={updateTextHandler}
+            {...register("address")}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             sx={sxStyles}
             required
-            id="nationality" //in place of city, for now
-            name="city"
+            id="city" 
             label="City"
             fullWidth
             autoComplete="shipping address-level2"
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
-            onChange={updateTextHandler}
+            {...register("city")}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             sx={sxStyles}
-            id="countryCode" //in place of state, for now
-            name="state"
+            id="state" 
             label="State/Province/Region"
             fullWidth
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
-            onChange={updateTextHandler}
+            {...register("state")}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -202,14 +159,13 @@ export function ComplexDetailForm() {
             sx={sxStyles}
             required
             id="postalCode"
-            name="postalCode"
             label="Zip / Postal code"
             fullWidth
             autoComplete="shipping postal-code"
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
-            onChange={updateTextHandler}
+            {...register("postalCode")}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -217,14 +173,13 @@ export function ComplexDetailForm() {
             sx={sxStyles}
             required
             id="countryOfResidence"
-            name="countryOfResidence"
             label="Country"
             fullWidth
             autoComplete="shipping country"
             variant="outlined"
             InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
-            onChange={updateTextHandler}
+            {...register("countryOfResidence")}
           />
         </Grid>
         <Grid item xs={12}>
@@ -232,28 +187,29 @@ export function ComplexDetailForm() {
             control={
               <Checkbox
                 color="primary"
-                name="saveAddress"
                 value="yes"
                 className="text-white"
+                {...register("saveAddress")}
               />
             }
             label="Use this address for payment details"
             className="text-white font-mont"
           />
         </Grid>
-
       </Grid>
       <form onSubmit={handleSubmit(onHandleFormSubmit)}>
-      <div className="text-red-500 mt-2">{msg}</div>
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{ mt: 3, ml: 1 }}
-          className="font-mont bg-theme-light-blue"
-        >
-          Save
-        </Button>
-       </form>
+        <div className="text-red-500 mt-2">{msg}</div>
+
+        <div>
+          <button className="mt-4 w-full bg-theme-blue text-white py-2 rounded-lg hover:bg-theme-light-blue"
+            onClick={onHandleBack}>
+            Back
+          </button>
+          <button className="mt-4 w-full bg-theme-blue text-white py-2 rounded-lg hover:bg-theme-light-blue">
+            Submit
+          </button>
+        </div>
+      </form>
     </>
   );
 }

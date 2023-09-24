@@ -11,12 +11,14 @@ interface IFormContext {
   formData: any;
   setFormData: Dispatch<SetStateAction<any>>;
   onHandleNext: () => void;
+  onHandleBack: () => void;
   step: number;
 }
 
 const FormContext = createContext<IFormContext>({
   formData: {},
   onHandleNext: () => {},
+  onHandleBack: () => {},
   setFormData: () => {},
   step: 0,
 });
@@ -32,11 +34,14 @@ export function FormProvider({ children }: IProps) {
   function onHandleNext() {
     setStep(() => 1);
   }
-
+  
+  function onHandleBack() {
+    setStep(() => 0);
+  }
 
   return (
     <FormContext.Provider
-      value={{ formData, setFormData, onHandleNext, step }}
+      value={{ formData, setFormData, onHandleNext, onHandleBack, step }}
     >
       {children}
     </FormContext.Provider>
