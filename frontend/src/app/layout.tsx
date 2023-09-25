@@ -1,9 +1,14 @@
+
 import "./globals.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Navbar from "./components/Navbar";
+import SidePanel from "./components/SidePanel";
+import { useState } from "react";
+import { GlobalStateProvider, useGlobalState } from "./globalStateContext";
 
-const mont = localFont({
+
+export const mont = localFont({
   src: [
     {
       path: "../../public/fonts/Mont/Mont-Regular.otf",
@@ -25,6 +30,11 @@ const mont = localFont({
       weight: "400",
       style: "semibold",
     },
+    {
+      path: "../../public/fonts/Mont/Mont-Light.otf",
+      weight: "300",
+      style: "light",
+    },
   ],
   variable: "--font-mont",
 });
@@ -39,12 +49,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  
+
   return (
-    <html>
-      <body>
-        <Navbar />
-        <div className={mont.className}>{children}</div>
-      </body>
+    <GlobalStateProvider>
+    <html>      
+        <body className={`${mont.className} flex flex-col items-center w-full h-fit`}>
+          <div className="flex flex-col items-start max-w-7xl w-full">
+            <SidePanel />
+            <Navbar />
+            {children}</div>
+        </body>
     </html>
+    </GlobalStateProvider>
   );
 }

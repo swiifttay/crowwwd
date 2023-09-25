@@ -2,15 +2,25 @@
 
 import Image from "next/image";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Logo from "/public/images/Logo.png";
+import { useState } from "react";
+import SidePanel from "./SidePanel";
+import { useGlobalState } from "../globalStateContext";
+
 
 export default function Navbar() {
+  const {isOpen, setIsOpen} = useGlobalState();
+
+  function toggleMenu(){
+    setIsOpen(!isOpen);
+  }
   return (
-    //I changed sticky to fixed here
-    <div className="bg-gradient-to-b from-theme-dark-blue to-theme-midnight w-full font-semibold fixed p-2 sm:px-12 md:px-60 justify-between flex flex-grow text-xl items-center z-50">
-      <div className="hover:text-gray-300 cursor-pointer">Explore</div>
-      <div className="relative group">
+    <div className="w-full font-bold text-base py-[20px] md:px-[128px] flex items-center z-40 justify-between px-20">
+      <a href="/explore" className="hover:text-gray-300 cursor-pointer hidden md:flex">Explore</a>
+      <div className="relative group hidden md:flex space-y-5">
+
         <a href="" className=" hover:text-gray-300">
           About Us
         </a>
@@ -32,6 +42,8 @@ export default function Navbar() {
           </ul>
         </div>
       </div>
+      <Bars3Icon className="h-10 md:hidden cursor-pointer" onClick={toggleMenu}/>
+      
       <Link href="/">
         <Image src={Logo} alt="Logo" className="w-48 h-20 object-cover" />
       </Link>
@@ -39,7 +51,7 @@ export default function Navbar() {
         <MagnifyingGlassIcon className="h-6 stroke-white hover:text-gray-300 cursor-pointer mr-2" />
         <div className="hover:text-gray-300 cursor-pointer">Search</div>
       </div>
-      <Link href="/login">
+      <Link href="/login" className="hidden md:flex">
         <div className="hover:text-gray-300 cursor-pointer">Login</div>
       </Link>
     </div>

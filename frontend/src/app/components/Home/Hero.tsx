@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function Hero() {
   return (
     <div className="flex items-center">
-      <Video />
+      {/* <Video /> */}
       <div className="px-5 mx-10 z-50 space-y-5">
         <h1 className="font-mont font-bold text-4xl">
           Your new paradigm to ticketing

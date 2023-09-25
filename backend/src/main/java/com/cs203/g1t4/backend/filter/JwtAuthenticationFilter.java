@@ -1,6 +1,5 @@
 package com.cs203.g1t4.backend.filter;
 
-import com.cs203.g1t4.backend.config.auth.SecurityConfiguration;
 import com.cs203.g1t4.backend.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,40 +24,84 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    public static final String[] whiteListedRoutes = new String[]{"/api/v1/auth/register", "/api/v1/auth/authenticate", "/error"};
 
+    //Purpose: doFilterInternal() method is called everytime an API is called which does the checks accordingly
     @Override
-    protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+
+        /*
+         * Declaring variables that are immutable:
+         * 1. String authHeader:    Stores the Header String in request that contains "Authorization".
+         * 2. String jwt:           Will be used to store the jwt obtained from a Header String containing "Authorization".
+         * 3. String username:      Will be used to store the username obtained from jwt.
+         */
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
-        if (Arrays.asList(SecurityConfiguration.whiteListedRoutes).contains(request.getServletPath()) ||
-                authHeader == null ||
-                !authHeader.startsWith("Bearer ")) {
+
+        /*
+         * Checks the following:
+         * 1. Checks if the API path is in the array of whiteListed paths
+         * 2. Checks if the authHeader is empty (No authentication)
+         * 3. Checks if the authHeader does not start with Bearer (No Bearer token)
+         *
+         * Logic needs review!
+         */
+        if (Arrays.asList(JwtAuthenticationFilter.whiteListedRoutes).contains(request.getServletPath()) ||
+            authHeader == null || !authHeader.startsWith("Bearer ")) {
+            /*
+             * If condition is met, the filterChain continues processing the request and response without any additional
+             * authentication or authorization checks. It effectively allows the request to pass
+             * through without requiring JWT validation.
+             */
             filterChain.doFilter(request, response);
+
+            //Returns prevents further processing of authentication and authorization logic for this request.
             return;
         }
+
+        //Obtains the JWT token from the String, substring(7) removes the "Bearer " before the actual jwt token
         jwt = authHeader.substring(7);
+
+        //Obtains the username from the JWT Token which is stored as a subject in the JWT generated
         username = jwtService.extractUsername(jwt);
+
+        /*
+         * Checks the following:
+         * 1. If there are no username, which only means that there is no JWT token (Necessary?)
+         * 2. Checks whether there is no authentication information available in the security context.
+         *    null means that user has not been logged in
+         */
         if ((username != null) && (SecurityContextHolder.getContext().getAuthentication() == null)) {
+
+            //Returns a UserDetails object that is obtained from the repository
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
+            //If token is valid.
             if (jwtService.isTokenValid(jwt, userDetails)) {
+
+                //Create an Authentication Token from username and password in userDetails
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities()
                 );
+
+                //Builds an authentication token
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                //Add a filterChain.doFilter here
             }
         }
-        //Something wrong here, needs to return error at this pt
+        /*
+         * If condition is met, the filterChain continues processing the request and response without any additional
+         * authentication or authorization checks. It effectively allows the request to pass
+         * through without requiring JWT validation.
+         */
         filterChain.doFilter(request, response);
     }
 }
