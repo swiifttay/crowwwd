@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +25,10 @@ public class ArtistService {
     @Value("${env.AWS_BUCKET_NAME}")
     private String bucketName;
 
+    // for manually adding a artist for event creation
     public Response addArtist(ArtistRequest request) {
 
-
+        // create artist object
         Artist artist = Artist.builder()
                 .name(request.getName())
                 .description(request.getDescription())
@@ -34,8 +36,10 @@ public class ArtistService {
                 .artistImage(request.getArtistImage())
                 .build();
 
+        // save into repo
         artistRepository.save(artist);
 
+        // return
         return SuccessResponse.builder()
                 .response("Artist has been created successfully")
                 .build();
@@ -43,34 +47,56 @@ public class ArtistService {
 
     public Response deleteArtistById(String artistId) {
 
+        // find the artist to delete
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new InvalidArtistIdException(artistId));
 
+        // delete from repo
         artistRepository.deleteById(artistId);
 
+        // return
         return SingleArtistResponse.builder()
                 .artist(artist)
                 .build();
     }
 
+
     public Response updateArtistById(String artistId, ArtistRequest request) {
 
-        Artist oldArtist = artistRepository.findById(artistId)
-                .orElseThrow(() -> new InvalidArtistIdException(artistId));
-
+        // update information about the artist
         Artist newArtist = Artist.builder()
-                .id(oldArtist.getId())
+                .id(artistId)
                 .name(request.getName())
                 .description(request.getDescription())
                 .website(request.getWebsite())
-                .artistImage(request.getArtistImage())
                 .build();
 
+        // save the artist
         artistRepository.save(newArtist);
 
+        // return
         return SingleArtistResponse.builder()
                 .artist(newArtist)
                 .build();
+    }
+
+    // for the purpose of updating artist when there is call to them again
+    public String updateArtistByName(Artist newArtist) {
+
+        Artist originalArtist = artistRepository.findByName(newArtist.getName())
+                .orElseThrow(() -> new InvalidArtistIdException(newArtist.getName()));
+
+        Artist updatedArtist = Artist.builder()
+                .id(originalArtist.getId())
+                .name(newArtist.getName())
+                .description(newArtist.getDescription())
+                .website(newArtist.getWebsite())
+                .artistImageURL(newArtist.getArtistImageURL())
+                .build();
+
+        artistRepository.save(updatedArtist);
+
+        return updatedArtist.getId();
     }
 
     public Response findArtistById(String artistId) {
@@ -78,10 +104,7 @@ public class ArtistService {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new InvalidArtistIdException(artistId));
 
-
-        // To get the URL for the artistImage
-        String artistImageUrl = "https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName,artistId, artist.getArtistImage());
-        artist.setArtistImageURL(artistImageUrl);
+        artist.setArtistImageURL(getArtistImage(artistId));
 
         return SingleArtistResponse.builder()
                 .artist(artist)
@@ -92,15 +115,16 @@ public class ArtistService {
 
         List<Artist> artistList = artistRepository.findAll();
 
-        for (Artist currentArtist : artistList) {
-            // To get the URL for the artistImage
-            String artistImageUrl = "https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName, currentArtist.getId(), currentArtist.getArtistImage());
-            currentArtist.setArtistImageURL(artistImageUrl);
+        for (Artist artist : artistList) {
+            artist.setArtistImageURL(getArtistImage(artist.getId()));
         }
+
         return ArtistResponse.builder()
                 .artists(artistList)
                 .build();
     }
+
+    // for manual changing of picture
     public SuccessResponse uploadArtistImage(String artistId,
                                             MultipartFile multipartFile) {
         // Get information on which artist to edit from
@@ -126,6 +150,7 @@ public class ArtistService {
                 .id(artist.getId())
                 .name(artist.getName())
                 .artistImage(artistImageName)
+                .artistImageURL("artist-images/%s/%s".formatted(artistId, artistImageName))
                 .description(artist.getDescription())
                 .build();
 
@@ -138,26 +163,47 @@ public class ArtistService {
                 .build();
     }
 
-    public String getArtistImageURL (String artistId) {
-        // Get information on which artist to edit from
-        Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new InvalidArtistIdException(artistId));
+    // depending on whether you are finding the image by spotify or by s3
+    public SuccessResponse getArtistImageResponse(String artistId) {
 
-
-        // To get the URL for the artistImage
-        String artistImageUrl = "https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName, artist.getId(), artist.getArtistImage());
-
-        return artistImageUrl;
-
-    }
-
-    public SuccessResponse getArtistImage(String artistId) {
-
-        String artistImageURL = getArtistImageURL(artistId);
+        String artistImageUrl = getArtistImage(artistId);
 
         // Return
         return SuccessResponse.builder()
-                .response("Artist Image URL: " + artistImageURL)
+                .response("Artist Image URL: " + artistImageUrl)
                 .build();
     }
 
+    public String getArtistImage(String artistId) {
+
+        // Get information on which artist to edit from
+        Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new InvalidArtistIdException(artistId));
+
+        String artistImageUrl = artist.getArtistImageURL();
+
+        // check if you are getting via s3 or spotify link
+        if ( artistImageUrl == null || artistImageUrl.length() == 0) {
+            artistImageUrl = "https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName, artistId, artist.getArtistImage());
+        }
+
+        // Return
+        return artistImageUrl;
+    }
+
+    // helper method
+    public String fanRecordsCreationAndUpdate(Artist artist) {
+        // Get information on which artist to edit from
+        Optional<Artist> currentArtist = artistRepository.findByName(artist.getName());
+
+        // check if there is already the artist
+        if (currentArtist.isPresent()) {
+            String currentArtistId = updateArtistByName(artist);
+            return currentArtistId;
+        }
+
+        // save the artist in the repo
+        Artist newArtist = artistRepository.save(artist);
+        // Get information on which artist to edit from
+        return newArtist.getId();
+    }
 }

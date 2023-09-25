@@ -34,7 +34,7 @@ const config: Config = {
         "theme-blue-60": "#001c66",
         "theme-light-blue": "#1D90F4",
         "theme-grey": "#868B99",
-        "theme-light-grey": "#C2C5CC",
+        "theme-offwhite": "#F3EFE0",
       },
     },
   },

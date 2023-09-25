@@ -43,7 +43,7 @@ export default function Navbar() {
         </div>
       </div>
       <Bars3Icon className="h-10 md:hidden cursor-pointer" onClick={toggleMenu}/>
-      
+
       <Link href="/">
         <Image src={Logo} alt="Logo" className="w-48 h-20 object-cover" />
       </Link>
