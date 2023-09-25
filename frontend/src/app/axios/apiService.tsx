@@ -8,6 +8,18 @@ const api = axios.create({
   baseURL: "http://localhost:8080/api/",
 });
 
+// api interceptor to place the jwt token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 //Login
 export const authenticate = async (credentials: {
   username: string;
@@ -51,7 +63,7 @@ export const registerAccount = async (registerDetails: {
 
 export const usernameCheck = async (username: string) => {
   try {
-    const response = await api.get("/auth/findUsername/${username}");
+    const response = await api.get(`/auth/findUsername/${username}`);
     return false;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -75,6 +87,55 @@ export const concertsList = async () => {
 export const getUserProfile =async () => {
   try {
     const response = await api.get("/profile/findProfile");
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    }
+  }
+
+}
+
+export const getFanRecords = async () => {
+  try {
+    const response = await api.get("/fanRecord/myFanRecords");
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);  
+    }
+  }
+}
+
+export const getArtistById = async (artistId: string) => {
+  try {
+    const response = await api.get(`artist/getArtist/${artistId}`);
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);  
+    }
+  }
+}
+
+export const getSpotifyLogin = async () => {
+  try {
+    const response = await api.get("/spotify/login");
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    }
+  }
+}
+
+export const updateFanRecords = async () => {
+  try {
+    const response = await api.post("/spotify/updateMyAccountFavouriteArtists");
     return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
