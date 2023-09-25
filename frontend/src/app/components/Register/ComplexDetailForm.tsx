@@ -23,8 +23,6 @@ type TFormValues = {
   postalCode: string;
   countryOfResidence: string;
   saveAddress: boolean;
-
-  // dateOfBirth: string;
 };
 
 export function ComplexDetailForm() {
@@ -56,7 +54,7 @@ export function ComplexDetailForm() {
     }
 
     setMsg("yay");
-    await setFormData((prev: any) => ({ ...prev, ...data }));
+    setFormData((prev: any) => ({ ...prev, ...data }));
     console.log({ data });
     await handleRegister();
   };
@@ -111,7 +109,6 @@ export function ComplexDetailForm() {
             required
             id="phoneNo"
             label="Mobile number"
-            type="number"
             fullWidth
             autoComplete="mobile-number"
             variant="outlined"
@@ -194,7 +191,7 @@ export function ComplexDetailForm() {
             control={
               <Checkbox
                 color="primary"
-                value="yes"
+                value="no"
                 className="text-white"
                 {...register("saveAddress")}
               />

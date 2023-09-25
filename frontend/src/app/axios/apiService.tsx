@@ -94,7 +94,7 @@ export const getUserProfile =async () => {
       console.error(error.response);
     }
   }
-  
+
 }
 
 export const getFanRecords = async () => {
