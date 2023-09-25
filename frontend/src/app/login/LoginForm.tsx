@@ -1,61 +1,106 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from 'next/navigation';
-import DataEntry from "../components/Login/DataEntry";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { authenticate } from "../axios/apiService";
-import { error } from "console";
+import { useFormState } from "../components/Login/FormContext";
 
+type TFormValues = {
+  username: string;
+  password: string;
+};
 export default function LoginForm() {
-  const router = useRouter()
+  const router = useRouter();
 
-  const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
-  });
+  const [msg, setMsg] = useState("");
+  const onHandleFormSubmit = async (data: TFormValues) => {
+    setFormData((prev: any) => ({ ...prev, ...data }));
 
-  const [isValidCredentials, setIsValidCredentials] = useState(true);
-
-  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(credentials);
-    // let isValid = true;
-    var isValid = await authenticate(credentials);
+    var isValid = await authenticate(data);
 
     console.log(isValid);
     if (!isValid) {
-      console.log("invalid");
-      setIsValidCredentials(false);
+      // console.log("invalid");
+      setMsg("The username or password entered is incorrect.");
     } else {
       console.log("valid");
-      setIsValidCredentials(true);
-      router.push("/explore")
+      setMsg("Loading...");
+      router.push("/");
     }
   };
 
-  const updateTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCredentials((prevState) => {
-      return { ...prevState, [e.target.id]: e.target.value };
-    });
+  const { setFormData, formData } = useFormState();
+  const { register, handleSubmit } = useForm<TFormValues>({
+    defaultValues: formData,
+  });
+
+  const inputStyles = {
+    color: "white",
+  };
+
+  const sxStyles = {
+    "& .MuiOutlinedInput-input": {
+      color: "black",
+      zIndex: 10,
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "theme-light-grey",
+        backgroundColor: "rgba(241, 245, 249, 0.5)",
+      },
+      "&:hover fieldset": {
+        borderColor: "white",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "white",
+      },
+    },
+    "& label.Mui-focused": {
+      color: "white",
+    },
   };
 
   return (
-    <form className="mt-8 w-full max-w-sm" onSubmit={submitHandler}>
-      <DataEntry
-        type="text"
-        id="username"
-        placeholder="Enter your username"
-        onTextChange={updateTextHandler}
-      />
-      <DataEntry
-        type="password"
-        id="password"
-        placeholder="Enter your password"
-        onTextChange={updateTextHandler}
-      />
-      {isValidCredentials ? null : (
-        <div>The username or password entered is incorrect.</div>
-      )}
+    <form
+      className="mt-8 w-full max-w-sm"
+      onSubmit={handleSubmit(onHandleFormSubmit)}
+    >
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <TextField
+            sx={sxStyles}
+            required
+            id="username"
+            label="Username"
+            fullWidth
+            autoComplete="username"
+            variant="outlined"
+            InputProps={{ style: inputStyles }}
+            InputLabelProps={{ style: inputStyles }}
+            {...register("username")}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            sx={sxStyles}
+            required
+            id="password"
+            label="Password"
+            type="password"
+            fullWidth
+            autoComplete="password"
+            variant="outlined"
+            InputProps={{ style: inputStyles }}
+            InputLabelProps={{ style: inputStyles }}
+            {...register("password")}
+          />
+        </Grid>
+      </Grid>
+
+      <div className="text-red-500 mt-2">{msg}</div>
 
       <button
         type="submit"
