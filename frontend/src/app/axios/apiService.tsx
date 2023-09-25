@@ -44,7 +44,18 @@ export const register = async (registerDetails: {
 
 export const concertsList = async () => {
   const response = await api.get("/event/getAllEvents");
-  // console.log(response.data.events);
-  // console.log(response.data)
   return response.data.events;
+}
+
+export const getEvent = async (eventId: string) => {
+  try {
+    const response = await api.get(`/event/getEvent/${eventId}`);
+    //console.log(response.data.outputEvent);
+    return response.data.outputEvent;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    }
+  }
 }

@@ -1,15 +1,35 @@
-import Image from "next/image";
+"use client"
 
-export default function Event() {
+import { getEvent } from "@/app/axios/apiService";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Event } from "../page";
+
+type EventParams = {
+  params: {
+    eventId: string
+  };
+}
+
+export default function Event({params: {eventId}}: EventParams) {
   const rulesHeader = "font-bold text-md ml-8 mb-2 mt-4";
   const rulesDetails = "list-disc ml-16";
+  const [event, setEvent] = useState<Event| null>(null);
+
+  useEffect(() => {
+    fetchEventDetails();
+  }, [])
+
+  const fetchEventDetails = async () => {
+    setEvent(await getEvent(eventId));
+  }
 
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="w-auto mt-32">
         <div className="">
           <Image
-            src="/images/EventPoster.jpg"
+            src={`${event?.eventImageURL}`}
             alt="Event Poster"
             className="rounded-3xl"
             width={1045}
@@ -19,11 +39,11 @@ export default function Event() {
 
         <div className="max-w-[1045px] mt-8">
           <div className="text-3xl font-bold mb-4">
-            2023 KIM SEON HO ASIA TOUR in SINGAPORE [ONE, TWO, THREE. SMILE] [G]
+            {event?.name}
           </div>
 
           <div className="flex justify-between">
-            <p className="text-lg mb-10">KPOP | Concert</p>
+            <p className="text-lg mb-10">{}</p>
             <button className="w-[150px] h-1/6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded -mt-4">
               Buy Tickets
             </button>

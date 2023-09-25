@@ -10,6 +10,7 @@ export function Card(event: Event) {
       : `${dateFormatter(startDate)} - ${dateFormatter(endDate)}`;
 
   return (
+    <a href={`/explore/${event.eventId}`}>
     <button className="w-full grid-rows-2 h-72 rounded-md transition-transform group text-left">
       <img
         src={event.eventImageURL}
@@ -21,5 +22,6 @@ export function Card(event: Event) {
         {/* <button className="bg-theme-blue text-white px-2 py-2 rounded-full text-xs" /> */}
       </div>
     </button>
+    </a>
   );
 }
