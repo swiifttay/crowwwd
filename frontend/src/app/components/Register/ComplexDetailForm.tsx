@@ -53,15 +53,20 @@ export function ComplexDetailForm() {
       return;
     }
 
-    setMsg("yay");
+    setMsg("loading...");
     setFormData((prev: any) => ({ ...prev, ...data }));
-    console.log({ data });
-    await handleRegister();
+    // router.push('/login');
+    await handleRegister(data);
   };
 
-  async function handleRegister() {
-    registerAccount(formData);
-    // router.push("/login");
+  async function handleRegister(data) {
+    console.log(formData);
+    try {
+      const response = await registerAccount(data);
+      router.push('/login');
+    } catch (error) {
+        setMsg("Try Again Later!");
+    }
   }
 
   const inputStyles = {

@@ -10,7 +10,7 @@ const SidePanel = () => {
   const [expand, setExpand] = useState(false);
 
   return (
-    <div className={`absolute flex flex-col space-y-10 p-10 items-start text-white bg-theme-midnight bg-opacity-90 h-full z-50 w-1/2 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+    <div className={`absolute flex flex-col space-y-10 p-10 items-start text-white bg-theme-midnight bg-opacity-90 h-full z-50 w-1/2 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'hidden'}`}
       onClick={()=> setIsOpen(false)}>
         <Link href='/explore' className='hover:scale-110'>Explore</Link>
         <Link href='' className='hover:scale-110'>About Us</Link>
