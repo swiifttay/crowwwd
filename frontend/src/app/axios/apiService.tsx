@@ -132,3 +132,16 @@ export const getSpotifyLogin = async () => {
     }
   }
 }
+
+export const updateFanRecords = async () => {
+  try {
+    const response = await api.post("/spotify/updateMyAccountFavouriteArtists");
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    }
+  }
+
+}

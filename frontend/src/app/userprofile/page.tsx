@@ -5,7 +5,7 @@ import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
 import EventButtonLong from "./EventButtonLong";
 import { StringLiteral } from "typescript";
-import { getFanRecords, getUserProfile, getArtistById, getSpotifyLogin } from "../axios/apiService";
+import { getFanRecords, getUserProfile, getArtistById, getSpotifyLogin, updateFanRecords } from "../axios/apiService";
 import { useEffect, useState } from "react";
 
 export interface User {
@@ -67,12 +67,17 @@ export default function UserProfile() {
   }
 
   const handleSpotifyButton = async () => {
+
     try {
-      console.log("here");
-      const response = await getSpotifyLogin();
-      window.location.replace(response?.data);
+      const response = await updateFanRecords();
+      location.reload()
     } catch (error) {
-      console.log({ error });
+      try {
+        const responseGetAccount = await getSpotifyLogin();
+        window.location.replace(responseGetAccount?.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -98,6 +103,7 @@ export default function UserProfile() {
 
           // Add the artist responses to the existing list
           updatedFavArtist.push(...flattenedArtistResponses);
+          console.log(updatedFavArtist.length);
 
           return updatedFavArtist;
         });
@@ -144,8 +150,9 @@ export default function UserProfile() {
             <div className="flex overflow-x-auto max-w-full">
 
               <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-4">
-                {favArtist ? (
-                  favArtist.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
+                {favArtist?.length !== 0 ? (
+                  favArtist?.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
+                    console.log(artist);
                     return (
                       <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
                     );
