@@ -14,10 +14,12 @@ export interface Event {
   eventId: string;
   name: string;
   eventImageURL: string;
+  eventImageName: string
   venue: string | null;
   categories: string[];
   artist: { name: string };
   dates: string[];
+  description: string
 }
 
 export default function Explore() {
