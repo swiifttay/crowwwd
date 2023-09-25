@@ -3,10 +3,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Navbar from "./components/Navbar";
+
 import SidePanel from "./components/SidePanel";
+import Footer from "./components/Footer";
 import { useState } from "react";
 import { GlobalStateProvider, useGlobalState } from "./globalStateContext";
-
 
 export const mont = localFont({
   src: [
@@ -58,7 +59,9 @@ export default function RootLayout({
           <div className="flex flex-col items-start max-w-7xl w-full">
             <SidePanel />
             <Navbar />
-            {children}</div>
+            {children}
+            <Footer />
+          </div>
         </body>
     </html>
     </GlobalStateProvider>
