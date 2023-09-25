@@ -1,19 +1,19 @@
 "use client";
 
-import Button from "@mui/material/Button";
 
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
+import { useState } from "react";
 import { registerAccount } from "../../axios/apiService";
 import "./style.css";
 
-import { useRouter } from 'next/navigation';
-import { useFormState } from "./FormContext";
+import { Button } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useFormState } from "./FormContext";
 
 type TFormValues = {
   phoneNo: string;
@@ -28,7 +28,7 @@ type TFormValues = {
 };
 
 export function ComplexDetailForm() {
-  const router = useRouter()
+  const router = useRouter();
 
   const { onHandleBack, setFormData, formData } = useFormState();
   const { register, handleSubmit } = useForm<TFormValues>({
@@ -38,7 +38,7 @@ export function ComplexDetailForm() {
   const [msg, setMsg] = useState("");
 
   const onHandleFormSubmit = async (data: TFormValues) => {
-    console.log({data});
+    console.log({ data });
     // check for validity
     if (!/^\d+$/.test(data.phoneNo)) {
       setMsg("Mobile number should be digits");
@@ -57,14 +57,13 @@ export function ComplexDetailForm() {
 
     setMsg("yay");
     await setFormData((prev: any) => ({ ...prev, ...data }));
-    console.log({data});
+    console.log({ data });
     await handleRegister();
   };
 
   async function handleRegister() {
     registerAccount(formData);
     // router.push("/login");
-
   }
 
   const inputStyles = {
@@ -72,9 +71,14 @@ export function ComplexDetailForm() {
   };
 
   const sxStyles = {
+    "& .MuiOutlinedInput-input": {
+      color: "black",
+      zIndex: 10,
+    },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
         borderColor: "theme-light-grey",
+        backgroundColor: "rgba(241, 245, 249, 0.5)",
       },
       "&:hover fieldset": {
         borderColor: "white",
@@ -89,16 +93,16 @@ export function ComplexDetailForm() {
   };
 
   return (
-    <>
+    <div className="w-full max-w-md">
       <Typography
         variant="h6"
-        className="font-mont text-white mb-5"
+        className="font-mont text-lg text-white mt-5 mb-5"
         gutterBottom
-      > {
-          "Hi " + formData.username + ","
-        }
-        <br></br>
-        just a few more information!
+      >
+        {" "}
+        {"Hi "}
+        <span style={{ color: "#0047FF" }}>{formData.username}</span>
+        {", we require a bit more information from you."}
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -107,6 +111,7 @@ export function ComplexDetailForm() {
             required
             id="phoneNo"
             label="Mobile number"
+            type="number"
             fullWidth
             autoComplete="mobile-number"
             variant="outlined"
@@ -124,7 +129,7 @@ export function ComplexDetailForm() {
             fullWidth
             autoComplete="shipping address-line"
             variant="outlined"
-            InputProps={{ className:"mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-theme-midnight" }}
+            InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
             {...register("address")}
           />
@@ -133,12 +138,12 @@ export function ComplexDetailForm() {
           <TextField
             sx={sxStyles}
             required
-            id="city" 
+            id="city"
             label="City"
             fullWidth
             autoComplete="shipping address-level2"
             variant="outlined"
-            InputProps={{ className:"mt-1 px-3 py-2 w-1/2 border border-zinc-500 rounded-lg text-white bg-theme-midnight" }}
+            InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
             {...register("city")}
           />
@@ -147,12 +152,12 @@ export function ComplexDetailForm() {
           <TextField
             sx={sxStyles}
             required
-            id="state" 
+            id="state"
             label="State/Province/Region"
             fullWidth
             variant="outlined"
-            InputProps={{ className:"mt-1 px-3 py-2 w-1/2 border border-zinc-500 rounded-lg text-white bg-theme-midnight" }}
-            InputLabelProps={{ style:inputStyles }}
+            InputProps={{ style: inputStyles }}
+            InputLabelProps={{ style: inputStyles }}
             {...register("state")}
           />
         </Grid>
@@ -165,7 +170,7 @@ export function ComplexDetailForm() {
             fullWidth
             autoComplete="shipping postal-code"
             variant="outlined"
-            InputProps={{ className:"mt-1 px-3 py-2 w-1/2 border border-zinc-500 rounded-lg text-white bg-theme-midnight" }}
+            InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
             {...register("postalCode")}
           />
@@ -179,7 +184,7 @@ export function ComplexDetailForm() {
             fullWidth
             autoComplete="shipping country"
             variant="outlined"
-            InputProps={{ className:"mt-1 px-3 py-2 w-1/2 border border-zinc-500 rounded-lg text-white bg-theme-midnight" }}
+            InputProps={{ style: inputStyles }}
             InputLabelProps={{ style: inputStyles }}
             {...register("countryOfResidence")}
           />
@@ -194,24 +199,26 @@ export function ComplexDetailForm() {
                 {...register("saveAddress")}
               />
             }
-            label="Use this address for payment details"
+            label="I would like to be provided with marketing information"
             className="text-white font-mont"
           />
         </Grid>
       </Grid>
-      <form className="mt-8 w-full max-w-sm" onSubmit={handleSubmit(onHandleFormSubmit)}>
-        <div className="text-red-500 mt-2">{msg}</div>
+      <form className="" onSubmit={handleSubmit(onHandleFormSubmit)}>
+        <div className="text-red-500 mt-1 mb-4">{msg}</div>
 
-        <div>
-          <button className="mt-4 w-full bg-theme-blue text-white py-2 rounded-lg hover:bg-theme-light-blue"
-            onClick={onHandleBack}>
+        <div className="flex justify-between px-2">
+          <Button
+            onClick={onHandleBack}
+            className="text-theme-blue hover:text-theme-light-blue rounded-lg -mt-1"
+          >
             Back
-          </button>
-          <button className="mt-4 w-full bg-theme-blue text-white py-2 rounded-lg hover:bg-theme-light-blue">
+          </Button>
+          <button className="w-fit-content bg-theme-blue text-white py-2 px-8 rounded-lg hover:bg-theme-light-blue">
             Submit
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 }
