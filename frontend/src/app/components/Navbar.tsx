@@ -20,6 +20,7 @@ export default function Navbar() {
     <div className="w-full font-bold text-base py-[20px] md:px-[128px] flex items-center z-40 justify-between px-20">
       <a href="/explore" className="hover:text-gray-300 cursor-pointer hidden md:flex">Explore</a>
       <div className="relative group hidden md:flex space-y-5">
+
         <a href="" className=" hover:text-gray-300">
           About Us
         </a>
@@ -44,7 +45,7 @@ export default function Navbar() {
       <Bars3Icon className="h-10 md:hidden cursor-pointer" onClick={toggleMenu}/>
       
       <Link href="/">
-        <Image src={Logo} alt="Logo" className="w-60 h-20 object-cover" />
+        <Image src={Logo} alt="Logo" className="w-48 h-20 object-cover" />
       </Link>
       <div className="flex">
         <MagnifyingGlassIcon className="h-6 stroke-white hover:text-gray-300 cursor-pointer mr-2" />

@@ -24,6 +24,7 @@ const config: Config = {
       },
       colors: {
         "theme-midnight": "#07172F",
+        "theme-dark-blue": "#001C66",
         "theme-blue": "#0047FF",
         "theme-blue-10": "#0040e6",
         "theme-blue-20": "#0039cc",
@@ -33,7 +34,7 @@ const config: Config = {
         "theme-blue-60": "#001c66",
         "theme-light-blue": "#1D90F4",
         "theme-grey": "#868B99",
-        "theme-offwhite": "#F3EFE0",
+        "theme-light-grey": "#C2C5CC",
       },
     },
   },

@@ -18,8 +18,11 @@ export default function Register() {
         <p className="text-lg">Create your account to get started.</p>
 
         <RegisterForm />
-        <AccountSwitch message="Already have an account?" link="/login" prompt="Log in." />
-        
+        <AccountSwitch
+          message="Already have an account?"
+          link="/login"
+          prompt="Log in."
+        />
       </main>
     </div>
   );
