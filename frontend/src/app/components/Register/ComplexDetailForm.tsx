@@ -59,7 +59,7 @@ export function ComplexDetailForm() {
     await handleRegister(data);
   };
 
-  async function handleRegister(data) {
+  async function handleRegister(data :any) {
     console.log(formData);
     try {
       const response = await registerAccount(data);
