@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
 import { registerAccount } from "../../axios/apiService";
+import "./style.css";
 
 import { useRouter } from 'next/navigation';
 import { useFormState } from "./FormContext";
@@ -123,7 +124,7 @@ export function ComplexDetailForm() {
             fullWidth
             autoComplete="shipping address-line"
             variant="outlined"
-            InputProps={{ style: inputStyles }}
+            InputProps={{ className:"mt-1 px-3 py-2 w-full border border-zinc-500 rounded-lg text-white bg-theme-midnight" }}
             InputLabelProps={{ style: inputStyles }}
             {...register("address")}
           />
@@ -137,7 +138,7 @@ export function ComplexDetailForm() {
             fullWidth
             autoComplete="shipping address-level2"
             variant="outlined"
-            InputProps={{ style: inputStyles }}
+            InputProps={{ className:"mt-1 px-3 py-2 w-1/2 border border-zinc-500 rounded-lg text-white bg-theme-midnight" }}
             InputLabelProps={{ style: inputStyles }}
             {...register("city")}
           />
@@ -145,12 +146,13 @@ export function ComplexDetailForm() {
         <Grid item xs={12} sm={6}>
           <TextField
             sx={sxStyles}
+            required
             id="state" 
             label="State/Province/Region"
             fullWidth
             variant="outlined"
-            InputProps={{ style: inputStyles }}
-            InputLabelProps={{ style: inputStyles }}
+            InputProps={{ className:"mt-1 px-3 py-2 w-1/2 border border-zinc-500 rounded-lg text-white bg-theme-midnight" }}
+            InputLabelProps={{ style:inputStyles }}
             {...register("state")}
           />
         </Grid>
@@ -163,7 +165,7 @@ export function ComplexDetailForm() {
             fullWidth
             autoComplete="shipping postal-code"
             variant="outlined"
-            InputProps={{ style: inputStyles }}
+            InputProps={{ className:"mt-1 px-3 py-2 w-1/2 border border-zinc-500 rounded-lg text-white bg-theme-midnight" }}
             InputLabelProps={{ style: inputStyles }}
             {...register("postalCode")}
           />
@@ -177,7 +179,7 @@ export function ComplexDetailForm() {
             fullWidth
             autoComplete="shipping country"
             variant="outlined"
-            InputProps={{ style: inputStyles }}
+            InputProps={{ className:"mt-1 px-3 py-2 w-1/2 border border-zinc-500 rounded-lg text-white bg-theme-midnight" }}
             InputLabelProps={{ style: inputStyles }}
             {...register("countryOfResidence")}
           />
@@ -197,7 +199,7 @@ export function ComplexDetailForm() {
           />
         </Grid>
       </Grid>
-      <form onSubmit={handleSubmit(onHandleFormSubmit)}>
+      <form className="mt-8 w-full max-w-sm" onSubmit={handleSubmit(onHandleFormSubmit)}>
         <div className="text-red-500 mt-2">{msg}</div>
 
         <div>

@@ -123,7 +123,7 @@ export function SimpleDetailForm() {
       />
 
       <button className="mt-4 w-full bg-theme-blue text-white py-2 rounded-lg hover:bg-theme-light-blue">
-        Sign Up
+        Continue
       </button>
       <div className="text-red-500 mt-2">{msg}</div>
     </form>
