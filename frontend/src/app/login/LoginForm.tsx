@@ -29,7 +29,7 @@ export default function LoginForm() {
     } else {
       console.log("valid");
       setIsValidCredentials(true);
-      router.push("/explore")
+      router.push("/userprofile")
     }
   };
 

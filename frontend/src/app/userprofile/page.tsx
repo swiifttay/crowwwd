@@ -5,7 +5,7 @@ import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
 import EventButtonLong from "./EventButtonLong";
 import { StringLiteral } from "typescript";
-import { getUserProfile } from "../axios/apiService";
+import { getFanRecords, getUserProfile, getArtistById } from "../axios/apiService";
 import { useEffect, useState } from "react";
 
 export interface User {
@@ -17,35 +17,89 @@ export interface User {
   password: string;
   phoneNo: string;
   userCreationDate: string;
-  nationality: string;
   countryOfResidence: string;
-  countryCode:string;
-  gender:string;
-  dateOfBirth:string;
+  city: string;
+  state: string;
+  // dateOfBirth: string;
   address: string;
   postalCode: string;
   isPreferredMarketing: string;
   spotifyAccount: string;
 }
 
+export interface FanRecord {
+  id: string;
+  userId: string;
+  artistId: string;
+  registerDate: string;
+}
+
+export interface Artist {
+  id: string;
+  name: string;
+  website: string;
+  artistImage: string;
+  artistImageURL: string;
+  description: string;
+}
+
 
 export default function UserProfile() {
 
   const [user, setUser] = useState<User>();
+  const [fanRecords, setFanRecords] = useState<FanRecord[] | undefined>(undefined);
+  const [favArtist, setFavArtist] = useState<Artist[] | undefined>(undefined);
+
 
   useEffect(() => {
     fetchUser();
+    fetchFanRecords();
   }, [])
-  
+
 
   const fetchUser = async () => {
-    const response = await getUserProfile();
-    setUser(response);
+    try {
+      const response = await getUserProfile();
+      setUser(response?.data);
+      console.log({ response });
+    } catch (error) {
+      console.log({ error });
+    }
   }
-  
 
-  
-  
+  const fetchFanRecords = async () => {
+    try {
+      const response = await getFanRecords();
+      const fanRecordsData: FanRecord[] | undefined = response?.data.allFanRecords;
+
+      if (fanRecordsData) {
+        setFanRecords(fanRecordsData);
+
+        console.log({ fanRecordsData });
+        const artistResponses = await Promise.all(
+          fanRecordsData.map(async (fanRecord: FanRecord) => {
+            const artistResponse = await getArtistById(fanRecord.artistId);
+            console.log({ artistResponse });
+            return artistResponse?.data.artist;
+          })
+        );
+
+        const flattenedArtistResponses = artistResponses.flat();
+
+        setFavArtist((prev: Artist[] | undefined) => {
+          const updatedFavArtist: Artist[] = prev ? [...prev] : [];
+
+          // Add the artist responses to the existing list
+          updatedFavArtist.push(...flattenedArtistResponses);
+
+          return updatedFavArtist;
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching fan records:', error);
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col justify-center items-center mt-4">
@@ -71,22 +125,25 @@ export default function UserProfile() {
                 />
               </div>
             </div>
-            <div className="text-xl font-bold mt-20 mb-4">
-              Your favourite artists
+            <div className="flex flex-row justify-between mb-4 mt-20">
+              <div className="text-xl font-bold w-1/2">
+                Your favourite artists
+              </div>
+              <button className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]">
+                Connect to Spotify
+              </button>
             </div>
             <div className="flex gap-5">
-              <VerticalCard
-                image="/images/TaylorSwift.jpg"
-                name="Taylor Swift"
-              />
-              <VerticalCard
-                image="/images/TaylorSwift.jpg"
-                name="Taylor Swift"
-              />
-              <VerticalCard
-                image="/images/TaylorSwift.jpg"
-                name="Taylor Swift"
-              />
+              {favArtist ? (
+                favArtist.map((artist, i) => {
+                  console.log(artist.artistImageURL);  // Log the artist's image URL
+                  return (
+                    <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
+                  );
+                })
+              ) : (
+                <p>No favorite artists available.</p>
+              )}
             </div>
           </div>
 
