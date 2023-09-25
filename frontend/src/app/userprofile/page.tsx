@@ -5,7 +5,7 @@ import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
 import EventButtonLong from "./EventButtonLong";
 import { StringLiteral } from "typescript";
-import { getFanRecords, getUserProfile, getArtistById } from "../axios/apiService";
+import { getFanRecords, getUserProfile, getArtistById, getSpotifyLogin } from "../axios/apiService";
 import { useEffect, useState } from "react";
 
 export interface User {
@@ -60,8 +60,17 @@ export default function UserProfile() {
   const fetchUser = async () => {
     try {
       const response = await getUserProfile();
-      setUser(response?.data);
-      console.log({ response });
+      setUser(response?.data.user);
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+
+  const handleSpotifyButton = async () => {
+    try {
+      console.log("here");
+      const response = await getSpotifyLogin();
+      window.location.replace(response?.data);
     } catch (error) {
       console.log({ error });
     }
@@ -75,11 +84,9 @@ export default function UserProfile() {
       if (fanRecordsData) {
         setFanRecords(fanRecordsData);
 
-        console.log({ fanRecordsData });
         const artistResponses = await Promise.all(
           fanRecordsData.map(async (fanRecord: FanRecord) => {
             const artistResponse = await getArtistById(fanRecord.artistId);
-            console.log({ artistResponse });
             return artistResponse?.data.artist;
           })
         );
@@ -102,12 +109,12 @@ export default function UserProfile() {
 
   return (
     <div>
-      <div className="flex flex-col justify-center items-center mt-4">
-        <div className="flex gap-12">
-          <div className="flex flex-col">
+      <div className="flex flex-col justify-center  mt-4 w-full">
+        <div className="flex flex-row ">
+          <div className="flex flex-col w-2/3">
             <div className="flex gap-12">
               <div className="">
-                <div className="text-3xl font-bold mt-8 mb-4">{user?.firstName} {user?.firstName}</div>
+                <div className="text-3xl font-bold mt-8 mb-4">{user?.firstName} {user?.lastName}</div>
                 <div className="text-md">{user?.username}</div>
                 <div className="text-md">{user?.email}</div>
                 <div className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer">
@@ -129,25 +136,29 @@ export default function UserProfile() {
               <div className="text-xl font-bold w-1/2">
                 Your favourite artists
               </div>
-              <button className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]">
+              <button className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
+                onClick={handleSpotifyButton}>
                 Connect to Spotify
               </button>
             </div>
-            <div className="flex gap-5">
-              {favArtist ? (
-                favArtist.map((artist, i) => {
-                  console.log(artist.artistImageURL);  // Log the artist's image URL
-                  return (
-                    <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
-                  );
-                })
-              ) : (
-                <p>No favorite artists available.</p>
-              )}
+            <div className="flex overflow-x-auto max-w-full">
+
+              <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-4">
+                {favArtist ? (
+                  favArtist.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
+                    return (
+                      <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
+                    );
+                  })
+                ) : (
+                  <p>No favorite artists available.</p>
+                )}
+              </div>
             </div>
+
           </div>
 
-          <div className="ml-10">
+          <div className="ml-10 w-1/3">
             <div className="text-xl font-bold mt-6 mb-4">What you may like</div>
             <div className="flex flex-col gap-3">
               <EventButtonShort

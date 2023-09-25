@@ -120,3 +120,15 @@ export const getArtistById = async (artistId: string) => {
     }
   }
 }
+
+export const getSpotifyLogin = async () => {
+  try {
+    const response = await api.get("/spotify/login");
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    }
+  }
+}
