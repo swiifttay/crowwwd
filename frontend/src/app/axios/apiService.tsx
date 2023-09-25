@@ -1,11 +1,14 @@
 import axios from "axios";
-import { Event } from "../explore/page";
+// import { Event } from "../explore/page";
+// import { Concert } from "../explore/page";
+// import { User } from "../userprofile/page";
 
 const api = axios.create({
   //TODO: backend to provide
   baseURL: "http://localhost:8080/api/",
 });
 
+//Login
 export const authenticate = async (credentials: {
   username: string;
   password: string;
@@ -65,4 +68,19 @@ export const concertsList = async () => {
   // console.log(response.data.events);
   // console.log(response.data)
   return response.data.events;
+};
+
+//User Profile Page
+
+export const getUserProfile =async () => {
+  try {
+    const response = await api.get("/profile/findProfile");
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    }
+  }
+  
 }
