@@ -1,5 +1,6 @@
 package com.cs203.g1t4.backend.data.request.user;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,15 +28,13 @@ public class UpdateProfileRequest implements UserRequest {
     private String phoneNo;
     private LocalDateTime userCreationDate;
     @NotNull
-    private String nationality;
-    @NotNull
     private String countryOfResidence;
+//    @NotNull
+//    private String dateOfBirth;
     @NotNull
-    private String countryCode;
+    private String city;
     @NotNull
-    private String gender;
-    @NotNull
-    private String dateOfBirth;
+    private String state;
     @NotNull
     private String address;
     @NotNull

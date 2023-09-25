@@ -71,7 +71,7 @@ public class ArtistController {
     public ResponseEntity<Response> getArtistImage(@PathVariable("artistId") String artistId) {
 
         // Upload the artist image
-        Response response = artistService.getArtistImage(artistId);
+        Response response = artistService.getArtistImageResponse(artistId);
 
         return ResponseEntity.ok(response);
     }

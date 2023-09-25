@@ -25,19 +25,17 @@ public class RegisterRequest implements UserRequest{
     private String phoneNo;
     private LocalDateTime userCreationDate;
     @NotNull
-    private String nationality;
-    @NotNull
     private String countryOfResidence;
-    @NotNull
-    private String countryCode;
-    @NotNull
-    private String gender;
-    @NotNull
-    private String dateOfBirth;
+//    @NotNull
+//    private String dateOfBirth;
     @NotNull
     private String address;
     @NotNull
     private String postalCode;
+    @NotNull
+    private String city;
+    @NotNull
+    private String state;
     private boolean isPreferredMarketing;
     private String spotifyAccount;
 }

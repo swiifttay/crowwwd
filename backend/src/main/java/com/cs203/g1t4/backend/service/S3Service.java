@@ -34,14 +34,16 @@ public class S3Service {
         }
     }
 
-    public String getObjectURL(String bucketName, String key) {
-        Calendar calendar = Calendar.getInstance();
-
-        // set the expiry
-        calendar.setTime(new Date());
-        calendar.add(Calendar.HOUR, 1); // Generated URL will be valid for 1 hour
-
-        // get the signed URL
-        return s3.generatePresignedUrl(bucketName, key, calendar.getTime()).toString();
-    }
+    // S3 objects successfully changed to public access
+    // Instead of using presignedUrl, now is a formatted string
+//    public String getObjectURL(String bucketName, String key) {
+//        Calendar calendar = Calendar.getInstance();
+//
+//        // set the expiry
+//        calendar.setTime(new Date());
+//        calendar.add(Calendar.HOUR, 1); // Generated URL will be valid for 1 hour
+//
+//        // get the signed URL
+//        return s3.generatePresignedUrl(bucketName, key, calendar.getTime()).toString();
+//    }
 }

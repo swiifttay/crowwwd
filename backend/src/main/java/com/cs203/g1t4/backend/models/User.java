@@ -47,19 +47,17 @@ public class User implements UserDetails { // Implements UserDetails so that the
 
     private LocalDateTime userCreationDate;
 
-    private String nationality;
-
     private String countryOfResidence;
 
-    private String countryCode;
-
-    private String gender;
-
-    private String dateOfBirth;
+//    private String dateOfBirth;
 
     private String address;
 
     private String postalCode;
+
+    private String city;
+
+    private String state;
 
     private boolean isPreferredMarketing;
 

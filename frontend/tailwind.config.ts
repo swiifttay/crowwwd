@@ -21,9 +21,12 @@ const config: Config = {
       fontFamily: {
         mont: "var(--font-mont)",
       },
-
+      screens: {
+        'md': '840px',
+      },
       colors: {
         "theme-midnight": "#07172F",
+        "theme-dark-blue": "#001C66",
         "theme-blue": "#0047FF",
         "theme-blue-10": "#0040e6",
         "theme-blue-20": "#0039cc",

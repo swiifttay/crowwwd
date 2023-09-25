@@ -5,7 +5,7 @@ import AccountSwitch from "../components/Login/AccountSwitch";
 
 export default function Login() {
   return (
-    <div className="items-center min-h-screen max-h-screen">
+    <div className="items-center max-h-screen">
       <Image
         src="/images/login-bg.jpg"
         alt="login-bg"
@@ -18,8 +18,8 @@ export default function Login() {
         <p className="text-lg">Please log in to access your account.</p>
 
         <LoginForm />
-        <AccountSwitch message="New to CROWD SYNC?" link="/register" prompt="Sign up." />
-        
+        <AccountSwitch message="New to CROWD SYNC?" link="/fullRegister" prompt="Sign up." />
+
       </main>
     </div>
   );
