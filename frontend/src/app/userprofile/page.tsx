@@ -68,17 +68,20 @@ export default function UserProfile() {
 
   const handleSpotifyButton = async () => {
 
-    try {
-      const response = await updateFanRecords();
-      location.reload()
-    } catch (error) {
+    const response = await updateFanRecords();
+    console.log(response);
+    if (!response) {
       try {
         const responseGetAccount = await getSpotifyLogin();
         window.location.replace(responseGetAccount?.data);
       } catch (error) {
         console.log(error);
       }
+    } else {
+      
+      location.reload();
     }
+
   }
 
   const fetchFanRecords = async () => {
@@ -220,8 +223,8 @@ export default function UserProfile() {
       </div>
 
       <div className="">
-        <div className="text-xl font-bold mt-16 mb-4">Friends</div>
-        <div className="flex gap-5">
+        <div className="text-xl font-bold mb-4 mt-16">Friends</div>
+        <div className="flex gap-5 mb-32">
           <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
           <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
           <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />

@@ -142,6 +142,7 @@ export const updateFanRecords = async () => {
       console.log(error.status);
       console.error(error.response);
     }
+    return false;
   }
 
 }

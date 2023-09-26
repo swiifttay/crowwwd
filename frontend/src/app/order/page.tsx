@@ -1,3 +1,4 @@
+"use client"
 import { useState } from "react";
 import { BsFillCalendarFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
