@@ -94,15 +94,18 @@ export default function Explore() {
     }
     if (dateRange) {
       filteredEvents = filteredEvents.filter(({ dates }) => {
-        dates.some((d) => {
+        return dates.some((d) => {
           const date = new Date(d);
           return date >= dateRange.startDate && date <= dateRange.endDate;
         });
       });
     }
-    
+
     return filteredEvents?.map((event: Event) => (
-      <div key={event.eventId} className="w-full md:col-span-4 sm:col-span-6 col-span-12" >
+      <div
+        key={event.eventId}
+        className="w-full md:col-span-4 sm:col-span-6 col-span-12"
+      >
         <Card {...event} />
       </div>
     ));
@@ -133,7 +136,7 @@ export default function Explore() {
       />
 
       {isLoaded ? (
-        <div className="w-full px-3 grid md:grid-cols-12 gap-5" >
+        <div className="w-full px-3 grid md:grid-cols-12 gap-5">
           {displayedItems}
         </div>
       ) : (
