@@ -1,7 +1,8 @@
 package com.cs203.g1t4.backend.data.request.user;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 
