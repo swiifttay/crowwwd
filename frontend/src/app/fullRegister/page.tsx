@@ -26,13 +26,13 @@ export default function Home() {
   const [step, useStep] = useState(0);
   return (
 
-    <div className="flex items-center justify-center w-full h-screen overflow-hidden">
-      <Image
+    <div className="flex items-center justify-center w-full h-screen overflow-hidden bg-login bg-center bg-cover">
+      {/* <Image
         src="/images/login-bg.jpg"
         alt="login-bg"
         layout="fill"
         objectFit="cover"
-      />
+      /> */}
 
       {/* <main className="absolute w-1/2 right-0 py-2 max-h-screen flex flex-col items-center justify-center flex-1 px-20 text-center"> */}
       <main className="mt-8 flex relative flex-col items-center justify-center w-full flex-1 px-20 text-center lg:left-1/4 sm:w-[95vw] xs:w-[90vw]  py-2">
