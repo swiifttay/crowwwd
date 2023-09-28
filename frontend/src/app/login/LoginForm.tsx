@@ -19,17 +19,18 @@ export default function LoginForm() {
   const onHandleFormSubmit = async (data: TFormValues) => {
     setFormData((prev: any) => ({ ...prev, ...data }));
 
-    var isValid = await authenticate(data);
-
-    console.log(isValid);
-    if (!isValid) {
-      // console.log("invalid");
-      setMsg("The username or password entered is incorrect.");
-    } else {
-      console.log("valid");
+    // gather data on response
+    const response = await authenticate(data);
+    // check if the status given is correct
+    if (response.request?.status === 200) {
       setMsg("Loading...");
-      router.push("/");
+      router.push("/userprofile");
+
+    // if it is incorrect,
+    } else if (response?.status === 401) {
+      setMsg("The username or password entered is incorrect.");
     }
+
   };
 
   const { setFormData, formData } = useFormState();
