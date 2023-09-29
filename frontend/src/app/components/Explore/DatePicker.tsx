@@ -69,7 +69,7 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
         )}`}
         readOnly
         onClick={() => setIsOpen((isOpen) => !isOpen)}
-        className="bg-transparent border-none focus:ring-0 h-full z-50"
+        className="bg-transparent border-none focus:ring-0 outline-white outline-slate-300 h-full z-50 w-48 text-center"
       />
 
       <div ref={refOne} className="inline-block relative">
@@ -81,7 +81,7 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
             ranges={range}
             months={1}
             direction="horizontal"
-            className="absolute right-full bg-none focus:ring-0"
+            className="absolute right-full top-2 bg-none focus:ring-0"
           />
         )}
       </div>

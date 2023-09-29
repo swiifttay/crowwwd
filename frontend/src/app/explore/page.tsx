@@ -7,7 +7,6 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { concertsList } from "../axios/apiService";
 import { SearchBar } from "../components/Explore/SearchBar";
 import { Card } from "../components/Explore/Card";
-import { Grid } from "@mui/material";
 import { BiLoaderAlt } from "react-icons/bi";
 
 export interface Event {
