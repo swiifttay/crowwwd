@@ -1,0 +1,86 @@
+[
+  {
+    "category": "Booking Tickets",
+    "questions": 
+    [
+      {
+        "question": "Question 1",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      },
+      {
+        "question": "Question 2",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      }
+    ]
+  },
+  {
+    "category": "Account",
+    "questions": 
+    [
+      {
+        "question": "Question 1",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      },
+      {
+        "question": "Question 2",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      }
+    ]
+  },
+  {
+    "category": "Payment",
+    "questions": 
+    [
+      {
+        "question": "Question 1",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      },
+      {
+        "question": "Question 2",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      }
+    ]
+  },
+  {
+    "category": "General Information",
+    "questions": 
+    [
+      {
+        "question": "Question 1",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      },
+      {
+        "question": "Question 2",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      }
+    ]
+  },
+  {
+    "category": "Existing Bookings",
+    "questions": 
+    [
+      {
+        "question": "Question 1",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      },
+      {
+        "question": "Question 2",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      }
+    ]
+  },
+  {
+    "category": "Contact Us",
+    "questions": 
+    [
+      {
+        "question": "Question 1",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      },
+      {
+        "question": "Question 2",
+        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      }
+    ]
+  }
+]
