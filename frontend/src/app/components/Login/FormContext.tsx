@@ -14,7 +14,7 @@ interface IFormContext {
 
 const FormContext = createContext<IFormContext>({
   formData: {},
-  setFormData: () => {}
+  setFormData: () => {},
 });
 
 interface IProps {
@@ -25,9 +25,7 @@ export function FormProvider({ children }: IProps) {
   const [formData, setFormData] = useState();
 
   return (
-    <FormContext.Provider
-      value={{ formData, setFormData }}
-    >
+    <FormContext.Provider value={{ formData, setFormData }}>
       {children}
     </FormContext.Provider>
   );

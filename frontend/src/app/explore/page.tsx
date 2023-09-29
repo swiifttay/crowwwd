@@ -51,7 +51,7 @@ export default function Explore() {
   const queriedEvents = events?.filter(
     (event) =>
       event.name.toLocaleLowerCase().indexOf(query) !== -1 ||
-      event.artist.name.toLocaleLowerCase().indexOf(query) !== -1
+      event.artist.name.toLocaleLowerCase().indexOf(query) !== -1,
   );
 
   //---------- Set Selected Categories ----------
@@ -78,7 +78,7 @@ export default function Explore() {
     queriedEvents: Event[],
     query: string,
     selectedCat: string[],
-    dateRange: { startDate: Date; endDate: Date } | null
+    dateRange: { startDate: Date; endDate: Date } | null,
   ) => {
     let filteredEvents = events;
     if (query !== "") {
@@ -88,7 +88,7 @@ export default function Explore() {
       filteredEvents = filteredEvents?.filter(({ categories }) =>
         categories.some((c) => {
           return selectedCat.includes(c.toLocaleLowerCase());
-        })
+        }),
       );
     }
     if (dateRange) {
@@ -114,7 +114,7 @@ export default function Explore() {
     queriedEvents,
     query,
     selectedCat,
-    dateRange
+    dateRange,
   );
 
   return (

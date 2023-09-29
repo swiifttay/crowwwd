@@ -11,13 +11,13 @@ const api = axios.create({
 // api interceptor to place the jwt token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 //Login
@@ -73,7 +73,7 @@ export const usernameCheck = async (username: string) => {
       }
     }
   }
-}
+};
 
 export const concertsList = async () => {
   const response = await api.get("/event/getAllEvents");
@@ -84,7 +84,7 @@ export const concertsList = async () => {
 
 //User Profile Page
 
-export const getUserProfile =async () => {
+export const getUserProfile = async () => {
   try {
     const response = await api.get("/profile/findProfile");
     return response;
@@ -94,8 +94,7 @@ export const getUserProfile =async () => {
       console.error(error.response);
     }
   }
-
-}
+};
 
 export const getFanRecords = async () => {
   try {
@@ -104,10 +103,10 @@ export const getFanRecords = async () => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log(error.status);
-      console.error(error.response);  
+      console.error(error.response);
     }
   }
-}
+};
 
 export const getArtistById = async (artistId: string) => {
   try {
@@ -116,10 +115,10 @@ export const getArtistById = async (artistId: string) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log(error.status);
-      console.error(error.response);  
+      console.error(error.response);
     }
   }
-}
+};
 
 export const getSpotifyLogin = async () => {
   try {
@@ -131,7 +130,7 @@ export const getSpotifyLogin = async () => {
       console.error(error.response);
     }
   }
-}
+};
 
 export const updateFanRecords = async () => {
   try {
@@ -144,5 +143,4 @@ export const updateFanRecords = async () => {
     }
     return false;
   }
-
-}
+};

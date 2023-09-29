@@ -34,7 +34,7 @@ export function FormProvider({ children }: IProps) {
   function onHandleNext() {
     setStep(() => 1);
   }
-  
+
   function onHandleBack() {
     setStep(() => 0);
   }
@@ -53,8 +53,7 @@ export function useFormState() {
 }
 
 // export function useFormState() {
-  
-  
+
 //   console.log("using");
 //   const [formData, setFormData] = useState();
 //   const [step, setStep] = useState(1);
@@ -63,7 +62,6 @@ export function useFormState() {
 //     console.log("arrived");
 //     setStep((prev) => prev + 1);
 //   }
-
 
 //   return (
 //     <FormContext.Provider

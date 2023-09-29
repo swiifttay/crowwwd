@@ -1,11 +1,17 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
 import EventButtonLong from "./EventButtonLong";
 import { StringLiteral } from "typescript";
-import { getFanRecords, getUserProfile, getArtistById, getSpotifyLogin, updateFanRecords } from "../axios/apiService";
+import {
+  getFanRecords,
+  getUserProfile,
+  getArtistById,
+  getSpotifyLogin,
+  updateFanRecords,
+} from "../axios/apiService";
 import { useEffect, useState } from "react";
 
 export interface User {
@@ -43,19 +49,17 @@ export interface Artist {
   description: string;
 }
 
-
 export default function UserProfile() {
-
   const [user, setUser] = useState<User>();
-  const [fanRecords, setFanRecords] = useState<FanRecord[] | undefined>(undefined);
+  const [fanRecords, setFanRecords] = useState<FanRecord[] | undefined>(
+    undefined,
+  );
   const [favArtist, setFavArtist] = useState<Artist[] | undefined>(undefined);
-
 
   useEffect(() => {
     fetchUser();
     fetchFanRecords();
-  }, [])
-
+  }, []);
 
   const fetchUser = async () => {
     try {
@@ -64,10 +68,9 @@ export default function UserProfile() {
     } catch (error) {
       console.log({ error });
     }
-  }
+  };
 
   const handleSpotifyButton = async () => {
-
     const response = await updateFanRecords();
     console.log(response);
     if (!response) {
@@ -78,16 +81,15 @@ export default function UserProfile() {
         console.log(error);
       }
     } else {
-      
       location.reload();
     }
-
-  }
+  };
 
   const fetchFanRecords = async () => {
     try {
       const response = await getFanRecords();
-      const fanRecordsData: FanRecord[] | undefined = response?.data.allFanRecords;
+      const fanRecordsData: FanRecord[] | undefined =
+        response?.data.allFanRecords;
 
       if (fanRecordsData) {
         setFanRecords(fanRecordsData);
@@ -96,7 +98,7 @@ export default function UserProfile() {
           fanRecordsData.map(async (fanRecord: FanRecord) => {
             const artistResponse = await getArtistById(fanRecord.artistId);
             return artistResponse?.data.artist;
-          })
+          }),
         );
 
         const flattenedArtistResponses = artistResponses.flat();
@@ -112,7 +114,7 @@ export default function UserProfile() {
         });
       }
     } catch (error) {
-      console.error('Error fetching fan records:', error);
+      console.error("Error fetching fan records:", error);
     }
   };
 
@@ -123,7 +125,9 @@ export default function UserProfile() {
           <div className="flex flex-col w-2/3">
             <div className="flex gap-12">
               <div className="">
-                <div className="text-3xl font-bold mt-8 mb-4">{user?.firstName} {user?.lastName}</div>
+                <div className="text-3xl font-bold mt-8 mb-4">
+                  {user?.firstName} {user?.lastName}
+                </div>
                 <div className="text-md">{user?.username}</div>
                 <div className="text-md">{user?.email}</div>
                 <div className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer">
@@ -145,27 +149,33 @@ export default function UserProfile() {
               <div className="text-xl font-bold w-1/2">
                 Your favourite artists
               </div>
-              <button className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
-                onClick={handleSpotifyButton}>
+              <button
+                className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
+                onClick={handleSpotifyButton}
+              >
                 Connect to Spotify
               </button>
             </div>
             <div className="flex overflow-x-auto max-w-full">
-
               <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-4">
                 {favArtist?.length !== 0 ? (
-                  favArtist?.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
-                    console.log(artist);
-                    return (
-                      <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
-                    );
-                  })
+                  favArtist
+                    ?.slice(0, Math.min(10, favArtist.length))
+                    .map((artist, i) => {
+                      console.log(artist);
+                      return (
+                        <VerticalCard
+                          key={i}
+                          image={artist.artistImageURL}
+                          name={artist.name}
+                        />
+                      );
+                    })
                 ) : (
                   <p>No favorite artists available.</p>
                 )}
               </div>
             </div>
-
           </div>
 
           <div className="ml-10 w-1/3">

@@ -28,7 +28,7 @@ export function SimpleDetailForm() {
         setMsg("Password should be at least 8 characters");
       } else if (
         !data.email.match(
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
         )
       ) {
         setMsg("Email is invalid");
@@ -52,7 +52,7 @@ export function SimpleDetailForm() {
   const isValid = (
     email: string,
     password: string,
-    confirmPassword: string
+    confirmPassword: string,
   ) => {
     // const usernameValidity = await checkUsernameValidity(username);
     // if (usernameValidity) {
@@ -61,7 +61,7 @@ export function SimpleDetailForm() {
     // }
     if (
       !email.match(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
       )
     )
       return false;

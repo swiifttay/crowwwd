@@ -1,6 +1,5 @@
 "use client";
 
-
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
@@ -59,13 +58,13 @@ export function ComplexDetailForm() {
     await handleRegister(data);
   };
 
-  async function handleRegister(data :any) {
+  async function handleRegister(data: any) {
     console.log(formData);
     try {
       const response = await registerAccount(data);
-      router.push('/login');
+      router.push("/login");
     } catch (error) {
-        setMsg("Try Again Later!");
+      setMsg("Try Again Later!");
     }
   }
 

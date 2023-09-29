@@ -6,7 +6,6 @@ import DatePicker from "./DatePicker";
 
 import { useEffect, useRef, useState, ChangeEvent } from "react";
 
-
 type SelectProps = {
   onCheck: (input: ChangeEvent<HTMLInputElement>) => void;
   onDateChange: (startDate: Date, endDate: Date) => void;
