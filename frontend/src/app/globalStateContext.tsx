@@ -1,14 +1,13 @@
-'use client'
+"use client";
 
 import { createContext, useContext, useState } from "react";
 
-
 interface GlobalStateContextType {
-    isOpen: boolean;
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  }
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-  const GlobalStateContext = createContext<GlobalStateContextType | null>(null);
+const GlobalStateContext = createContext<GlobalStateContextType | null>(null);
 
 export const GlobalStateProvider = ({ children }: any) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,9 +20,9 @@ export const GlobalStateProvider = ({ children }: any) => {
 };
 
 export const useGlobalState = (): GlobalStateContextType => {
-    const context = useContext(GlobalStateContext);
-    if (!context) {
-      throw new Error("useGlobalState must be used within a GlobalStateProvider");
-    }
-    return context;
-  };
+  const context = useContext(GlobalStateContext);
+  if (!context) {
+    throw new Error("useGlobalState must be used within a GlobalStateProvider");
+  }
+  return context;
+};

@@ -15,8 +15,10 @@ export function Card(event: Event) {
     router.push("/eventdetails");
   }
   return (
-    <button className="w-full grid-rows-2 h-72 rounded-md transition-transform group text-left"
-      onClick={handleEventDetails}>
+    <button
+      className="w-full grid-rows-2 h-72 rounded-md transition-transform group text-left"
+      onClick={handleEventDetails}
+    >
       <img
         src={event.eventImageURL}
         className="row-span-1 rounded-md h-44 object-cover w-full group-hover:opacity-60 group-hover:scale-105 group-hover:ease-in-out group-hover:duration-200"

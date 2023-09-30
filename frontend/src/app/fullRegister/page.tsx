@@ -1,14 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
+import { useState } from "react";
 import AccountSwitch from "../components/Login/AccountSwitch";
 // import { ActiveStepFormComponent } from "./ActiveStepFormComponent";
 
-import { useFormState, FormProvider } from "../components/Register/FormContext";
-import { SimpleDetailForm } from "../components/Register/SimpleDetailForm";
 import { ComplexDetailForm } from "../components/Register/ComplexDetailForm";
-
+import { FormProvider, useFormState } from "../components/Register/FormContext";
+import { SimpleDetailForm } from "../components/Register/SimpleDetailForm";
 
 function ActiveStepFormComponent() {
   const { step } = useFormState();
@@ -25,7 +23,6 @@ function ActiveStepFormComponent() {
 export default function Home() {
   const [step, useStep] = useState(0);
   return (
-
     <div className="flex items-center justify-center w-full h-screen overflow-hidden bg-login bg-center bg-cover">
       {/* <Image
         src="/images/login-bg.jpg"

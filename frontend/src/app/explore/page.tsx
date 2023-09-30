@@ -7,7 +7,6 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { concertsList } from "../axios/apiService";
 import { SearchBar } from "../components/Explore/SearchBar";
 import { Card } from "../components/Explore/Card";
-import { Grid } from "@mui/material";
 import { BiLoaderAlt } from "react-icons/bi";
 
 export interface Event {
@@ -60,7 +59,7 @@ export default function Explore() {
   const queriedEvents = events?.filter(
     (event) =>
       event.name.toLocaleLowerCase().indexOf(query) !== -1 ||
-      event.artist.name.toLocaleLowerCase().indexOf(query) !== -1
+      event.artist.name.toLocaleLowerCase().indexOf(query) !== -1,
   );
 
   //---------- Set Selected Categories ----------
@@ -87,7 +86,7 @@ export default function Explore() {
     queriedEvents: Event[],
     query: string,
     selectedCat: string[],
-    dateRange: { startDate: Date; endDate: Date } | null
+    dateRange: { startDate: Date; endDate: Date } | null,
   ) => {
     let filteredEvents = events;
     if (query !== "") {
@@ -97,7 +96,7 @@ export default function Explore() {
       filteredEvents = filteredEvents?.filter(({ categories }) =>
         categories.some((c) => {
           return selectedCat.includes(c.toLocaleLowerCase());
-        })
+        }),
       );
     }
     if (dateRange) {
@@ -123,7 +122,7 @@ export default function Explore() {
     queriedEvents,
     query,
     selectedCat,
-    dateRange
+    dateRange,
   );
 
   return (

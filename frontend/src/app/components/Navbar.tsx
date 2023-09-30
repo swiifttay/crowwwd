@@ -9,18 +9,21 @@ import { useState } from "react";
 import SidePanel from "./SidePanel";
 import { useGlobalState } from "../globalStateContext";
 
-
 export default function Navbar() {
-  const {isOpen, setIsOpen} = useGlobalState();
+  const { isOpen, setIsOpen } = useGlobalState();
 
-  function toggleMenu(){
+  function toggleMenu() {
     setIsOpen(!isOpen);
   }
   return (
     <div className="w-full font-bold text-base py-[20px] md:px-[128px] flex items-center z-40 justify-between px-20">
-      <a href="/explore" className="hover:text-gray-300 cursor-pointer hidden md:flex">Explore</a>
+      <a
+        href="/explore"
+        className="hover:text-gray-300 cursor-pointer hidden md:flex"
+      >
+        Explore
+      </a>
       <div className="relative group hidden md:flex space-y-5">
-
         <a href="" className=" hover:text-gray-300">
           About Us
         </a>
@@ -42,7 +45,10 @@ export default function Navbar() {
           </ul>
         </div>
       </div>
-      <Bars3Icon className="h-10 md:hidden cursor-pointer" onClick={toggleMenu}/>
+      <Bars3Icon
+        className="h-10 md:hidden cursor-pointer"
+        onClick={toggleMenu}
+      />
 
       <Link href="/">
         <Image src={Logo} alt="Logo" className="w-48 h-20 object-cover" />

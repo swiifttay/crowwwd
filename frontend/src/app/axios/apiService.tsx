@@ -126,8 +126,7 @@ export const getUserProfile = async () => {
   } catch (error) {
     return Promise.reject(error);
   }
-
-}
+};
 
 export const getFanRecords = async () => {
   try {
@@ -136,7 +135,7 @@ export const getFanRecords = async () => {
   } catch (error) {
     return Promise.reject(error);
   }
-}
+};
 
 export const getArtistById = async (artistId: string) => {
   try {
@@ -145,7 +144,7 @@ export const getArtistById = async (artistId: string) => {
   } catch (error) {
     return Promise.reject(error);
   }
-}
+};
 
 export const getSpotifyLogin = async () => {
   try {
@@ -154,7 +153,7 @@ export const getSpotifyLogin = async () => {
   } catch (error) {
     return Promise.reject(error);
   }
-}
+};
 
 export const updateFanRecords = async () => {
   try {
@@ -163,5 +162,4 @@ export const updateFanRecords = async () => {
   } catch (error) {
     return Promise.reject(error);
   }
-
-}
+};

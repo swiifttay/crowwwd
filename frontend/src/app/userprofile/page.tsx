@@ -1,11 +1,17 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
 import EventButtonLong from "./EventButtonLong";
 import { StringLiteral } from "typescript";
-import { getFanRecords, getUserProfile, getArtistById, getSpotifyLogin, updateFanRecords } from "../axios/apiService";
+import {
+  getFanRecords,
+  getUserProfile,
+  getArtistById,
+  getSpotifyLogin,
+  updateFanRecords,
+} from "../axios/apiService";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -44,9 +50,7 @@ export interface Artist {
   description: string;
 }
 
-
 export default function UserProfile() {
-
   const [user, setUser] = useState<User>();
   const [fanRecords, setFanRecords] = useState<FanRecord[]>();
   const [favArtist, setFavArtist] = useState<Artist[]>();
@@ -64,7 +68,7 @@ export default function UserProfile() {
     }
     fetchUser();
     fetchFanRecords();
-    console.log(fanRecords);
+    // console.log(fanRecords);
   }, [])
 
 
@@ -76,10 +80,9 @@ export default function UserProfile() {
     } else {
       router.push('/login');
     }
-  }
+  };
 
   const handleSpotifyButton = async () => {
-
     const response = await updateFanRecords();
     console.log("hi");
     console.log(response);
@@ -103,7 +106,7 @@ export default function UserProfile() {
       if (response.status == 200) {
         const fanRecordsData: FanRecord[] = response.data.allFanRecords;
 
-        console.log(fanRecordsData.length);
+        // console.log(fanRecordsData.length);
         // if there is any fanrecord data
         if (fanRecordsData.length !== 0) {
           setFanRecords(fanRecordsData);
@@ -134,7 +137,7 @@ export default function UserProfile() {
         setMsg("Connect to Spotify to see your favourite artists!")
       }
     } catch (error) {
-      console.error('Error fetching fan records:', error);
+      console.error("Error fetching fan records:", error);
     }
   };
 
@@ -145,7 +148,9 @@ export default function UserProfile() {
           <div className="flex flex-col w-2/3">
             <div className="flex gap-12">
               <div className="">
-                <div className="text-3xl font-bold mt-8 mb-4">{user?.firstName} {user?.lastName}</div>
+                <div className="text-3xl font-bold mt-8 mb-4">
+                  {user?.firstName} {user?.lastName}
+                </div>
                 <div className="text-md">{user?.username}</div>
                 <div className="text-md">{user?.email}</div>
                 <div className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer">
@@ -173,7 +178,6 @@ export default function UserProfile() {
               </button>
             </div>
             <div className="flex overflow-x-auto max-w-full">
-
               <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-4">
                 <div className={`${isArtistLoaded ? 'hidden' : 'display'}`}> Loading... </div>
                 {favArtist?.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
@@ -184,7 +188,6 @@ export default function UserProfile() {
                   })}
               </div>
             </div>
-
           </div>
 
           <div className="ml-10 w-1/3">
