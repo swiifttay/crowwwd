@@ -35,7 +35,7 @@ public class EventService {
     private final ArtistRepository artistRepository;
     private final S3Service s3Service;
 
-    @Value("${env.AWS_BUCKET_NAME}")
+    @Value("${aws.bucket.name}")
     private String bucketName;
 
     // Main Service Methods

@@ -13,6 +13,7 @@ import {
   updateFanRecords,
 } from "../axios/apiService";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export interface User {
   id: string;
@@ -51,67 +52,89 @@ export interface Artist {
 
 export default function UserProfile() {
   const [user, setUser] = useState<User>();
-  const [fanRecords, setFanRecords] = useState<FanRecord[] | undefined>(
-    undefined,
-  );
-  const [favArtist, setFavArtist] = useState<Artist[] | undefined>(undefined);
+  const [fanRecords, setFanRecords] = useState<FanRecord[]>();
+  const [favArtist, setFavArtist] = useState<Artist[]>();
+
+  const [msg, setMsg] = useState("");
+  const [isLoggedInSpotify, setIsLoggedInSpotify] = useState(false);
+  const [isArtistLoaded, setIsArtistLoaded] = useState(false);
+  const [spotifyButtonMsg, setSpotifyButtonMsg] = useState("Connect to Spotify");
+
+  const router = useRouter();
 
   useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      router.push('/login');
+    }
     fetchUser();
     fetchFanRecords();
-  }, []);
+    // console.log(fanRecords);
+  }, [])
+
 
   const fetchUser = async () => {
-    try {
-      const response = await getUserProfile();
-      setUser(response?.data.user);
-    } catch (error) {
-      console.log({ error });
+    const response = await getUserProfile();
+
+    if (response.request?.status === 200) {
+      setUser(response.data.user);
+    } else {
+      router.push('/login');
     }
   };
 
   const handleSpotifyButton = async () => {
     const response = await updateFanRecords();
+    console.log("hi");
     console.log(response);
-    if (!response) {
-      try {
-        const responseGetAccount = await getSpotifyLogin();
-        window.location.replace(responseGetAccount?.data);
-      } catch (error) {
-        console.log(error);
+    if (response.status === 401) {
+      const responseGetAccount = await getSpotifyLogin();
+      window.location.replace(responseGetAccount?.data);
+
+      if (responseGetAccount.status === 401) {
+        setSpotifyButtonMsg("Login to spotify!");
       }
-    } else {
+    } else if (response.status === 200) {
       location.reload();
     }
-  };
+  }
 
   const fetchFanRecords = async () => {
     try {
       const response = await getFanRecords();
-      const fanRecordsData: FanRecord[] | undefined =
-        response?.data.allFanRecords;
 
-      if (fanRecordsData) {
-        setFanRecords(fanRecordsData);
+      // check if it user has logged to spotify
+      if (response.status == 200) {
+        const fanRecordsData: FanRecord[] = response.data.allFanRecords;
 
-        const artistResponses = await Promise.all(
-          fanRecordsData.map(async (fanRecord: FanRecord) => {
-            const artistResponse = await getArtistById(fanRecord.artistId);
-            return artistResponse?.data.artist;
-          }),
-        );
+        // console.log(fanRecordsData.length);
+        // if there is any fanrecord data
+        if (fanRecordsData.length !== 0) {
+          setFanRecords(fanRecordsData);
 
-        const flattenedArtistResponses = artistResponses.flat();
+          // get all the artists that are relevant
+          const artistResponses = await Promise.all(
+            fanRecordsData.map(async (fanRecord: FanRecord) => {
+              const artistResponse = await getArtistById(fanRecord.artistId);
+              return artistResponse?.data.artist;
+            })
+          );
+          const flattenedArtistResponses = artistResponses.flat();
+  
+          setFavArtist((prev: Artist[] | undefined) => {
+            const updatedFavArtist: Artist[] = prev ? [...prev] : [];
+  
+            // Add the artist responses to the existing list
+            updatedFavArtist.push(...flattenedArtistResponses);
+            setIsArtistLoaded(true);
+  
+            return updatedFavArtist;
+          });
+        } else {
+          setMsg("Connect to Spotify to see your favourite artists!");
+        }
 
-        setFavArtist((prev: Artist[] | undefined) => {
-          const updatedFavArtist: Artist[] = prev ? [...prev] : [];
-
-          // Add the artist responses to the existing list
-          updatedFavArtist.push(...flattenedArtistResponses);
-          console.log(updatedFavArtist.length);
-
-          return updatedFavArtist;
-        });
+      } else {
+        setMsg("Connect to Spotify to see your favourite artists!")
       }
     } catch (error) {
       console.error("Error fetching fan records:", error);
@@ -149,31 +172,20 @@ export default function UserProfile() {
               <div className="text-xl font-bold w-1/2">
                 Your favourite artists
               </div>
-              <button
-                className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
-                onClick={handleSpotifyButton}
-              >
-                Connect to Spotify
+              <button className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
+                onClick={handleSpotifyButton}>
+                {spotifyButtonMsg}
               </button>
             </div>
             <div className="flex overflow-x-auto max-w-full">
               <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-4">
-                {favArtist?.length !== 0 ? (
-                  favArtist
-                    ?.slice(0, Math.min(10, favArtist.length))
-                    .map((artist, i) => {
-                      console.log(artist);
-                      return (
-                        <VerticalCard
-                          key={i}
-                          image={artist.artistImageURL}
-                          name={artist.name}
-                        />
-                      );
-                    })
-                ) : (
-                  <p>No favorite artists available.</p>
-                )}
+                <div className={`${isArtistLoaded ? 'hidden' : 'display'}`}> Loading... </div>
+                {favArtist?.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
+                    console.log(artist);
+                    return (
+                      <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
+                    );
+                  })}
               </div>
             </div>
           </div>
