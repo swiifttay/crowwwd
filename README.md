@@ -56,7 +56,22 @@ $ npm run dev
 bash
 $ cd ../backend
 ```
-#### `Step 6` - Run backend
+#### `Step 6` - create secrets.properties file in in `backend/src/main/resources`
+```
+spring.data.mongodb.database=<your-database>
+spring.data.mongodb.uri=<your-database-uri>
+
+aws.bucket.region=<your-aws-bucket-region>
+aws.bucket.name=<your-aws-bucket-name>
+aws.access.key=<your-aws-access-key>
+aws.secret.key=<your-aws-secret-key>
+
+spotify.client.id=<your-spotify-client-id>
+spotify.client.secretkey=<your-spotify-secret-key>
+
+crowwwd.backend.app.jwtSecretKey=<your-jwt-secret-key>
+```
+#### `Step 7` - Run backend
 ```
 bash
 $ ./mvnw spring-boot:run
@@ -66,14 +81,14 @@ Enter browser and open http://localhost:3000
 ## Contributors
 
 **Frontend:**
-- Dexter
-- Yuting
-- Joel
+- Dexter    [(dexterlim24)](https://github.com/dexterlim24)
+- Yuting    [(yutinggh)](https://github.com/yutinggh)
+- Joel      [(owjoel)](https://github.com/owjoel)
 
 **Backend:**
-- Eugene
-- Si Yu
-- Jeremiah
+- Eugene    [(eugenelian)](https://github.com/eugenelian)
+- Si Yu     [(swiifttay)](https://github.com/swiifttay)
+- Jeremiah  [(jtrabino)](https://github.com/jtrabino)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
