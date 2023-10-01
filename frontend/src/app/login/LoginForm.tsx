@@ -26,11 +26,10 @@ export default function LoginForm() {
       setMsg("Loading...");
       router.push("/userprofile");
 
-    // if it is incorrect,
+      // if it is incorrect,
     } else if (response?.status === 401) {
       setMsg("The username or password entered is incorrect.");
     }
-
   };
 
   const { setFormData, formData } = useFormState();

@@ -42,7 +42,7 @@ export default function Explore() {
       console.log(eventList);
       setEvents(eventList);
       setIsLoaded(true);
-    
+
       // will come here if it was from a token error
     } else {
       window.location.reload();

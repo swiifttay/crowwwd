@@ -4,7 +4,7 @@ import { Grid, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useFormState } from "./FormContext";
 
-import {usernameCheck} from "../../axios/apiService";
+import { usernameCheck } from "../../axios/apiService";
 
 // take note of the values recorded in this form
 type TFormValues = {
@@ -60,7 +60,6 @@ export function SimpleDetailForm() {
     } else {
       return false;
     }
-  
   }
 
   const isValid = (

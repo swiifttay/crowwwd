@@ -64,7 +64,6 @@ export function ComplexDetailForm() {
     if (response.request?.status === 200) {
       setMsg("Saving...");
       router.push("/login");
-
     } else {
       setMsg("Try Again Later!");
     }

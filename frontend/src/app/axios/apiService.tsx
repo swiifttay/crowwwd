@@ -26,20 +26,18 @@ const api = axios.create({
 //     return Promise.reject(error)
 //   }
 // );
-api.interceptors.request.use(
-  async (config) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    } catch (error) {
-      // console.error('Error setting authorization header:', error);
-      throw error;
+api.interceptors.request.use(async (config) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
+  } catch (error) {
+    // console.error('Error setting authorization header:', error);
+    throw error;
   }
-);
+});
 
 api.interceptors.response.use(
   (response) => {
@@ -50,16 +48,14 @@ api.interceptors.response.use(
 
     if (error.response?.data?.status === 500) {
       console.log("Handling 500 error");
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
       // return a false value that shows that the token was invalid
       // return false;
     }
     console.log(error.toJSON());
     return error.toJSON();
-  }
+  },
 );
-
-
 
 //Login
 export const authenticate = async (credentials: {
@@ -71,7 +67,7 @@ export const authenticate = async (credentials: {
 
   // check if valid response
   if (response.status === 200) {
-    const {token} = response.data;
+    const { token } = response.data;
     localStorage.setItem("token", token);
   }
 
@@ -109,7 +105,7 @@ export const usernameCheck = async (username: string) => {
     }
     return Promise.reject(error);
   }
-}
+};
 
 export const concertsList = async () => {
   const response = await api.get("/event/getAllEvents");
