@@ -155,6 +155,15 @@ export const getSpotifyLogin = async () => {
   }
 };
 
+export const getSpotifyToken = async() => {
+  try {
+    const response = await api.get("/spotify/getSpotifyToken");
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 export const updateFanRecords = async () => {
   try {
     const response = await api.post("/spotify/updateMyAccountFavouriteArtists");
