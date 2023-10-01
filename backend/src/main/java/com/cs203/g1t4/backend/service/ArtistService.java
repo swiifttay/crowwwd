@@ -22,7 +22,7 @@ public class ArtistService {
     private final ArtistRepository artistRepository;
     private final S3Service s3Service;
 
-    @Value("${env.AWS_BUCKET_NAME}")
+    @Value("${aws.bucket.name}")
     private String bucketName;
 
     // for manually adding a artist for event creation

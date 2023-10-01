@@ -54,16 +54,18 @@ export function ComplexDetailForm() {
 
     setMsg("loading...");
     setFormData((prev: any) => ({ ...prev, ...data }));
-    // router.push('/login');
     await handleRegister(data);
   };
 
   async function handleRegister(data: any) {
-    console.log(formData);
-    try {
-      const response = await registerAccount(data);
+    const response = await registerAccount(data);
+
+    // check if the status given is correct
+    if (response.request?.status === 200) {
+      setMsg("Saving...");
       router.push("/login");
-    } catch (error) {
+
+    } else {
       setMsg("Try Again Later!");
     }
   }

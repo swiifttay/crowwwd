@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,9 +15,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -32,11 +32,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("timestamp", new Date());
         body.put("status", status.value());
         body.put("error", status.getClass());
-        StringBuilder message = new StringBuilder();
-        for (ObjectError objectError : ex.getBindingResult().getAllErrors()){
-            message.append(objectError.getDefaultMessage());
-        }
-        body.put("message", message.toString());
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(FieldError::getDefaultMessage)
+                .toList();
+        body.put("message", getErrorsMap(errors));
         body.put("path", request.getDescription(false));
         return new ResponseEntity<>(body, headers, status);
 
@@ -48,4 +49,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
+    // private method to get the errors for invalid fields
+    private Map<String, List<String>> getErrorsMap(List<String>errors) {
+        Map<String, List<String>> errorResponse = new TreeMap<>();
+        errorResponse.put("errors", errors);
+        return errorResponse;
+    }
 }

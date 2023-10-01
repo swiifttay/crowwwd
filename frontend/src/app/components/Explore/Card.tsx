@@ -12,8 +12,8 @@ export function Card(event: Event) {
       : `${dateFormatter(startDate)} - ${dateFormatter(endDate)}`;
 
   const handleEventDetails = () => {
-    router.push("eventdetails");
-  };
+    router.push("/eventdetails");
+  }
   return (
     <button
       className="w-full grid-rows-2 h-72 rounded-md transition-transform group text-left"

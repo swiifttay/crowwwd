@@ -35,10 +35,18 @@ export default function Explore() {
   }, []);
 
   const fetchEvents = async () => {
-    const eventList: Event[] = await concertsList();
-    console.log(eventList);
-    setEvents(eventList);
-    setIsLoaded(true);
+    // check if response valid
+    const response = await concertsList();
+    if (response.request?.status === 200) {
+      const eventList: Event[] = response.data.events;
+      console.log(eventList);
+      setEvents(eventList);
+      setIsLoaded(true);
+    
+      // will come here if it was from a token error
+    } else {
+      window.location.reload();
+    }
   };
 
   //--------- Search Filter ----------
