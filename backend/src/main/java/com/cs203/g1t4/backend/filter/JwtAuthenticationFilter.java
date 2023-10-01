@@ -24,7 +24,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    public static final String[] whiteListedRoutes = new String[]{"/api/v1/auth/register", "/api/v1/auth/authenticate", "/error"};
+    public static final String[] whiteListedRoutes = new String[]{
+        "/api/auth/register", 
+        "/api/auth/authenticate", 
+        "/api/event/addEvent",
+        "/api/event/deleteEvent/.*",
+        "/api/event/updateEvent/.*",
+        "/api/event/getEvent/.*",
+        "/api/event/getAllEvents",
+        "/api/event/getEventsBetween/start/.*/end/.*",
+        "/error"
+    };
 
     //Purpose: doFilterInternal() method is called everytime an API is called which does the checks accordingly
     @Override
@@ -48,11 +58,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
          * 2. Checks if the authHeader is empty (No authentication)
          * 3. Checks if the authHeader does not start with Bearer (No Bearer token)
          *
-         * Logic needs review!
          */
-        if (Arrays.asList(JwtAuthenticationFilter.whiteListedRoutes).contains(request.getServletPath()) ||
-            authHeader == null || !authHeader.startsWith("Bearer ")) {
-            /*
+        if (isWhiteListed(request.getServletPath())) {
+            /* 
              * If condition is met, the filterChain continues processing the request and response without any additional
              * authentication or authorization checks. It effectively allows the request to pass
              * through without requiring JWT validation.
@@ -104,4 +112,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
          */
         filterChain.doFilter(request, response);
     }
+
+    
+    public static boolean isWhiteListed(String url) {
+        for (String pattern : whiteListedRoutes) {
+            // Escape special characters and replace '*' with '.*' for regex matching
+            // String regexPattern = pattern
+            //         .replace("/", "\\/") // Escape '/'
+            //         .replace(".", "\\.")  // Escape '.'
+            //         .replace("*", ".*"); // Replace '*' with '.*' for regex matching
+
+            if (url.matches(pattern)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

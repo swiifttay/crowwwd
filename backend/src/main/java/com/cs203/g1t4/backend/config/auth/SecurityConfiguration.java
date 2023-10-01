@@ -1,6 +1,8 @@
 package com.cs203.g1t4.backend.config.auth;
 
 import com.cs203.g1t4.backend.filter.JwtAuthenticationFilter;
+
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +25,17 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     
-    public static final String[] whiteListedRoutes = new String[] { "/api/v1/auth/register",
-            "/api/v1/auth/authenticate", "/error" };
+    public static final String[] whiteListedRoutes = new String[]{
+        "/api/auth/register", 
+        "/api/auth/authenticate", 
+        "/api/event/addEvent",
+        "/api/event/deleteEvent/.*",
+        "/api/event/updateEvent/.*",
+        "/api/event/getEvent/.*",
+        "/api/event/getAllEvents",
+        "/api/event/getEventsBetween/start/.*?/end/.*?",
+        "/error"
+    };
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;    //Autowired from ApplicationConfig
@@ -59,23 +70,25 @@ public class SecurityConfiguration {
                 //Sets up CORS to handle cross-origin requests
         return http.cors(withDefaults())
                 //Disables CSRF (Cross-Site Request Forgery) protection. Deprecated and can be removed
-                .csrf().disable()
+                .csrf(csrf -> csrf.disable())
                 //Configure authorization rules for your application. Include all requestMatchers within "{}"
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(
-                        "/api/**", 
-                        "/error", 
+                    auth
+                    .requestMatchers(this::isWhiteListed).permitAll()   // white listed routes for all users
+                    .requestMatchers(
+                        "/error",
                         "/v2/api-docs",
                         "/v3/api-docs",
                         "/v3/api-docs/**",
                         "/swagger-resources",
-                        "swagger-resources/**",
+                        "/swagger-resources/**",
                         "/configuration/ui",
                         "/configuration/security",
                         "/swagger-ui/**",
-                        "webjars/**",
-                        "/swagger-ui.html").permitAll().anyRequest()
-                            .authenticated();
+                        "/webjars/**",
+                        "/swagger-ui.html"
+                    ).permitAll()                                      // swagger api routes for all users
+                    .anyRequest().authenticated();                     // any other api routes to require authentication
                 })
                 //Treats each request independently, and there is no server-side session state stored between requests.
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -86,4 +99,10 @@ public class SecurityConfiguration {
                 //Builds the SecurityFilterChain
                 .build();
     }
+
+    private boolean isWhiteListed(HttpServletRequest request) {
+    return Arrays.stream(whiteListedRoutes)
+            .anyMatch(request.getServletPath()::matches);
+}
+    
 }
