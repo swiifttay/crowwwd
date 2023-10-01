@@ -103,7 +103,7 @@ export function ComplexDetailForm() {
       >
         {" "}
         {"Hi "}
-        <span style={{ color: "#0047FF" }}>{formData.username}</span>
+        <span style={{ color: "#1D90F4" }}>{formData.username}</span>
         {", we require a bit more information from you."}
       </Typography>
       <Grid container spacing={3}>

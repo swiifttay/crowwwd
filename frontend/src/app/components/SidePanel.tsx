@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import Link from "next/link";
+import { useState } from "react";
 import { useGlobalState } from "../globalStateContext";
 
 const SidePanel = () => {
