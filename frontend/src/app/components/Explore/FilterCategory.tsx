@@ -13,7 +13,7 @@ type CheckProps = {
 export default function FilterCategory({ onCheck }: CheckProps) {
   const handleFormControlLabelChange = (
     event: React.SyntheticEvent<Element, Event>,
-    checked: boolean
+    checked: boolean,
   ) => {
     onCheck(event as React.ChangeEvent<HTMLInputElement>);
   };
@@ -30,7 +30,7 @@ export default function FilterCategory({ onCheck }: CheckProps) {
             control={<Checkbox size="small" sx={{ color: "white" }} />}
             label={<span className="text-sm font-mont mr-2">{genre}</span>}
           />
-        )
+        ),
       )}
     </FormGroup>
   );
