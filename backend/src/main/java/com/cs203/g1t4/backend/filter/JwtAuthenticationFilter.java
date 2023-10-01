@@ -25,14 +25,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     public static final String[] whiteListedRoutes = new String[]{
+        // normal user paths
         "/api/auth/register", 
         "/api/auth/authenticate", 
+        "/api/event/getEvent/.*",
+        "/api/event/getAllEvents",
+        "/api/event/getEventsBetween/start/.*?/end/.*?",
+
+        // admin user (additional features in the future)
         "/api/event/addEvent",
         "/api/event/deleteEvent/.*",
         "/api/event/updateEvent/.*",
-        "/api/event/getEvent/.*",
-        "/api/event/getAllEvents",
-        "/api/event/getEventsBetween/start/.*/end/.*",
+
+        // others
+        "/api/spotify/get-user-code",
         "/error"
     };
 
