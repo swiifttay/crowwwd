@@ -11,8 +11,8 @@ export default function Event() {
     router.push("/order");
   };
   return (
-    <div className="flex flex-col justify-center items-center">
-      <div className="w-auto mt-32">
+    <div className="flex w-full items-center justify-center mt-4">
+      <div className="">
         <div className="">
           <Image
             src="/images/EventPoster.jpg"
@@ -108,7 +108,7 @@ export default function Event() {
           </ul>
 
           <div className="mt-12 text-xl font-bold mb-2">FAQ</div>
-          <div className="flex gap-1">
+          <div className="flex gap-1 mb-16">
             <div>Click</div>
             <div className="hover:underline text-theme-light-blue cursor-pointer">
               here

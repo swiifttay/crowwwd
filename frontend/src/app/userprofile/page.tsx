@@ -64,15 +64,14 @@ export default function UserProfile() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      router.push('/login');
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
     }
     checkSpotifyLoginStatus();
     fetchUser();
     fetchFanRecords();
     // console.log(fanRecords);
-  }, [])
-
+  }, []);
 
   const fetchUser = async () => {
     const response = await getUserProfile();
@@ -80,7 +79,7 @@ export default function UserProfile() {
     if (response.request?.status === 200) {
       setUser(response.data.user);
     } else {
-      router.push('/login');
+      router.push("/login");
     }
   };
 
@@ -119,7 +118,7 @@ export default function UserProfile() {
         }
       }
     }
-  }
+  };
 
   const fetchFanRecords = async () => {
     try {
@@ -139,7 +138,7 @@ export default function UserProfile() {
             fanRecordsData.map(async (fanRecord: FanRecord) => {
               const artistResponse = await getArtistById(fanRecord.artistId);
               return artistResponse?.data.artist;
-            })
+            }),
           );
           const flattenedArtistResponses = artistResponses.flat();
 
@@ -155,9 +154,8 @@ export default function UserProfile() {
         } else {
           setMsg("Connect to Spotify to see your favourite artists!");
         }
-
       } else {
-        setMsg("Connect to Spotify to see your favourite artists!")
+        setMsg("Connect to Spotify to see your favourite artists!");
       }
     } catch (error) {
       console.error("Error fetching fan records:", error);
@@ -195,8 +193,10 @@ export default function UserProfile() {
               <div className="text-xl font-bold w-1/2">
                 Your favourite artists
               </div>
-              <button className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
-                onClick={handleSpotifyButton}>
+              <button
+                className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
+                onClick={handleSpotifyButton}
+              >
                 {spotifyButtonMsg}
               </button>
             </div>
