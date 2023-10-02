@@ -17,7 +17,7 @@ const EventButtonLong: React.FC<EventButtonProps> = ({
 }) => {
   return (
     <div>
-      <button className="w-[1128px] bg-zinc-900 hover:bg-zinc-800 text-white pt-2 pb-1 px-5 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]">
+      <button className="w-full bg-zinc-900 hover:bg-zinc-800 text-white pt-2 pb-1 px-5 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]">
         <div className="flex">
           <div className="mr-6">
             <Image

@@ -11,6 +11,7 @@ import {
   getArtistById,
   getSpotifyLogin,
   updateFanRecords,
+  getSpotifyToken
 } from "../axios/apiService";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -58,8 +59,7 @@ export default function UserProfile() {
   const [msg, setMsg] = useState("");
   const [isLoggedInSpotify, setIsLoggedInSpotify] = useState(false);
   const [isArtistLoaded, setIsArtistLoaded] = useState(false);
-  const [spotifyButtonMsg, setSpotifyButtonMsg] =
-    useState("Connect to Spotify");
+  const [spotifyButtonMsg, setSpotifyButtonMsg] = useState("");
 
   const router = useRouter();
 
@@ -67,6 +67,7 @@ export default function UserProfile() {
     if (!localStorage.getItem("token")) {
       router.push("/login");
     }
+    checkSpotifyLoginStatus();
     fetchUser();
     fetchFanRecords();
     // console.log(fanRecords);
@@ -82,19 +83,40 @@ export default function UserProfile() {
     }
   };
 
-  const handleSpotifyButton = async () => {
-    const response = await updateFanRecords();
-    console.log("hi");
-    console.log(response);
-    if (response.status === 401) {
-      const responseGetAccount = await getSpotifyLogin();
-      window.location.replace(responseGetAccount?.data);
+  const checkSpotifyLoginStatus = async () => {
+    const spotifyTokenResponse = await getSpotifyToken();
+    console.log(spotifyTokenResponse.data.response);
+    if (spotifyTokenResponse?.status === 200 && spotifyTokenResponse.data?.response != null) {
+      console.log("success");
+      localStorage.setItem("spotifyToken", spotifyTokenResponse.data.response);
+      setSpotifyButtonMsg("Update My Records");
+      setIsLoggedInSpotify(true);
+    } else {
+      console.log("failure");
+      setSpotifyButtonMsg("Connect to Spotify");
+      setIsLoggedInSpotify(false);
+    }
+  }
 
-      if (responseGetAccount.status === 401) {
-        setSpotifyButtonMsg("Login to spotify!");
+  const handleSpotifyButton = async () => {
+    if (isLoggedInSpotify) {
+      const updateFanRecordsResponse = await updateFanRecords();
+      if (updateFanRecordsResponse.request?.status === 200) {
+        window.location.reload();
+      } else {
+        localStorage.removeItem("spotifyToken");
+        setIsLoggedInSpotify(false);
+        setSpotifyButtonMsg("Connect to Spotify");
       }
-    } else if (response.status === 200) {
-      location.reload();
+    } else {
+      const getAccountResponse = await getSpotifyLogin();
+      if (getAccountResponse.request?.status == 200) {
+        window.location.replace(getAccountResponse?.data);
+      } else {
+        if (!localStorage.getItem('token')) {
+          router.push('/login');
+        }
+      }
     }
   };
 
@@ -141,8 +163,8 @@ export default function UserProfile() {
   };
 
   return (
-    <div>
-      <div className="flex flex-col justify-center  mt-4 w-full">
+    <main className="flex flex-col items-center h-fit relative w-full px-8">
+      <div className="flex flex-col justify-center align-center mt-4 w-full">
         <div className="flex flex-row ">
           <div className="flex flex-col w-2/3">
             <div className="flex gap-12">
@@ -179,23 +201,13 @@ export default function UserProfile() {
               </button>
             </div>
             <div className="flex overflow-x-auto max-w-full">
-              <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-4">
-                <div className={`${isArtistLoaded ? "hidden" : "display"}`}>
-                  {" "}
-                  Loading...{" "}
-                </div>
-                {favArtist
-                  ?.slice(0, Math.min(10, favArtist.length))
-                  .map((artist, i) => {
-                    console.log(artist);
-                    return (
-                      <VerticalCard
-                        key={i}
-                        image={artist.artistImageURL}
-                        name={artist.name}
-                      />
-                    );
-                  })}
+              <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-8">
+                <div className={`${isArtistLoaded ? 'hidden' : 'display'}`}> Loading... </div>
+                {favArtist?.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
+                  return (
+                    <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -232,7 +244,7 @@ export default function UserProfile() {
           </div>
         </div>
       </div>
-      <div className="">
+      <div className="flex flex-col w-full">
         <div className="text-xl font-bold mt-16 mb-4">
           Your purchased concerts
         </div>
@@ -251,19 +263,35 @@ export default function UserProfile() {
             datetime="Fri 15 Sep 2023, 7pm"
             venue="The Star Theatre, The Star Performing Arts Centre"
           />
+          <EventButtonLong
+            image="/images/TaylorSwift.jpg"
+            title="Reputation Tour"
+            artist="Taylor Swift"
+            datetime="Fri 15 Sep 2023, 7pm"
+            venue="The Star Theatre, The Star Performing Arts Centre"
+          />
+          <EventButtonLong
+            image="/images/TaylorSwift.jpg"
+            title="Reputation Tour"
+            artist="Taylor Swift"
+            datetime="Fri 15 Sep 2023, 7pm"
+            venue="The Star Theatre, The Star Performing Arts Centre"
+          />
         </div>
       </div>
 
-      <div className="">
+      <div className="flex flex-col w-full">
         <div className="text-xl font-bold mb-4 mt-16">Friends</div>
-        <div className="flex gap-5 mb-32">
-          <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-          <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-          <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-          <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-          <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+        <div className="flex overflow-x-auto max-w-full mb-32 px-4 py-8">
+          <div className="flex gap-5">
+            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
