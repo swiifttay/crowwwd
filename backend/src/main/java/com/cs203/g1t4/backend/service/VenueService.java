@@ -14,42 +14,48 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class VenueService {
-  private final VenueRepository venueRepository;
+    private final VenueRepository venueRepository;
 
-  public Response getVenue(String venueId) {
-    Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new InvalidVenueException());
+    public Response getVenue(String venueId) {
+        Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new InvalidVenueException());
 
-    return SingleVenueResponse.builder().venue(venue).build();
-  }
-  
-  public Response createVenue(VenueRequest venueRequest) {
-    Venue venue = Venue.builder()
-                    .address(venueRequest.getAddress())
-                    .locationName(venueRequest.getLocationName())
-                    .postalCode(venueRequest.getPostalCode())
-                  .build();
-    venueRepository.save(venue);
+        return SingleVenueResponse.builder().venue(venue).build();
+    }
 
-    return SingleVenueResponse.builder().venue(venue).build();
-  }
-  public Response updateVenue(String venueId, VenueRequest venueRequest) {
-    Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new InvalidVenueException());
+    public Response createVenue(VenueRequest venueRequest) {
+        Venue venue = Venue.builder()
+                .address(venueRequest.getAddress())
+                .locationName(venueRequest.getLocationName())
+                .postalCode(venueRequest.getPostalCode())
+                .description(venueRequest.getDescription())
+                .build();
+        venueRepository.save(venue);
 
-    venue.setAddress(venueRequest.getAddress());
-    venue.setLocationName(venueRequest.getLocationName());
-    venue.setPostalCode(venueRequest.getPostalCode());
+        return SingleVenueResponse.builder().venue(venue).build();
+    }
 
-    venueRepository.save(venue);
+    public Response updateVenue(String venueId, VenueRequest venueRequest) {
+        Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new InvalidVenueException());
 
-    return SingleVenueResponse.builder().venue(venue).build();
-  }
+        Venue updatedVenue = Venue.builder()
+                .id(venue.getId())
+                .address(venueRequest.getAddress())
+                .locationName(venueRequest.getLocationName())
+                .postalCode(venueRequest.getPostalCode())
+                .description(venueRequest.getDescription())
+                .build();
 
-  public Response removeVenue(String venueId) {
-    Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new InvalidVenueException());
-    venueRepository.deleteById(venueId);
+        venueRepository.save(updatedVenue);
 
-    return SingleVenueResponse.builder().venue(venue).build();
-  }
+        return SingleVenueResponse.builder().venue(venue).build();
+    }
 
-  
+    public Response removeVenue(String venueId) {
+        Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new InvalidVenueException());
+        venueRepository.deleteById(venueId);
+
+        return SingleVenueResponse.builder().venue(venue).build();
+    }
+
+
 }

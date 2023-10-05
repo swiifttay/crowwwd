@@ -1,14 +1,7 @@
 package com.cs203.g1t4.backend.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cs203.g1t4.backend.data.request.venue.VenueRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -35,21 +28,21 @@ public class VenueController {
   }
 
   @GetMapping("/getVenue/{venueId}")
-  public ResponseEntity<Response> getVenue(@RequestParam String venueId) {
+  public ResponseEntity<Response> getVenue(@PathVariable String venueId) {
     Response response = venueService.getVenue(venueId);
 
     return ResponseEntity.ok(response);
   }
 
   @PutMapping("/updateVenue/{venueId}")
-  public ResponseEntity<Response> updateVenue(@RequestParam String venueId, @Valid @RequestBody VenueRequest venueReuest) {
+  public ResponseEntity<Response> updateVenue(@PathVariable String venueId, @Valid @RequestBody VenueRequest venueReuest) {
     Response response = venueService.updateVenue(venueId, venueReuest);
 
     return ResponseEntity.ok(response);
   }
 
-  @DeleteMapping("/deleteVenue'{venueId}")
-  public ResponseEntity<Response> deleteVenue(@RequestParam String venueId) {
+  @DeleteMapping("/deleteVenue/{venueId}")
+  public ResponseEntity<Response> deleteVenue(@PathVariable String venueId) {
     Response response = venueService.removeVenue(venueId);
 
     return ResponseEntity.ok(response);

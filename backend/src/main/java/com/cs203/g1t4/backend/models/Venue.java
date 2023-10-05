@@ -26,5 +26,8 @@ public class Venue {
 
     @NotBlank
     private String postalCode;
+
+    @NotBlank
+    private String description;
   
 }

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VenueRequest {
 
-
     @NotNull
     private String locationName;
 
@@ -21,4 +20,7 @@ public class VenueRequest {
 
     @NotNull
     private String postalCode;
+
+    @NotNull
+    private String description;
 }
