@@ -25,7 +25,7 @@ function RenderIcon({ category }) {
 }
 
 
-export function CategoryCard({ key, category }) {
+export function CategoryCard({ category }) {
   const catString = category.toString()
   const link = catString.toLowerCase().replace(/\s/g, '')
   return (

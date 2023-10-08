@@ -1,10 +1,7 @@
-import { useState } from "react";
 import { CategoryCard } from "../components/FAQ/CategoryCard";
 import faqdata from "../../../public/faqdata.json";
 
 export default function FAQ() {
-  const data = faqdata
-
   return (
     <main className="flex flex-col items-center h-fit relative w-full bg-space bg-cover bg-center px-8">
       <div
@@ -14,10 +11,8 @@ export default function FAQ() {
       </div>
       <section className="flex flex-col items-justify w-full px-3 mb-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.map((item, index) => (
-            <CategoryCard 
-              key={index} 
-              category={item.category} />
+          {faqdata.map((item) => (
+            <CategoryCard category={item.category} />
           ))}
         </div>
       </section>
