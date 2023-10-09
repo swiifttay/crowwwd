@@ -2,7 +2,6 @@ package com.cs203.g1t4.backend.data.request.user;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 
@@ -12,31 +11,54 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RegisterRequest implements UserRequest{
 
-    @NotNull
+    @NotBlank(message = "First name is required")
     private String firstName;
-    @NotNull
+
+    @NotBlank(message = "Last name is required")
     private String lastName;
-    @NotNull
+
+    @NotBlank(message = "Username is required")
+    @Size(min = 6,
+            max = 30,
+            message = "Username must be between {min} and {max} characters long")
     private String username;
-    @NotNull
+
+    @NotBlank(message = "Email is required")
+    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
+            message = "Email must be valid")
     private String email;
-    @NotNull
+
+    @NotBlank(message = "Password is required")
+    @Size(min = 8,
+            max = 120,
+            message = "Password must be between {min} and {max} characters long")
     private String password;
-    @NotNull
+
+    @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = "(6|8|9)\\d{7}", message = "Phone number must be valid")
     private String phoneNo;
+
     private LocalDateTime userCreationDate;
-    @NotNull
+
+    @NotBlank(message = "Country Of Residence is required")
     private String countryOfResidence;
+
 //    @NotNull
 //    private String dateOfBirth;
-    @NotNull
+
+    @NotBlank(message = "Address is required")
     private String address;
-    @NotNull
+
+    @NotBlank(message = "Postal Code is required")
     private String postalCode;
-    @NotNull
+
+    @NotBlank(message = "City is required")
     private String city;
-    @NotNull
+
+    @NotBlank(message = "State is required")
     private String state;
+
     private boolean isPreferredMarketing;
+
     private String spotifyAccount;
 }
