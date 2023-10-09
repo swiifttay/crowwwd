@@ -1,6 +1,7 @@
 package com.cs203.g1t4.backend.models.event;
 
 import com.cs203.g1t4.backend.models.Artist;
+import com.cs203.g1t4.backend.models.Venue;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -50,19 +51,44 @@ public class Event {
     @NotBlank
     private List<LocalDateTime> ticketSalesDate; // date and time at which the ticket sales will be available
 
-    public OutputEvent returnOutputEvent(Artist artist) {
+    public FullEvent returnFullEvent(Artist artist) {
 
-        return OutputEvent.builder()
+        return FullEvent.builder()
                 .eventId(id)
                 .name(name)
-                .description(description)
                 .eventImageName(eventImageName)
+                .description(description)
                 .dates(convertLocalDateTimeListToStrList(dates))
                 .venue(venue)
                 .categories(categories)
                 .artist(artist)
                 .seatingImagePlan(seatingImagePlan)
                 .ticketSalesDate(convertLocalDateTimeListToStrList(ticketSalesDate))
+                .build();
+    }
+
+    public ExploreEvent returnExploreEvent(String artistName) {
+
+        return ExploreEvent.builder()
+                .eventId(id)
+                .name(name)
+                .eventImageName(eventImageName)
+                .dates(convertLocalDateTimeListToStrList(dates))
+                .categories(categories)
+                .artistName(artistName)
+                .build();
+    }
+
+    public DetailsEvent returnDetailsEvent(Venue venue) {
+
+        return DetailsEvent.builder()
+                .eventId(id)
+                .name(name)
+                .eventImageName(eventImageName)
+                .dates(convertLocalDateTimeListToStrList(dates))
+                .ticketSalesDate(convertLocalDateTimeListToStrList(ticketSalesDate))
+                .venue(venue)
+                .description(description)
                 .build();
     }
 

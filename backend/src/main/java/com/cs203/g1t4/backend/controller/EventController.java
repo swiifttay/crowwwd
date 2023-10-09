@@ -22,7 +22,7 @@ public class EventController {
     public ResponseEntity<Response> addEvent(@Valid @RequestBody EventRequest request) {
 
         // Add Events using addEvent method in profileService
-        Response response = eventService.addEvent(request);
+        Response response = eventService.addFullEvent(request);
 
         // Else, return ok response
         return ResponseEntity.ok(response);
@@ -32,7 +32,7 @@ public class EventController {
     public ResponseEntity<Response> deleteEvent(@PathVariable String eventId) {
 
         // Add Events using addEvent method in profileService
-        Response response = eventService.deleteEventById(eventId);
+        Response response = eventService.deleteFullEventById(eventId);
 
         // Else, return ok response
         return ResponseEntity.ok(response);
@@ -42,7 +42,7 @@ public class EventController {
     public ResponseEntity<Response> updateEvent(@PathVariable String eventId, @Valid @RequestBody EventRequest request) {
 
         // Add Events using addEvent method in profileService
-        Response response = eventService.updateEventById(eventId, request);
+        Response response = eventService.updateFullEventById(eventId, request);
 
         // Else, return ok response
         return ResponseEntity.ok(response);
@@ -53,7 +53,7 @@ public class EventController {
 
         // Update Profile using updateProfile method in profileService
         // Throws a InvalidTokenException if username cannot be found in repository
-        Response response = eventService.findEventById(eventId);
+        Response response = eventService.findFullEventById(eventId);
 
         // Else, return ok response
         return ResponseEntity.ok(response);
@@ -64,7 +64,7 @@ public class EventController {
 
             // Update Profile using updateProfile method in profileService
             // Throws a InvalidTokenException if username cannot be found in repository
-            Response response = eventService.getAllEventsAfterToday();
+            Response response = eventService.findAllExploreEvents();
 
             // Else, return ok response
             return ResponseEntity.ok(response);

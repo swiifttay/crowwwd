@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-public class OutputEvent {
+public class FullEvent {
   private String eventId;
   private String name;
   private String eventImageName;

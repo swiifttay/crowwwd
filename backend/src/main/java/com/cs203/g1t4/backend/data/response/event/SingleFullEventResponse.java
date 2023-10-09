@@ -1,7 +1,7 @@
 package com.cs203.g1t4.backend.data.response.event;
 import com.cs203.g1t4.backend.data.response.Response;
 
-import com.cs203.g1t4.backend.models.event.OutputEvent;
+import com.cs203.g1t4.backend.models.event.FullEvent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SingleEventResponse implements Response {
+public class SingleFullEventResponse implements Response {
 
-    private OutputEvent outputEvent;
+    private FullEvent fullEvent;
 
 }
