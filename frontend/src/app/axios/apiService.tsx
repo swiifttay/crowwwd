@@ -168,3 +168,24 @@ export const updateFanRecords = async () => {
     return Promise.reject(error);
   }
 };
+
+export const updateUserProfile = async (updateDetails: {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+  countryOfResidence: string;
+  city: string;
+  state: string;
+  address: string;
+  postalCode: string;
+  phoneNo: string;
+}) => {
+  try {
+    const response = await api.post("/profile/updateProfile", updateDetails);
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};

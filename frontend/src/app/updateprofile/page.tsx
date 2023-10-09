@@ -6,7 +6,8 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { registerAccount } from "../axios/apiService";
+import { updateUserProfile } from "../axios/apiService";
+import { usernameCheck } from "../axios/apiService";
 import "./style.css";
 
 import { Button } from "@mui/material";
@@ -15,13 +16,22 @@ import { useForm } from "react-hook-form";
 import { useFormState } from "../components/Register/FormContext";
 
 type TFormValues = {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  oldPassword: string;
+
+  newPassword: string;
+  confirmPassword: string;
+
   phoneNo: string;
   address: string;
   city: string;
   state: string;
   postalCode: string;
   countryOfResidence: string;
-  saveAddress: boolean;
+  isPreferredMarketing: boolean;
 };
 
 export default function ComplexDetailForm() {
@@ -31,42 +41,79 @@ export default function ComplexDetailForm() {
   const { register, handleSubmit } = useForm<TFormValues>({
     defaultValues: formData,
   });
-
   const [msg, setMsg] = useState("");
+
+  const isValid = (
+    email: string,
+    newPassword: string,
+    confirmPassword: string,
+  ) => {
+    if (
+      !email.match(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+      )
+    )
+      return false;
+    if (newPassword !== confirmPassword) return false;
+    if (newPassword.length < 8) return false;
+    return true;
+  };
 
   const onHandleFormSubmit = async (data: TFormValues) => {
     console.log({ data });
     // check for validity
-    if (!/^\d+$/.test(data.phoneNo)) {
+
+    if (data.newPassword.length < 8) {
+      setMsg("New password should be at least 8 characters");
+    } else if (
+      !data.email.match(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+      )
+    ) {
+      setMsg("Email is invalid");
+    } else if (data.newPassword !== data.confirmPassword) {
+      setMsg("New passwords are not consistent");
+    } else if (!/^\d+$/.test(data.phoneNo)) {
       setMsg("Mobile number should be digits");
       return;
-    }
-
-    if (data.phoneNo.length < 8) {
+    } else if (data.phoneNo.length < 8) {
       setMsg("Mobile number should be at least 8 characters");
       return;
-    }
-
-    if (!/^\d+$/.test(data.postalCode)) {
+    } else if (!/^\d+$/.test(data.postalCode)) {
       setMsg("Postal code should be digits");
       return;
     }
 
-    setMsg("loading...");
-    setFormData((prev: any) => ({ ...prev, ...data }));
-    await handleRegister(data);
+    try {
+      const response = await updateUserProfile(data);
+      setMsg("Loading...");
+
+      if (response.request?.status === 200) {
+        setMsg("Saving...");
+        router.push("/userprofile");
+      } else {
+        setMsg("Try Again Later!");
+      }
+    } catch (error) {
+        if (error === DuplicatedUsernameException) { // edit this
+          setMsg("Username has been used");
+          return;
+        }
+        if (error === PasswordDoNotMatchException) {
+          setMsg("Old password is incorrect");
+          return;
+        }
+    }
+
+    // setFormData((prev: any) => ({ ...prev, ...data }));
+    // await handleUpdate(data);
   };
 
-  async function handleRegister(data: any) {
-    const response = await registerAccount(data);
+  // async function handleUpdate(data: any) {
+  //   const response = await updateUserProfile(data);
 
-    // check if the status given is correct
-    if (response.request?.status === 200) {
-      setMsg("Saving...");
-      router.push("/login");
-    } else {
-      setMsg("Try Again Later!");
-    }
+  //   // check if the status given is correct
+
   }
 
   const inputStyles = {
@@ -94,6 +141,17 @@ export default function ComplexDetailForm() {
       color: "white",
     },
   };
+
+  /* TO DO:
+  1. call for user old data, put inside the textfields
+  2. check if the original text fields and new textfields are any different
+  3. if username is the same, pass into updateProfile as null
+
+  >> create a "dropdown" for change of password
+  1. password textfields initially are empty
+  2. if user enters anything, take it as user wants to change password
+     else, pass in null for password
+  */
 
   return (
     <div className="flex items-top justify-center w-full overflow-hidden bg-login bg-center bg-cover pb-20">
@@ -304,7 +362,7 @@ export default function ComplexDetailForm() {
                   color="primary"
                   value="no"
                   className="text-white"
-                  {...register("saveAddress")}
+                  {...register("isPreferredMarketing")}
                 />
               }
               label="I would like to be provided with marketing information"
