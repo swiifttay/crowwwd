@@ -1,7 +1,6 @@
 package com.cs203.g1t4.backend.data.request.event;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
