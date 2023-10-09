@@ -26,21 +26,21 @@ public class SeatingDetailsService {
 
     public SuccessResponse addSeatingDetails(String eventId, SeatingDetailsRequest request) {
 
-        String requestId = request.getEventId();
+        //Checks if eventRepository contains an event of specific eventId
+        if (eventRepository.findById(eventId).isEmpty()) { throw new InvalidEventIdException(eventId); }
 
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
-
-        Optional<EventSeatingDetails> duplicateSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(requestId);
-
-        if (duplicateSeatingDetails.isPresent()) {
-            throw new DuplicateSeatingDetailsException(requestId);
+        //Checks if there already exists a seatingDetails with the eventId
+        if (seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId).isPresent()) {
+            throw new DuplicateSeatingDetailsException(eventId);
         }
 
+        //Generates a seatingDetails for the specific event using the details from both the requestBody and the eventId.
         EventSeatingDetails seatingDetails = EventSeatingDetails.builder()
                                                 .eventId(eventId)
                                                 .categories(request.getCategories())
                                                 .build();
 
+        //Save the eventSeatingDetails into the repository.
         seatingDetailsRepository.save(seatingDetails);
 
         return SuccessResponse.builder()
@@ -50,9 +50,11 @@ public class SeatingDetailsService {
 
     public Response deleteSeatingDetails(String eventId) {
 
+        //Find the EventSeatingDetails from the repository, else throws InvalidSeatingDetailsException()
         EventSeatingDetails seatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
+        //Deletion from repository if present
         seatingDetailsRepository.deleteById(eventId);
 
         return SeatingDetailsResponse.builder()
@@ -62,15 +64,14 @@ public class SeatingDetailsService {
     
     public Response updateSeatingDetails(String eventId, SeatingDetailsRequest request) {
 
-        String requestId = request.getEventId();
-
+        //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails seatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
-        if (requestId.equals(eventId)) {
-            seatingDetails.setCategories(request.getCategories());
-        }
+        //Set the category of the seatingDetails to the category in requestBody
+        seatingDetails.setCategories(request.getCategories());
 
+        //Save the updated seatingDetails into the repository
         seatingDetailsRepository.save(seatingDetails);
 
         return SeatingDetailsResponse.builder()
@@ -80,6 +81,7 @@ public class SeatingDetailsService {
 
     public Response getSeatingDetailsById(String eventId) {
 
+        //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails seatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
