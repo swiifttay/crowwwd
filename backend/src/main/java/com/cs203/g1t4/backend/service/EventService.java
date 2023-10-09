@@ -45,7 +45,7 @@ public class EventService {
     private String bucketName;
 
     // Main Service Methods
-    public Response addFullEvent(EventRequest request) {
+    public Response addFullEvent(EventRequest request, MultipartFile image) {
 
         // Creates newEvent using private method
         // getEventClassFromRequest(EventRequest request, Event oldEvent)
@@ -53,6 +53,16 @@ public class EventService {
 
         //Saves event into database
         eventRepository.save(event);
+
+        // Get the event image name
+        String eventImageName = image.getOriginalFilename();
+
+        // Put the image into the bucket
+        s3Service.putObject(
+                bucketName,
+                "event-images/%s/%s".formatted(event.getId(), eventImageName),
+                image
+        );
 
         //If Everything goes smoothly, SuccessResponse will be created
         return SuccessResponse.builder()
@@ -76,7 +86,7 @@ public class EventService {
                 .build();
     }
 
-    public Response updateFullEventById(String eventId, EventRequest request) {
+    public Response updateFullEventById(String eventId, EventRequest request, MultipartFile image) {
 
         //Checks if there is an event with the specified eventID in the repository
         //If event cannot be found, throws new InvalidEventIdException if no such event found
@@ -87,13 +97,27 @@ public class EventService {
 
         eventRepository.save(newEvent);
 
+        if (image != null || !image.isEmpty() ) {
+            // Get the event image name
+            String eventImageName = oldEvent.getEventImageName();
+
+
+            // Put the image into the bucket
+            s3Service.putObject(
+                    bucketName,
+                    "event-images/%s/%s".formatted(eventId, eventImageName),
+                    image
+            );
+        }
+
+
         //If Everything goes smoothly, return the event in SingleFullEventResponse
         return SingleFullEventResponse.builder()
                 .fullEvent(getFullEventFromEvent(newEvent))
                 .build();
     }
 
-    public Response findFullEventById(String eventId) {
+    public Response getFullEventById(String eventId) {
 
         //Use of private method getFullEventFromEventId() to generate FullEvent Object from eventId
         FullEvent fullEvent = getFullEventFromEventId(eventId);
@@ -104,7 +128,7 @@ public class EventService {
                 .build();
     }
 
-    public Response findDetailsEventById(String eventId) {
+    public Response getDetailsEventById(String eventId) {
         //Use of private method getDetailsEventFromEventId() to generate DetailsEvent Object from eventId
         DetailsEvent detailsEvent = getDetailsEventFromEventId(eventId);
 
@@ -114,7 +138,7 @@ public class EventService {
                 .build();
     }
 
-    public Response findAllExploreEvents() {
+    public Response getAllExploreEvents() {
         // get the current day's date
         LocalDateTime today = LocalDateTime.now();
 
@@ -132,63 +156,6 @@ public class EventService {
         // Returns the events with date after today if successful
         return ExploreEventsResponse.builder()
                 .exploreEventList(events)
-                .build();
-    }
-
-    public Response getEventBetweenDateRange(String beginDateRange, String endDateRange) {
-        
-        // convert the start and end date to LocalDateTime class between 00:00 of start and 23:59 of end
-        LocalDateTime beginDateRangeLDT = LocalDate.parse(beginDateRange).atStartOfDay();
-        LocalDateTime endDateRangeLDT = LocalDate.parse(endDateRange).atTime(LocalTime.MAX);
-
-        // get all the events between those two dates
-        List<ExploreEvent> events = returnExploreEventFormattedList(eventRepository.findByDatesBetween(beginDateRangeLDT, endDateRangeLDT));
-
-        // Get the URL to the image of each event
-        for (ExploreEvent currentEvent : events) {
-            // To get the URL for the eventImage
-            String eventImageURL = "https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
-                    .formatted(bucketName, currentEvent.getEventId(), currentEvent.getEventImageName());
-            currentEvent.setEventImageURL(eventImageURL);
-        }
-
-        // Return the events with date after today if successful
-        return ExploreEventsResponse.builder()
-                .exploreEventList(events)
-                .build();
-    }
-
-    public SuccessResponse uploadEventImage(String eventId,
-                                            MultipartFile multipartFile) {
-        // Get information on which event to edit from
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
-
-        // Get the event image name
-        String eventImageName = event.getEventImageName();
-
-        // Check if this is to update image of the event or to input a new one
-        if (eventImageName == null) {
-            eventImageName = multipartFile.getOriginalFilename();
-        }
-
-        // Put the image into the bucket
-        s3Service.putObject(
-                bucketName,
-                "event-images/%s/%s".formatted(eventId, eventImageName),
-                multipartFile
-        );
-
-        // Return
-        return SuccessResponse.builder()
-                .build();
-    }
-
-    public SuccessResponse getEventImage(String eventId) {
-        String eventImageUrl = getEventImageUrl(eventId);
-
-        // Return
-        return SuccessResponse.builder()
-                .response("Event Image URL: " + eventImageUrl)
                 .build();
     }
 
@@ -312,27 +279,6 @@ public class EventService {
             outList.add(exploreEvent);
         }
         return outList;
-    }
-
-    public String getEventImageUrl(String eventId) {
-        // Get information on which event to edit from
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
-
-        String eventImageName = event.getEventImageName();
-        // check if there is any Image to return
-        if (eventImageName.isBlank()) {
-            throw new InvalidEventIdException(eventId);
-        }
-
-
-        // To get the URL for the eventImage
-        String eventImageURL = "https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
-                .formatted(bucketName, event.getId(), event.getEventImageName());
-
-        // Implement catch error in the event no image is saved.
-
-        // Return
-        return eventImageURL;
     }
 
 }

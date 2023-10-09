@@ -1,14 +1,13 @@
 package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.EventService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -18,85 +17,51 @@ public class EventController {
 
     private final EventService eventService;
 
-    @PostMapping("/addEvent")
-    public ResponseEntity<Response> addEvent(@Valid @RequestBody EventRequest request) {
+    @PostMapping("/fullEvent")
+    public ResponseEntity<Response> addEvent(@Valid @RequestBody EventRequest request, @RequestBody MultipartFile image) {
+        // Add Events using addFullEvent method in eventService
+        Response response = eventService.addFullEvent(request, image);
 
-        // Add Events using addEvent method in profileService
-        Response response = eventService.addFullEvent(request);
-
-        // Else, return ok response
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/deleteEvent/{eventId}")
-    public ResponseEntity<Response> deleteEvent(@PathVariable String eventId) {
+    @GetMapping("/fullEvent/{eventId}")
+    public ResponseEntity<Response> getFullEvent(@PathVariable String eventId) {
+        // Get event using getFulLEventById in eventService
+        Response response = eventService.getFullEventById(eventId);
 
-        // Add Events using addEvent method in profileService
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/fullEvent/{eventId}")
+    public ResponseEntity<Response> deleteEvent(@PathVariable String eventId) {
+        // Delete event using deleteFullEventById in eventService
         Response response = eventService.deleteFullEventById(eventId);
 
-        // Else, return ok response
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/updateEvent/{eventId}")
-    public ResponseEntity<Response> updateEvent(@PathVariable String eventId, @Valid @RequestBody EventRequest request) {
-
-        // Add Events using addEvent method in profileService
-        Response response = eventService.updateFullEventById(eventId, request);
-
-        // Else, return ok response
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/getEvent/{eventId}")
-    public ResponseEntity<Response> getEventById(@PathVariable String eventId) {
-
-        // Update Profile using updateProfile method in profileService
-        // Throws a InvalidTokenException if username cannot be found in repository
-        Response response = eventService.findFullEventById(eventId);
-
-        // Else, return ok response
-        return ResponseEntity.ok(response);
-    }
-  
-    @GetMapping("/getAllEvents")
-        public ResponseEntity<Response> getAllEventsAfterToday() {
-
-            // Update Profile using updateProfile method in profileService
-            // Throws a InvalidTokenException if username cannot be found in repository
-            Response response = eventService.findAllExploreEvents();
-
-            // Else, return ok response
-            return ResponseEntity.ok(response);
-        }
-
-    @GetMapping("/getEventsBetween/start/{start}/end/{end}")
-    public ResponseEntity<Response> getEventsBetween(@PathVariable String start, @PathVariable String end) {
-        // Find the Event that is between the start date and end date
-        Response response = eventService.getEventBetweenDateRange(start, end);
-
-        // Else, return ok response
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("{eventId}/event-image")
-    public ResponseEntity<Response> uploadEventImage(
-            @PathVariable("eventId") String eventId,
-            @RequestBody MultipartFile multipartFile) {
-
-        // Upload the event image
-        Response response = eventService.uploadEventImage(eventId, multipartFile);
+    @PutMapping("/fullEvent/{eventId}")
+    public ResponseEntity<Response> updateEvent(@PathVariable String eventId, @Valid @RequestBody EventRequest request, @RequestBody MultipartFile image) {
+        // Update event using updateFullEventById() in eventService
+        Response response = eventService.updateFullEventById(eventId, request, image);
 
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("{eventId}/event-image")
-    public ResponseEntity<Response> getEventImage(@PathVariable("eventId") String eventId) {
-
-        // Upload the event image
-        Response response = eventService.getEventImage(eventId);
+    @GetMapping("/exploreEvent/all")
+    public ResponseEntity<Response> getAllExploreEventAfterToday() {
+        // Get all events for the explore page
+        Response response = eventService.getAllExploreEvents();
 
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/detailsEvent/{eventId}")
+    public ResponseEntity<Response> getDetailsEvent(@PathVariable String eventId) {
+        // Get event for details page
+        Response response = eventService.getDetailsEventById(eventId);
+
+        return ResponseEntity.ok(response);
+    }
 }
