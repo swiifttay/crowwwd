@@ -1,6 +1,6 @@
 package com.cs203.g1t4.backend.data.request.fanRecord;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FanRecordRequest {
-    @NotNull
+
+    @NotBlank(message = "Artist ID is required")
     String artistId;
 }
