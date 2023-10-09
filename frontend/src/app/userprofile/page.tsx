@@ -11,7 +11,7 @@ import {
   getArtistById,
   getSpotifyLogin,
   updateFanRecords,
-  getSpotifyToken
+  getSpotifyToken,
 } from "../axios/apiService";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -87,7 +87,10 @@ export default function UserProfile() {
   const checkSpotifyLoginStatus = async () => {
     const spotifyTokenResponse = await getSpotifyToken();
     console.log(spotifyTokenResponse.data.response);
-    if (spotifyTokenResponse?.status === 200 && spotifyTokenResponse.data?.response != null) {
+    if (
+      spotifyTokenResponse?.status === 200 &&
+      spotifyTokenResponse.data?.response != null
+    ) {
       console.log("success");
       localStorage.setItem("spotifyToken", spotifyTokenResponse.data.response);
       setSpotifyButtonMsg("Update My Records");
@@ -97,7 +100,7 @@ export default function UserProfile() {
       setSpotifyButtonMsg("Connect to Spotify");
       setIsLoggedInSpotify(false);
     }
-  }
+  };
 
   const handleSpotifyButton = async () => {
     if (isLoggedInSpotify) {
@@ -114,8 +117,8 @@ export default function UserProfile() {
       if (getAccountResponse.request?.status == 200) {
         window.location.replace(getAccountResponse?.data);
       } else {
-        if (!localStorage.getItem('token')) {
-          router.push('/login');
+        if (!localStorage.getItem("token")) {
+          router.push("/login");
         }
       }
     }
@@ -203,12 +206,21 @@ export default function UserProfile() {
             </div>
             <div className="flex overflow-x-auto max-w-full">
               <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-8">
-                <div className={`${isArtistLoaded ? 'hidden' : 'display'}`}> Loading... </div>
-                {favArtist?.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
-                  return (
-                    <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
-                  );
-                })}
+                <div className={`${isArtistLoaded ? "hidden" : "display"}`}>
+                  {" "}
+                  Loading...{" "}
+                </div>
+                {favArtist
+                  ?.slice(0, Math.min(10, favArtist.length))
+                  .map((artist, i) => {
+                    return (
+                      <VerticalCard
+                        key={i}
+                        image={artist.artistImageURL}
+                        name={artist.name}
+                      />
+                    );
+                  })}
               </div>
             </div>
           </div>

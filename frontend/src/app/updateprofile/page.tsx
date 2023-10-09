@@ -105,7 +105,12 @@ export default function ComplexDetailForm() {
         >
           {"Update your information here."}
         </Typography>
-        <Grid container spacing={1.5} alignItems="center" justifyContent="center">
+        <Grid
+          container
+          spacing={1.5}
+          alignItems="center"
+          justifyContent="center"
+        >
           <Grid item xs={10} sm={6}>
             <TextField
               sx={sxStyles}
