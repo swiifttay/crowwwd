@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TicketRequest {
 
-    @NotNull
+    @NotBlank(message = "Event ID is required")
     private String eventId;
 
-    @NotNull
+    @NotBlank(message = "Attending userID is required")
     private String userIdAttending;
 
-//    @NotNull
+//    @NotBlank(message = "Seat Number is required")
 //    private String seatNo;
 
-    @NotNull
+    //If not filled, assume false.
     private boolean isSurpriseTicket;
 }
