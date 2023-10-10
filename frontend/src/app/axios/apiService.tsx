@@ -174,7 +174,9 @@ export const updateUserProfile = async (updateDetails: {
   lastName: string;
   username: string;
   email: string;
-  password: string;
+  oldPassword: string;
+  newPassword: string;
+  repeatNewPassword: string;
   countryOfResidence: string;
   city: string;
   state: string;
@@ -183,7 +185,7 @@ export const updateUserProfile = async (updateDetails: {
   phoneNo: string;
 }) => {
   try {
-    const response = await api.post("/profile/updateProfile", updateDetails);
+    const response = await api.put("/profile/updateProfile", updateDetails);
     return response;
   } catch (error) {
     return Promise.reject(error);

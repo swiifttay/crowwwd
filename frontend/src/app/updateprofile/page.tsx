@@ -7,8 +7,8 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { updateUserProfile } from "../axios/apiService";
-import { usernameCheck } from "../axios/apiService";
 import "./style.css";
+
 
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -23,7 +23,7 @@ type TFormValues = {
   oldPassword: string;
 
   newPassword: string;
-  confirmPassword: string;
+  repeatNewPassword: string;
 
   phoneNo: string;
   address: string;
@@ -71,50 +71,45 @@ export default function ComplexDetailForm() {
       )
     ) {
       setMsg("Email is invalid");
-    } else if (data.newPassword !== data.confirmPassword) {
+    } else if (data.newPassword !== data.repeatNewPassword) {
       setMsg("New passwords are not consistent");
     } else if (!/^\d+$/.test(data.phoneNo)) {
       setMsg("Mobile number should be digits");
-      return;
+      // return;
     } else if (data.phoneNo.length < 8) {
       setMsg("Mobile number should be at least 8 characters");
-      return;
+      // return;
     } else if (!/^\d+$/.test(data.postalCode)) {
       setMsg("Postal code should be digits");
-      return;
+      // return;
     }
 
     try {
       const response = await updateUserProfile(data);
-      setMsg("Loading...");
+      // setMsg("Loading...");
 
       if (response.request?.status === 200) {
         setMsg("Saving...");
         router.push("/userprofile");
-      } else {
-        setMsg("Try Again Later!");
       }
+      // else {
+      //   setMsg("Try Again Later!");
+      // }
     } catch (error) {
-        if (error === DuplicatedUsernameException) { // edit this
-          setMsg("Username has been used");
-          return;
-        }
-        if (error === PasswordDoNotMatchException) {
-          setMsg("Old password is incorrect");
-          return;
-        }
+      console.log(error);
+        // if (error.response? instanceof DuplicatedUsernameException) { // edit this
+        //   setMsg("Username has been used");
+        //   return;
+        // }
+        // if (error.response? instanceof PasswordDoNotMatchException) {
+        //   setMsg("Old password is incorrect");
+        //   return;
+        // }
     }
 
     // setFormData((prev: any) => ({ ...prev, ...data }));
     // await handleUpdate(data);
   };
-
-  // async function handleUpdate(data: any) {
-  //   const response = await updateUserProfile(data);
-
-  //   // check if the status given is correct
-
-  }
 
   const inputStyles = {
     color: "white",
@@ -154,7 +149,7 @@ export default function ComplexDetailForm() {
   */
 
   return (
-    <div className="flex items-top justify-center w-full overflow-hidden bg-login bg-center bg-cover pb-20">
+    <main className="flex items-top justify-center w-full overflow-hidden bg-login bg-center bg-cover pb-20">
       <div className="flex flex-col items-center justify-center w-full text-center lg:w-1/2 sm:w-[80vw] xs:w-[40vw]">
         <Typography
           variant="h6"
@@ -315,7 +310,7 @@ export default function ComplexDetailForm() {
               required
               id="oldPassword"
               label="Old Password"
-              type="oldPassword"
+              type="password"
               fullWidth
               autoComplete="oldPassword"
               variant="outlined"
@@ -351,7 +346,7 @@ export default function ComplexDetailForm() {
               variant="outlined"
               InputProps={{ style: inputStyles }}
               InputLabelProps={{ style: inputStyles }}
-              {...register("confirmPassword")}
+              {...register("repeatNewPassword")}
             />
           </Grid>
 
@@ -386,6 +381,6 @@ export default function ComplexDetailForm() {
           </div>
         </form>
       </div>
-    </div>
+    </main>
   );
 }
