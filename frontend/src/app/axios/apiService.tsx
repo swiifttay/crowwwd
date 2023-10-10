@@ -182,7 +182,7 @@ const calculateOrderAmount = (items:any) => {
   return 1400;
 };
 
-export default async function handler(req: any, res: any) {
+export default async function createPaymentIntent(req: any) {
   const { items } = req.body;
 
   // Create a PaymentIntent with the order amount and currency
@@ -194,8 +194,6 @@ export default async function handler(req: any, res: any) {
       enabled: true,
     },
   });
+  return paymentIntent.client_secret;
 
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-  })
 };
