@@ -26,6 +26,7 @@ export default function App() {
 
   const appearance = {
     theme: 'stripe',
+
   };
   const options:any = {
     clientSecret,
@@ -33,12 +34,21 @@ export default function App() {
   };
 
   return (
-    <div className="w-full p-5 flex justify-end">
+    <div className="w-full h-full p-5 flex space-x-10">
+      <div className="w-1/2 mb-10 rounded-3xl bg-checkout bg-cover bg-center flex flex-col justify-center items-center shadow-lg shadow-slate-950">
+        <h1 className="m-2 text-5xl font-semibold text-center">
+          You're on your way!
+        </h1>
+        <h3></h3>
+      </div>
+      <div className="w-1/2">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm />
         </Elements>
       )}
+      </div>
+      
     </div>
   );
 }
