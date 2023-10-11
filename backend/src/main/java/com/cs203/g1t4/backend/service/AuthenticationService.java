@@ -25,6 +25,15 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final CommonService commonService;
 
+    /**
+     * Adds a new user to the repository.
+     * If username can be found in the repository, throw a DuplicatedUsernameException.
+     * For updating, if all three password fields are not the same or wrong oldPassword is inputted, throw a
+     * PasswordDoNotMatchException
+     *
+     * @param request a RegisterRequest object containing the new user info to be created
+     * @return SuccessResponse "User has been created successfully"
+     */
     public Response register(RegisterRequest request) {
 
         User user = commonService.getUserClassFromRequest(request, null);
@@ -37,9 +46,15 @@ public class AuthenticationService {
                 .build();
     }
 
-    public Response authenticate(AuthenticationRequest request) {
+    /**
+     * Authenticate a user.
+     * If authentication fails, throws InvalidCredentialsException.
+     *
+     * @param request a AuthenticationRequest object containing the username and password of user to be authenticated
+     * @return SuccessResponse "User has been created successfully"
+     */
+    public Response authenticate(AuthenticationRequest request) throws InvalidCredentialsException {
 
-        //Rethink logic and fix it for better understandability
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -63,7 +78,14 @@ public class AuthenticationService {
                 .build();
     }
 
-    public Response findUsername(String username) {
+    /**
+     * Finds if user with inputted username exists in repository.
+     * If such a user exists, throws DuplicatedUsernameException.
+     *
+     * @param username a String object containing the username to be checked
+     * @return SuccessResponse "Username is available"
+     */
+    public Response findUsername(String username) throws DuplicatedUsernameException {
         //If username exists, throw new DuplicatedUsernameException(username)
         if (userRepository.findByUsername(username).isPresent()) {
             throw new DuplicatedUsernameException(username);
