@@ -50,6 +50,12 @@ public class Event {
     @NotBlank
     private List<LocalDateTime> ticketSalesDate; // date and time at which the ticket sales will be available
 
+    /**
+     * Returns an OutputEvent Object based on the current Event Object
+     *
+     * @param artist a Artist object obtained from the ArtistId of the Event object.
+     * @return the OutputEvent object converted from the Event object.
+     */
     public OutputEvent returnOutputEvent(Artist artist) {
 
         return OutputEvent.builder()
@@ -66,6 +72,12 @@ public class Event {
                 .build();
     }
 
+    /**
+     * Converts a List of LocalDateTime objects to a List of Strings for storage
+     *
+     * @param list a list of LocalDateTime objects
+     * @return a list of String objects converted from the list of LocalDateTime object.
+     */
     public List<String> convertLocalDateTimeListToStrList(List<LocalDateTime> list) {
         List<String> strList = new ArrayList<>();
         for (LocalDateTime localDateTime: list) {

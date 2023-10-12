@@ -39,6 +39,13 @@ public class EventService {
     private String bucketName;
 
     // Main Service Methods
+
+    /**
+     * Adds a new event to the repository.
+     *
+     * @param request a RegisterRequest object containing the new event info to be created
+     * @return SuccessResponse "Event has been created successfully"
+     */
     public Response addEvent(EventRequest request) {
 
         //Creates newEvent using private method getEventClassFromRequest(EventRequest request, Event oldEvent)
@@ -53,6 +60,12 @@ public class EventService {
                 .build();
     }
 
+    /**
+     * Deletes an event from the repository based on the eventId.
+     *
+     * @param eventId a String object containing the eventId of the event to be deleted.
+     * @return a SingleEventResponse object containing the deleted Event Object in the form of an OutputEvent.
+     */
     public Response deleteEventById(String eventId) {
 
         //Checks if there is an event with the specified eventID in the repository
@@ -68,6 +81,13 @@ public class EventService {
                 .build();
     }
 
+    /**
+     * Updates an event from the repository based on the eventId and request.
+     *
+     * @param eventId a String object containing the eventId of the event to be updated.
+     * @param request a EventRequest object containing the new event info to be updated
+     * @return a SingleEventResponse object containing the updated Event Object in the form of an OutputEvent.
+     */
     public Response updateEventById(String eventId, EventRequest request) {
 
         //Checks if there is an event with the specified eventID in the repository
@@ -85,6 +105,12 @@ public class EventService {
                 .build();
     }
 
+    /**
+     * Finds an event from the repository based on the eventId.
+     *
+     * @param eventId a String object containing the eventId of the event to be found.
+     * @return a SingleEventResponse object containing the found Event Object in the form of an OutputEvent.
+     */
     public Response findEventById(String eventId) {
 
         //Use of private method getOutputEventFromEventId() to generate OutputEvent Object from eventId
@@ -96,6 +122,11 @@ public class EventService {
                 .build();
     }
 
+    /**
+     * Finds a list of events from the repository that happens after today.
+     *
+     * @return a EventResponse object containing the List of OutputEvent objects.
+     */
     public Response getAllEventsAfterToday() {
         // get today's date
         LocalDateTime today = LocalDateTime.now();
@@ -117,6 +148,13 @@ public class EventService {
             .build();
     }
 
+    /**
+     * Finds a list of events from the repository that happens between a date range.
+     *
+     * @param beginDateRange a String object containing the start of the date range.
+     * @param endDateRange a String object containing the end of the date range.
+     * @return a EventResponse object containing the List of OutputEvent objects.
+     */
     public Response getEventBetweenDateRange(String beginDateRange, String endDateRange) {
         
         // convert the start and end date to LocalDateTime class between 00:00 of start and 23:59 of end
@@ -140,6 +178,14 @@ public class EventService {
                 .build();
     }
 
+    /**
+     * Uploads an image for an event.
+     * If event cannot be found in repository based on eventId, throw InvalidEventIdException.
+     *
+     * @param eventId a String object containing the eventId of the event.
+     * @param multipartFile a MultipartFile object containing the image.
+     * @return a SuccessResponse containing "Image has been successfully uploaded".
+     */
     public SuccessResponse uploadEventImage(String eventId,
                                             MultipartFile multipartFile) {
         // Get information on which event to edit from
@@ -162,9 +208,16 @@ public class EventService {
 
         // Return
         return SuccessResponse.builder()
+                .response("Image has been successfully uploaded")
                 .build();
     }
 
+    /**
+     * Obtains the eventImageURL and returns as part of the message body of the SuccessResponse.
+     *
+     * @param eventId a String object containing the eventId to obtain the eventImageURL from.
+     * @return a SuccessResponse object with message containing the eventImageURL.
+     */
     public SuccessResponse getEventImage(String eventId) {
         String eventImageUrl = getEventImageUrl(eventId);
 
@@ -175,6 +228,13 @@ public class EventService {
     }
 
     // Helper Service Methods
+    /**
+     * Converts a String[] into a list of LocalDateTime. Dates are stored in the String[] in the forms of
+     * "<yyyy>-<MM>-<dd>T<HH>:<mm>:<ss>", example: 2011-12-03T10:15:30
+     *
+     * @param arr a String[] array containing dates
+     * @return a List of LocalDateTime objects converted from an array of String objects.
+     */
     private List<LocalDateTime> convertArrToList(String[] arr) {
         List<LocalDateTime> list = new ArrayList<>();
         for (String s: arr) {
@@ -184,7 +244,16 @@ public class EventService {
         return list;
     }
 
-    private OutputEvent getOutputEventFromEventId(String eventId) {
+    /**
+     * Obtains an Event Object from String eventID and converts the Event Object to an OutputEvent Object
+     * If event with inputted eventID cannot be found, throw InvalidEventIdException.
+     * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
+     *
+     * @param eventId a String object containing the event ID of the event to be converted.
+     * @return the OutputEvent object converted from the Event object.
+     */
+    private OutputEvent getOutputEventFromEventId(String eventId)
+            throws InvalidArtistIdException, InvalidEventIdException{
         //Finds event from repository, or else throw InvalidEventIdException()
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new InvalidEventIdException(eventId));
@@ -197,7 +266,16 @@ public class EventService {
         return event.returnOutputEvent(artist);
     }
 
-    private void eventRequestChecker(EventRequest request, Event oldEvent) {
+    /**
+     * Checks if an EventRequest object is valid.
+     * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
+     * If event with the same artist and eventName already exists, throw DuplicatedEventException.
+     *
+     * @param request a EventRequest object containing the new event info to be created/updated
+     * @param oldEvent an Event object containing the event info of the user that has to be updated. null for creation
+     */
+    private void eventRequestChecker(EventRequest request, Event oldEvent)
+            throws DuplicatedEventException, InvalidArtistIdException {
 
         // Check 1: Check if artist exists in the first place in the ArtistRepository
         if (artistRepository.findById(request.getArtistId()).isEmpty()) {
@@ -222,6 +300,13 @@ public class EventService {
         }
     }
 
+    /**
+     * Creates Event object from EventRequest object
+     *
+     * @param eventRequest a EventRequest object containing the new event info to be created/updated
+     * @param oldEvent an Event object containing the event info of the user that has to be updated. null for creation
+     * @return the Event object that has been created/updated
+     */
     private Event getEventClassFromRequest(EventRequest eventRequest, Event oldEvent) {
         //Checks if EventRequest isValid
         eventRequestChecker(eventRequest, oldEvent);
@@ -250,6 +335,12 @@ public class EventService {
         return event;
     }
 
+    /**
+     * Converts a List of Event objects to a List of a OutputEvent objects
+     *
+     * @param eventList a List of Event objects to be converted
+     * @return the List of a OutputEvent objects converted from input
+     */
     private List<OutputEvent> returnFormattedList(List<Event> eventList) {
         List<OutputEvent> outList = new ArrayList<>();
         for (Event event : eventList) {
@@ -261,7 +352,13 @@ public class EventService {
         return outList;
     }
 
-    public String getEventImageUrl(String eventId) {
+    /**
+     * Returns an eventImageUrl based on the Event object, which is stated by the eventId.
+     *
+     * @param eventId a String object containing the EventId of the event.
+     * @return a String object containing the eventImageUrl.
+     */
+    public String getEventImageUrl(String eventId) throws InvalidEventIdException {
         // Get information on which event to edit from
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
 
