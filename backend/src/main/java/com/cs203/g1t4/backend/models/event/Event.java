@@ -86,6 +86,7 @@ public class Event {
                 .eventImageName(eventImageName)
                 .dates(convertLocalDateTimeListToStrList(dates))
                 .ticketSalesDate(convertLocalDateTimeListToStrList(ticketSalesDate))
+                .categories(categories)
                 .venue(venue)
                 .description(description)
                 .build();

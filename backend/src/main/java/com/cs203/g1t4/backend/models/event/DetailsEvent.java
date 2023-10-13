@@ -19,6 +19,7 @@ public class DetailsEvent {
     private String eventImageURL; // Image URL
     private List<String> dates; // date and time of the actual concert
     private List<String> ticketSalesDate; // date and time at which the ticket sales will be available
+    private List<String> categories;
     private Venue venue;
     private String description;
 }

@@ -132,6 +132,9 @@ public class EventService {
         //Use of private method getDetailsEventFromEventId() to generate DetailsEvent Object from eventId
         DetailsEvent detailsEvent = getDetailsEventFromEventId(eventId);
 
+        String eventImageURL = "https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
+                .formatted(bucketName, eventId, detailsEvent.getEventImageName());
+        detailsEvent.setEventImageURL(eventImageURL);
         // Returns the detailsEvent if successful
         return SingleDetailsEventResponse.builder()
                 .detailsEvent(detailsEvent)
