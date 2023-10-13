@@ -1,35 +1,92 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import {
+  concertDetails
+} from "../../axios/apiService";
+import { StringLiteral } from "typescript";
 
-export default function Event() {
+export interface Venue {
+  venueId: string;
+  locationName: string;
+  address: string;
+  postalCode: string;
+  description: string;
+}
+
+export interface Event {
+  eventId: string;
+  name: string;
+  eventImageURL: string;
+  dates: string[];
+  ticketSalesDate: string[];
+  categories: string[];
+  venue: Venue;
+  description: string;
+}
+
+export default function EventDetails({ params }: any) {
   const router = useRouter();
+  const { eventId } = params;
+  const [eventDetail, setEventDetail] = useState<Event>();
+
   const rulesHeader = "font-bold text-md ml-8 mb-2 mt-4";
   const rulesDetails = "list-disc ml-16";
+
+  useEffect(() => {
+    fetchDetails();
+  }, []);
+  // useEffect(() => {
+  //   if (eventDetail === null) {
+  //     fetchDetails();
+  //   }
+  // }, []);
 
   const handleBuyTickets = async () => {
     router.push("/order");
   };
+
+  const fetchDetails = async () => {
+
+    try {
+      const response = await concertDetails(eventId);
+      setEventDetail(response.data.detailsEvent);
+
+    } catch (error) {
+      console.error(error);
+      router.push("/pageNotFound");
+    }
+
+  };
+
+  console.log("eventDetail is", eventDetail);
+
+
   return (
     <div className="flex w-full items-center justify-center mt-4">
-      <div className="">
-        <div className="">
-          <Image
-            src="/images/EventPoster.jpg"
-            alt="Event Poster"
-            className="rounded-3xl"
-            width={1045}
-            height={487}
+      <main className="w-11/12">
+        <div className="w-full h-1/2">
+          <img
+            src={eventDetail?.eventImageURL}
+            className="max-h-1/2 rounded-3xl cover"
           />
         </div>
 
         <div className="max-w-[1045px] mt-8">
           <div className="text-3xl font-bold mb-4">
-            2023 KIM SEON HO ASIA TOUR in SINGAPORE [ONE, TWO, THREE. SMILE] [G]
+            {eventDetail?.name}
           </div>
 
           <div className="flex justify-between">
-            <p className="text-lg mb-10">KPOP | Concert</p>
+            <p className="text-lg mb-10">
+              {eventDetail?.categories.map((category: string, index: any) => (
+                <span key={index}>
+                  {category}
+                  {index < eventDetail?.categories.length - 1 && ' | '}
+                </span>
+              ))}
+            </p>
             <button
               className="w-[150px] h-1/6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded -mt-4"
               onClick={handleBuyTickets}
@@ -38,34 +95,38 @@ export default function Event() {
             </button>
           </div>
 
-          <div className="flex gap-3 ml-10">
+          <div className="flex ml-10">
             <Image
               src="/images/icon-calendar.svg"
               alt="Calendar"
               width={20}
               height={20}
             />
-            <div className="text-md mr-20 hover:text-theme-grey hover:underline cursor-pointer">
-              Fri 15 Sep 2023, 7pm
+
+            <div className="flex ml-3 flex-wrap gap-3 ">
+              {eventDetail?.dates.map((date: string, index: any) => (
+                <div className="text-md mr-20 hover:text-theme-grey hover:underline cursor-pointer">
+                  {date}
+                </div>
+              ))}
+
             </div>
+          </div>
+          <div className="flex gap-3 ml-10 mt-3">
+
             <Image
               src="/images/icon-map-pin.svg"
-              alt="Calendar"
+              alt="Location"
               width={20}
               height={20}
             />
             <div className="text-md mr-20 hover:text-theme-grey hover:underline cursor-pointer">
-              The Star Theatre, The Star Performing Arts Centre
+              {eventDetail?.venue?.locationName}
             </div>
           </div>
 
           <p className="text-md mt-10 mb-10">
-            KIM SEON HO is all set to take the stage in SINGAPORE with his
-            highly anticipated fan meeting, bringing his undeniable talent,
-            irresistible smile, and heartwarming presence to his dedicated
-            Seonhohada. PULP Live World and Happee Hour present the 2023 KIM
-            SEON HO ASIA TOUR in SINGAPORE on September 15, 2023, 7PM at THE
-            STAR THEATRE.
+            {eventDetail?.description}
           </p>
 
           <div className="font-semibold text-2xl mb-4">Price Details</div>
@@ -116,7 +177,7 @@ export default function Event() {
             <div>to view the FAQ for this event.</div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
