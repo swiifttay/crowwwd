@@ -55,9 +55,9 @@ export function SimpleDetailForm() {
     const response = await usernameCheck(username);
 
     // check if response is successful
-    if (response.request?.status === 200) {
+    if (response.status === 200) {
       return true;
-    } else {
+    } else if (response.data?.message.includes("exists")) {
       return false;
     }
   }
@@ -151,7 +151,7 @@ export function SimpleDetailForm() {
             {...register("username")}
           />
         </Grid>
-        <Grid item xs={12} marginBottom={1.5}>
+        <Grid item xs={12} >
           <TextField
             sx={sxStyles}
             required

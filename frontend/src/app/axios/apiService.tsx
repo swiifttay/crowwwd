@@ -44,7 +44,6 @@ api.interceptors.response.use(
     return response;
   },
   async (error) => {
-    // console.error('Error:', {error});
 
     if (error.response?.data?.status === 500) {
       console.log("Handling 500 error");
@@ -52,8 +51,8 @@ api.interceptors.response.use(
       // return a false value that shows that the token was invalid
       // return false;
     }
-    console.log(error.toJSON());
-    return error.toJSON();
+    console.log(error.response);
+    return error.response;
   },
 );
 
@@ -172,11 +171,11 @@ export const updateFanRecords = async () => {
 export const updateUserProfile = async (updateDetails: {
   firstName: string;
   lastName: string;
-  username: string;
+  username: string | null;
   email: string;
-  oldPassword: string;
-  newPassword: string;
-  repeatNewPassword: string;
+  oldPassword: string | null;
+  newPassword: string | null;
+  repeatNewPassword: string | null;
   countryOfResidence: string;
   city: string;
   state: string;
