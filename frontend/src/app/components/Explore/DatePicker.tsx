@@ -36,7 +36,7 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
     return () => {
       document.removeEventListener("keydown", hideOnEscape, true);
       document.removeEventListener("click", hideOnClickOutside, true);
-    }
+    };
   }, []);
 
   const hideOnEscape = (e: any) => {
@@ -55,21 +55,21 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
     const selectedRange = ranges["selection"];
     if (selectedRange?.startDate && selectedRange?.endDate) {
       setRange([selectedRange as Range]);
-      console.log()
+      console.log();
       onDateChange(selectedRange.startDate, selectedRange.endDate);
     }
-  }
+  };
 
   return (
     <div className="rounded-3xl bg-theme-blue text-sm py-2 px-4 text-center focus:ring-0">
       <input
         value={`${format(range[0].startDate, "MM/dd/yyyy")}  -  ${format(
           range[0].endDate,
-          "MM/dd/yyyy"
+          "MM/dd/yyyy",
         )}`}
         readOnly
         onClick={() => setIsOpen((isOpen) => !isOpen)}
-        className="bg-transparent border-none focus:ring-0 h-full z-50"
+        className="bg-transparent border-none focus:ring-0 outline-white outline-slate-300 h-full z-50 w-48 text-center"
       />
 
       <div ref={refOne} className="inline-block relative">
@@ -81,7 +81,7 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
             ranges={range}
             months={1}
             direction="horizontal"
-            className="absolute right-full bg-none focus:ring-0"
+            className="absolute right-full top-2 bg-none focus:ring-0"
           />
         )}
       </div>

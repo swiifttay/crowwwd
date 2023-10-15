@@ -4,6 +4,8 @@ import { Grid, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useFormState } from "./FormContext";
 
+import { usernameCheck } from "../../axios/apiService";
+
 // take note of the values recorded in this form
 type TFormValues = {
   firstName: string;
@@ -22,20 +24,25 @@ export function SimpleDetailForm() {
 
   const [msg, setMsg] = useState("");
 
-  const onHandleFormSubmit = (data: TFormValues) => {
-    if (!isValid(data.email, data.password, data.confirmPassword)) {
+  const onHandleFormSubmit = async (data: TFormValues) => {
+    // check if valid
+    const isValidUsername = await isValidUsernameCheck(data.username);
+    if (!isValidUsername) {
+      setMsg("Username has been used!");
+      return;
+    } else if (!isValid(data.email, data.password, data.confirmPassword)) {
       if (data.password.length < 8) {
         setMsg("Password should be at least 8 characters");
       } else if (
         !data.email.match(
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
         )
       ) {
         setMsg("Email is invalid");
       } else if (data.password !== data.confirmPassword) {
         setMsg("Passwords are not consistent");
       } else {
-        setMsg("loading...");
+        setMsg("Loading...");
       }
       return;
     }
@@ -44,24 +51,25 @@ export function SimpleDetailForm() {
     onHandleNext();
   };
 
-  // async function checkUsernameValidity(username: string) {
-  //   const isValid = await usernameCheck(username);
-  //   return isValid;
-  // }
+  async function isValidUsernameCheck(username: string) {
+    const response = await usernameCheck(username);
+
+    // check if response is successful
+    if (response.request?.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   const isValid = (
     email: string,
     password: string,
-    confirmPassword: string
+    confirmPassword: string,
   ) => {
-    // const usernameValidity = await checkUsernameValidity(username);
-    // if (usernameValidity) {
-    //   console.log(usernameValidity);
-    //   return false;
-    // }
     if (
       !email.match(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
       )
     )
       return false;

@@ -1,7 +1,9 @@
 import { Event } from "@/app/explore/page";
 import { dateFormatter } from "@/app/utillities/dateFormat";
+import { useRouter } from "next/navigation";
 
 export function Card(event: Event) {
+  const router = useRouter();
   const startDate = event.dates[0];
   const endDate = event.dates[event.dates.length - 1];
   const displayedDate =
@@ -9,8 +11,14 @@ export function Card(event: Event) {
       ? `${dateFormatter(startDate)}`
       : `${dateFormatter(startDate)} - ${dateFormatter(endDate)}`;
 
+  const handleEventDetails = () => {
+    router.push("/eventdetails");
+  };
   return (
-    <button className="w-full grid-rows-2 h-72 rounded-md transition-transform group text-left">
+    <button
+      className="w-full grid-rows-2 h-72 rounded-md transition-transform group text-left"
+      onClick={handleEventDetails}
+    >
       <img
         src={event.eventImageURL}
         className="row-span-1 rounded-md h-44 object-cover w-full group-hover:opacity-60 group-hover:scale-105 group-hover:ease-in-out group-hover:duration-200"

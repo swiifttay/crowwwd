@@ -7,7 +7,6 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { concertsList } from "../axios/apiService";
 import { SearchBar } from "../components/Explore/SearchBar";
 import { Card } from "../components/Explore/Card";
-import { Grid } from "@mui/material";
 import { BiLoaderAlt } from "react-icons/bi";
 
 export interface Event {
@@ -36,10 +35,18 @@ export default function Explore() {
   }, []);
 
   const fetchEvents = async () => {
-    const eventList: Event[] = await concertsList();
-    console.log(eventList);
-    setEvents(eventList);
-    setIsLoaded(true);
+    // check if response valid
+    const response = await concertsList();
+    if (response.request?.status === 200) {
+      const eventList: Event[] = response.data.events;
+      console.log(eventList);
+      setEvents(eventList);
+      setIsLoaded(true);
+
+      // will come here if it was from a token error
+    } else {
+      window.location.reload();
+    }
   };
 
   //--------- Search Filter ----------
@@ -52,7 +59,7 @@ export default function Explore() {
   const queriedEvents = events?.filter(
     (event) =>
       event.name.toLocaleLowerCase().indexOf(query) !== -1 ||
-      event.artist.name.toLocaleLowerCase().indexOf(query) !== -1
+      event.artist.name.toLocaleLowerCase().indexOf(query) !== -1,
   );
 
   //---------- Set Selected Categories ----------
@@ -79,7 +86,7 @@ export default function Explore() {
     queriedEvents: Event[],
     query: string,
     selectedCat: string[],
-    dateRange: { startDate: Date; endDate: Date } | null
+    dateRange: { startDate: Date; endDate: Date } | null,
   ) => {
     let filteredEvents = events;
     if (query !== "") {
@@ -89,20 +96,23 @@ export default function Explore() {
       filteredEvents = filteredEvents?.filter(({ categories }) =>
         categories.some((c) => {
           return selectedCat.includes(c.toLocaleLowerCase());
-        })
+        }),
       );
     }
     if (dateRange) {
       filteredEvents = filteredEvents.filter(({ dates }) => {
-        dates.some((d) => {
+        return dates.some((d) => {
           const date = new Date(d);
           return date >= dateRange.startDate && date <= dateRange.endDate;
         });
       });
     }
-    
+
     return filteredEvents?.map((event: Event) => (
-      <div key={event.eventId} className="w-full md:col-span-4 sm:col-span-6 col-span-12" >
+      <div
+        key={event.eventId}
+        className="w-full md:col-span-4 sm:col-span-6 col-span-12"
+      >
         <Card {...event} />
       </div>
     ));
@@ -112,7 +122,7 @@ export default function Explore() {
     queriedEvents,
     query,
     selectedCat,
-    dateRange
+    dateRange,
   );
 
   return (
@@ -133,7 +143,7 @@ export default function Explore() {
       />
 
       {isLoaded ? (
-        <div className="w-full px-3 grid md:grid-cols-12 gap-5" >
+        <div className="w-full px-3 grid md:grid-cols-12 gap-5">
           {displayedItems}
         </div>
       ) : (

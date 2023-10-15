@@ -1,4 +1,3 @@
-
 import "./globals.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -50,12 +49,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
-
   return (
     <GlobalStateProvider>
-    <html>
-        <body className={`${mont.className} flex flex-col items-center w-full h-fit`}>
+      <html>
+        <body
+          className={`${mont.className} flex flex-col items-center w-full h-fit`}
+        >
           <div className="flex flex-col items-start max-w-7xl w-full">
             <SidePanel />
             <Navbar />
@@ -63,7 +62,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </body>
-    </html>
+      </html>
     </GlobalStateProvider>
   );
 }

@@ -1,6 +1,6 @@
 package com.cs203.g1t4.backend.data.request.artist;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,12 +11,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArtistRequest {
-    @NotNull
+
+    @NotBlank(message = "Artist Name is required")
     private String name;
-    @NotNull
+
+    @NotBlank(message = "Artist Website is required")
     private String website;
-    @NotNull
+
+    //Is there a missing artistURL here?
+
+    //Can be blank as not all artist may have images
     private String artistImage;
-    @NotNull
+
+    //Can be blank as not all artist may have description planned
+    //Consider size validation checks for inputted description.
     private String description;
 }

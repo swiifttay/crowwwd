@@ -1,12 +1,18 @@
+"use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Event() {
+  const router = useRouter();
   const rulesHeader = "font-bold text-md ml-8 mb-2 mt-4";
   const rulesDetails = "list-disc ml-16";
 
+  const handleBuyTickets = async () => {
+    router.push("/order");
+  };
   return (
-    <div className="flex flex-col justify-center items-center">
-      <div className="w-auto mt-32">
+    <div className="flex w-full items-center justify-center mt-4">
+      <div className="">
         <div className="">
           <Image
             src="/images/EventPoster.jpg"
@@ -24,7 +30,10 @@ export default function Event() {
 
           <div className="flex justify-between">
             <p className="text-lg mb-10">KPOP | Concert</p>
-            <button className="w-[150px] h-1/6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded -mt-4">
+            <button
+              className="w-[150px] h-1/6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded -mt-4"
+              onClick={handleBuyTickets}
+            >
               Buy Tickets
             </button>
           </div>
@@ -99,7 +108,7 @@ export default function Event() {
           </ul>
 
           <div className="mt-12 text-xl font-bold mb-2">FAQ</div>
-          <div className="flex gap-1">
+          <div className="flex gap-1 mb-16">
             <div>Click</div>
             <div className="hover:underline text-theme-light-blue cursor-pointer">
               here

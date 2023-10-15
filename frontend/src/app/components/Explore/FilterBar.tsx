@@ -6,7 +6,6 @@ import DatePicker from "./DatePicker";
 
 import { useEffect, useRef, useState, ChangeEvent } from "react";
 
-
 type SelectProps = {
   onCheck: (input: ChangeEvent<HTMLInputElement>) => void;
   onDateChange: (startDate: Date, endDate: Date) => void;
@@ -47,7 +46,8 @@ export default function FilterBar({ onCheck, onDateChange }: SelectProps) {
           }}
           className="flex py-2 px-4 bg-theme-blue rounded-full text-sm hover:ease-in-out duration-300 hover:-translate-y-1 hover:scale-105 z-20"
         >
-          <BsFilter className="text-lg group-focus:rotate-90" /> Select Category
+          <BsFilter className="text-lg group-focus:rotate-90 mr-1" /> Select
+          Category
         </button>
         {isOpen && (
           <div className="h-10 w-full top-5 absolute z-10">

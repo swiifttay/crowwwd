@@ -10,19 +10,26 @@ const config: Config = {
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "hero": "radial-gradient(circle at center, rgba(5, 16, 33, 0.4) 20%, rgba(7, 23, 47, 1) 55%), url('/images/home-1.jpg')",
-        "hollow-purple": "linear-gradient(to right, rgba(5, 16, 33, 0.5) 1%, rgba(0, 36, 128, 0.8) 90%), url('/images/hollow-purple.jpg')",
-        "space": "radial-gradient(circle at bottom, rgba(7, 23, 47, 0.1) 10%, rgba(7, 23, 47, 1) 23%), url('/images/space.jpg')",
-        "azure": "linear-gradient(to right, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.3) 90%), url('/images/azure.jpg')",
-        "footer": "linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%)"
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        hero: "radial-gradient(circle at center, rgba(5, 16, 33, 0.4) 20%, rgba(7, 23, 47, 1) 55%), url('/images/home-1.jpg')",
+        "hollow-purple":
+          "linear-gradient(to right, rgba(5, 16, 33, 0.5) 1%, rgba(0, 36, 128, 0.8) 90%), url('/images/hollow-purple.jpg')",
+        space:
+          "radial-gradient(circle at bottom, rgba(7, 23, 47, 0.1) 10%, rgba(7, 23, 47, 1) 23%), url('/images/space.jpg')",
+        azure:
+          "linear-gradient(to right, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.3) 90%), url('/videos/imsorry.gif')",
+        footer:
+          "linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%)",
+        login:
+          "radial-gradient(circle at center, rgba(5, 16, 33, 0.4) 20%, rgba(7, 23, 47, 1) 65%), url('/images/login-bg.jpg')",
       },
 
       fontFamily: {
         mont: "var(--font-mont)",
       },
       screens: {
-        'md': '840px',
+        md: "840px",
       },
       colors: {
         "theme-midnight": "#07172F",

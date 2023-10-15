@@ -1,6 +1,7 @@
 package com.cs203.g1t4.backend.data.request.event;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Data
@@ -9,23 +10,33 @@ import lombok.*;
 @NoArgsConstructor
 public class EventRequest {
 
-    //Dates should be parsed it in String format of "<yyyy>-<MM>-<dd>T<HH>:<mm>:<ss>", example: 2011-12-03T10:15:30
-    @NotNull
+    @NotBlank(message = "Event Name is required")
     private String name;
-    @NotNull
+
+    @NotBlank(message = "Event Image Name is required")
     private String eventImageName; // imageName to look for in S3 Bucket
-    @NotNull
+
+    @NotBlank(message = "Event Description is required")
+    @Size(max = 30, message = "Event Description must be at most {max} characters long")
     private String description;
-    @NotNull
+
+    //Dates should be parsed it in String format of "<yyyy>-<MM>-<dd>T<HH>:<mm>:<ss>", example: 2011-12-03T10:15:30
+    @NotBlank(message = "Event Dates is required")
     private String[] dates; // date and time of the actual concert
-    @NotNull
+
+    @NotBlank(message = "Event Venue is required")
     private String venue;
-    @NotNull
+
+    @NotBlank(message = "Event Categories is required")
     private String[] categories;
-    @NotNull
+
+    @NotBlank(message = "Artist ID is required")
     private String artistId;
-    @NotNull
+
+    @NotBlank(message = "Event Seating Image Plan is required")
     private String seatingImagePlan; // imageName to look for in S3 Bucket
-    @NotNull
+
+    //Dates should be parsed it in String format of "<yyyy>-<MM>-<dd>T<HH>:<mm>:<ss>", example: 2011-12-03T10:15:30
+    @NotBlank(message = "Event Ticket Sales Date is required")
     private String[] ticketSalesDate; // date and time at which the ticket sales will be available
 }

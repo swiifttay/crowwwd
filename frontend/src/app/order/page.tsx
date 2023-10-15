@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { BsFillCalendarFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
@@ -34,7 +35,9 @@ export default function Order() {
         </div>
       </section>
       <section className="mt-5">
-        <h2 className="my-2 text-2xl font-light text-theme-light-blue">Notes</h2>
+        <h2 className="my-2 text-2xl font-light text-theme-light-blue">
+          Notes
+        </h2>
         <p className="text-sm font-thin text-slate-400">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
           ornare pulvinar velit eu luctus. Curabitur sed sem et tortor dictum

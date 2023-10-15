@@ -1,6 +1,5 @@
 "use client";
 
-
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
@@ -53,15 +52,21 @@ export function ComplexDetailForm() {
       return;
     }
 
-    setMsg("yay");
+    setMsg("loading...");
     setFormData((prev: any) => ({ ...prev, ...data }));
-    console.log({ data });
-    await handleRegister();
+    await handleRegister(data);
   };
 
-  async function handleRegister() {
-    registerAccount(formData);
-    // router.push("/login");
+  async function handleRegister(data: any) {
+    const response = await registerAccount(data);
+
+    // check if the status given is correct
+    if (response.request?.status === 200) {
+      setMsg("Saving...");
+      router.push("/login");
+    } else {
+      setMsg("Try Again Later!");
+    }
   }
 
   const inputStyles = {
@@ -99,7 +104,7 @@ export function ComplexDetailForm() {
       >
         {" "}
         {"Hi "}
-        <span style={{ color: "#0047FF" }}>{formData.username}</span>
+        <span style={{ color: "#1D90F4" }}>{formData.username}</span>
         {", we require a bit more information from you."}
       </Typography>
       <Grid container spacing={3}>

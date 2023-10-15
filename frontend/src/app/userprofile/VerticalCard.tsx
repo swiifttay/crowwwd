@@ -28,7 +28,6 @@ const VerticalCard: React.FC<EventButtonProps> = ({ image, name }) => {
             style={{ width: '200px', height: '200px'}}
           />
         </div> */}
- 
 
         <div className="font-bold mb-2 truncate">{name}</div>
       </button>
