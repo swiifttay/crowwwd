@@ -1,11 +1,28 @@
 package com.cs203.g1t4.backend.service;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
+import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
-import com.cs203.g1t4.backend.data.response.event.EventResponse;
+import com.cs203.g1t4.backend.data.response.event.ExploreEventsResponse;
+import com.cs203.g1t4.backend.data.response.event.SingleDetailsEventResponse;
+import com.cs203.g1t4.backend.data.response.event.SingleFullEventResponse;
 import com.cs203.g1t4.backend.models.Artist;
-import com.cs203.g1t4.backend.models.event.OutputEvent;
-import com.cs203.g1t4.backend.models.exceptions.*;
+import com.cs203.g1t4.backend.models.Venue;
+import com.cs203.g1t4.backend.models.event.DetailsEvent;
+import com.cs203.g1t4.backend.models.event.Event;
+import com.cs203.g1t4.backend.models.event.ExploreEvent;
+import com.cs203.g1t4.backend.models.event.FullEvent;
+import com.cs203.g1t4.backend.models.exceptions.DuplicatedEventException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidArtistIdException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidEventIdException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidVenueException;
+import com.cs203.g1t4.backend.repository.ArtistRepository;
+import com.cs203.g1t4.backend.repository.EventRepository;
+import com.cs203.g1t4.backend.repository.VenueRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,18 +31,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.cs203.g1t4.backend.repository.ArtistRepository;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.data.response.event.SingleEventResponse;
-import com.cs203.g1t4.backend.models.event.Event;
-import com.cs203.g1t4.backend.repository.EventRepository;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 @Service
@@ -33,26 +38,38 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 public class EventService {
     private final EventRepository eventRepository;
     private final ArtistRepository artistRepository;
+    private final VenueRepository venueRepository;
     private final S3Service s3Service;
 
     @Value("${aws.bucket.name}")
     private String bucketName;
 
-    // Main Service Methods
-
     /**
      * Adds a new event to the repository.
      *
-     * @param request a RegisterRequest object containing the new event info to be created
+     * @param request a EventRequest object containing the new event info to be created
+     * @param image a MultipartFile object containing the image corresponding to the event
      * @return SuccessResponse "Event has been created successfully"
      */
-    public Response addEvent(EventRequest request) {
+    // Main Service Methods
+    public Response addFullEvent(EventRequest request, MultipartFile image) {
 
-        //Creates newEvent using private method getEventClassFromRequest(EventRequest request, Event oldEvent)
+        // Creates newEvent using private method
+        // getEventClassFromRequest(EventRequest request, Event oldEvent)
         Event event = getEventClassFromRequest(request, null);
 
         //Saves event into database
         eventRepository.save(event);
+
+        // Get the event image name
+        String eventImageName = image.getOriginalFilename();
+
+        // Put the image into the bucket
+        s3Service.putObject(
+                bucketName,
+                "event-images/%s/%s".formatted(event.getId(), eventImageName),
+                image
+        );
 
         //If Everything goes smoothly, SuccessResponse will be created
         return SuccessResponse.builder()
@@ -64,31 +81,33 @@ public class EventService {
      * Deletes an event from the repository based on the eventId.
      *
      * @param eventId a String object containing the eventId of the event to be deleted.
-     * @return a SingleEventResponse object containing the deleted Event Object in the form of an OutputEvent.
+     * @return a SingleFullEventResponse object containing the deleted Event Object in the form of a FullEvent.
      */
-    public Response deleteEventById(String eventId) {
+    public Response deleteFullEventById(String eventId) {
 
         //Checks if there is an event with the specified eventID in the repository
         //If there are any exceptions, it will be propagated out
-        OutputEvent outputEvent = getOutputEventFromEventId(eventId);
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new InvalidEventIdException(eventId));
 
         //If event can be found, delete it from repository
         eventRepository.deleteById(eventId);
 
-        //If Everything goes smoothly, return the event in SingleEventResponse
-        return SingleEventResponse.builder()
-                .outputEvent(outputEvent)
+        //If Everything goes smoothly, return the event in SingleFullEventResponse
+        return SingleFullEventResponse.builder()
+                .fullEvent(getFullEventFromEvent(event))
                 .build();
     }
 
     /**
-     * Updates an event from the repository based on the eventId and request.
+     * Updates an event from the repository based on the eventId, request and image.
      *
      * @param eventId a String object containing the eventId of the event to be updated.
      * @param request a EventRequest object containing the new event info to be updated
-     * @return a SingleEventResponse object containing the updated Event Object in the form of an OutputEvent.
+     * @param image a MultipartFile object containing the new image to be updated
+     * @return a SingleFullEventResponse object containing the updated Event Object in the form of a FullEvent.
      */
-    public Response updateEventById(String eventId, EventRequest request) {
+    public Response updateFullEventById(String eventId, EventRequest request, MultipartFile image) {
 
         //Checks if there is an event with the specified eventID in the repository
         //If event cannot be found, throws new InvalidEventIdException if no such event found
@@ -99,43 +118,76 @@ public class EventService {
 
         eventRepository.save(newEvent);
 
-        //If Everything goes smoothly, return the event in SingleEventResponse
-        return SingleEventResponse.builder()
-                .outputEvent(getOutputEventFromEventId(newEvent.getId()))
+        if (image != null && !image.isEmpty()) {
+            // Get the event image name
+            String eventImageName = oldEvent.getEventImageName();
+
+
+            // Put the image into the bucket
+            s3Service.putObject(
+                    bucketName,
+                    "event-images/%s/%s".formatted(eventId, eventImageName),
+                    image
+            );
+        }
+
+
+        //If Everything goes smoothly, return the event in SingleFullEventResponse
+        return SingleFullEventResponse.builder()
+                .fullEvent(getFullEventFromEvent(newEvent))
                 .build();
     }
 
     /**
-     * Finds an event from the repository based on the eventId.
+     * Finds an ExploreEvent from the repository based on the eventId.
      *
      * @param eventId a String object containing the eventId of the event to be found.
-     * @return a SingleEventResponse object containing the found Event Object in the form of an OutputEvent.
+     * @return a SingleFullEventResponse object containing the found Event Object in the form of an ExploreEvent.
      */
-    public Response findEventById(String eventId) {
+    public Response getFullEventById(String eventId) {
 
-        //Use of private method getOutputEventFromEventId() to generate OutputEvent Object from eventId
-        OutputEvent outputEvent = getOutputEventFromEventId(eventId);
+        //Use of private method getFullEventFromEventId() to generate FullEvent Object from eventId
+        FullEvent fullEvent = getFullEventFromEventId(eventId);
 
         //Returns the event with id if successful
-        return SingleEventResponse.builder()
-                .outputEvent(outputEvent)
+        return SingleFullEventResponse.builder()
+                .fullEvent(fullEvent)
                 .build();
     }
 
     /**
-     * Finds a list of events from the repository that happens after today.
+     * Finds a DetailsEvent from the repository based on the eventId.
      *
-     * @return a EventResponse object containing the List of OutputEvent objects.
+     * @param eventId a String object containing the eventId of the event to be found.
+     * @return a SingleDetailsEventResponse object containing the found Event Object in the form of an DetailsEvent.
      */
-    public Response getAllEventsAfterToday() {
-        // get today's date
+    public Response getDetailsEventById(String eventId) {
+        //Use of private method getDetailsEventFromEventId() to generate DetailsEvent Object from eventId
+        DetailsEvent detailsEvent = getDetailsEventFromEventId(eventId);
+
+        String eventImageURL = "https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
+                .formatted(bucketName, eventId, detailsEvent.getEventImageName());
+        detailsEvent.setEventImageURL(eventImageURL);
+        // Returns the detailsEvent if successful
+        return SingleDetailsEventResponse.builder()
+                .detailsEvent(detailsEvent)
+                .build();
+    }
+
+    /**
+     * Finds a list of ExploreEvent from the repository that happens after today.
+     *
+     * @return a ExploreEventsResponse object containing the List of ExploreEvent objects.
+     */
+    public Response getAllExploreEvents() {
+        // get the current day's date
         LocalDateTime today = LocalDateTime.now();
 
-        // get all the events after today, or else returns an empty List<Event>
-        List<OutputEvent> events = returnFormattedList(eventRepository.findByDatesGreaterThan(today));
+        // determine which events are after today
+        List<ExploreEvent> events = returnExploreEventFormattedList(eventRepository.findByDatesGreaterThan(today));
 
-        // Get the URL to the image of each event
-        for (OutputEvent currentEvent : events) {
+        // input the imageURL
+        for (ExploreEvent currentEvent : events) {
             // To get the URL for the eventImage
             String eventImageURL = "https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
                     .formatted(bucketName, currentEvent.getEventId(), currentEvent.getEventImageName());
@@ -143,87 +195,8 @@ public class EventService {
         }
 
         // Returns the events with date after today if successful
-        return EventResponse.builder()
-            .events(events)
-            .build();
-    }
-
-    /**
-     * Finds a list of events from the repository that happens between a date range.
-     *
-     * @param beginDateRange a String object containing the start of the date range.
-     * @param endDateRange a String object containing the end of the date range.
-     * @return a EventResponse object containing the List of OutputEvent objects.
-     */
-    public Response getEventBetweenDateRange(String beginDateRange, String endDateRange) {
-        
-        // convert the start and end date to LocalDateTime class between 00:00 of start and 23:59 of end
-        LocalDateTime beginDateRangeLDT = LocalDate.parse(beginDateRange).atStartOfDay();
-        LocalDateTime endDateRangeLDT = LocalDate.parse(endDateRange).atTime(LocalTime.MAX);
-
-        // get all the events between those two dates
-        List<OutputEvent> events = returnFormattedList(eventRepository.findByDatesBetween(beginDateRangeLDT, endDateRangeLDT));
-
-        // Get the URL to the image of each event
-        for (OutputEvent currentEvent : events) {
-            // To get the URL for the eventImage
-            String eventImageURL = "https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
-                    .formatted(bucketName, currentEvent.getEventId(), currentEvent.getEventImageName());
-            currentEvent.setEventImageURL(eventImageURL);
-        }
-
-        // Return the events with date after today if successful
-        return EventResponse.builder()
-                .events(events)
-                .build();
-    }
-
-    /**
-     * Uploads an image for an event.
-     * If event cannot be found in repository based on eventId, throw InvalidEventIdException.
-     *
-     * @param eventId a String object containing the eventId of the event.
-     * @param multipartFile a MultipartFile object containing the image.
-     * @return a SuccessResponse containing "Image has been successfully uploaded".
-     */
-    public SuccessResponse uploadEventImage(String eventId,
-                                            MultipartFile multipartFile) {
-        // Get information on which event to edit from
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
-
-        // Get the event image name
-        String eventImageName = event.getEventImageName();
-
-        // Check if this is to update image of the event or to input a new one
-        if (eventImageName == null) {
-            eventImageName = multipartFile.getOriginalFilename();
-        }
-
-        // Put the image into the bucket
-        s3Service.putObject(
-                bucketName,
-                "event-images/%s/%s".formatted(eventId, eventImageName),
-                multipartFile
-        );
-
-        // Return
-        return SuccessResponse.builder()
-                .response("Image has been successfully uploaded")
-                .build();
-    }
-
-    /**
-     * Obtains the eventImageURL and returns as part of the message body of the SuccessResponse.
-     *
-     * @param eventId a String object containing the eventId to obtain the eventImageURL from.
-     * @return a SuccessResponse object with message containing the eventImageURL.
-     */
-    public SuccessResponse getEventImage(String eventId) {
-        String eventImageUrl = getEventImageUrl(eventId);
-
-        // Return
-        return SuccessResponse.builder()
-                .response("Event Image URL: " + eventImageUrl)
+        return ExploreEventsResponse.builder()
+                .exploreEventList(events)
                 .build();
     }
 
@@ -245,15 +218,14 @@ public class EventService {
     }
 
     /**
-     * Obtains an Event Object from String eventID and converts the Event Object to an OutputEvent Object
+     * Obtains an Event Object from String eventID and converts the Event Object to a FullEvent Object
      * If event with inputted eventID cannot be found, throw InvalidEventIdException.
      * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
      *
      * @param eventId a String object containing the event ID of the event to be converted.
-     * @return the OutputEvent object converted from the Event object.
+     * @return the FullEvent object converted from the Event object.
      */
-    private OutputEvent getOutputEventFromEventId(String eventId)
-            throws InvalidArtistIdException, InvalidEventIdException{
+    private FullEvent getFullEventFromEventId(String eventId) throws InvalidEventIdException, InvalidArtistIdException {
         //Finds event from repository, or else throw InvalidEventIdException()
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new InvalidEventIdException(eventId));
@@ -263,7 +235,61 @@ public class EventService {
                 .orElseThrow(() -> new InvalidArtistIdException(event.getArtistId()));
 
         //Returns OutputEvent object from Event Object
-        return event.returnOutputEvent(artist);
+        return event.returnFullEvent(artist);
+    }
+
+    /**
+     * Obtains an Event Object from String eventID and converts the Event Object to a FullEvent Object
+     * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
+     *
+     * @param event a Event object to be converted.
+     * @return the FullEvent object converted from the Event object.
+     */
+    private FullEvent getFullEventFromEvent(Event event) throws InvalidArtistIdException{
+
+        //Find artist from repository, or else throw InvalidArtistIdException()
+        Artist artist = artistRepository.findById(event.getArtistId())
+                .orElseThrow(() -> new InvalidArtistIdException(event.getArtistId()));
+
+        //Returns OutputEvent object from Event Object
+        return event.returnFullEvent(artist);
+    }
+
+    /**
+     * Obtains an Event Object from String eventID and converts the Event Object to a ExploreEvent Object
+     * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
+     *
+     * @param event a Event object to be converted.
+     * @return the ExploreEvent object converted from the Event object.
+     */
+    private ExploreEvent getExploreEventFromEvent(Event event) throws InvalidArtistIdException{
+        //Find artist from repository, or else throw InvalidArtistIdException()
+        Artist artist = artistRepository.findById(event.getArtistId())
+                .orElseThrow(() -> new InvalidArtistIdException(event.getArtistId()));
+
+        //Returns OutputEvent object from Event Object
+        return event.returnExploreEvent(artist.getName());
+
+    }
+
+    /**
+     * Obtains an Event Object from String eventID and converts the Event Object to a DetailsEvent Object
+     * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
+     *
+     * @param event a Event object to be converted.
+     * @return the DetailsEvent object converted from the Event object.
+     */
+    private DetailsEvent getDetailsEventFromEventId(String eventId) throws InvalidEventIdException, InvalidVenueException{
+        //Finds event from repository, or else throw InvalidEventIdException()
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new InvalidEventIdException(eventId));
+
+        Venue venue = venueRepository.findById(event.getVenue())
+                .orElseThrow(() -> new InvalidVenueException());
+
+        //Returns OutputEvent object from Event Object
+        return event.returnDetailsEvent(venue);
+
     }
 
     /**
@@ -274,16 +300,20 @@ public class EventService {
      * @param request a EventRequest object containing the new event info to be created/updated
      * @param oldEvent an Event object containing the event info of the user that has to be updated. null for creation
      */
-    private void eventRequestChecker(EventRequest request, Event oldEvent)
-            throws DuplicatedEventException, InvalidArtistIdException {
+    private void eventRequestChecker(EventRequest request, Event oldEvent) throws DuplicatedEventException, InvalidArtistIdException, InvalidVenueException {
 
         // Check 1: Check if artist exists in the first place in the ArtistRepository
         if (artistRepository.findById(request.getArtistId()).isEmpty()) {
             throw new InvalidArtistIdException(request.getArtistId());
         }
 
+        // Check 2: Check if venue exists in the first place in the VenueRepository
+        if (venueRepository.findById(request.getVenue()).isEmpty()) {
+            throw new InvalidVenueException();
+        }
+
         /*
-         * Check 2: Checks the request if there are other events that are created by the same artist and eventName
+         * Check 3: Checks the request if there are other events that are created by the same artist and eventName
          *
          * Considers 2 scenarios to check for DuplicatedEventName:
          * 1. If addEvent(), the oldEvent is null
@@ -327,6 +357,7 @@ public class EventService {
                 .artistId(eventRequest.getArtistId())
                 .seatingImagePlan(eventRequest.getSeatingImagePlan())
                 .ticketSalesDate(ticketSalesDateList)
+                .venue(eventRequest.getVenue())
                 .build();
 
         //If updateEvent (oldEvent != null), set eventId to oldEvent eventId.
@@ -336,47 +367,21 @@ public class EventService {
     }
 
     /**
-     * Converts a List of Event objects to a List of a OutputEvent objects
+     * Converts a List of Event objects to a List of a ExploreEvent objects
      *
      * @param eventList a List of Event objects to be converted
-     * @return the List of a OutputEvent objects converted from input
+     * @return the List of a ExploreEvent objects converted from input
      */
-    private List<OutputEvent> returnFormattedList(List<Event> eventList) {
-        List<OutputEvent> outList = new ArrayList<>();
+    private List<ExploreEvent> returnExploreEventFormattedList(List<Event> eventList) {
+        List<ExploreEvent> outList = new ArrayList<>();
+
         for (Event event : eventList) {
             //Use of private method getOutputEventFromEventId() to generate OutputEvent Object from eventId
-            OutputEvent outputEvent = getOutputEventFromEventId(event.getId());
+            ExploreEvent exploreEvent = getExploreEventFromEvent(event);
             //Add outputEvent into outList
-            outList.add(outputEvent);
+            outList.add(exploreEvent);
         }
         return outList;
-    }
-
-    /**
-     * Returns an eventImageUrl based on the Event object, which is stated by the eventId.
-     *
-     * @param eventId a String object containing the EventId of the event.
-     * @return a String object containing the eventImageUrl.
-     */
-    public String getEventImageUrl(String eventId) throws InvalidEventIdException {
-        // Get information on which event to edit from
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
-
-        String eventImageName = event.getEventImageName();
-        // check if there is any Image to return
-        if (eventImageName.isBlank()) {
-            throw new InvalidEventIdException(eventId);
-        }
-
-
-        // To get the URL for the eventImage
-        String eventImageURL = "https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
-                .formatted(bucketName, event.getId(), event.getEventImageName());
-
-        // Implement catch error in the event no image is saved.
-
-        // Return
-        return eventImageURL;
     }
 
 }

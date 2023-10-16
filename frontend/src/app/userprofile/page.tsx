@@ -86,7 +86,7 @@ export default function UserProfile() {
 
   const checkSpotifyLoginStatus = async () => {
     const spotifyTokenResponse = await getSpotifyToken();
-    console.log(spotifyTokenResponse.data.response);
+    console.log(spotifyTokenResponse.data?.response);
     if (spotifyTokenResponse?.status === 200 && spotifyTokenResponse.data?.response != null) {
       console.log("success");
       localStorage.setItem("spotifyToken", spotifyTokenResponse.data.response);

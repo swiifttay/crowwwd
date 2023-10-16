@@ -1,14 +1,14 @@
 package com.cs203.g1t4.backend.models.event;
 
 import com.cs203.g1t4.backend.models.Artist;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import com.cs203.g1t4.backend.models.Venue;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,24 +51,56 @@ public class Event {
     private List<LocalDateTime> ticketSalesDate; // date and time at which the ticket sales will be available
 
     /**
-     * Returns an OutputEvent Object based on the current Event Object
+     * Returns a FullEvent Object based on the current Event Object
      *
      * @param artist a Artist object obtained from the ArtistId of the Event object.
-     * @return the OutputEvent object converted from the Event object.
+     * @return the FullEvent object converted from the Event object.
      */
-    public OutputEvent returnOutputEvent(Artist artist) {
+    public FullEvent returnFullEvent(Artist artist) {
 
-        return OutputEvent.builder()
+        return FullEvent.builder()
                 .eventId(id)
                 .name(name)
-                .description(description)
                 .eventImageName(eventImageName)
+                .description(description)
                 .dates(convertLocalDateTimeListToStrList(dates))
                 .venue(venue)
                 .categories(categories)
                 .artist(artist)
                 .seatingImagePlan(seatingImagePlan)
                 .ticketSalesDate(convertLocalDateTimeListToStrList(ticketSalesDate))
+                .build();
+    }
+
+    /**
+     * Returns an ExploreEvent Object based on the current Event Object
+     *
+     * @param artistName a String object containing the name of the artist.
+     * @return the ExploreEvent object converted from the Event object.
+     */
+    public ExploreEvent returnExploreEvent(String artistName) {
+
+        return ExploreEvent.builder()
+                .eventId(id)
+                .name(name)
+                .eventImageName(eventImageName)
+                .dates(convertLocalDateTimeListToStrList(dates))
+                .categories(categories)
+                .artistName(artistName)
+                .build();
+    }
+
+    public DetailsEvent returnDetailsEvent(Venue venue) {
+
+        return DetailsEvent.builder()
+                .eventId(id)
+                .name(name)
+                .eventImageName(eventImageName)
+                .dates(convertLocalDateTimeListToStrList(dates))
+                .ticketSalesDate(convertLocalDateTimeListToStrList(ticketSalesDate))
+                .categories(categories)
+                .venue(venue)
+                .description(description)
                 .build();
     }
 

@@ -23,14 +23,14 @@ public class TicketController {
     private final ProfileService profileService;
 
     @PostMapping("/createTicket")
-    public ResponseEntity<Response> createTicket(@Valid @RequestBody TicketRequest TicketRequest, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Response> createTicket(@Valid @RequestBody TicketRequest ticketRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
         // Get the username from the userDetails of the authenticated user
         String username = userDetails.getUsername();
 
         // Provide information from both CreateTicketRequest and userid to createTicket in TicketService
         //Throws a InvalidTokenException if username cannot be found in repository
-        Response response = ticketService.createTicket(TicketRequest, username);
+        Response response = ticketService.createTicket(ticketRequest, username);
 
         //Else, return ok response
         return ResponseEntity.ok(response);
@@ -45,14 +45,14 @@ public class TicketController {
     }
 
     @PutMapping("/updateTicket/{ticketId}")
-    public ResponseEntity<Response> updateTicket(@PathVariable String ticketId, @Valid @RequestBody TicketRequest TicketRequest, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Response> updateTicket(@PathVariable String ticketId, @Valid @RequestBody TicketRequest ticketRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
         // Get the username from the userDetails of the authenticated user
         String username = userDetails.getUsername();
 
         // Provide information from both CreateTicketRequest and userid to createTicket in TicketService
         //Throws a InvalidTokenException if username cannot be found in repository
-        Response response = ticketService.updateTicket(ticketId, TicketRequest, username);
+        Response response = ticketService.updateTicket(ticketId, ticketRequest, username);
 
         //Else, return ok response
         return ResponseEntity.ok(response);
