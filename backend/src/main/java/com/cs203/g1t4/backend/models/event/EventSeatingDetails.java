@@ -1,7 +1,6 @@
 package com.cs203.g1t4.backend.models.event;
 
 import com.cs203.g1t4.backend.models.Category;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,4 +22,6 @@ public class EventSeatingDetails {
 
     @NotNull
     private List<Category> categories;
+
+    private String seatsInformationString;
 }

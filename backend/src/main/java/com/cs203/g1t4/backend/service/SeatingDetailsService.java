@@ -15,14 +15,13 @@ import com.cs203.g1t4.backend.repository.SeatingDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class SeatingDetailsService {
     private final EventRepository eventRepository;
     private final SeatingDetailsRepository seatingDetailsRepository;
+    private static final int NUM_SEATS_PER_ROW = 4;
+    private static final int NUM_ROWS = 4;
 
     public SuccessResponse addSeatingDetails(String eventId, SeatingDetailsRequest request) {
 
@@ -34,10 +33,18 @@ public class SeatingDetailsService {
             throw new DuplicateSeatingDetailsException(eventId);
         }
 
+        //Creates the default String containing total number of seats with '0'
+        int totalSeats = NUM_SEATS_PER_ROW * NUM_ROWS;
+        StringBuilder stringBuilder = new StringBuilder(totalSeats);
+        for (int i = 0 ; i < totalSeats ; i++) {
+            stringBuilder.append('0');
+        }
+
         //Generates a seatingDetails for the specific event using the details from both the requestBody and the eventId.
         EventSeatingDetails seatingDetails = EventSeatingDetails.builder()
                                                 .eventId(eventId)
                                                 .categories(request.getCategories())
+                                                .seatsInformationString(stringBuilder.toString())
                                                 .build();
 
         //Save the eventSeatingDetails into the repository.
@@ -70,6 +77,22 @@ public class SeatingDetailsService {
 
         //Set the category of the seatingDetails to the category in requestBody
         seatingDetails.setCategories(request.getCategories());
+
+        //Save the updated seatingDetails into the repository
+        seatingDetailsRepository.save(seatingDetails);
+
+        return SeatingDetailsResponse.builder()
+                .seatingDetails(seatingDetails)
+                .build();
+    }
+
+    public Response updateSeatingDetails(String eventId, String seatsInformationString) {
+        //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
+        EventSeatingDetails seatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
+                .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
+
+        //Set the seatsInformationString of the seatsInformationString
+        seatingDetails.setSeatsInformationString(seatsInformationString);
 
         //Save the updated seatingDetails into the repository
         seatingDetailsRepository.save(seatingDetails);
