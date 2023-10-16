@@ -374,6 +374,7 @@ public class EventService {
      */
     private List<ExploreEvent> returnExploreEventFormattedList(List<Event> eventList) {
         List<ExploreEvent> outList = new ArrayList<>();
+
         for (Event event : eventList) {
             //Use of private method getOutputEventFromEventId() to generate OutputEvent Object from eventId
             ExploreEvent exploreEvent = getExploreEventFromEvent(event);

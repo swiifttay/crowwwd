@@ -20,7 +20,19 @@ public class ProfileService {
     private final AuthenticationManager authenticationManager;
     private final CommonService commonService;
 
-    public Response updateProfile(UpdateProfileRequest request, String username) {
+    /**
+     * Updates new user to the repository.
+     * If original user cannot be found based on token, throw a InvalidTokenException.
+     * If username can be found in the repository, throw a DuplicatedUsernameException.
+     * For updating, if all three password fields are not the same or wrong oldPassword is inputted, throw a
+     * PasswordDoNotMatchException
+     *
+     * @param request a RegisterRequest object containing the new user info to be updated
+     * @param username a String object containing the username of the user originally
+     * @return SuccessResponse "User has been updated successfully"
+     */
+    public Response updateProfile(UpdateProfileRequest request, String username)
+            throws InvalidTokenException{
 
         //Finds user from repository, or else throw Invalid token exception
         User oldUser = userRepository.findByUsername(username)
@@ -38,6 +50,13 @@ public class ProfileService {
                 .build();
     }
 
+    /**
+     * Finds a user from the repository.
+     * If original user cannot be found based on username from token, throw a InvalidTokenException.
+     *
+     * @param username a String object containing the username of the user
+     * @return SingleUserResponse containing the User Object
+     */
     public Response findProfile(String username) {
 
         //Finds user from repository, or else throw Invalid token exception
