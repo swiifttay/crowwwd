@@ -1,9 +1,14 @@
 package com.cs203.g1t4.backend.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class SeatsService {
 
     private static final int NUM_SEATS_PER_ROW = 4;
