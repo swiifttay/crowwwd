@@ -23,5 +23,4 @@ public class EventSeatingDetails {
     @NotNull
     private List<Category> categories;
 
-    private String seatsInformationString;
 }

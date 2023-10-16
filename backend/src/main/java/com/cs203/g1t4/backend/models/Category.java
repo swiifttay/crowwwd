@@ -13,4 +13,6 @@ public class Category {
     private String category;
 
     private int price;
+
+    private String seatsInformationString;
 }
