@@ -9,7 +9,6 @@ import { useState, useEffect } from "react";
 import { getUserProfile, updateUserProfile } from "../axios/apiService";
 import "./style.css";
 
-
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -35,23 +34,23 @@ type TFormValues = {
 
 const formData: TFormValues = {
   // Initial values for the form fields
-  firstName: ' ',
-  lastName: ' ',
-  username: ' ',
-  email: ' ',
-  oldPassword: '',
+  firstName: " ",
+  lastName: " ",
+  username: " ",
+  email: " ",
+  oldPassword: "",
 
-  newPassword: '',
-  repeatNewPassword: '',
+  newPassword: "",
+  repeatNewPassword: "",
 
-  phoneNo: ' ',
-  address: ' ',
-  city: ' ',
-  state: ' ',
-  postalCode: ' ',
-  countryOfResidence: ' ',
-  isPreferredMarketing: false
-}
+  phoneNo: " ",
+  address: " ",
+  city: " ",
+  state: " ",
+  postalCode: " ",
+  countryOfResidence: " ",
+  isPreferredMarketing: false,
+};
 
 export default function UpdateProfile() {
   const router = useRouter();
@@ -61,7 +60,7 @@ export default function UpdateProfile() {
   });
 
   const [msg, setMsg] = useState("");
-  
+
   useEffect(() => {
     fetchUsersOriginalData();
   }, [formData]);
@@ -71,13 +70,16 @@ export default function UpdateProfile() {
       const response = await getUserProfile();
       if (response.data && response.data.user) {
         const userData = response.data.user as TFormValues;
-        const validKeys = Object.keys(userData).filter((key) => Object.keys(formData).includes(key));
+        const validKeys = Object.keys(userData).filter((key) =>
+          Object.keys(formData).includes(key),
+        );
         validKeys.forEach((key) => {
-          setValue(key as keyof TFormValues, userData[key as keyof TFormValues]);
+          setValue(
+            key as keyof TFormValues,
+            userData[key as keyof TFormValues],
+          );
           (formData as any)[key] = userData[key as keyof TFormValues];
-
         });
-        
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -99,10 +101,10 @@ export default function UpdateProfile() {
     if (newPassword.length < 8) return false;
     return true;
   };
-  
-  const onHandleBack = async() => {
+
+  const onHandleBack = async () => {
     router.push("/userprofile");
-  }
+  };
   const onHandleFormSubmit = async (data: TFormValues) => {
     // check if username is null
     if (data.username === formData.username) {
@@ -110,31 +112,32 @@ export default function UpdateProfile() {
     }
     // check if password was changed
     if (data.oldPassword === "") {
-      data.oldPassword= null;
-      data.newPassword= null;
-      data.repeatNewPassword= null;
+      data.oldPassword = null;
+      data.newPassword = null;
+      data.repeatNewPassword = null;
     }
 
     // check for validity
-    
+
     // if (data.newPassword.length < 8) {
     //   setMsg("New password should be at least 8 characters");
-    // } else 
-    if (!data.email.match(
+    // } else
+    if (
+      !data.email.match(
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
       )
     ) {
       setMsg("Email is invalid");
-    // } else if (data.newPassword !== data.repeatNewPassword) {
-    //   setMsg("New passwords are not consistent");
-    // } else if (!/^\d+$/.test(data.phoneNo)) {
-    //   setMsg("Mobile number should be digits");
-    //   // return;
-    // } else if (data.phoneNo.length < 8) {
-    //   setMsg("Mobile number should be at least 8 characters");
-    //   // return;
-    // } else if (!/^\d+$/.test(data.postalCode)) {
-    //   setMsg("Postal code should be digits");
+      // } else if (data.newPassword !== data.repeatNewPassword) {
+      //   setMsg("New passwords are not consistent");
+      // } else if (!/^\d+$/.test(data.phoneNo)) {
+      //   setMsg("Mobile number should be digits");
+      //   // return;
+      // } else if (data.phoneNo.length < 8) {
+      //   setMsg("Mobile number should be at least 8 characters");
+      //   // return;
+      // } else if (!/^\d+$/.test(data.postalCode)) {
+      //   setMsg("Postal code should be digits");
       return;
     }
 
@@ -150,14 +153,14 @@ export default function UpdateProfile() {
       }
     } catch (error) {
       console.log(error);
-        // if (error.response? instanceof DuplicatedUsernameException) { // edit this
-        //   setMsg("Username has been used");
-        //   return;
-        // }
-        // if (error.response? instanceof PasswordDoNotMatchException) {
-        //   setMsg("Old password is incorrect");
-        //   return;
-        // }
+      // if (error.response? instanceof DuplicatedUsernameException) { // edit this
+      //   setMsg("Username has been used");
+      //   return;
+      // }
+      // if (error.response? instanceof PasswordDoNotMatchException) {
+      //   setMsg("Old password is incorrect");
+      //   return;
+      // }
     }
 
     // setFormData((prev: any) => ({ ...prev, ...data }));
@@ -189,7 +192,7 @@ export default function UpdateProfile() {
       color: "white",
     },
   };
-  
+
   /* TO DO:
   1. call for user old data, put inside the textfields
   2. check if the original text fields and new textfields are any different
@@ -211,7 +214,7 @@ export default function UpdateProfile() {
         >
           {"Update your information here."}
         </Typography>
-        
+
         <Grid
           container
           spacing={1.5}

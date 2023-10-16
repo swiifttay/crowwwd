@@ -151,7 +151,7 @@ export function SimpleDetailForm() {
             {...register("username")}
           />
         </Grid>
-        <Grid item xs={12} >
+        <Grid item xs={12}>
           <TextField
             sx={sxStyles}
             required
