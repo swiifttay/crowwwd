@@ -18,8 +18,8 @@ import {
 export default function Seats() {
   return (
     <MapContainer
-      className="h-[32rem] w-full"
-      center={[0, 0]}
+      className="h-[26rem] w-full overflow-x-scroll z-30"
+      center={[2, 0]}
       zoom={3.4}
       scrollWheelZoom={false}
       zoomControl={false}
@@ -36,26 +36,26 @@ export default function Seats() {
         eventHandlers={{ mouseover: lowerOpacity, mouseout: higherOpacity }}
       />
       <Marker
-        position={[23, 15]}
+        position={[25, 5]}
         icon={catC}
         eventHandlers={{ mouseover: lowerOpacity, mouseout: higherOpacity }}
       />
-      {/*
+
       <Marker
-        position={[45, 17]}
+        position={[41, 8]}
         icon={catF}
         eventHandlers={{ mouseover: lowerOpacity, mouseout: higherOpacity }}
       />
       <Marker
-        position={[36, -58]}
+        position={[41, -42]}
         icon={catE}
         eventHandlers={{ mouseover: lowerOpacity, mouseout: higherOpacity }}
       />
       <Marker
-        position={[1, 22]}
+        position={[14, 13]}
         icon={catD}
         eventHandlers={{ mouseover: lowerOpacity, mouseout: higherOpacity }}
-  />*/}
+      />
       <Marker position={[2, -50]} icon={stage} interactive={false} />
     </MapContainer>
   );

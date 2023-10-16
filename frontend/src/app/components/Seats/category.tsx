@@ -21,25 +21,25 @@ export const catB = new L.Icon({
 
 export const catC = new L.Icon({
     iconUrl: "/svg/catC.svg", 
-    iconSize: [170, 100], 
+    iconSize: [160, 160], 
     iconAnchor: [10, 10], 
   });
 
 export const catD = new L.Icon({
     iconUrl: "/svg/catD.svg",
-    iconSize: [370, 300], 
+    iconSize: [260, 260], 
     iconAnchor: [10, 10], 
   });
 
 export const catE = new L.Icon({
     iconUrl: "/svg/catE.svg", 
-    iconSize: [450, 300], 
+    iconSize: [290, 290], 
     iconAnchor: [10, 10], 
   });
 
 export const catF = new L.Icon({
   iconUrl: "/svg/catF.svg",
-  iconSize: [390, 390],
+  iconSize: [280, 270],
   iconAnchor: [10, 10],
 });
 
