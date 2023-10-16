@@ -44,6 +44,13 @@ public class EventService {
     @Value("${aws.bucket.name}")
     private String bucketName;
 
+    /**
+     * Adds a new event to the repository.
+     *
+     * @param request a EventRequest object containing the new event info to be created
+     * @param image a MultipartFile object containing the image corresponding to the event
+     * @return SuccessResponse "Event has been created successfully"
+     */
     // Main Service Methods
     public Response addFullEvent(EventRequest request, MultipartFile image) {
 
@@ -70,6 +77,12 @@ public class EventService {
                 .build();
     }
 
+    /**
+     * Deletes an event from the repository based on the eventId.
+     *
+     * @param eventId a String object containing the eventId of the event to be deleted.
+     * @return a SingleFullEventResponse object containing the deleted Event Object in the form of a FullEvent.
+     */
     public Response deleteFullEventById(String eventId) {
 
         //Checks if there is an event with the specified eventID in the repository
@@ -86,6 +99,14 @@ public class EventService {
                 .build();
     }
 
+    /**
+     * Updates an event from the repository based on the eventId, request and image.
+     *
+     * @param eventId a String object containing the eventId of the event to be updated.
+     * @param request a EventRequest object containing the new event info to be updated
+     * @param image a MultipartFile object containing the new image to be updated
+     * @return a SingleFullEventResponse object containing the updated Event Object in the form of a FullEvent.
+     */
     public Response updateFullEventById(String eventId, EventRequest request, MultipartFile image) {
 
         //Checks if there is an event with the specified eventID in the repository
@@ -97,7 +118,7 @@ public class EventService {
 
         eventRepository.save(newEvent);
 
-        if (image != null || !image.isEmpty() ) {
+        if (image != null && !image.isEmpty()) {
             // Get the event image name
             String eventImageName = oldEvent.getEventImageName();
 
@@ -117,6 +138,12 @@ public class EventService {
                 .build();
     }
 
+    /**
+     * Finds an ExploreEvent from the repository based on the eventId.
+     *
+     * @param eventId a String object containing the eventId of the event to be found.
+     * @return a SingleFullEventResponse object containing the found Event Object in the form of an ExploreEvent.
+     */
     public Response getFullEventById(String eventId) {
 
         //Use of private method getFullEventFromEventId() to generate FullEvent Object from eventId
@@ -128,6 +155,12 @@ public class EventService {
                 .build();
     }
 
+    /**
+     * Finds a DetailsEvent from the repository based on the eventId.
+     *
+     * @param eventId a String object containing the eventId of the event to be found.
+     * @return a SingleDetailsEventResponse object containing the found Event Object in the form of an DetailsEvent.
+     */
     public Response getDetailsEventById(String eventId) {
         //Use of private method getDetailsEventFromEventId() to generate DetailsEvent Object from eventId
         DetailsEvent detailsEvent = getDetailsEventFromEventId(eventId);
@@ -141,6 +174,11 @@ public class EventService {
                 .build();
     }
 
+    /**
+     * Finds a list of ExploreEvent from the repository that happens after today.
+     *
+     * @return a ExploreEventsResponse object containing the List of ExploreEvent objects.
+     */
     public Response getAllExploreEvents() {
         // get the current day's date
         LocalDateTime today = LocalDateTime.now();
@@ -163,6 +201,13 @@ public class EventService {
     }
 
     // Helper Service Methods
+    /**
+     * Converts a String[] into a list of LocalDateTime. Dates are stored in the String[] in the forms of
+     * "<yyyy>-<MM>-<dd>T<HH>:<mm>:<ss>", example: 2011-12-03T10:15:30
+     *
+     * @param arr a String[] array containing dates
+     * @return a List of LocalDateTime objects converted from an array of String objects.
+     */
     private List<LocalDateTime> convertArrToList(String[] arr) {
         List<LocalDateTime> list = new ArrayList<>();
         for (String s: arr) {
@@ -172,7 +217,15 @@ public class EventService {
         return list;
     }
 
-    private FullEvent getFullEventFromEventId(String eventId) {
+    /**
+     * Obtains an Event Object from String eventID and converts the Event Object to a FullEvent Object
+     * If event with inputted eventID cannot be found, throw InvalidEventIdException.
+     * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
+     *
+     * @param eventId a String object containing the event ID of the event to be converted.
+     * @return the FullEvent object converted from the Event object.
+     */
+    private FullEvent getFullEventFromEventId(String eventId) throws InvalidEventIdException, InvalidArtistIdException {
         //Finds event from repository, or else throw InvalidEventIdException()
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new InvalidEventIdException(eventId));
@@ -185,8 +238,14 @@ public class EventService {
         return event.returnFullEvent(artist);
     }
 
-
-    private FullEvent getFullEventFromEvent(Event event) {
+    /**
+     * Obtains an Event Object from String eventID and converts the Event Object to a FullEvent Object
+     * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
+     *
+     * @param event a Event object to be converted.
+     * @return the FullEvent object converted from the Event object.
+     */
+    private FullEvent getFullEventFromEvent(Event event) throws InvalidArtistIdException{
 
         //Find artist from repository, or else throw InvalidArtistIdException()
         Artist artist = artistRepository.findById(event.getArtistId())
@@ -196,7 +255,14 @@ public class EventService {
         return event.returnFullEvent(artist);
     }
 
-    private ExploreEvent getExploreEventFromEvent(Event event) {
+    /**
+     * Obtains an Event Object from String eventID and converts the Event Object to a ExploreEvent Object
+     * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
+     *
+     * @param event a Event object to be converted.
+     * @return the ExploreEvent object converted from the Event object.
+     */
+    private ExploreEvent getExploreEventFromEvent(Event event) throws InvalidArtistIdException{
         //Find artist from repository, or else throw InvalidArtistIdException()
         Artist artist = artistRepository.findById(event.getArtistId())
                 .orElseThrow(() -> new InvalidArtistIdException(event.getArtistId()));
@@ -206,7 +272,14 @@ public class EventService {
 
     }
 
-    private DetailsEvent getDetailsEventFromEventId(String eventId) {
+    /**
+     * Obtains an Event Object from String eventID and converts the Event Object to a DetailsEvent Object
+     * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
+     *
+     * @param event a Event object to be converted.
+     * @return the DetailsEvent object converted from the Event object.
+     */
+    private DetailsEvent getDetailsEventFromEventId(String eventId) throws InvalidEventIdException, InvalidVenueException{
         //Finds event from repository, or else throw InvalidEventIdException()
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new InvalidEventIdException(eventId));
@@ -219,15 +292,28 @@ public class EventService {
 
     }
 
-    private void eventRequestChecker(EventRequest request, Event oldEvent) {
+    /**
+     * Checks if an EventRequest object is valid.
+     * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
+     * If event with the same artist and eventName already exists, throw DuplicatedEventException.
+     *
+     * @param request a EventRequest object containing the new event info to be created/updated
+     * @param oldEvent an Event object containing the event info of the user that has to be updated. null for creation
+     */
+    private void eventRequestChecker(EventRequest request, Event oldEvent) throws DuplicatedEventException, InvalidArtistIdException, InvalidVenueException {
 
         // Check 1: Check if artist exists in the first place in the ArtistRepository
         if (artistRepository.findById(request.getArtistId()).isEmpty()) {
             throw new InvalidArtistIdException(request.getArtistId());
         }
 
+        // Check 2: Check if venue exists in the first place in the VenueRepository
+        if (venueRepository.findById(request.getVenue()).isEmpty()) {
+            throw new InvalidVenueException();
+        }
+
         /*
-         * Check 2: Checks the request if there are other events that are created by the same artist and eventName
+         * Check 3: Checks the request if there are other events that are created by the same artist and eventName
          *
          * Considers 2 scenarios to check for DuplicatedEventName:
          * 1. If addEvent(), the oldEvent is null
@@ -244,6 +330,13 @@ public class EventService {
         }
     }
 
+    /**
+     * Creates Event object from EventRequest object
+     *
+     * @param eventRequest a EventRequest object containing the new event info to be created/updated
+     * @param oldEvent an Event object containing the event info of the user that has to be updated. null for creation
+     * @return the Event object that has been created/updated
+     */
     private Event getEventClassFromRequest(EventRequest eventRequest, Event oldEvent) {
         //Checks if EventRequest isValid
         eventRequestChecker(eventRequest, oldEvent);
@@ -273,6 +366,12 @@ public class EventService {
         return event;
     }
 
+    /**
+     * Converts a List of Event objects to a List of a ExploreEvent objects
+     *
+     * @param eventList a List of Event objects to be converted
+     * @return the List of a ExploreEvent objects converted from input
+     */
     private List<ExploreEvent> returnExploreEventFormattedList(List<Event> eventList) {
         List<ExploreEvent> outList = new ArrayList<>();
         for (Event event : eventList) {
