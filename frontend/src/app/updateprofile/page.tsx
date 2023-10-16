@@ -5,14 +5,15 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getUserProfile, updateUserProfile } from "../axios/apiService";
 import "./style.css";
-
 
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
 type TFormValues = {
   firstName: string;
@@ -35,23 +36,23 @@ type TFormValues = {
 
 const formData: TFormValues = {
   // Initial values for the form fields
-  firstName: ' ',
-  lastName: ' ',
-  username: ' ',
-  email: ' ',
-  oldPassword: '',
+  firstName: " ",
+  lastName: " ",
+  username: " ",
+  email: " ",
+  oldPassword: "",
 
-  newPassword: '',
-  repeatNewPassword: '',
+  newPassword: "",
+  repeatNewPassword: "",
 
-  phoneNo: ' ',
-  address: ' ',
-  city: ' ',
-  state: ' ',
-  postalCode: ' ',
-  countryOfResidence: ' ',
-  isPreferredMarketing: false
-}
+  phoneNo: " ",
+  address: " ",
+  city: " ",
+  state: " ",
+  postalCode: " ",
+  countryOfResidence: " ",
+  isPreferredMarketing: false,
+};
 
 export default function UpdateProfile() {
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function UpdateProfile() {
   });
 
   const [msg, setMsg] = useState("");
-  
+
   useEffect(() => {
     fetchUsersOriginalData();
   }, [formData]);
@@ -71,13 +72,16 @@ export default function UpdateProfile() {
       const response = await getUserProfile();
       if (response.data && response.data.user) {
         const userData = response.data.user as TFormValues;
-        const validKeys = Object.keys(userData).filter((key) => Object.keys(formData).includes(key));
+        const validKeys = Object.keys(userData).filter((key) =>
+          Object.keys(formData).includes(key)
+        );
         validKeys.forEach((key) => {
-          setValue(key as keyof TFormValues, userData[key as keyof TFormValues]);
+          setValue(
+            key as keyof TFormValues,
+            userData[key as keyof TFormValues]
+          );
           (formData as any)[key] = userData[key as keyof TFormValues];
-
         });
-        
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -87,11 +91,11 @@ export default function UpdateProfile() {
   const isValid = (
     email: string,
     newPassword: string,
-    confirmPassword: string,
+    confirmPassword: string
   ) => {
     if (
       !email.match(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       )
     )
       return false;
@@ -99,10 +103,10 @@ export default function UpdateProfile() {
     if (newPassword.length < 8) return false;
     return true;
   };
-  
-  const onHandleBack = async() => {
+
+  const onHandleBack = async () => {
     router.push("/userprofile");
-  }
+  };
   const onHandleFormSubmit = async (data: TFormValues) => {
     // check if username is null
     if (data.username === formData.username) {
@@ -110,37 +114,22 @@ export default function UpdateProfile() {
     }
     // check if password was changed
     if (data.oldPassword === "") {
-      data.oldPassword= null;
-      data.newPassword= null;
-      data.repeatNewPassword= null;
+      data.oldPassword = null;
+      data.newPassword = null;
+      data.repeatNewPassword = null;
     }
 
-    // check for validity
-    
-    // if (data.newPassword.length < 8) {
-    //   setMsg("New password should be at least 8 characters");
-    // } else 
-    if (!data.email.match(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+    if (
+      !data.email.match(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       )
     ) {
       setMsg("Email is invalid");
-    // } else if (data.newPassword !== data.repeatNewPassword) {
-    //   setMsg("New passwords are not consistent");
-    // } else if (!/^\d+$/.test(data.phoneNo)) {
-    //   setMsg("Mobile number should be digits");
-    //   // return;
-    // } else if (data.phoneNo.length < 8) {
-    //   setMsg("Mobile number should be at least 8 characters");
-    //   // return;
-    // } else if (!/^\d+$/.test(data.postalCode)) {
-    //   setMsg("Postal code should be digits");
       return;
     }
 
     try {
       const response = await updateUserProfile(data);
-      // setMsg("Loading...");
 
       if (response.request?.status === 200) {
         setMsg("Saving...");
@@ -150,18 +139,7 @@ export default function UpdateProfile() {
       }
     } catch (error) {
       console.log(error);
-        // if (error.response? instanceof DuplicatedUsernameException) { // edit this
-        //   setMsg("Username has been used");
-        //   return;
-        // }
-        // if (error.response? instanceof PasswordDoNotMatchException) {
-        //   setMsg("Old password is incorrect");
-        //   return;
-        // }
     }
-
-    // setFormData((prev: any) => ({ ...prev, ...data }));
-    // await handleUpdate(data);
   };
 
   const inputStyles = {
@@ -189,7 +167,13 @@ export default function UpdateProfile() {
       color: "white",
     },
   };
-  
+
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleFields = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+
   /* TO DO:
   1. call for user old data, put inside the textfields
   2. check if the original text fields and new textfields are any different
@@ -206,12 +190,12 @@ export default function UpdateProfile() {
       <div className="flex flex-col items-center justify-center w-full text-center lg:w-1/2 sm:w-[80vw] xs:w-[40vw]">
         <Typography
           variant="h6"
-          className="font-mont text-lg text-white mt-5 mb-5"
+          className="font-mont text-lg text-white mt-5 mb-6"
           gutterBottom
         >
           {"Update your information here."}
         </Typography>
-        
+
         <Grid
           container
           spacing={1.5}
@@ -357,51 +341,71 @@ export default function UpdateProfile() {
             />
           </Grid>
 
-          <Grid item xs={10} sm={12} marginTop={2.5}>
-            <TextField
-              sx={sxStyles}
-              required
-              id="oldPassword"
-              label="Old Password"
-              type="password"
-              fullWidth
-              autoComplete="oldPassword"
-              variant="outlined"
-              InputProps={{ style: inputStyles }}
-              InputLabelProps={{ style: inputStyles }}
-              {...register("oldPassword")}
-            />
-          </Grid>
-          <Grid item xs={10} sm={12}>
-            <TextField
-              sx={sxStyles}
-              required
-              id="newPassword"
-              label="New Password"
-              type="password"
-              fullWidth
-              autoComplete="newPassword"
-              variant="outlined"
-              InputProps={{ style: inputStyles }}
-              InputLabelProps={{ style: inputStyles }}
-              {...register("newPassword")}
-            />
-          </Grid>
-          <Grid item xs={10} sm={12}>
-            <TextField
-              sx={sxStyles}
-              required
-              id="confirmPassword"
-              label="Confirm Password"
-              type="password"
-              fullWidth
-              autoComplete="confirmPassword"
-              variant="outlined"
-              InputProps={{ style: inputStyles }}
-              InputLabelProps={{ style: inputStyles }}
-              {...register("repeatNewPassword")}
-            />
-          </Grid>
+          <Button
+            onClick={toggleFields}
+            variant="contained"
+            sx={{
+              marginTop: 2.5,
+              "&:hover": {
+                backgroundColor: "bg-theme-light-blue",
+              },
+              '&.MuiButton-root':{
+                backgroundColor: "bg-theme-blue",
+              },
+            }}
+          >
+            Change your password{" "}
+            {isDropdownOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+          </Button>
+          {isDropdownOpen && (
+            <>
+              <Grid item xs={10} sm={12}>
+                <TextField
+                  sx={sxStyles}
+                  required
+                  id="oldPassword"
+                  label="Old Password"
+                  type="password"
+                  fullWidth
+                  autoComplete="oldPassword"
+                  variant="outlined"
+                  InputProps={{ style: inputStyles }}
+                  InputLabelProps={{ style: inputStyles }}
+                  {...register("oldPassword")}
+                />
+              </Grid>
+              <Grid item xs={10} sm={12}>
+                <TextField
+                  sx={sxStyles}
+                  required
+                  id="newPassword"
+                  label="New Password"
+                  type="password"
+                  fullWidth
+                  autoComplete="newPassword"
+                  variant="outlined"
+                  InputProps={{ style: inputStyles }}
+                  InputLabelProps={{ style: inputStyles }}
+                  {...register("newPassword")}
+                />
+              </Grid>
+              <Grid item xs={10} sm={12}>
+                <TextField
+                  sx={sxStyles}
+                  required
+                  id="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  fullWidth
+                  autoComplete="confirmPassword"
+                  variant="outlined"
+                  InputProps={{ style: inputStyles }}
+                  InputLabelProps={{ style: inputStyles }}
+                  {...register("repeatNewPassword")}
+                />
+              </Grid>
+            </>
+          )}
 
           <Grid item xs={8} sm={10} marginBottom={1.5}>
             <FormControlLabel
@@ -410,6 +414,7 @@ export default function UpdateProfile() {
                   color="primary"
                   value="no"
                   className="text-white"
+                  sx={{ color: "white" }}
                   {...register("isPreferredMarketing")}
                 />
               }
@@ -417,22 +422,25 @@ export default function UpdateProfile() {
               className="text-white font-mont"
             />
           </Grid>
-        </Grid>
-        <form className="" onSubmit={handleSubmit(onHandleFormSubmit)}>
-          <div className="text-red-500 mt-1 mb-4">{msg}</div>
+          <form
+            className="w-full px-4"
+            onSubmit={handleSubmit(onHandleFormSubmit)}
+          >
+            <div className="text-red-500 mt-1 mb-4">{msg}</div>
 
-          <div className="flex justify-between px-2">
-            <Button
-              onClick={onHandleBack}
-              className="text-theme-blue hover:text-theme-light-blue rounded-lg -mt-1"
-            >
-              Back
-            </Button>
-            <button className="w-fit-content bg-theme-blue text-white py-2 px-8 rounded-lg hover:bg-theme-light-blue">
-              Submit
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-between px-2">
+              <Button
+                onClick={onHandleBack}
+                className="text-theme-blue hover:text-theme-light-blue rounded-lg -mt-1"
+              >
+                Back
+              </Button>
+              <button className="w-fit-content bg-theme-blue text-white py-2 px-8 rounded-lg hover:bg-theme-light-blue">
+                Submit
+              </button>
+            </div>
+          </form>
+        </Grid>
       </div>
     </main>
   );

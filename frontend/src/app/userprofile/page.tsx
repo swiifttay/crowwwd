@@ -102,9 +102,9 @@ export default function UserProfile() {
     }
   };
 
-  const handleUpdateProfile = async() => {
+  const handleUpdateProfile = async () => {
     router.push("/updateprofile");
-  }
+  };
 
   const handleSpotifyButton = async () => {
     if (isLoggedInSpotify) {
@@ -182,7 +182,10 @@ export default function UserProfile() {
                 </div>
                 <div className="text-md">{user?.username}</div>
                 <div className="text-md">{user?.email}</div>
-                <div className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer" onClick={handleUpdateProfile}>
+                <div
+                  className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer"
+                  onClick={handleUpdateProfile}
+                >
                   Update Profile
                 </div>
               </div>
