@@ -8,7 +8,7 @@ export default function NotFound() {
       </div>
       <div className="flex text-xl font-bold gap-1">
         <div>Return to</div>
-        <div className="text-theme-blue hover:text-theme-light-blue">
+        <div className="text-theme-blue hover:text-theme-light-blue hover:underline cursor-pointer">
           <a href="/">HOME</a>
         </div>
       </div>
