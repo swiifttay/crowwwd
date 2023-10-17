@@ -2,4 +2,5 @@
   color: white !important;
   font-style: bold !important;
   font-size: medium;
+  font-family: var(--font-mont);
 }
