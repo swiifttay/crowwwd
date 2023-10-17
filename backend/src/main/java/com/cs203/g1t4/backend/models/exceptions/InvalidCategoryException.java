@@ -8,7 +8,7 @@ public class InvalidCategoryException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public InvalidCategoryException() {
-        super("Category cannot be found. Please try again");
+    public InvalidCategoryException(String category) {
+        super("Category " + category + " cannot be found. Please try again");
     }
 }

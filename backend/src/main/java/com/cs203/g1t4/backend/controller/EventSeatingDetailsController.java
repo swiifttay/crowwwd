@@ -4,7 +4,9 @@ import com.cs203.g1t4.backend.data.request.event.SeatingDetailsRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.SeatingDetailsService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EventSeatingDetailsController {
 
-    private final SeatingDetailsService seatingDetailsService;
+    @Autowired
+    public final SeatingDetailsService seatingDetailsService;
 
     @PostMapping("{eventId}/event-seating-details")
     public ResponseEntity<Response> addEventSeatingDetails(@PathVariable("eventId") String eventId,

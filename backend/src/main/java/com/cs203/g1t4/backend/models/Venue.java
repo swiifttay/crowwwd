@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class Venue {
-  @Id
+    @Id
     private String id;
 
     @NotBlank
@@ -29,5 +29,5 @@ public class Venue {
 
     @NotBlank
     private String description;
-  
+
 }

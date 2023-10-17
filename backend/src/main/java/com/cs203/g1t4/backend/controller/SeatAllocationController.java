@@ -2,7 +2,6 @@ package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.event.SeatingDetailsRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.service.SeatingDetailsService;
 import com.cs203.g1t4.backend.service.SeatsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SeatAllocationController {
 
-    private final SeatingDetailsService seatingDetailsService;
     private final SeatsService seatsService;
 
     @GetMapping("{eventId}/{category}/{numSeats}")
@@ -23,7 +21,7 @@ public class SeatAllocationController {
                                               @PathVariable("numSeats") String numSeats,
                                               @Valid @RequestBody SeatingDetailsRequest request) {
 
-        Response response = seatingDetailsService.findSeats(eventId, category, numSeats);
+        Response response = seatsService.findSeats(eventId, category, numSeats);
 
         return ResponseEntity.ok(response);
     }
@@ -31,8 +29,9 @@ public class SeatAllocationController {
     @PutMapping("{eventId}/{category}/{numSeats}")
     public ResponseEntity<Response> confirmSeats(@PathVariable("eventId") String eventId) {
 
-        Response response = seatingDetailsService.deleteSeatingDetails(eventId);
+//        Response response = seatsService.confirmSeats(eventId);
 
-        return ResponseEntity.ok(response);
+//        return ResponseEntity.ok(response);
+        return null;
     }
 }

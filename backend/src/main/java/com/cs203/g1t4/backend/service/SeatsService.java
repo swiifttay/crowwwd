@@ -1,5 +1,13 @@
 package com.cs203.g1t4.backend.service;
 
+import com.cs203.g1t4.backend.data.response.Response;
+import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
+import com.cs203.g1t4.backend.models.Category;
+import com.cs203.g1t4.backend.models.Seats;
+import com.cs203.g1t4.backend.models.event.EventSeatingDetails;
+import com.cs203.g1t4.backend.models.exceptions.InvalidCategoryException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidSeatingDetailsException;
+import com.cs203.g1t4.backend.repository.SeatingDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +19,60 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeatsService {
 
+    private final SeatingDetailsService seatingDetailsService;
+    private final SeatingDetailsRepository seatingDetailsRepository;
+
     private static final int NUM_SEATS_PER_ROW = 4;
     private static final int NUM_ROWS = 4;
+
+    public Response findSeats(final String eventId, final String category, final String numSeats)
+            throws InvalidSeatingDetailsException {
+
+        //Create Seats to store information
+        Seats seats = Seats.builder()
+                .category(category)
+                .build();
+
+        //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
+        EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
+                .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
+
+        //Obtain pricing for each seat
+        List<Category> categoryList = eventSeatingDetails.getCategories();
+        Category c = null;
+        boolean found = false;
+        for (int i = 0 ; i < categoryList.size() && !found ; i++) {
+            c = categoryList.get(i);
+            if (c.getCategory().equals(category)) {
+                found = true;
+                seats.setPricePerSeat(c.getPrice());
+            }
+        }
+
+        //If Category is not in the list, throws an InvalidCategoryException back
+        if (!found) { throw new InvalidCategoryException(category); }
+
+        //Calculate total cost of seats
+        seats.setTotalCost(seats.getPricePerSeat() * Integer.parseInt(numSeats));
+
+        //Find seats using Seats Allocation
+        List<String> seatAllocation = getSeats(4, c.getSeatsInformationString());
+
+        //Update Seats Allocation Pending status into the seatingDetails
+        String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(), seatAllocation);
+        seatingDetailsService.updateSeatingDetails(eventId, category, updatedSeatsString);
+
+
+        return SuccessResponse.builder()
+                .response("findSeats successful")
+                .build();
+    }
+
+    public Response confirmSeats(String eventId, String category, String numSeats) {
+        return SuccessResponse.builder()
+                .response("findSeats successful")
+                .build();
+    }
 
     public static List<String> getSeats(int numTickets, String seatsInformationString) {
         List<Integer> combination = getCombi(numTickets);
@@ -125,6 +185,20 @@ public class SeatsService {
         if (editedPrev.size() != 0)
             toReturn.addAll(editedPrev);
         return toReturn;
+    }
+
+    public static String returnUpdatedSeatsString(String seatsInformation, List<String> seats) {
+        if (seats == null) {
+            throw new IllegalArgumentException();
+        }
+        StringBuilder updatedSeatsInformation = new StringBuilder(seatsInformation);
+        for (int i = 0; i < seats.size(); i++) {
+            String currentSeat = seats.get(i);
+            int seatIndex = (currentSeat.charAt(0) - 'A') * NUM_ROWS + (currentSeat.charAt(1) - '1');
+            updatedSeatsInformation.setCharAt(seatIndex, '2');
+        }
+
+        return updatedSeatsInformation.toString();
     }
 
     public static void printSeatsMatrix(String seatsInformation) {

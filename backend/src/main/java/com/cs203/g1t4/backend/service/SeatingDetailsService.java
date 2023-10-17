@@ -20,9 +20,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SeatingDetailsService {
+
     private final EventRepository eventRepository;
     private final SeatingDetailsRepository seatingDetailsRepository;
-    private final SeatsService seatsService;
     private static final int NUM_SEATS_PER_ROW = 4;
     private static final int NUM_ROWS = 4;
 
@@ -77,13 +77,36 @@ public class SeatingDetailsService {
                 .build();
     }
 
-    public Response findSeats(String eventId, String category, String numSeats) {
+    //Public Helper methods
+    public Response updateSeatingDetails(String eventId, String category, String seatsInformationString) {
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
-        return SuccessResponse.builder()
-                .response("findSeats successful")
+        //Find listOfCategories in eventSeatingDetails
+        List<Category> listOfCategory = eventSeatingDetails.getCategories();
+
+        //Instantiate found with false to assume that the category is not found.
+        boolean found = false;
+
+        //Loops through each category in the listOfCategory
+        for (int index = 0 ; index < listOfCategory.size() && !found; index++) {
+
+            Category c = listOfCategory.get(index);
+
+            if (c.getCategory().equals(category)) {
+                found = true;
+                c.setSeatsInformationString(seatsInformationString);
+            }
+        }
+
+        if (!found) { throw new InvalidCategoryException(category); }
+
+        //Save the updated seatingDetails into the repository
+        seatingDetailsRepository.save(eventSeatingDetails);
+
+        return SeatingDetailsResponse.builder()
+                .seatingDetails(eventSeatingDetails)
                 .build();
     }
 
@@ -138,37 +161,5 @@ public class SeatingDetailsService {
                 .categories(request.getCategories())
                 .build();
         return seatingDetails;
-    }
-
-    private Response updateSeatingDetails(String eventId, String category, String seatsInformationString) {
-        //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
-        EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
-                .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
-
-        //Find listOfCategories in eventSeatingDetails
-        List<Category> listOfCategory = eventSeatingDetails.getCategories();
-
-        //Instantiate found with false to assume that the category is not found.
-        boolean found = false;
-
-        //Loops through each category in the listOfCategory
-        for (int index = 0 ; index < listOfCategory.size() && !found; index++) {
-
-            Category c = listOfCategory.get(index);
-
-            if (c.getCategory().equals(category)) {
-                found = true;
-                c.setSeatsInformationString(seatsInformationString);
-            }
-        }
-
-        if (!found) { throw new InvalidCategoryException(); }
-
-        //Save the updated seatingDetails into the repository
-        seatingDetailsRepository.save(eventSeatingDetails);
-
-        return SeatingDetailsResponse.builder()
-                .seatingDetails(eventSeatingDetails)
-                .build();
     }
 }
