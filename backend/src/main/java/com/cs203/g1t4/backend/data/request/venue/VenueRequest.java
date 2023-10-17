@@ -1,5 +1,7 @@
 package com.cs203.g1t4.backend.data.request.venue;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,4 +25,7 @@ public class VenueRequest {
 
     @NotNull
     private String description;
+
+    // private MultipartFile image;
+
 }

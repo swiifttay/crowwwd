@@ -30,4 +30,7 @@ public class Venue {
     @NotBlank
     private String description;
 
+    @NotBlank
+    private String venueImageName;
+  
 }

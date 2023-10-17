@@ -14,4 +14,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SingleVenueResponse implements Response {
   private Venue venue;
+  private String imageURL;
 }
