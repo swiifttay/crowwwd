@@ -6,6 +6,8 @@ import com.cs203.g1t4.backend.service.EventService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,8 +19,8 @@ public class EventController {
 
     private final EventService eventService;
 
-    @PostMapping("/fullEvent")
-    public ResponseEntity<Response> addEvent(@Valid @RequestBody EventRequest request, @RequestBody MultipartFile image) {
+    @PostMapping(value = "/fullEvent", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Response> addEvent(@Valid @ModelAttribute EventRequest request, @RequestPart MultipartFile image) {
         // Add Events using addFullEvent method in eventService
         Response response = eventService.addFullEvent(request, image);
 
@@ -41,8 +43,8 @@ public class EventController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/fullEvent/{eventId}")
-    public ResponseEntity<Response> updateEvent(@PathVariable String eventId, @Valid @RequestBody EventRequest request, @RequestBody MultipartFile image) {
+    @PutMapping(value = "/fullEvent/{eventId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Response> updateEvent(@PathVariable String eventId, @Valid @ModelAttribute EventRequest request, @RequestPart(required = false) MultipartFile image) {
         // Update event using updateFullEventById() in eventService
         Response response = eventService.updateFullEventById(eventId, request, image);
 
