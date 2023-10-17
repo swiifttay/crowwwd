@@ -16,6 +16,8 @@ import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { StringLiteral } from "typescript";
+import React from "react";
 
 export interface User {
   id: string;
@@ -86,8 +88,11 @@ export default function UserProfile() {
 
   const checkSpotifyLoginStatus = async () => {
     const spotifyTokenResponse = await getSpotifyToken();
-    console.log(spotifyTokenResponse.data?.response);
-    if (spotifyTokenResponse?.status === 200 && spotifyTokenResponse.data?.response != null) {
+    console.log(spotifyTokenResponse.data.response);
+    if (
+      spotifyTokenResponse?.status === 200 &&
+      spotifyTokenResponse.data?.response != null
+    ) {
       console.log("success");
       localStorage.setItem("spotifyToken", spotifyTokenResponse.data.response);
       setSpotifyButtonMsg("Update My Records");
