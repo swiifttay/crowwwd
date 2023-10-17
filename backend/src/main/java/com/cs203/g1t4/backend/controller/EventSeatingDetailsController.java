@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EventSeatingDetailsController {
 
-    @Autowired
-    public final SeatingDetailsService seatingDetailsService;
+    private final SeatingDetailsService seatingDetailsService;
 
     @PostMapping("{eventId}/event-seating-details")
     public ResponseEntity<Response> addEventSeatingDetails(@PathVariable("eventId") String eventId,

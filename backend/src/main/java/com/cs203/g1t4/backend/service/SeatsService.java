@@ -1,7 +1,9 @@
 package com.cs203.g1t4.backend.service;
 
+import com.cs203.g1t4.backend.data.request.seat.SeatRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
+import com.cs203.g1t4.backend.data.response.seat.SeatResponse;
 import com.cs203.g1t4.backend.models.Category;
 import com.cs203.g1t4.backend.models.Seats;
 import com.cs203.g1t4.backend.models.event.EventSeatingDetails;
@@ -19,8 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeatsService {
 
-    private final SeatingDetailsService seatingDetailsService;
     private final SeatingDetailsRepository seatingDetailsRepository;
+    private final SeatingDetailsService seatingDetailsService;
 
     private static final int NUM_SEATS_PER_ROW = 4;
     private static final int NUM_ROWS = 4;
@@ -52,25 +54,60 @@ public class SeatsService {
         //If Category is not in the list, throws an InvalidCategoryException back
         if (!found) { throw new InvalidCategoryException(category); }
 
-        //Calculate total cost of seats
+        //Calculate total cost of seats and update in seats
         seats.setTotalCost(seats.getPricePerSeat() * Integer.parseInt(numSeats));
 
         //Find seats using Seats Allocation
         List<String> seatAllocation = getSeats(4, c.getSeatsInformationString());
 
+        //Throws seatAllocation == null
+        if (seatAllocation == null) { throw new IllegalArgumentException("No Combination can be found"); }
+
         //Update Seats Allocation Pending status into the seatingDetails
-        String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(), seatAllocation);
+        String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(), seatAllocation, '2');
         seatingDetailsService.updateSeatingDetails(eventId, category, updatedSeatsString);
 
+        //Update Seating allocation into seats
+        String[] array = new String[seatAllocation.size()];
+        for (int i = 0 ; i < seatAllocation.size() ; i++) {
+            array[i] = seatAllocation.get(i);
+        }
+        seats.setAllocatedSeats(array);
 
-        return SuccessResponse.builder()
-                .response("findSeats successful")
-                .build();
+        return SeatResponse.builder()
+                        .seats(seats)
+                        .build();
     }
 
-    public Response confirmSeats(String eventId, String category, String numSeats) {
+    public Response confirmSeats(String eventId, String category, SeatRequest seatRequest) {
+
+        //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
+        EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
+                .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
+
+        //Obtain pricing for each seat
+        List<Category> categoryList = eventSeatingDetails.getCategories();
+        Category c = null;
+        boolean found = false;
+        for (int i = 0 ; i < categoryList.size() && !found ; i++) {
+            c = categoryList.get(i);
+            if (c.getCategory().equals(category)) {
+                found = true;
+            }
+        }
+
+        //If Category is not in the list, throws an InvalidCategoryException back
+        if (!found) { throw new InvalidCategoryException(category); }
+
+        //Update Seats Allocation Pending status into the seatingDetails
+        String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(),
+                seatRequest.getAllocatedSeats(), '1');
+        seatingDetailsService.updateSeatingDetails(eventId, category, updatedSeatsString);
+
+        //Consider returning ticket here?
+
         return SuccessResponse.builder()
-                .response("findSeats successful")
+                .response("Seats confirmed.")
                 .build();
     }
 
@@ -187,7 +224,7 @@ public class SeatsService {
         return toReturn;
     }
 
-    public static String returnUpdatedSeatsString(String seatsInformation, List<String> seats) {
+    public static String returnUpdatedSeatsString(String seatsInformation, List<String> seats, char type) {
         if (seats == null) {
             throw new IllegalArgumentException();
         }
@@ -195,7 +232,7 @@ public class SeatsService {
         for (int i = 0; i < seats.size(); i++) {
             String currentSeat = seats.get(i);
             int seatIndex = (currentSeat.charAt(0) - 'A') * NUM_ROWS + (currentSeat.charAt(1) - '1');
-            updatedSeatsInformation.setCharAt(seatIndex, '2');
+            updatedSeatsInformation.setCharAt(seatIndex, type);
         }
 
         return updatedSeatsInformation.toString();
