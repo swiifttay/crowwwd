@@ -4,7 +4,7 @@ import Stepper from "../components/WaitingRoom/Stepper";
 export default function WaitingRoom() {
   return (
     <main className="flex flex-col items-center w-full h-screen px-8">
-      <Stepper />
+      <Stepper activeStep={1}/>
       <Box
         sx={{
           width: "60%",
