@@ -1,4 +1,4 @@
-import React from "react";
+import {useState, useEffect} from "react";
 import {
   PaymentElement,
   LinkAuthenticationElement,
@@ -10,11 +10,11 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [email, setEmail] = React.useState<string>('');
-  const [message, setMessage] = React.useState<string|undefined>('');
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [message, setMessage] = useState<string|undefined>('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!stripe) {
       return;
     }
