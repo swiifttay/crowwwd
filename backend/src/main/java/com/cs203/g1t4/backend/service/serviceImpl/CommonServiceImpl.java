@@ -6,6 +6,7 @@ import com.cs203.g1t4.backend.data.request.user.UserRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
 import com.cs203.g1t4.backend.models.exceptions.PasswordDoNotMatchException;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import com.cs203.g1t4.backend.service.services.CommonService;

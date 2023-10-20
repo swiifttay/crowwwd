@@ -28,7 +28,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final CommonService commonService;
 
-    public Response register(RegisterRequest request) {
+    public SuccessResponse register(RegisterRequest request) {
 
         User user = commonService.getUserClassFromRequest(request, null);
 
@@ -40,7 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
-    public Response authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
         //Rethink logic and fix it for better understandability
         try {
@@ -66,7 +66,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
-    public Response findUsername(String username) {
+    public SuccessResponse findUsername(String username) {
         //If username exists, throw new DuplicatedUsernameException(username)
         if (userRepository.findByUsername(username).isPresent()) {
             throw new DuplicatedUsernameException(username);
