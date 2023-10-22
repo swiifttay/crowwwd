@@ -4,6 +4,8 @@ import com.cs203.g1t4.backend.data.request.artist.ArtistRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.models.Artist;
+import com.cs203.g1t4.backend.models.exceptions.DuplicatedArtistException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidCredentialsException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
 import com.cs203.g1t4.backend.service.serviceImpl.ArtistServiceImpl;
 import com.cs203.g1t4.backend.service.serviceImpl.S3ServiceImpl;
@@ -19,8 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -76,7 +77,7 @@ public class ArtistServiceTest {
 
         // mock artistRepository "save" method
         when(artistRepository.save(artistCaptor.capture())).thenAnswer(invocation -> {
-            // Here you can modify the captured artist object
+            // modify the artist object to have an id
             Artist savedArtist = artistCaptor.getValue();
             savedArtist.setId("1235");
             return savedArtist;
@@ -89,16 +90,34 @@ public class ArtistServiceTest {
         assertTrue(response instanceof SuccessResponse);
         SuccessResponse successResponse = (SuccessResponse) response;
         assertEquals("Artist has been created successfully", successResponse.getResponse());
-
-        // Verify that artistRepository.save was called with any Artist instance
         verify(artistRepository).save(artistCaptor.getValue());
-
-        // Verify that putObject was called with the correct arguments
         verify(s3Service).putObject(
                 eq("your_bucket_name"),
                 eq("artist-images/%s/sabrinacarpenterimage".formatted("1235")),
                 same(image)
         );
+    }
+
+    @Test
+    void addArtist_DuplicateArtist_ReturnDuplicatedArtistException() {
+        // arrange
+        ArtistRequest artistRequest = ArtistRequest.builder()
+                .name("Taylor Swift")
+                .website("www.taylorswift2.com")
+                .description("Most popular artist in the world too")
+                .build();
+
+        // mock artistRepository "findByName" method
+        when(artistRepository.findByName(any(String.class))).thenReturn(Optional.of(existingArtist));
+
+        // act
+        DuplicatedArtistException e = assertThrows(DuplicatedArtistException.class, () -> {
+            artistService.addArtist(artistRequest, null);
+        });
+
+        // assert
+        assertEquals("Artist: Taylor Swift already exists", e.getMessage());
+        verify(artistRepository).findByName(eq("Taylor Swift"));
     }
 
 //    @Test
