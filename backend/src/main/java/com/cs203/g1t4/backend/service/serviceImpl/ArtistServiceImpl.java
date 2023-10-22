@@ -7,7 +7,6 @@ import com.cs203.g1t4.backend.data.response.artist.SingleArtistResponse;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.models.Artist;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedArtistException;
-import com.cs203.g1t4.backend.models.exceptions.DuplicatedEventException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidArtistIdException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
 import com.cs203.g1t4.backend.service.services.ArtistService;
@@ -29,7 +28,7 @@ public class ArtistServiceImpl implements ArtistService {
     @Value("${aws.bucket.name}")
     private String bucketName;
 
-    // for manually adding a artist for event creation
+    // for manually adding an artist for event creation
     public Response addArtist(ArtistRequest request, MultipartFile image) {
 
         Artist artist = getArtistClassFromRequest(request, null);
@@ -47,7 +46,6 @@ public class ArtistServiceImpl implements ArtistService {
                 "artist-images/%s/%s".formatted(artist.getId(), artistImageName),
                 image
         );
-
 
         // return
         return SuccessResponse.builder()
