@@ -6,6 +6,8 @@ import com.cs203.g1t4.backend.data.response.artist.ArtistResponse;
 import com.cs203.g1t4.backend.data.response.artist.SingleArtistResponse;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.models.Artist;
+import com.cs203.g1t4.backend.models.exceptions.DuplicatedArtistException;
+import com.cs203.g1t4.backend.models.exceptions.DuplicatedEventException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidArtistIdException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +30,11 @@ public class ArtistService {
     // for manually adding a artist for event creation
     public Response addArtist(ArtistRequest request, MultipartFile image) {
 
-        String artistImageName = image.getOriginalFilename();
+        Artist artist = getArtistClassFromRequest(request, null);
 
-        // create artist object
-        Artist artist = Artist.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .website(request.getWebsite())
-                .artistImage(artistImageName)
-                .build();
+        // set the image name
+        String artistImageName = image.getOriginalFilename();
+        artist.setArtistImage(artistImageName);
 
         // save into repo
         artistRepository.save(artist);
@@ -77,24 +75,21 @@ public class ArtistService {
         Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new InvalidArtistIdException(artistId));
 
         // update information about the artist
-        Artist newArtist = Artist.builder()
-                .id(artistId)
-                .name(request.getName())
-                .description(request.getDescription())
-                .website(request.getWebsite())
-                .artistImage(artist.getArtistImage())
-                .artistImageURL(artist.getArtistImageURL())
-                .build();
+        Artist newArtist = getArtistClassFromRequest(request, artist);
 
         if (image != null && !image.isEmpty()) {
+            // in the event the image is reset from a spotify one
+            // need to reset the imagename
+            if (newArtist.getArtistImage() == null) {
+                newArtist.setArtistImage(image.getOriginalFilename());
+            }
+
             // Put the image into the bucket
             s3Service.putObject(
                     bucketName,
-                    "artist-images/%s/%s".formatted(artistId, artist.getArtistImage()),
+                    "artist-images/%s/%s".formatted(artistId, newArtist.getArtistImage()),
                     image
             );
-            // reset the artist image url in the event the previous set one was from spotify
-            artist.setArtistImageURL("https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName, artist.getId(), artist.getArtistImage()));
         }
 
         // save the artist
@@ -142,18 +137,19 @@ public class ArtistService {
 
         // check if there is already the artist
         if (currentArtist.isPresent()) {
-            String currentArtistId = updateArtistByName(artist);
+            String currentArtistId = updateSpotifyArtistByName(artist);
             return currentArtistId;
         }
 
         // save the artist in the repo
         Artist newArtist = artistRepository.save(artist);
+
         // Get information on which artist to edit from
         return newArtist.getId();
     }
 
     // for the purpose of updating artist when there is the old one to be replaced by spotify's information
-    public String updateArtistByName(Artist newArtist) {
+    public String updateSpotifyArtistByName(Artist newArtist) {
 
         Artist originalArtist = artistRepository.findByName(newArtist.getName())
                 .orElseThrow(() -> new InvalidArtistIdException(newArtist.getName()));
@@ -169,6 +165,45 @@ public class ArtistService {
         artistRepository.save(updatedArtist);
 
         return updatedArtist.getId();
+    }
+
+    public void artistRequestChecker(ArtistRequest artistRequest, Artist oldArtist) {
+        /*
+         * Check 1: Checks the request if there are other artists that have the same name
+         *
+         * Considers 2 scenarios to check for DuplicatedEventName:
+         * 1. If addArtist(), the oldArtist is null
+         * 2. If updateArtistById(), the oldArtist will not be null and if there's a change in the eventName
+         */
+        if (oldArtist == null || !(oldArtist.getName().equals(oldArtist.getName()))) {
+
+            //Checks Repository for the artistId and eventName
+            Optional<Artist> artist = artistRepository.findByName(artistRequest.getName());
+            if (artist.isPresent()) {
+
+                //If present, throw new DuplicatedEventException.
+                throw new DuplicatedArtistException(artistRequest.getName());
+            }
+        }
+    }
+
+    public Artist getArtistClassFromRequest(ArtistRequest artistRequest, Artist oldArtist) {
+        artistRequestChecker(artistRequest, oldArtist);
+
+        // Build the new artist
+        Artist artist = Artist.builder()
+                .name(artistRequest.getName())
+                .description(artistRequest.getDescription())
+                .website(artistRequest.getWebsite())
+                .build();
+
+        //If updateArtist (oldArtist != null), set artistId to oldArtist artistId.
+        if (oldArtist != null) {
+            artist.setId(oldArtist.getId());
+            artist.setArtistImage(oldArtist.getArtistImage());
+        }
+
+        return artist;
     }
 
 }
