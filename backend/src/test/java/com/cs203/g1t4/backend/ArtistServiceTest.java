@@ -454,10 +454,10 @@ public class ArtistServiceTest {
         // mock artistRepository "findAll" method
         when(artistRepository.findAll()).thenReturn(allArtists);
 
-        // Call the method to be tested
+        // act
         Response response = artistService.getAllArtist();
 
-        // Verify the behavior of the service method
+        // verify
         assertTrue(response instanceof ArtistResponse);
         ArtistResponse listOfArtistResponse = (ArtistResponse) response;
         List<Artist> listOfArtistInResponse = listOfArtistResponse.getArtists();
@@ -468,4 +468,100 @@ public class ArtistServiceTest {
 
     }
 
+    @Test
+    void fanRecordsCreationAndUpdate_PreviousCustomArtist_ReturnArtistId() {
+
+        // arrange
+        Artist spotifyEditedArtist = Artist.builder()
+                .name("Taylor Swift")
+                .website("www.taylorswift.com")
+                .artistImageURL("www.taylorswiftimage.com")
+                .description("Most popular artist in the world")
+                .build();
+
+        ArgumentCaptor<Artist> artistCaptor = ArgumentCaptor.forClass(Artist.class);
+
+        // mock artistRepository "findByName" method
+        when(artistRepository.findByName(any(String.class))).thenReturn(Optional.of(customArtist));
+
+        // mock artistRepository "save" method
+        when(artistRepository.save(artistCaptor.capture())).thenAnswer(invocation -> {
+            // modify the artist object to have an id
+            Artist savedArtist = artistCaptor.getValue();
+            return savedArtist;
+        });
+
+        // act
+        String updateArtistIdConfirmation = artistService.fanRecordsCreationAndUpdate(spotifyEditedArtist);
+
+        // Verify the behavior of the service method
+        assertEquals("1234", updateArtistIdConfirmation);
+        verify(artistRepository).save(artistCaptor.getValue());
+
+    }
+
+    @Test
+    void fanRecordsCreationAndUpdate_PreviousSpotifyArtist_ReturnArtistId() {
+
+        // arrange
+        Artist spotifyEditedArtist = Artist.builder()
+                .name("Taylor Swift")
+                .website("www.taylorswift.com")
+                .artistImageURL("www.taylorswiftimage.com")
+                .description("Most popular artist in the world")
+                .build();
+
+        ArgumentCaptor<Artist> artistCaptor = ArgumentCaptor.forClass(Artist.class);
+
+        // mock artistRepository "findByName" method
+        when(artistRepository.findByName(any(String.class))).thenReturn(Optional.of(spotifyArtist));
+
+        // mock artistRepository "save" method
+        when(artistRepository.save(artistCaptor.capture())).thenAnswer(invocation -> {
+            // modify the artist object to have an id
+            Artist savedArtist = artistCaptor.getValue();
+            return savedArtist;
+        });
+
+        // act
+        String updateArtistIdConfirmation = artistService.fanRecordsCreationAndUpdate(spotifyEditedArtist);
+
+        // Verify the behavior of the service method
+        assertEquals("1234", updateArtistIdConfirmation);
+        verify(artistRepository).save(artistCaptor.getValue());
+
+    }
+
+    @Test
+    void fanRecordsCreationAndUpdate_NewArtist_ReturnArtistId() {
+
+        // arrange
+        Artist spotifyEditedArtist = Artist.builder()
+                .name("Taylor Swift")
+                .website("www.taylorswift.com")
+                .artistImageURL("www.taylorswiftimage.com")
+                .description("Most popular artist in the world")
+                .build();
+
+        ArgumentCaptor<Artist> artistCaptor = ArgumentCaptor.forClass(Artist.class);
+
+        // mock artistRepository "findByName" method
+        when(artistRepository.findByName(any(String.class))).thenReturn(Optional.empty());
+
+        // mock artistRepository "save" method
+        when(artistRepository.save(artistCaptor.capture())).thenAnswer(invocation -> {
+            // modify the artist object to have an id
+            Artist savedArtist = artistCaptor.getValue();
+            savedArtist.setId("1235");
+            return savedArtist;
+        });
+
+        // act
+        String updateArtistIdConfirmation = artistService.fanRecordsCreationAndUpdate(spotifyEditedArtist);
+
+        // Verify the behavior of the service method
+        assertEquals("1235", updateArtistIdConfirmation);
+        verify(artistRepository).save(artistCaptor.getValue());
+
+    }
 }

@@ -138,7 +138,7 @@ public class ArtistServiceImpl implements ArtistService {
 
         // check if there is already the artist
         if (currentArtist.isPresent()) {
-            String currentArtistId = updateSpotifyArtistByName(artist);
+            String currentArtistId = updateSpotifyArtistByName(artist, currentArtist.get().getId());
             return currentArtistId;
         }
 
@@ -150,13 +150,10 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     // for the purpose of updating artist when there is the old one to be replaced by spotify's information
-    public String updateSpotifyArtistByName(Artist newArtist) {
-
-        Artist originalArtist = artistRepository.findByName(newArtist.getName())
-                .orElseThrow(() -> new InvalidArtistIdException(newArtist.getName()));
+    public String updateSpotifyArtistByName(Artist newArtist, String originalArtistId) {
 
         Artist updatedArtist = Artist.builder()
-                .id(originalArtist.getId())
+                .id(originalArtistId)
                 .name(newArtist.getName())
                 .description(newArtist.getDescription())
                 .website(newArtist.getWebsite())
@@ -165,7 +162,7 @@ public class ArtistServiceImpl implements ArtistService {
 
         artistRepository.save(updatedArtist);
 
-        return updatedArtist.getId();
+        return originalArtistId;
     }
 
     public void artistRequestChecker(ArtistRequest artistRequest, Artist oldArtist) {
