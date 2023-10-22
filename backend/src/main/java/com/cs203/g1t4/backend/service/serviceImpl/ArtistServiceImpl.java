@@ -82,6 +82,7 @@ public class ArtistServiceImpl implements ArtistService {
             // need to reset the imagename
             if (newArtist.getArtistImage() == null) {
                 newArtist.setArtistImage(image.getOriginalFilename());
+                newArtist.setArtistImageURL(null);
             }
 
             // Put the image into the bucket
@@ -107,7 +108,7 @@ public class ArtistServiceImpl implements ArtistService {
                 .orElseThrow(() -> new InvalidArtistIdException(artistId));
 
         if (artist.getArtistImage() != null) {
-            artist.setArtistImage("https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName, artist.getId(), artist.getArtistImage()));
+            artist.setArtistImageURL("https://%s.s3.ap-southeast-1.amazonaws.com/artist-images/%s/%s".formatted(bucketName, artist.getId(), artist.getArtistImage()));
         }
 
         return SingleArtistResponse.builder()
@@ -175,7 +176,7 @@ public class ArtistServiceImpl implements ArtistService {
          * 1. If addArtist(), the oldArtist is null
          * 2. If updateArtistById(), the oldArtist will not be null and if there's a change in the eventName
          */
-        if (oldArtist == null || !(oldArtist.getName().equals(oldArtist.getName()))) {
+        if (oldArtist == null || !(oldArtist.getName().equals(artistRequest.getName()))) {
 
             //Checks Repository for the artistId and eventName
             Optional<Artist> artist = artistRepository.findByName(artistRequest.getName());
@@ -201,6 +202,7 @@ public class ArtistServiceImpl implements ArtistService {
         if (oldArtist != null) {
             artist.setId(oldArtist.getId());
             artist.setArtistImage(oldArtist.getArtistImage());
+            artist.setArtistImageURL(oldArtist.getArtistImageURL());
         }
 
         return artist;
