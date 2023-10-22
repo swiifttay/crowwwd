@@ -9,6 +9,6 @@ public class DuplicatedArtistException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public DuplicatedArtistException(String name) {
-        super("Artist: " + name + "already exists");
+        super("Artist: " + name + " already exists");
     }
 }

@@ -21,7 +21,7 @@ public class ArtistRequest {
     //Is there a missing artistURL here?
 
     //Can be blank as not all artist may have images
-//    private String artistImage;oh r
+//    private String artistImage;
 
     //Can be blank as not all artist may have description planned
     //Consider size validation checks for inputted description.
