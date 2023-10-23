@@ -1,6 +1,5 @@
 package com.cs203.g1t4.backend.controller;
 
-import com.cs203.g1t4.backend.data.request.event.SeatingDetailsRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatsConfirmRequest;
 import com.cs203.g1t4.backend.data.response.Response;

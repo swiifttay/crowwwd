@@ -1,10 +1,6 @@
 package com.cs203.g1t4.backend.data.request.seat;
 
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
-import com.cs203.g1t4.backend.models.Category;
-import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.models.event.Event;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +18,7 @@ public class SeatsConfirmRequest {
     private List<String> userIdsAttending;
     private int noOfSurpriseTickets;
 
-    public List<TicketRequest> returnTicketRequestListFromRequest(User user, String eventId) {
+    public List<TicketRequest> returnTicketRequestListFromRequest(String eventId) {
 
         if ((userIdsAttending.size() + noOfSurpriseTickets) != allocatedSeats.size()) {
             throw new IllegalArgumentException();

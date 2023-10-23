@@ -11,14 +11,12 @@ import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
 import com.cs203.g1t4.backend.models.Category;
 import com.cs203.g1t4.backend.models.Seats;
 import com.cs203.g1t4.backend.models.Ticket;
-import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.event.EventSeatingDetails;
 import com.cs203.g1t4.backend.models.exceptions.InvalidCategoryException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidSeatingDetailsException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
 import com.cs203.g1t4.backend.repository.SeatingDetailsRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
-import com.sun.net.httpserver.Authenticator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -85,7 +83,7 @@ public class SeatsService {
     public Response confirmSeats(final String eventId, final String category, final String username, final SeatsConfirmRequest seatsConfirmRequest) {
 
         //Find User object from username
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new InvalidTokenException());
+        userRepository.findByUsername(username).orElseThrow(() -> new InvalidTokenException());
 
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
@@ -102,7 +100,7 @@ public class SeatsService {
 
         //Return Tickets
         List<Ticket> ticketList = new ArrayList<>();
-        List<TicketRequest> ticketRequestList = seatsConfirmRequest.returnTicketRequestListFromRequest(user, eventId);
+        List<TicketRequest> ticketRequestList = seatsConfirmRequest.returnTicketRequestListFromRequest(eventId);
         for (int i = 0 ; i < ticketRequestList.size() ; i++) {
             SingleTicketResponse singleTicketResponse = ticketService.createTicket(ticketRequestList.get(i), username);
             ticketList.add(singleTicketResponse.getTicket());
