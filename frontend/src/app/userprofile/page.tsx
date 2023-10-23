@@ -1,21 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import {
+  getArtistById,
+  getFanRecords,
+  getSpotifyLogin,
+  getSpotifyToken,
+  getUserProfile,
+  updateFanRecords,
+} from "../axios/apiService";
+import Modal from "../components/UserProfile/Modal";
+import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
-import EventButtonLong from "./EventButtonLong";
-import { StringLiteral } from "typescript";
-import {
-  getFanRecords,
-  getUserProfile,
-  getArtistById,
-  getSpotifyLogin,
-  updateFanRecords,
-  getSpotifyToken
-} from "../axios/apiService";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import React from "react";
 
 export interface User {
   id: string;
@@ -87,7 +86,10 @@ export default function UserProfile() {
   const checkSpotifyLoginStatus = async () => {
     const spotifyTokenResponse = await getSpotifyToken();
     console.log(spotifyTokenResponse.data.response);
-    if (spotifyTokenResponse?.status === 200 && spotifyTokenResponse.data?.response != null) {
+    if (
+      spotifyTokenResponse?.status === 200 &&
+      spotifyTokenResponse.data?.response != null
+    ) {
       console.log("success");
       localStorage.setItem("spotifyToken", spotifyTokenResponse.data.response);
       setSpotifyButtonMsg("Update My Records");
@@ -97,7 +99,7 @@ export default function UserProfile() {
       setSpotifyButtonMsg("Connect to Spotify");
       setIsLoggedInSpotify(false);
     }
-  }
+  };
 
   const handleSpotifyButton = async () => {
     if (isLoggedInSpotify) {
@@ -114,8 +116,8 @@ export default function UserProfile() {
       if (getAccountResponse.request?.status == 200) {
         window.location.replace(getAccountResponse?.data);
       } else {
-        if (!localStorage.getItem('token')) {
-          router.push('/login');
+        if (!localStorage.getItem("token")) {
+          router.push("/login");
         }
       }
     }
@@ -139,7 +141,7 @@ export default function UserProfile() {
             fanRecordsData.map(async (fanRecord: FanRecord) => {
               const artistResponse = await getArtistById(fanRecord.artistId);
               return artistResponse?.data.artist;
-            }),
+            })
           );
           const flattenedArtistResponses = artistResponses.flat();
 
@@ -162,6 +164,8 @@ export default function UserProfile() {
       console.error("Error fetching fan records:", error);
     }
   };
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <main className="flex flex-col items-center h-fit relative w-full px-8">
@@ -203,12 +207,21 @@ export default function UserProfile() {
             </div>
             <div className="flex overflow-x-auto max-w-full">
               <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-8">
-                <div className={`${isArtistLoaded ? 'hidden' : 'display'}`}> Loading... </div>
-                {favArtist?.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
-                  return (
-                    <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
-                  );
-                })}
+                <div className={`${isArtistLoaded ? "hidden" : "display"}`}>
+                  {" "}
+                  Loading...{" "}
+                </div>
+                {favArtist
+                  ?.slice(0, Math.min(10, favArtist.length))
+                  .map((artist, i) => {
+                    return (
+                      <VerticalCard
+                        key={i}
+                        image={artist.artistImageURL}
+                        name={artist.name}
+                      />
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -245,10 +258,13 @@ export default function UserProfile() {
           </div>
         </div>
       </div>
+
       <div className="flex flex-col w-full">
         <div className="text-xl font-bold mt-16 mb-4">
           Your purchased concerts
         </div>
+        <button onClick={() => setIsOpen(true)}>Open Modal</button>
+        {isOpen && <Modal setIsOpen={setIsOpen} />}
         <div className="flex flex-col gap-3">
           <EventButtonLong
             image="/images/TaylorSwift.jpg"
@@ -257,6 +273,7 @@ export default function UserProfile() {
             datetime="Fri 15 Sep 2023, 7pm"
             venue="The Star Theatre, The Star Performing Arts Centre"
           />
+
           <EventButtonLong
             image="/images/TaylorSwift.jpg"
             title="Reputation Tour"
