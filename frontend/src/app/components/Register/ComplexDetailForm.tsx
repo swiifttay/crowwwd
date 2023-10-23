@@ -199,7 +199,7 @@ export function ComplexDetailForm() {
                 color="primary"
                 value="no"
                 className="text-white"
-                sx={{color: "white"}}
+                sx={{ color: "white" }}
                 {...register("saveAddress")}
               />
             }

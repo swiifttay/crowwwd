@@ -146,7 +146,7 @@ export default function UserProfile() {
             fanRecordsData.map(async (fanRecord: FanRecord) => {
               const artistResponse = await getArtistById(fanRecord.artistId);
               return artistResponse?.data.artist;
-            })
+            }),
           );
           const flattenedArtistResponses = artistResponses.flat();
 

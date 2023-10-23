@@ -19,7 +19,10 @@ const Modal = ({ setIsOpen }) => {
           </div>
           <div className={styles.modalActions}>
             <div className={styles.actionsContainer}>
-              <button className={styles.deleteBtn} onClick={() => setIsOpen(false)}>
+              <button
+                className={styles.deleteBtn}
+                onClick={() => setIsOpen(false)}
+              >
                 Delete
               </button>
               <button

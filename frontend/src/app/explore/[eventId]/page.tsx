@@ -30,13 +30,13 @@ export default function Event({ params: { eventId } }: EventParams) {
 
   console.log(event);
   const startDate = event?.dates[0];
-  console.log(dateFormatter(startDate))
+  console.log(dateFormatter(startDate));
   const endDate = event?.dates[event?.dates.length - 1];
   const pleaseWork = () => {
     if (startDate && endDate) {
-      return (startDate === endDate
+      return startDate === endDate
         ? dateFormatter(startDate)
-        : `${dateFormatter(startDate)} - ${dateFormatter(endDate)}`);
+        : `${dateFormatter(startDate)} - ${dateFormatter(endDate)}`;
     } else {
       return "";
     }
@@ -45,7 +45,7 @@ export default function Event({ params: { eventId } }: EventParams) {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      { event &&
+      {event && (
         <div className="w-auto mt-32">
           <div className="">
             <img
@@ -69,20 +69,20 @@ export default function Event({ params: { eventId } }: EventParams) {
 
             <div className="flex gap-3 ml-10">
               <Image
-              src="/images/icon-calendar.svg"
-              alt="Calendar"
-              width={20}
-              height={20}
-            />
+                src="/images/icon-calendar.svg"
+                alt="Calendar"
+                width={20}
+                height={20}
+              />
               <div className="text-md mr-20 hover:text-theme-grey hover:underline cursor-pointer">
                 {displayedDate}
               </div>
               <Image
                 src="/images/icon-map-pin.svg"
-              alt="Calendar"
-              width={20}
-              height={20}
-            />
+                alt="Calendar"
+                width={20}
+                height={20}
+              />
               <div className="text-md mr-20 hover:text-theme-grey hover:underline cursor-pointer">
                 {event?.venue}
               </div>
@@ -139,7 +139,7 @@ export default function Event({ params: { eventId } }: EventParams) {
             </div>
           </div>
         </div>
-      }
+      )}
     </div>
   );
 }

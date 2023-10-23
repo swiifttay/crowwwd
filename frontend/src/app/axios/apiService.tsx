@@ -126,7 +126,7 @@ export const getEvent = async (eventId: string) => {
   try {
     const response = await api.get(`/event/getEvent/6501c2167e60d210c8875fc6`);
     console.log(response.data.outputEvent);
-    console.log("bye")
+    console.log("bye");
     return response.data.outputEvent;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -134,7 +134,7 @@ export const getEvent = async (eventId: string) => {
       console.error(error.response);
     }
   }
-}
+};
 
 export const getFanRecords = async () => {
   try {
