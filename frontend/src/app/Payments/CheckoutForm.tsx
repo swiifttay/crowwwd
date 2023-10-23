@@ -1,20 +1,21 @@
-import {useState, useEffect} from "react";
+import React from "react";
 import {
   PaymentElement,
   LinkAuthenticationElement,
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
+import axios from "axios";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [email, setEmail] = useState<string>('');
-  const [message, setMessage] = useState<string|undefined>('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = React.useState<string>('');
+  const [message, setMessage] = React.useState<string|undefined>('');
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!stripe) {
       return;
     }
@@ -45,7 +46,8 @@ export default function CheckoutForm() {
     });
   }, [stripe]);
 
-  const handleSubmit:any = async (e:any) => {
+  const handleSubmit:any = async (e: React.FormEvent<HTMLFormElement>) => 
+  {
     e.preventDefault();
 
     if (!stripe || !elements) {
@@ -55,6 +57,7 @@ export default function CheckoutForm() {
     }
 
     setIsLoading(true);
+
 
     const { error } = await stripe.confirmPayment({
       elements,

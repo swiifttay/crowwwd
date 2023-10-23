@@ -6,19 +6,24 @@ import { Elements } from "@stripe/react-stripe-js";
 
 import CheckoutForm from "../Payments/CheckoutForm";
 import createPaymentIntent from "../axios/apiService";
+import axios from "axios";
 
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
 // This is your test publishable API key.
-const stripePromise = loadStripe('pk_test_51NxKRHKEafGwrR3ZJnpGsVXU7gh8DaQszUOQebCNiMoYnL8OsSsMV6BXTY4WyxuX5FFRvRPm4qqVrYiQUCFew75M00iEBL7DFs');
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
 export default function App() {
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
     const paymentIntent = async () => {
-        const response:any = await createPaymentIntent({body: "ticket"});
-        setClientSecret(response);
+      const { data } = await axios.post("/api/create-payment-intent", {
+        data: { amount: 89 },
+      });
+        setClientSecret(data);
         // console.log(response)
     }
     paymentIntent();
@@ -34,7 +39,7 @@ export default function App() {
   };
 
   return (
-    <div className="w-full p-5 flex space-x-10 my-20">
+    <div className="w-full h-full p-5 flex space-x-10">
       <div className="w-1/2 mb-10 rounded-3xl bg-checkout bg-cover bg-center flex flex-col justify-center items-center shadow-lg shadow-slate-950">
         <h1 className="m-2 text-5xl font-semibold text-center">
           You're on your way!
