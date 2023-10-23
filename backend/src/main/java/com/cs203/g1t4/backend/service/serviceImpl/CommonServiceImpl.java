@@ -89,7 +89,7 @@ public class CommonServiceImpl implements CommonService {
                 .username(username)
                 .email(userRequest.getEmail())
                 .phoneNo(userRequest.getPhoneNo())
-                .userCreationDate(LocalDateTime.now())
+                .userCreationDate(userRequest.getUserCreationDate())
                 .countryOfResidence(userRequest.getCountryOfResidence())
 //                .dateOfBirth(userRequest.getDateOfBirth())
                 .address(userRequest.getAddress())
@@ -130,8 +130,8 @@ public class CommonServiceImpl implements CommonService {
          *         -> Change password in user object to encoded newPassword
          */
         //Case 1 handled by if-block
-        if ((updateProfileRequest.getOldPassword() == null ||
-            updateProfileRequest.getNewPassword() == null ||
+        if ((updateProfileRequest.getOldPassword() == null &&
+            updateProfileRequest.getNewPassword() == null &&
             updateProfileRequest.getRepeatNewPassword() == null)) {
 
             //Change password in user object to oldPassword
@@ -139,6 +139,11 @@ public class CommonServiceImpl implements CommonService {
 
         //Case 2, 3, 4 handled else-block
         } else {
+            // check if any of the three passwords are null
+            if (updateProfileRequest.getOldPassword() == null ||
+                    updateProfileRequest.getNewPassword() == null ||
+                    updateProfileRequest.getRepeatNewPassword() == null)
+                throw new PasswordDoNotMatchException();
 
             //Case 2 handled in if-block
             if (!(updateProfileRequest.getNewPassword().equals(updateProfileRequest.getRepeatNewPassword()))) {
