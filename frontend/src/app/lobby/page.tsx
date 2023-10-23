@@ -4,7 +4,7 @@ import Stepper from "../components/WaitingRoom/Stepper";
 export default function WaitingRoom() {
   return (
     <main className="flex flex-col items-center w-full h-screen px-8">
-      <Stepper activeStep={1} />
+      <Stepper activeStep={0} />
       <Box
         sx={{
           width: "auto",
@@ -19,15 +19,25 @@ export default function WaitingRoom() {
       >
         <div className="text-black justify-center text-center items-center align-middle flex flex-col p-12">
           <div className="font-bold text-2xl mb-4">
-            Thank you for joining the Waiting Room
+            Tickets are now on sale.
           </div>
-          <div className="max-w-lg text-center mb-10">
+          <div className="max-w-sm text-center">
             <div className="text-lg">
-              When the sale begins, your screen will automatically refresh and
-              you will be moved into the Queue.
+              To shop for tickets, please join the Queue. We will provide
+              additional information.
             </div>
           </div>
-          <div className="font-bold text-5xl">27 minutes left</div>
+          <button className="mt-4 w-2/3 bg-theme-blue text-white p-2 rounded-md hover:bg-theme-light-blue">
+            Join the Queue
+          </button>
+          <div className="mt-6 text-sm flex flex-col sm:flex-row">
+            <div className="sm:mr-1">
+              Availability and pricing are subject to change.
+            </div>
+            <div className="text-theme-blue hover:text-theme-light-blue hover:underline cursor-pointer">
+              Learn more.
+            </div>
+          </div>
         </div>
       </Box>
     </main>

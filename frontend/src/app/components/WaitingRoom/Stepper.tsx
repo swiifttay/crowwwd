@@ -10,7 +10,9 @@ interface StepperProps {
   activeStep: number;
 }
 
-export default function HorizontalLinearAlternativeLabelStepper({ activeStep }: StepperProps) {
+export default function HorizontalLinearAlternativeLabelStepper({
+  activeStep,
+}: StepperProps) {
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper activeStep={activeStep} alternativeLabel>
