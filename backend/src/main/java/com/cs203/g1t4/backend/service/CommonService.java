@@ -93,6 +93,8 @@ public class CommonService {
             user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
             //Returns the User Object
             return user;
+        } else {
+            user.setId(oldUser.getId());
         }
 
         //If the code reaches here, UserRequest object is a UpdateProfileRequest object

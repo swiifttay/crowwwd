@@ -28,6 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // normal user paths
         "/api/auth/register",
         "/api/auth/authenticate",
+        "/api/auth/findUsername/.*",
         "/api/event/getEvent/.*",
         "/api/event/getAllEvents",
         "/api/event/getEventsBetween/start/.*?/end/.*?",
