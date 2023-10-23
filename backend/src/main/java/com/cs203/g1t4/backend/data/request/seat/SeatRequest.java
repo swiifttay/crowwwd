@@ -1,7 +1,6 @@
 package com.cs203.g1t4.backend.data.request.seat;
 
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.models.Seats;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
