@@ -115,7 +115,7 @@ public class SeatingDetailsService {
             throws InvalidEventIdException, InvalidSeatingDetailsException, DuplicateSeatingDetailsException {
 
         //Checks if Event ID can be found in eventRepository
-        if (eventRepository.findById(eventId).isPresent()) {
+        if (eventRepository.findById(eventId).isEmpty()) {
             throw new InvalidEventIdException(eventId);
         }
 
