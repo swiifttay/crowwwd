@@ -44,16 +44,14 @@ api.interceptors.response.use(
     return response;
   },
   async (error) => {
-    // console.error('Error:', {error});
-
     if (error.response?.data?.status === 500) {
       console.log("Handling 500 error");
       localStorage.removeItem("token");
       // return a false value that shows that the token was invalid
       // return false;
     }
-    console.log(error.toJSON());
-    return error.toJSON();
+    console.log(error.response);
+    return error.response;
   },
 );
 
@@ -124,6 +122,20 @@ export const getUserProfile = async () => {
   }
 };
 
+export const getEvent = async (eventId: string) => {
+  try {
+    const response = await api.get(`/event/getEvent/6501c2167e60d210c8875fc6`);
+    console.log(response.data.outputEvent);
+    console.log("bye")
+    return response.data.outputEvent;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    }
+  }
+}
+
 export const getFanRecords = async () => {
   try {
     const response = await api.get("/fanRecord/myFanRecords");
@@ -151,18 +163,41 @@ export const getSpotifyLogin = async () => {
   }
 };
 
-export const getSpotifyToken = async() => {
+export const getSpotifyToken = async () => {
   try {
     const response = await api.get("/spotify/getSpotifyToken");
     return response;
   } catch (error) {
     return Promise.reject(error);
   }
-}
+};
 
 export const updateFanRecords = async () => {
   try {
     const response = await api.post("/spotify/updateMyAccountFavouriteArtists");
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const updateUserProfile = async (updateDetails: {
+  firstName: string;
+  lastName: string;
+  username: string | null;
+  email: string;
+  oldPassword: string | null;
+  newPassword: string | null;
+  repeatNewPassword: string | null;
+  countryOfResidence: string;
+  city: string;
+  state: string;
+  address: string;
+  postalCode: string;
+  phoneNo: string;
+}) => {
+  try {
+    const response = await api.put("/profile/updateProfile", updateDetails);
     return response;
   } catch (error) {
     return Promise.reject(error);
