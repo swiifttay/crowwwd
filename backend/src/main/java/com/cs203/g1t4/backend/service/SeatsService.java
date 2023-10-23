@@ -1,18 +1,28 @@
 package com.cs203.g1t4.backend.service;
 
 import com.cs203.g1t4.backend.data.request.seat.SeatRequest;
+import com.cs203.g1t4.backend.data.request.seat.SeatsConfirmRequest;
+import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.seat.SeatResponse;
+import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
+import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
 import com.cs203.g1t4.backend.models.Category;
 import com.cs203.g1t4.backend.models.Seats;
+import com.cs203.g1t4.backend.models.Ticket;
+import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.event.EventSeatingDetails;
 import com.cs203.g1t4.backend.models.exceptions.InvalidCategoryException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidSeatingDetailsException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
 import com.cs203.g1t4.backend.repository.SeatingDetailsRepository;
+import com.cs203.g1t4.backend.repository.UserRepository;
+import com.sun.net.httpserver.Authenticator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,8 +31,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeatsService {
 
+    private final UserRepository userRepository;
     private final SeatingDetailsRepository seatingDetailsRepository;
     private final SeatingDetailsService seatingDetailsService;
+    private final TicketService ticketService;
 
     private static final int NUM_SEATS_PER_ROW = 4;
     private static final int NUM_ROWS = 4;
@@ -70,7 +82,10 @@ public class SeatsService {
                         .build();
     }
 
-    public Response confirmSeats(final String eventId, final String category, final SeatRequest seatRequest) {
+    public Response confirmSeats(final String eventId, final String category, final String username, final SeatsConfirmRequest seatsConfirmRequest) {
+
+        //Find User object from username
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new InvalidTokenException());
 
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
@@ -80,14 +95,21 @@ public class SeatsService {
         Category c = findCategory(eventSeatingDetails, category);
 
         //Update Seats Allocation Pending status into the seatingDetails
+        List<String> allocatedSeats = seatsConfirmRequest.getAllocatedSeats();
         String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(),
-                seatRequest.getAllocatedSeats(), '1');
+                allocatedSeats, '1');
         seatingDetailsService.updateSeatingDetails(eventId, category, updatedSeatsString);
 
-        //Consider returning ticket here?
+        //Return Tickets
+        List<Ticket> ticketList = new ArrayList<>();
+        List<TicketRequest> ticketRequestList = seatsConfirmRequest.returnTicketRequestListFromRequest(user, eventId);
+        for (int i = 0 ; i < ticketRequestList.size() ; i++) {
+            SingleTicketResponse singleTicketResponse = ticketService.createTicket(ticketRequestList.get(i), username);
+            ticketList.add(singleTicketResponse.getTicket());
+        }
 
-        return SuccessResponse.builder()
-                .response("Seats confirmed.")
+        return TicketResponse.builder()
+                .tickets(ticketList)
                 .build();
     }
 

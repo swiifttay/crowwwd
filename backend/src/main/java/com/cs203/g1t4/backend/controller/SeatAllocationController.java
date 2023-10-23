@@ -2,11 +2,14 @@ package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.event.SeatingDetailsRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatRequest;
+import com.cs203.g1t4.backend.data.request.seat.SeatsConfirmRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.SeatsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,9 +32,13 @@ public class SeatAllocationController {
     @PutMapping("{eventId}/{category}")
     public ResponseEntity<Response> confirmSeats(@PathVariable("eventId") String eventId,
                                                  @PathVariable("category") String category,
-                                                 @Valid @RequestBody SeatRequest request) {
+                                                 @AuthenticationPrincipal UserDetails userDetails,
+                                                 @Valid @RequestBody SeatsConfirmRequest request) {
 
-        Response response = seatsService.confirmSeats(eventId, category, request);
+        // Get the username from the userDetails of the authenticated user
+        String username = userDetails.getUsername();
+
+        Response response = seatsService.confirmSeats(eventId, category, username, request);
 
         return ResponseEntity.ok(response);
     }
