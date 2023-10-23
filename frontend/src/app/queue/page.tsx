@@ -1,7 +1,8 @@
-"use client"
+"use client";
 
-import { Box, Button } from "@mui/material";
+import { Box, Slider } from "@mui/material";
 import Stepper from "../components/WaitingRoom/Stepper";
+import "./style.css";
 
 export default function Queue() {
   return (
@@ -20,9 +21,12 @@ export default function Queue() {
         }}
       >
         <div className="text-black justify-center items-center align-middle flex flex-col">
-          <div className="font-bold text-2xl mb-4">
+          <div className="font-bold text-2xl mb-6">
             You are now in the queue.
           </div>
+          <div className="font-bold text-7xl">2000+</div>
+          <div className="font-bold text-lg mb-5">people ahead of you</div>
+          <Slider defaultValue={10} aria-label="Default" />
         </div>
       </Box>
     </main>
