@@ -35,4 +35,14 @@ public class SeatAllocationController {
 
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("{eventId}/{category}")
+    public ResponseEntity<Response> cancelSeats(@PathVariable("eventId") String eventId,
+                                                 @PathVariable("category") String category,
+                                                 @Valid @RequestBody SeatRequest request) {
+
+        Response response = seatsService.cancelSeats(eventId, category, request);
+
+        return ResponseEntity.ok(response);
+    }
 }
