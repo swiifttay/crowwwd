@@ -12,7 +12,7 @@ export function Card(event: Event) {
       : `${dateFormatter(startDate)} - ${dateFormatter(endDate)}`;
 
   const handleEventDetails = () => {
-    router.push("/eventdetails");
+    router.push(`/eventdetails/${event.eventId}`);
   };
   return (
     <button
