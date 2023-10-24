@@ -166,6 +166,10 @@ export default function UserProfile() {
     }
   };
 
+  const handleUpdateProfile = async () => {
+    router.push("/updateprofile");
+  };
+
   return (
     <main className="flex flex-col items-center h-fit relative w-full px-8">
       <div className="flex flex-col justify-center align-center mt-4 w-full">
