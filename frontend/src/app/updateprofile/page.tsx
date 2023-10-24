@@ -190,7 +190,7 @@ export default function UpdateProfile() {
       <div className="flex flex-col items-center justify-center w-full text-center lg:w-1/2 sm:w-[80vw] xs:w-[40vw]">
         <Typography
           variant="h6"
-          className="font-mont text-lg text-white mt-5 mb-6"
+          className="font-mont text-lg text-white mt-10 mb-8"
           gutterBottom
         >
           {"Update your information here."}
@@ -341,22 +341,23 @@ export default function UpdateProfile() {
             />
           </Grid>
 
-          <Button
+          <button
             onClick={toggleFields}
-            variant="contained"
-            sx={{
-              marginTop: 2.5,
-              "&:hover": {
-                backgroundColor: "bg-theme-light-blue",
-              },
-              '&.MuiButton-root':{
-                backgroundColor: "bg-theme-blue",
-              },
-            }}
+            className="bg-theme-blue text-white py-2 pl-3.5 pr-2 mt-4 rounded-lg hover:bg-theme-light-blue"
+            // variant="contained"
+            // sx={{
+            //   marginTop: 2.5,
+            //   "&:hover": {
+            //     backgroundColor: "bg-theme-light-blue",
+            //   },
+            //   '&.MuiButton-root':{
+            //     backgroundColor: "bg-theme-blue",
+            //   },
+            // }}
           >
             Change your password{" "}
             {isDropdownOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-          </Button>
+          </button>
           {isDropdownOpen && (
             <>
               <Grid item xs={10} sm={12}>
