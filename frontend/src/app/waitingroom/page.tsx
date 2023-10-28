@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import Stepper from "../components/WaitingRoom/Stepper";
+import CountdownTimer from "../components/WaitingRoom/CountdownTimer";
 
 export default function WaitingRoom() {
   return (
@@ -27,6 +28,7 @@ export default function WaitingRoom() {
               you will be moved into the Queue.
             </div>
           </div>
+          <CountdownTimer />
           <div className="font-bold text-5xl">27 minutes left</div>
         </div>
       </Box>
