@@ -1,7 +1,7 @@
 .darkBG {
   background-color: rgba(0, 0, 0, 0.2);
-  width: 100vw;
-  height: 100vh;
+  /* width: 100vw; */
+  /* height: 100vh; */
   z-index: 0;
   top: 50%;
   left: 50%;
@@ -17,8 +17,8 @@
 }
 
 .modal {
-  width: 250px;
-  height: 170px;
+  width: auto;
+  height: auto;
   background: white;
   color: white;
   z-index: 10;
@@ -27,7 +27,6 @@
 }
 
 .modalHeader {
-  height: 50px;
   background: white;
   overflow: hidden;
   border-top-left-radius: 16px;
@@ -36,22 +35,28 @@
 
 .heading {
   margin: 0;
-  padding: 10px;
-  color: #2c3e50;
-  font-weight: 500;
-  font-size: 18px;
+  padding-top: 18px;
+  color: black;
+  font-family: var(--font-mont);
+  font-style: bold;
+  font-weight: 800;
+  font-size: 24px;
   text-align: center;
 }
 
 .modalContent {
-  padding: 10px;
+  flex-direction: column;
+  padding-top: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
   font-size: 14px;
-  color: #2c3e50;
+  font-family: var(--font-mont);
+  font-style: bold;
+  color: black;
   text-align: center;
 }
 
 .modalActions {
-  position: absolute;
   bottom: 2px;
   margin-bottom: 10px;
   width: 100%;
@@ -59,7 +64,8 @@
 
 .actionsContainer {
   display: flex;
-  justify-content: space-around;
+  margin-top: 10px;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -87,40 +93,22 @@
   transform: translate(-4px, 4px);
 }
 
-.deleteBtn {
-  margin-top: 10px;
+.confirmBtn {
+  margin-top: 5px;
+  margin-bottom: 15px;
   cursor: pointer;
   font-weight: 500;
   padding: 11px 28px;
   border-radius: 12px;
   font-size: 0.8rem;
   border: none;
-  color: #fff;
-  background: #ff3e4e;
+  color: white;
+  background: #0047FF;
   transition: all 0.25s ease;
 }
 
-.deleteBtn:hover {
-  box-shadow: 0 10px 20px -10px rgba(255, 62, 78, 0.6);
-  transform: translateY(-5px);
-  background: #ff3e4e;
-}
-
-.cancelBtn {
-  margin-top: 10px;
-  cursor: pointer;
-  font-weight: 500;
-  padding: 11px 28px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  border: none;
-  color: #2c3e50;
-  background: #fcfcfc;
-  transition: all 0.25s ease;
-}
-
-.cancelBtn:hover {
+.confirmBtn:hover {
   box-shadow: none;
-  transform: none;
-  background: whitesmoke;
+  transform: translateY(-5px);
+  background: #1D90F4;
 }

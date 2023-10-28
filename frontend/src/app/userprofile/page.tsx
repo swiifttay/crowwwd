@@ -10,7 +10,6 @@ import {
   getSpotifyToken,
   getUserProfile,
   updateFanRecords,
-  getSpotifyToken,
 } from "../axios/apiService";
 import Modal from "../components/UserProfile/Modal";
 import EventButtonLong from "./EventButtonLong";

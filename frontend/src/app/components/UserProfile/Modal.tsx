@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Modal.module.css";
 import { RiCloseLine } from "react-icons/ri";
+import Dropdown from "./Dropdown";
 
 const Modal = ({ setIsOpen }) => {
   return (
@@ -9,27 +10,26 @@ const Modal = ({ setIsOpen }) => {
       <div className={styles.centered}>
         <div className={styles.modal}>
           <div className={styles.modalHeader}>
-            <h5 className={styles.heading}>Dialog</h5>
+            <h5 className={styles.heading}>Transfer Tickets to Friends</h5>
           </div>
           <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>
             <RiCloseLine style={{ marginBottom: "-3px" }} />
           </button>
           <div className={styles.modalContent}>
-            Are you sure you want to delete the item?
+            <div className="text-base	font-extrabold text-md">Reputation Tour</div>
+            <div className="text-base	font-extrabold mb-2">Taylor Swift</div>
+            <div>Fri 15 Sep 2023, 7pm</div>
+            <div>The Star Theatre, The Star Performing Arts Centre</div>
           </div>
           <div className={styles.modalActions}>
+
             <div className={styles.actionsContainer}>
+            <Dropdown />
               <button
-                className={styles.deleteBtn}
+                className={styles.confirmBtn}
                 onClick={() => setIsOpen(false)}
               >
-                Delete
-              </button>
-              <button
-                className={styles.cancelBtn}
-                onClick={() => setIsOpen(false)}
-              >
-                Cancel
+                Confirm
               </button>
             </div>
           </div>
