@@ -59,11 +59,11 @@ export default function Navbar() {
         <div className="hover:text-gray-300 cursor-pointer">Search</div>
       </div>
       {isLogin ? (
-        <Link href="/login" className="hidden md:flex">
-          <div className="hover:text-gray-300 cursor-pointer">Login</div>
+        <Link href="/userprofile" className="hidden md:flex">
+          <div className="hover:text-gray-300 cursor-pointer">Profile</div>
         </Link>
       ) : (
-        <Link href="/profile" className="hidden md:flex">
+        <Link href="/login" className="hidden md:flex">
           <div className="hover:text-gray-300 cursor-pointer">Login</div>
         </Link>
       )}
