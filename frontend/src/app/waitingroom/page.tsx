@@ -29,7 +29,6 @@ export default function WaitingRoom() {
             </div>
           </div>
           <CountdownTimer />
-          <div className="font-bold text-5xl">27 minutes left</div>
         </div>
       </Box>
     </main>

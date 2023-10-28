@@ -1,13 +1,11 @@
 "use client";
 
 import type { NextPage } from "next";
-import Head from "next/head";
 import { useEffect, useState } from "react";
 import { TimerContainer } from "./TimerContainer";
-// import { TimerInput } from "./TimerInput";
 
 const Home: NextPage = () => {
-  const [time, setTime] = useState<number>(7);
+  const [time, setTime] = useState<number>(0.0002);
   const [newTime, setNewTime] = useState<number>(0);
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
@@ -24,10 +22,10 @@ const Home: NextPage = () => {
       var difference = countDownDate - now;
 
       var newHours = Math.floor(
-        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
       );
       var newMinutes = Math.floor(
-        (difference % (1000 * 60 * 60)) / (1000 * 60)
+        (difference % (1000 * 60 * 60)) / (1000 * 60),
       );
       var newSeconds = Math.floor((difference % (1000 * 60)) / 1000);
 
@@ -60,18 +58,8 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-[#1e1f29]">
-      <Head>
-        <title>Launch Countdown Timer</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
+    <div className="">
       <TimerContainer hours={hours} minutes={minutes} seconds={seconds} />
-      {/* <TimerInput
-        value={newTime}
-        handleClick={handleClick}
-        handleChange={handleChange}
-      /> */}
     </div>
   );
 };
