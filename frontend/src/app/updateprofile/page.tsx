@@ -73,12 +73,12 @@ export default function UpdateProfile() {
       if (response.data && response.data.user) {
         const userData = response.data.user as TFormValues;
         const validKeys = Object.keys(userData).filter((key) =>
-          Object.keys(formData).includes(key)
+          Object.keys(formData).includes(key),
         );
         validKeys.forEach((key) => {
           setValue(
             key as keyof TFormValues,
-            userData[key as keyof TFormValues]
+            userData[key as keyof TFormValues],
           );
           (formData as any)[key] = userData[key as keyof TFormValues];
         });
@@ -91,11 +91,11 @@ export default function UpdateProfile() {
   const isValid = (
     email: string,
     newPassword: string,
-    confirmPassword: string
+    confirmPassword: string,
   ) => {
     if (
       !email.match(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
       )
     )
       return false;
@@ -121,7 +121,7 @@ export default function UpdateProfile() {
 
     if (
       !data.email.match(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
       )
     ) {
       setMsg("Email is invalid");
