@@ -169,7 +169,7 @@ export default function UserProfile() {
     }
   };
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState();
 
   return (
     <main className="flex flex-col items-center h-fit relative w-full px-8">
@@ -271,7 +271,7 @@ export default function UserProfile() {
           Your purchased concerts
         </div>
         <button onClick={() => setIsOpen(true)}>Open Modal</button>
-        {isOpen && <Modal setIsOpen={setIsOpen} />}
+        {/* {isOpen && <Modal setIsOpen={setIsOpen} />} */}
         <div className="flex flex-col gap-3">
           <EventButtonLong
             image="/images/TaylorSwift.jpg"
@@ -279,9 +279,10 @@ export default function UserProfile() {
             artist="Taylor Swift"
             datetime="Fri 15 Sep 2023, 7pm"
             venue="The Star Theatre, The Star Performing Arts Centre"
+            setIsOpen={setIsOpen}
           />
 
-          <EventButtonLong
+          {/* <EventButtonLong
             image="/images/TaylorSwift.jpg"
             title="Reputation Tour"
             artist="Taylor Swift"
@@ -301,7 +302,7 @@ export default function UserProfile() {
             artist="Taylor Swift"
             datetime="Fri 15 Sep 2023, 7pm"
             venue="The Star Theatre, The Star Performing Arts Centre"
-          />
+          /> */}
         </div>
       </div>
 
