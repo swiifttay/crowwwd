@@ -19,9 +19,14 @@
   height: auto;
   background: white;
   color: white;
-  z-index: 100;
+  z-index: 2000;
   border-radius: 16px;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+}
+
+.modal-container {
+  position: absolute;
+  z-index: 1000;
 }
 
 .modalHeader {

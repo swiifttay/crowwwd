@@ -1,8 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import { RiCloseLine } from "react-icons/ri";
-import Dropdown from "../components/UserProfile/Dropdown";
-import styles from "../components/UserProfile/Modal.module.css";
 
 interface EventButtonProps {
   image: string;
@@ -10,7 +7,7 @@ interface EventButtonProps {
   artist: string;
   datetime: string;
   venue: string;
-  setIsOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 const EventButtonLong: React.FC<EventButtonProps> = ({
@@ -19,13 +16,17 @@ const EventButtonLong: React.FC<EventButtonProps> = ({
   artist,
   datetime,
   venue,
-  setIsOpen = false,
+  setIsOpen,
 }) => {
+  const handleButtonClick = () => {
+    setIsOpen(true);
+  };
+
   return (
     <div>
       <button
         className="w-full bg-zinc-900 hover:bg-zinc-800 text-white pt-2 pb-1 px-5 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
-        onClick={() => setIsOpen(true)}
+        onClick={handleButtonClick}
       >
         <div className="flex">
           <div className="mr-6">
@@ -47,44 +48,6 @@ const EventButtonLong: React.FC<EventButtonProps> = ({
           </div>
         </div>
       </button>
-
-      {setIsOpen ? (
-        <>
-          {/* <div className={styles.darkBG} onClick={() => setIsOpen(true)} /> */}
-          <div className={styles.centered}>
-            <div className={styles.modal}>
-              <div className={styles.modalHeader}>
-                <h5 className={styles.heading}>Transfer Tickets to Friends</h5>
-              </div>
-              <button
-                className={styles.closeBtn}
-                onClick={() => setIsOpen(false)}
-              >
-                <RiCloseLine style={{ marginBottom: "-3px" }} />
-              </button>
-              <div className={styles.modalContent}>
-                <div className="text-base	font-extrabold text-md">
-                  Reputation Tour
-                </div>
-                <div className="text-base	font-extrabold mb-2">Taylor Swift</div>
-                <div>Fri 15 Sep 2023, 7pm</div>
-                <div>The Star Theatre, The Star Performing Arts Centre</div>
-              </div>
-              <div className={styles.modalActions}>
-                <div className={styles.actionsContainer}>
-                  <Dropdown />
-                  <button
-                    className={styles.confirmBtn}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Confirm
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      ) : null}
     </div>
   );
 };

@@ -1,9 +1,23 @@
 import React from "react";
-import styles from "./Modal.module.css";
 import { RiCloseLine } from "react-icons/ri";
 import Dropdown from "./Dropdown";
+import styles from "./Modal.module.css";
 
-const Modal = ({ setIsOpen }) => {
+interface ModalProps {
+  setIsOpen: (isOpen: boolean) => void;
+  title: string;
+  artist: string;
+  datetime: string;
+  venue: string;
+}
+
+const Modal: React.FC<ModalProps> = ({
+  setIsOpen,
+  title,
+  artist,
+  datetime,
+  venue,
+}) => {
   return (
     <>
       <div className={styles.darkBG} onClick={() => setIsOpen(false)} />
@@ -16,12 +30,10 @@ const Modal = ({ setIsOpen }) => {
             <RiCloseLine style={{ marginBottom: "-3px" }} />
           </button>
           <div className={styles.modalContent}>
-            <div className="text-base	font-extrabold text-md">
-              Reputation Tour
-            </div>
-            <div className="text-base	font-extrabold mb-2">Taylor Swift</div>
-            <div>Fri 15 Sep 2023, 7pm</div>
-            <div>The Star Theatre, The Star Performing Arts Centre</div>
+            <div className="text-base	font-extrabold text-md">{title}</div>
+            <div className="text-base	font-extrabold mb-2">{artist}</div>
+            <div>{datetime}</div>
+            <div>{venue}</div>
           </div>
           <div className={styles.modalActions}>
             <div className={styles.actionsContainer}>
