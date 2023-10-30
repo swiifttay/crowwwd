@@ -5,7 +5,7 @@ import axios from "axios";
 
 const api = axios.create({
   //TODO: backend to provide
-  baseURL: "http://localhost:8080/api/",
+  baseURL: "http://localhost:8080/api",
 });
 
 // api interceptor to place the jwt token
@@ -105,16 +105,31 @@ export const usernameCheck = async (username: string) => {
   }
 };
 
-export const concertsList = async () => {
+export const getAllEvents = async () => {
   const response = await api.get("/event/exploreEvent/all");
-  console.log({response});
-  return response;
+  console.log(response);
+
+  return response.data;
 };
 
-export const concertDetails = async(eventId: string) => {
-  const response = await api.get(`/event/detailsEvent/${eventId}`);
-  return response;
+export const getEvent = async (eventId: string) => {
+  try {
+    const response = await api.get(`/event/fullEvent/${eventId}`);
+    console.log(response);
+    if (response.request?.status === 200) {
+      return response.data;
+      // will come here if it was from a token error
+    } else {
+      window.location.reload();
+    }
 
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    }
+  }
 }
 
 //User Profile Page
@@ -127,20 +142,6 @@ export const getUserProfile = async () => {
     return Promise.reject(error);
   }
 };
-
-export const getEvent = async (eventId: string) => {
-  try {
-    const response = await api.get(`/event/getEvent/6501c2167e60d210c8875fc6`);
-    console.log(response.data.outputEvent);
-    console.log("bye")
-    return response.data.outputEvent;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.log(error.status);
-      console.error(error.response);
-    }
-  }
-}
 
 export const getFanRecords = async () => {
   try {

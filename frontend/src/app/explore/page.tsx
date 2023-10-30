@@ -38,17 +38,9 @@ export default function Explore() {
 
   const fetchEvents = async () => {
     // check if response valid
-    const response = await getAllEvents();
-    if (response.request?.status === 200) {
-      const eventList: Event[] = response.data.exploreEventList;
-      console.log(eventList);
-      setEvents(eventList);
-      setIsLoaded(true);
-
-      // will come here if it was from a token error
-    } else {
-      window.location.reload();
-    }
+    const data = await getAllEvents();
+    setEvents(data.exploreEventList);
+    setIsLoaded(true);
   };
 
   //--------- Search Filter ----------
