@@ -4,7 +4,7 @@ import FilterBar from "../components/Explore/FilterBar";
 import "../globals.css";
 
 import { useState, useEffect, ChangeEvent } from "react";
-import { concertsList } from "../axios/apiService";
+import { getAllEvents } from "../axios/apiService";
 import { SearchBar } from "../components/Explore/SearchBar";
 import { Card } from "../components/Explore/Card";
 import { BiLoaderAlt } from "react-icons/bi";
@@ -18,7 +18,7 @@ export interface Event {
   categories: string[];
   artist: { name: string };
   dates: string[];
-  description: string
+  description: string;
 }
 
 export default function Explore() {
@@ -38,7 +38,7 @@ export default function Explore() {
 
   const fetchEvents = async () => {
     // check if response valid
-    const response = await concertsList();
+    const response = await getAllEvents();
     if (response.request?.status === 200) {
       const eventList: Event[] = response.data.events;
       console.log(eventList);
