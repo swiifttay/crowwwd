@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { TimerContainer } from "./TimerContainer";
 
 const CountdownTimer = ({ onCountdownFinish }) => {
-  const [time, setTime] = useState<number>(0.0002);
+  const [time, setTime] = useState<number>(0.0001);
   const [newTime, setNewTime] = useState<number>(0);
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
