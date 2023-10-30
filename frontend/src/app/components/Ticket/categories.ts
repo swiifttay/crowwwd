@@ -5,7 +5,7 @@ export const lowerOpacity = (e:LeafletEvent) => {e.target.setOpacity(0.7); e.tar
 
 export const higherOpacity = (e:LeafletEvent) => {e.target.setOpacity(1);}
 
-export const handleClick = (cat:string) => console.log(cat);
+export const handleClick = (cat: string) => console.log(cat);
 
 export const catA = new L.Icon({
     iconUrl: "/svg/catA.svg", 
@@ -36,7 +36,7 @@ export const catE = new L.Icon({
     iconSize: [290, 290], 
     iconAnchor: [145, 145], 
   });
-
+  
 export const catF = new L.Icon({
   iconUrl: "/svg/catF.svg",
   iconSize: [280, 270],
