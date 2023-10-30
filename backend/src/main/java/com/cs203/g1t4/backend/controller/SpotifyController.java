@@ -75,11 +75,10 @@ public class SpotifyController {
         response.sendRedirect("http://localhost:3000/userprofile");
     }
 
-    @GetMapping(value = "/getSpotifyToken") 
-    public ResponseEntity<Response> getSpotifyAccessToken() {
-        Response response = SuccessResponse.builder()
-                    .response(spotifyAPI.getAccessToken())
-                    .build();
+    @GetMapping(value ="/getSpotifyToken")
+    public ResponseEntity<Response> validateMySpotifyAccount(@AuthenticationPrincipal UserDetails userDetails) {
+        Response response = spotifyService.validateAccount(spotifyAPI, userDetails.getUsername());
+
         return ResponseEntity.ok(response);
     }
 

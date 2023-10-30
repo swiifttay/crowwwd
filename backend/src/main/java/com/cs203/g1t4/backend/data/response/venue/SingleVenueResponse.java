@@ -1,7 +1,8 @@
-package com.cs203.g1t4.backend.data.response.event;
-import com.cs203.g1t4.backend.data.response.Response;
+package com.cs203.g1t4.backend.data.response.venue;
 
-import com.cs203.g1t4.backend.models.event.OutputEvent;
+import com.cs203.g1t4.backend.data.response.Response;
+import com.cs203.g1t4.backend.models.Venue;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,8 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SingleEventResponse implements Response {
-
-    private OutputEvent outputEvent;
-
+public class SingleVenueResponse implements Response {
+  private Venue venue;
+  private String imageURL;
 }
