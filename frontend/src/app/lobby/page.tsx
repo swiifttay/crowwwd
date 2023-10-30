@@ -1,7 +1,15 @@
+"use client"
+
 import { Box } from "@mui/material";
 import Stepper from "../components/WaitingRoom/Stepper";
+import { useRouter } from "next/navigation";
 
-export default function WaitingRoom() {
+export default function Lobby() {
+  const router = useRouter();
+  const handleJoinQueue = () => {
+    router.push("/waitingroom");
+  };
+
   return (
     <main className="flex flex-col items-center w-full h-screen px-8">
       <Stepper activeStep={0} />
@@ -27,7 +35,7 @@ export default function WaitingRoom() {
               additional information.
             </div>
           </div>
-          <button className="mt-4 w-2/3 bg-theme-blue text-white p-2 rounded-md hover:bg-theme-light-blue">
+          <button className="mt-4 w-2/3 bg-theme-blue text-white p-2 rounded-md hover:bg-theme-light-blue" onClick={handleJoinQueue}>
             Join the Queue
           </button>
           <div className="mt-6 text-sm flex flex-col sm:flex-row">
