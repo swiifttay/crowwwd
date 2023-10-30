@@ -1,8 +1,25 @@
+"use client";
+
 import { Box } from "@mui/material";
-import Stepper from "../components/WaitingRoom/Stepper";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import CountdownTimer from "../components/WaitingRoom/CountdownTimer";
+import Stepper from "../components/WaitingRoom/Stepper";
 
 export default function WaitingRoom() {
+  const router = useRouter();
+  const [countdownFinished, setCountdownFinished] = useState(false);
+
+  const handleCountdownFinish = () => {
+    setCountdownFinished(true);
+  };
+
+  useEffect(() => {
+    if (countdownFinished) {
+      router.push("/queue");
+    }
+  }, [countdownFinished, router]);
+
   return (
     <main className="flex flex-col items-center w-full h-screen px-8">
       <Stepper activeStep={1} />
@@ -28,7 +45,7 @@ export default function WaitingRoom() {
               you will be moved into the Queue.
             </div>
           </div>
-          <CountdownTimer />
+          <CountdownTimer onCountdownFinish={handleCountdownFinish} />
         </div>
       </Box>
     </main>
