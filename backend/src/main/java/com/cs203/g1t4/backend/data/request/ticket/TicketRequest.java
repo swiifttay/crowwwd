@@ -1,5 +1,7 @@
 package com.cs203.g1t4.backend.data.request.ticket;
 
+import com.cs203.g1t4.backend.models.Ticket;
+import com.cs203.g1t4.backend.models.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,9 +20,21 @@ public class TicketRequest {
     @NotBlank(message = "Attending userID is required")
     private String userIdAttending;
 
-//    @NotBlank(message = "Seat Number is required")
-//    private String seatNo;
+    @NotNull
+    private String seatNo;
 
     //If not filled, assume false.
     private boolean isSurpriseTicket;
+
+    public Ticket returnTicketFromRequest(User user) {
+        return Ticket.builder()
+                .userIdAttending(this.getUserIdAttending())
+                .eventId(this.getEventId())
+                .userIdBuyer(user.getId())
+                .seatNo(this.seatNo)
+                .isSurpriseTicket(this.isSurpriseTicket())
+                .build();
+    }
+
+
 }

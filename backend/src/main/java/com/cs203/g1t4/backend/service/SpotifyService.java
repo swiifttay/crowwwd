@@ -1,18 +1,21 @@
 package com.cs203.g1t4.backend.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.model_objects.specification.Artist;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.User;
 import se.michaelthelin.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import se.michaelthelin.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class SpotifyService {
 
     private final ArtistService artistService;
     private final FanRecordService fanRecordService;
+    private final ProfileService profileService;
 
     public Response spotifyGetMyTopArtists(SpotifyApi spotifyApi, String username) {
 
@@ -72,6 +76,34 @@ public class SpotifyService {
                     .build();
 
         } catch (Exception e) {
+            throw new InvalidTokenException();
+        }
+
+    }
+
+    public Response validateAccount(SpotifyApi spotifyApi, String username) {
+
+        // get the user account 
+        final GetCurrentUsersProfileRequest getUserAccountRequest = spotifyApi.getCurrentUsersProfile().build();
+
+        try {
+            final User spotifyUser = getUserAccountRequest.execute();
+
+            String spotifyUserId = spotifyUser.getId();
+
+            // determine if the user account name is valid according to database
+            // to prevent a user from logging in using someone else's spotify account
+            if (!profileService.validate(spotifyUserId, username)) {
+                throw new InvalidTokenException();
+            }
+
+            // if it was valid, return the accesstoken 
+            return SuccessResponse.builder()
+                        .response(spotifyApi.getAccessToken())
+                        .build();
+                        
+        } catch (Exception e) {
+            spotifyApi.setAccessToken(null);
             throw new InvalidTokenException();
         }
 

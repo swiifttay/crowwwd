@@ -32,7 +32,18 @@ public class CommonService {
         return jwtService.extractUsername(jwt);
     }
 
-    public User getUserClassFromRequest(UserRequest userRequest, User oldUser) {
+    /**
+     * Creates User object from UserRequest object
+     * If username can be found in the repository, throw a DuplicatedUsernameException.
+     * For updating, if all three password fields are not the same or wrong oldPassword is inputted, throw a
+     * PasswordDoNotMatchException
+     *
+     * @param userRequest a UserRequest object containing the new user info to be created/updated
+     * @param oldUser a User object containing the user info of the user that has to be updated. null for creation
+     * @return the User object that has been created/updated
+     */
+    public User getUserClassFromRequest(UserRequest userRequest, User oldUser)
+            throws DuplicatedUsernameException, PasswordDoNotMatchException {
 
         //Initialise variable to contain username
         String username;

@@ -40,7 +40,7 @@ export default function Explore() {
     // check if response valid
     const response = await concertsList();
     if (response.request?.status === 200) {
-      const eventList: Event[] = response.data.events;
+      const eventList: Event[] = response.data.exploreEventList;
       console.log(eventList);
       setEvents(eventList);
       setIsLoaded(true);
