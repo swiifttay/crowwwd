@@ -1,6 +1,9 @@
 "use client"
+import { getEvent } from "@/app/axios/apiService";
+import { Event } from "@/app/explore/page";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type EventDetailsParams = {
   params: {
@@ -15,30 +18,38 @@ export default function EventDetails({
   const router = useRouter();
   const rulesHeader = "font-bold text-md ml-8 mb-2 mt-4";
   const rulesDetails = "list-disc ml-16";
+  const [event, setEvent] = useState<Event>();
   const handleBuyTickets = async () => {
     router.push("/order");
   };
 
+  useEffect(() => {
+    const loadEvent = async () => {
+      const res = await getEvent(eventId);
+      console.log(res);
+      setEvent(res);
+    }
+    loadEvent();
+  })
+
   return (
     <div className="flex w-full items-center justify-center mt-4">
       <div className="">
-        <div className="">
           <Image
-            src="/images/EventPoster.jpg"
+            src={event?.eventImageURL ?? ""}
             alt="Event Poster"
             className="rounded-3xl"
             width={1045}
             height={487}
           />
-        </div>
 
         <div className="max-w-[1045px] mt-8">
           <div className="text-3xl font-bold mb-4">
-            2023 KIM SEON HO ASIA TOUR in SINGAPORE [ONE, TWO, THREE. SMILE] [G]
+            {event?.name}
           </div>
 
           <div className="flex justify-between">
-            <p className="text-lg mb-10">KPOP | Concert</p>
+            <p className="text-lg mb-10">{event?.categories}</p>
             <button
               className="w-[150px] h-1/6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded -mt-4"
               onClick={handleBuyTickets}
@@ -64,17 +75,12 @@ export default function EventDetails({
               height={20}
             />
             <div className="text-md mr-20 hover:text-theme-grey hover:underline cursor-pointer">
-              The Star Theatre, The Star Performing Arts Centre
+              {event?.venue}
             </div>
           </div>
 
           <p className="text-md mt-10 mb-10">
-            KIM SEON HO is all set to take the stage in SINGAPORE with his
-            highly anticipated fan meeting, bringing his undeniable talent,
-            irresistible smile, and heartwarming presence to his dedicated
-            Seonhohada. PULP Live World and Happee Hour present the 2023 KIM
-            SEON HO ASIA TOUR in SINGAPORE on September 15, 2023, 7PM at THE
-            STAR THEATRE.
+            {event?.description}
           </p>
 
           <div className="font-semibold text-2xl mb-4">Price Details</div>

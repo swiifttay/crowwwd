@@ -107,11 +107,16 @@ export const usernameCheck = async (username: string) => {
   }
 };
 
-export const concertsList = async () => {
+export const getAllEvents = async () => {
   const response = await api.get("/event/getAllEvents");
 
   return response;
 };
+
+export const getEvent = async (eventId: string) => {
+  const res = await api.get(`/fullEvent/${eventId}`);
+  return res.data;
+}
 
 //User Profile Page
 
