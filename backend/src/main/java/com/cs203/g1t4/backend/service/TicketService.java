@@ -26,7 +26,7 @@ public class TicketService {
     private final EventRepository eventRepository;
 
 
-    public SuccessResponse createTicket(TicketRequest ticketRequest, String username) {
+    public SingleTicketResponse createTicket(TicketRequest ticketRequest, String username) {
         // Get the buying user's id
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());
@@ -39,20 +39,14 @@ public class TicketService {
         }
 
        // Create the Ticket object
-        Ticket ticket = Ticket.builder()
-                        .userIdAttending(ticketRequest.getUserIdAttending())
-                        .eventId(ticketRequest.getEventId())
-                        .userIdBuyer(user.getId())
-                        .seatNo(seatNoGenerator(ticketRequest.getEventId()))
-                        .isSurpriseTicket(ticketRequest.isSurpriseTicket())
-                        .build();
+        Ticket ticket = ticketRequest.returnTicketFromRequest(user);
 
         //Saves ticket into database
         ticketRepository.save(ticket);
 
         //If Everything goes smoothly, SuccessResponse will be created
-        return SuccessResponse.builder()
-                .response("Ticket has been created successfully")
+        return SingleTicketResponse.builder()
+                .ticket(ticket)
                 .build();
     }
 
@@ -68,7 +62,7 @@ public class TicketService {
                 .build();
     }
 
-    public Response updateTicket(String ticketId, TicketRequest TicketRequest, String username) {
+    public Response updateTicket(String ticketId, TicketRequest ticketRequest, String username) {
         // Get the buying user's id
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());
@@ -83,8 +77,8 @@ public class TicketService {
         }
 
         // Update the Ticket object only allowed in 2 fields of userIdAttending and isSurprise Ticket
-        ticket.setUserIdAttending(TicketRequest.getUserIdAttending());
-        ticket.setSurpriseTicket(TicketRequest.isSurpriseTicket());
+        ticket.setUserIdAttending(ticketRequest.getUserIdAttending());
+        ticket.setSurpriseTicket(ticketRequest.isSurpriseTicket());
 
         //Saves ticket into database
         ticketRepository.save(ticket);

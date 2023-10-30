@@ -34,9 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         "/api/event/getEventsBetween/start/.*?/end/.*?",
 
         // admin user (additional features in the future)
-        "/api/event/addEvent",
-        "/api/event/deleteEvent/.*",
-        "/api/event/updateEvent/.*",
+        "/api/event/fullEvent/.*",
 
         // others
         "/api/spotify/get-user-code",
