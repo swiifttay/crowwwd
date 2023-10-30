@@ -1,10 +1,9 @@
 "use client";
 
-import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { TimerContainer } from "./TimerContainer";
 
-const Home: NextPage = () => {
+const CountdownTimer = ({ onCountdownFinish }) => {
   const [time, setTime] = useState<number>(0.0002);
   const [newTime, setNewTime] = useState<number>(0);
   const [hours, setHours] = useState<number>(0);
@@ -22,10 +21,10 @@ const Home: NextPage = () => {
       var difference = countDownDate - now;
 
       var newHours = Math.floor(
-        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
       );
       var newMinutes = Math.floor(
-        (difference % (1000 * 60 * 60)) / (1000 * 60),
+        (difference % (1000 * 60 * 60)) / (1000 * 60)
       );
       var newSeconds = Math.floor((difference % (1000 * 60)) / 1000);
 
@@ -38,24 +37,27 @@ const Home: NextPage = () => {
         setHours(0);
         setMinutes(0);
         setSeconds(0);
+        onCountdownFinish();
+      } else if (difference <= 2000) {
+        onCountdownFinish();
       }
     });
 
-    return () => {
-      clearInterval(updateTime);
-    };
+    // return () => {
+    //   clearInterval(updateTime);
+    // };
   }, [time]);
 
-  const handleClick = () => {
-    setTime(newTime);
-    console.log(time);
-    setNewTime(0);
-  };
+  // const handleClick = () => {
+  //   setTime(newTime);
+  //   console.log(time);
+  //   setNewTime(0);
+  // };
 
-  const handleChange = (e: any) => {
-    let inputTime = e.target.value;
-    setNewTime(inputTime);
-  };
+  // const handleChange = (e: any) => {
+  //   let inputTime = e.target.value;
+  //   setNewTime(inputTime);
+  // };
 
   return (
     <div className="">
@@ -64,4 +66,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default CountdownTimer;
