@@ -11,7 +11,7 @@ import {
   getArtistById,
   getSpotifyLogin,
   updateFanRecords,
-  getSpotifyToken
+  getSpotifyToken,
 } from "../axios/apiService";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -87,7 +87,10 @@ export default function UserProfile() {
   const checkSpotifyLoginStatus = async () => {
     const spotifyTokenResponse = await getSpotifyToken();
     console.log(spotifyTokenResponse.data.response);
-    if (spotifyTokenResponse?.status === 200 && spotifyTokenResponse.data?.response != null) {
+    if (
+      spotifyTokenResponse?.status === 200 &&
+      spotifyTokenResponse.data?.response != null
+    ) {
       console.log("success");
       localStorage.setItem("spotifyToken", spotifyTokenResponse.data.response);
       setSpotifyButtonMsg("Update My Records");
@@ -97,7 +100,11 @@ export default function UserProfile() {
       setSpotifyButtonMsg("Connect to Spotify");
       setIsLoggedInSpotify(false);
     }
-  }
+  };
+
+  const handleUpdateProfile = async () => {
+    router.push("/updateprofile");
+  };
 
   const handleSpotifyButton = async () => {
     if (isLoggedInSpotify) {
@@ -114,8 +121,8 @@ export default function UserProfile() {
       if (getAccountResponse.request?.status == 200) {
         window.location.replace(getAccountResponse?.data);
       } else {
-        if (!localStorage.getItem('token')) {
-          router.push('/login');
+        if (!localStorage.getItem("token")) {
+          router.push("/login");
         }
       }
     }
@@ -167,7 +174,7 @@ export default function UserProfile() {
     <main className="flex flex-col items-center h-fit relative w-full px-8">
       <div className="flex flex-col justify-center align-center mt-4 w-full">
         <div className="flex flex-row ">
-          <div className="flex flex-col w-2/3">
+          <div className="flex flex-col sm:w-full lg:w-2/3">
             <div className="flex gap-12">
               <div className="">
                 <div className="text-3xl font-bold mt-8 mb-4">
@@ -175,7 +182,10 @@ export default function UserProfile() {
                 </div>
                 <div className="text-md">{user?.username}</div>
                 <div className="text-md">{user?.email}</div>
-                <div className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer">
+                <div
+                  className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer"
+                  onClick={handleUpdateProfile}
+                >
                   Update Profile
                 </div>
               </div>
@@ -195,7 +205,7 @@ export default function UserProfile() {
                 Your favourite artists
               </div>
               <button
-                className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
+                className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg"
                 onClick={handleSpotifyButton}
               >
                 {spotifyButtonMsg}
@@ -203,12 +213,21 @@ export default function UserProfile() {
             </div>
             <div className="flex overflow-x-auto max-w-full">
               <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-8">
-                <div className={`${isArtistLoaded ? 'hidden' : 'display'}`}> Loading... </div>
-                {favArtist?.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
-                  return (
-                    <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
-                  );
-                })}
+                <div className={`${isArtistLoaded ? "hidden" : "display"}`}>
+                  {" "}
+                  Loading...{" "}
+                </div>
+                {favArtist
+                  ?.slice(0, Math.min(10, favArtist.length))
+                  .map((artist, i) => {
+                    return (
+                      <VerticalCard
+                        key={i}
+                        image={artist.artistImageURL}
+                        name={artist.name}
+                      />
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -283,7 +302,7 @@ export default function UserProfile() {
 
       <div className="flex flex-col w-full">
         <div className="text-xl font-bold mb-4 mt-16">Friends</div>
-        <div className="flex overflow-x-auto max-w-full mb-32 px-4 py-8">
+        <div className="flex overflow-x-auto max-w-full mb-32 px-4">
           <div className="flex gap-5">
             <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
             <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />

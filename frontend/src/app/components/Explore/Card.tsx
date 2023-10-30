@@ -15,10 +15,8 @@ export function Card(event: Event) {
     router.push(`/eventdetails/${event.eventId}`);
   };
   return (
-    <button
-      className="w-full grid-rows-2 h-72 rounded-md transition-transform group text-left"
-      onClick={handleEventDetails}
-    >
+    <a href={`/explore/${event.eventId}`}>
+    <button className="w-full grid-rows-2 h-72 rounded-md transition-transform group text-left">
       <img
         src={event.eventImageURL}
         className="row-span-1 rounded-md h-44 object-cover w-full group-hover:opacity-60 group-hover:scale-105 group-hover:ease-in-out group-hover:duration-200"
@@ -29,5 +27,6 @@ export function Card(event: Event) {
         {/* <button className="bg-theme-blue text-white px-2 py-2 rounded-full text-xs" /> */}
       </div>
     </button>
+    </a>
   );
 }

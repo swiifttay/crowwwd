@@ -13,6 +13,7 @@ export interface Event {
   eventId: string;
   name: string;
   eventImageURL: string;
+  eventImageName: string
   venue: string | null;
   categories: string[];
   artist: { name: string };
@@ -148,8 +149,8 @@ export default function Explore() {
           {displayedItems}
         </div>
       ) : (
-        <div className="my-5 w-full flex text-4xl text-center font-thin justify-center">
-          <h1 className="px-3">Loading</h1>{" "}
+        <div className="my-5 w-full flex text-2xl text-center font-bold justify-center">
+          <div className="px-3">Loading</div>{" "}
           <BiLoaderAlt className="animate-spin" />
         </div>
       )}
