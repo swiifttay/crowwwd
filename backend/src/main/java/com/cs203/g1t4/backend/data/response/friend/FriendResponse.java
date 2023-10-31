@@ -2,6 +2,7 @@ package com.cs203.g1t4.backend.data.response.friend;
 
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.models.Friend;
+import com.cs203.g1t4.backend.models.OutputFriend;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +15,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FriendResponse implements Response {
-    private List<Friend> friends;
+    private List<OutputFriend> friends;
 }

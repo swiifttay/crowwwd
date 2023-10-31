@@ -15,4 +15,5 @@ public class Category {
     private int price;
 
     private String seatsInformationString;
+
 }

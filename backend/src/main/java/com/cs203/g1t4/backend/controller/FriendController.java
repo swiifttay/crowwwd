@@ -3,7 +3,6 @@ package com.cs203.g1t4.backend.controller;
 import com.cs203.g1t4.backend.data.request.friend.FriendRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.FriendService;
-import com.cs203.g1t4.backend.service.ProfileService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class FriendController {
 
     private final FriendService friendService;
-    private final ProfileService profileService;
 
     @PostMapping("/friend")
     public ResponseEntity<Response> addFriend(@Valid @RequestBody FriendRequest friendRequest, @AuthenticationPrincipal UserDetails userDetails) {
@@ -48,7 +46,7 @@ public class FriendController {
     }
 
     @PutMapping("/friend")
-    public ResponseEntity<Response> updateTicket(@Valid @RequestBody FriendRequest friendRequest, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Response> approveFriend(@Valid @RequestBody FriendRequest friendRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
         //Get the username from the userDetails of the authenticated user
         String username = userDetails.getUsername();
