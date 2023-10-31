@@ -1,6 +1,7 @@
 package com.cs203.g1t4.backend.data.request.seat;
 
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +15,19 @@ import java.util.List;
 @NoArgsConstructor
 public class SeatsConfirmRequest {
 
+    @NotBlank
+    private String eventId;
+
+    @NotBlank
+    private String category;
+
+    @NotBlank
     private List<String> allocatedSeats;
+
+    @NotBlank
     private List<String> userIdsAttending;
+
+    @NotBlank
     private int noOfSurpriseTickets;
 
     public List<TicketRequest> returnTicketRequestListFromRequest(String eventId) {
