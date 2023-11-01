@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../AuthContext";
 import { authenticate } from "../axios/apiService";
 import { useFormState } from "../components/Login/FormContext";
 
@@ -12,10 +13,19 @@ type TFormValues = {
   username: string;
   password: string;
 };
-export default function LoginForm() {
+
+// type LoginFormProps = {
+//   onLoginSuccess: () => void;
+// };
+
+// export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
+export default function LoginForm({ handleLoginSuccess }) {
   const router = useRouter();
 
   const [msg, setMsg] = useState("");
+
+  // const { setIsLogin } = useAuth();
+
   const onHandleFormSubmit = async (data: TFormValues) => {
     setFormData((prev: any) => ({ ...prev, ...data }));
 
@@ -24,6 +34,9 @@ export default function LoginForm() {
     // check if the status given is correct
     if (response.request?.status === 200) {
       setMsg("Loading...");
+      // onLoginSuccess();
+      // setIsLogin(true);
+      handleLoginSuccess();
       router.push("/userprofile");
 
       // if it is incorrect,
