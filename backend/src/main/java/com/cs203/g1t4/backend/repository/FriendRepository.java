@@ -11,7 +11,5 @@ public interface FriendRepository extends MongoRepository<Friend, String> {
 
     List<Friend> findAllByUserId(String userId);
 
-    List<Friend> findAllByUserIdAndApproved(String userId, boolean isApproved);
-
     void deleteByUserIdAndFriendId(String userId, String friendId);
 }

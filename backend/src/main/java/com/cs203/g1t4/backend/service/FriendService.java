@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -152,7 +153,8 @@ public class FriendService {
                 .orElseThrow(() -> new InvalidTokenException());
 
         //Obtain friendList from username
-        List<Friend> friendList = friendRepository.findAllByUserIdAndApproved(user.getId(), true);
+        List<Friend> friendList = friendRepository.findAllByUserId(user.getId());
+        filterFriendList(friendList, true);
 
         //If Everything goes smoothly, SuccessResponse will be created
         return FriendResponse.builder()
@@ -167,12 +169,23 @@ public class FriendService {
                 .orElseThrow(() -> new InvalidTokenException());
 
         //Obtain friendList from username
-        List<Friend> friendList = friendRepository.findAllByUserIdAndApproved(user.getId(), false);
+        List<Friend> friendList = friendRepository.findAllByUserId(user.getId());
+        filterFriendList(friendList, false);
 
         //If Everything goes smoothly, SuccessResponse will be created
         return FriendResponse.builder()
                 .friends(convertFriendListToOutputFriendList(friendList))
                 .build();
+    }
+
+    private void filterFriendList(List<Friend> list, boolean isApproved) {
+        Iterator<Friend> iter = list.iterator();
+        while (iter.hasNext()) {
+            Friend friend = iter.next();
+            if (friend.isApproved() != isApproved) {
+                iter.remove();
+            }
+        }
     }
 
     private List<OutputFriend> convertFriendListToOutputFriendList(List<Friend> list) {
