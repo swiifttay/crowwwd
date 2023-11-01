@@ -1,6 +1,8 @@
 import React from "react";
 import { RiCloseLine } from "react-icons/ri";
 import Dropdown from "./Dropdown";
+import SingleSelect from "./FriendDropdown";
+import NumTicket from "./NumTicketsDropdown";
 import styles from "./Modal.module.css";
 
 interface ModalProps {
@@ -37,7 +39,12 @@ const Modal: React.FC<ModalProps> = ({
           </div>
           <div className={styles.modalActions}>
             <div className={styles.actionsContainer}>
-              <Dropdown />
+              <SingleSelect />
+              <NumTicket />
+            </div>
+          </div>
+          <div className={styles.modalActions}>
+            <div className={styles.actionsContainer}>
               <button
                 className={styles.confirmBtn}
                 onClick={() => setIsOpen(false)}

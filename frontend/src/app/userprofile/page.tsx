@@ -15,6 +15,7 @@ import Modal from "../components/UserProfile/Modal";
 import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export interface User {
   id: string;
@@ -199,14 +200,15 @@ export default function UserProfile() {
                 </div>
               </div>
 
-              <div className="">
-                <Image
+              <div className="flex items-center">
+                {/* <Image
                   src="/images/Siyu.png"
                   alt="Profile Picture"
                   className="rounded-full"
                   width={200}
                   height={200}
-                />
+                /> */}
+                <AccountCircleIcon style={{ fontSize: 140 }}/>
               </div>
             </div>
             <div className="flex flex-row justify-between mb-4 mt-20">
