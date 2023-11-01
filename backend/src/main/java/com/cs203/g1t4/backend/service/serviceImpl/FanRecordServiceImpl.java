@@ -1,12 +1,8 @@
 package com.cs203.g1t4.backend.service;
 
-import com.cs203.g1t4.backend.data.request.fanRecord.FanRecordRequest;
-import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.fanRecord.FanRecordResponse;
-import com.cs203.g1t4.backend.models.Artist;
 import com.cs203.g1t4.backend.models.FanRecord;
 import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.models.exceptions.DuplicateFanRecordException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
 import com.cs203.g1t4.backend.repository.FanRecordRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
@@ -19,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class FanRecordService {
+public class FanRecordServiceImpl implements FanRecordService {
     private final FanRecordRepository fanRecordRepository;
     private final UserRepository userRepository;
 

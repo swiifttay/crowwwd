@@ -19,11 +19,10 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TicketService {
+public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
-
 
     public SingleTicketResponse createTicket(TicketRequest ticketRequest, String username) {
         // Get the buying user's id

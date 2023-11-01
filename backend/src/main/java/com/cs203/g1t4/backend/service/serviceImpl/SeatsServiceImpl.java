@@ -27,8 +27,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SeatsService {
-
+public class SeatsServiceImpl implements SeatsService{
     private final UserRepository userRepository;
     private final SeatingDetailsRepository seatingDetailsRepository;
     private final SeatingDetailsService seatingDetailsService;

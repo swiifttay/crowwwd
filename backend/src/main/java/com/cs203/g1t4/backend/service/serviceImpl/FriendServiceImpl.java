@@ -1,6 +1,5 @@
 package com.cs203.g1t4.backend.service;
 
-import com.amazonaws.services.cloudformation.model.Output;
 import com.cs203.g1t4.backend.data.request.friend.FriendRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.friend.FriendResponse;
@@ -8,7 +7,10 @@ import com.cs203.g1t4.backend.data.response.friend.SingleFriendResponse;
 import com.cs203.g1t4.backend.models.Friend;
 import com.cs203.g1t4.backend.models.OutputFriend;
 import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.models.exceptions.*;
+import com.cs203.g1t4.backend.models.exceptions.DuplicatedFriendException;
+import com.cs203.g1t4.backend.models.exceptions.FriendNotFoundException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidUserIdException;
 import com.cs203.g1t4.backend.repository.FriendRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class FriendService {
+public class FriendServiceImpl implements FriendService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
 

@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SeatingDetailsService {
+public class SeatingDetailsServiceImpl implements SeatingDetailsService{
 
     private final EventRepository eventRepository;
     private final SeatingDetailsRepository seatingDetailsRepository;

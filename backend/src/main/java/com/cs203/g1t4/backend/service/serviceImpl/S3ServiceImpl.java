@@ -8,11 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 
 @Service
-public class S3Service {
+public class S3ServiceImpl implements S3Service{
     @Autowired
     private AmazonS3 s3;
 

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class CommonService {
+public class CommonServiceImpl implements CommonService {
     //    This defaultResponse is on purpose so that it @Autowired DefaultResponse class instead of Response implementation
     private final Response defaultResponse;
     private final JwtService jwtService;

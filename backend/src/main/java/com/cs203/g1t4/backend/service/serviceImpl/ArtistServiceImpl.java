@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ArtistService {
+public class ArtistServiceImpl implements ArtistService {
     private final ArtistRepository artistRepository;
     private final S3Service s3Service;
 

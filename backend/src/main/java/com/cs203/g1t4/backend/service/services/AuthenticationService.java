@@ -5,7 +5,9 @@ import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidCredentialsException;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface AuthenticationService {
 
     /**
