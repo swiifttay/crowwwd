@@ -1,6 +1,7 @@
 package com.cs203.g1t4.backend.models.event;
 
 import com.cs203.g1t4.backend.models.Artist;
+import com.cs203.g1t4.backend.models.Venue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class FullEvent {
   private String eventImageURL; // Image URL
   private String description;
   private List<String> dates; // date and time of the actual concert
-  private String venue;
+  private Venue venue;
   private List<String> categories;
   private Artist artist;
   private String seatingImagePlan; // imageName to look for in S3 Bucket

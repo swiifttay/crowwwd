@@ -1,6 +1,8 @@
-package com.cs203.g1t4.backend.data.request.seat;
+package com.cs203.g1t4.backend.data.response.friend;
 
 import com.cs203.g1t4.backend.data.response.Response;
+import com.cs203.g1t4.backend.models.Friend;
+import com.cs203.g1t4.backend.models.OutputFriend;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SeatRequest implements Response {
-  private List<String> allocatedSeats;
+public class FriendResponse implements Response {
+    private List<OutputFriend> friends;
 }

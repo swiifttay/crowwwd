@@ -71,6 +71,9 @@ public class EventService {
                 image
         );
 
+        //Checks if venue exists
+        Venue venue = venueRepository.findById(request.getVenue()).orElseThrow(() -> new InvalidVenueException());
+
         //If Everything goes smoothly, SuccessResponse will be created
         return SuccessResponse.builder()
                 .response("Event has been created successfully")
@@ -236,8 +239,12 @@ public class EventService {
         Artist artist = artistRepository.findById(event.getArtistId())
                 .orElseThrow(() -> new InvalidArtistIdException(event.getArtistId()));
 
+        // Find venue from repository, or else throw InvalidVenueException()
+        Venue venue = venueRepository.findById(event.getVenue())
+                .orElseThrow(() -> new InvalidVenueException());
+
         //Returns OutputEvent object from Event Object
-        return event.returnFullEvent(artist);
+        return event.returnFullEvent(artist, venue);
     }
 
     /**
@@ -253,8 +260,12 @@ public class EventService {
         Artist artist = artistRepository.findById(event.getArtistId())
                 .orElseThrow(() -> new InvalidArtistIdException(event.getArtistId()));
 
+        // Find venue from repository, or else throw InvalidVenueException()
+        Venue venue = venueRepository.findById(event.getVenue())
+                .orElseThrow(() -> new InvalidVenueException());
+
         //Returns OutputEvent object from Event Object
-        return event.returnFullEvent(artist);
+        return event.returnFullEvent(artist, venue);
     }
 
     /**
@@ -278,7 +289,7 @@ public class EventService {
      * Obtains an Event Object from String eventID and converts the Event Object to a DetailsEvent Object
      * If artist with inputted artistID cannot be found, throw InvalidArtistIdException.
      *
-     * @param event a Event object to be converted.
+     * @param eventId a Event object to be converted.
      * @return the DetailsEvent object converted from the Event object.
      */
     private DetailsEvent getDetailsEventFromEventId(String eventId) throws InvalidEventIdException, InvalidVenueException{
@@ -340,7 +351,7 @@ public class EventService {
      * @param oldEvent an Event object containing the event info of the user that has to be updated. null for creation
      * @return the Event object that has been created/updated
      */
-    private Event getEventClassFromRequest(EventRequest eventRequest, Event oldEvent) {
+    private Event getEventClassFromRequest(EventRequest eventRequest, Event oldEvent) throws InvalidVenueException {
         // Checks if EventRequest isValid
         eventRequestChecker(eventRequest, oldEvent);
 
@@ -349,6 +360,9 @@ public class EventService {
 
         // Create a ArrayList<LocalDateTime> from String[] ticketSalesDate
         List<LocalDateTime> ticketSalesDateList = convertArrToList(eventRequest.getTicketSalesDate());
+
+        //Checks if venue exists in the repository
+        venueRepository.findById(eventRequest.getVenue()).orElseThrow(() -> new InvalidVenueException());
 
         // Build event
         Event event = Event.builder()

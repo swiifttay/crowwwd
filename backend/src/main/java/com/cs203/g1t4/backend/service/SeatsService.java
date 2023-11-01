@@ -1,6 +1,7 @@
 package com.cs203.g1t4.backend.service;
 
-import com.cs203.g1t4.backend.data.request.seat.SeatRequest;
+import com.cs203.g1t4.backend.data.request.seat.FindSeatRequest;
+import com.cs203.g1t4.backend.data.request.seat.SeatCancelRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatsConfirmRequest;
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -20,7 +21,6 @@ import com.cs203.g1t4.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,8 +37,13 @@ public class SeatsService {
     private static final int NUM_SEATS_PER_ROW = 4;
     private static final int NUM_ROWS = 4;
 
-    public Response findSeats(final String eventId, final String category, final String numSeats)
+    public Response findSeats(final FindSeatRequest findSeatRequest)
             throws InvalidCategoryException, InvalidSeatingDetailsException {
+
+        //Initialise variables
+        String eventId = findSeatRequest.getEventId();
+        String category = findSeatRequest.getCategory();
+        int numSeats = findSeatRequest.getNumSeats();
 
         //Create Seats to store information to be returned to frontend
         Seats seats = Seats.builder()
@@ -56,10 +61,10 @@ public class SeatsService {
         seats.setPricePerSeat(cat.getPrice());
 
         //Calculate total cost of seats and update in seats
-        seats.setTotalCost(seats.getPricePerSeat() * Integer.parseInt(numSeats));
+        seats.setTotalCost(seats.getPricePerSeat() * numSeats);
 
         //Find seats using Seats Allocation
-        List<String> seatAllocation = getSeats(Integer.parseInt(numSeats), cat.getSeatsInformationString());
+        List<String> seatAllocation = getSeats(numSeats, cat.getSeatsInformationString());
 
         //Throws seatAllocation == null
         if (seatAllocation == null) { throw new IllegalArgumentException("No Combination can be found"); }
@@ -80,7 +85,10 @@ public class SeatsService {
                         .build();
     }
 
-    public Response confirmSeats(final String eventId, final String category, final String username, final SeatsConfirmRequest seatsConfirmRequest) {
+    public Response confirmSeats(final String username, final SeatsConfirmRequest seatsConfirmRequest) {
+
+        String eventId = seatsConfirmRequest.getEventId();
+        String category = seatsConfirmRequest.getCategory();
 
         //Find User object from username
         userRepository.findByUsername(username).orElseThrow(() -> new InvalidTokenException());
@@ -111,7 +119,10 @@ public class SeatsService {
                 .build();
     }
 
-    public Response cancelSeats(final String eventId, final String category, final SeatRequest seatRequest) {
+    public Response cancelSeats(final SeatCancelRequest seatRequest) {
+
+        String eventId = seatRequest.getEventId();
+        String category = seatRequest.getCategory();
 
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
@@ -124,8 +135,6 @@ public class SeatsService {
         String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(),
                 seatRequest.getAllocatedSeats(), '0');
         seatingDetailsService.updateSeatingDetails(eventId, category, updatedSeatsString);
-
-        //Consider returning ticket here?
 
         return SuccessResponse.builder()
                 .response("Seats cancelled.")

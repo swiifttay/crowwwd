@@ -56,7 +56,7 @@ public class Event {
      * @param artist a Artist object obtained from the ArtistId of the Event object.
      * @return the FullEvent object converted from the Event object.
      */
-    public FullEvent returnFullEvent(Artist artist) {
+    public FullEvent returnFullEvent(Artist artist, Venue venue) {
 
         return FullEvent.builder()
                 .eventId(id)
