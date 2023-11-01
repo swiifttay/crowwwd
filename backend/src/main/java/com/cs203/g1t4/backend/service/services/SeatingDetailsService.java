@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import com.cs203.g1t4.backend.data.request.event.SeatingDetailsRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -10,14 +10,14 @@ import java.util.List;
 @Service
 public interface SeatingDetailsService {
 
-    public SuccessResponse addSeatingDetails(String eventId, SeatingDetailsRequest request);
+    SuccessResponse addSeatingDetails(String eventId, SeatingDetailsRequest request);
 
-    public Response deleteSeatingDetails(String eventId);
+    Response deleteSeatingDetails(String eventId);
     
-    public Response updateSeatingDetails(String eventId, SeatingDetailsRequest request);
+    Response updateSeatingDetails(String eventId, SeatingDetailsRequest request);
 
-    public Response getSeatingDetailsById(String eventId);
+    Response getSeatingDetailsById(String eventId);
 
     //Public Helper methods
-    public Response updateSeatingDetails(String eventId, String category, String seatsInformationString);
+    Response updateSeatingDetails(String eventId, String category, String seatsInformationString);
 }

@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 public interface TicketService {
 
-    public SingleTicketResponse createTicket(TicketRequest ticketRequest, String username);
+    SingleTicketResponse createTicket(TicketRequest ticketRequest, String username);
 
-    public Response deleteTicket(String ticketId);
+    Response deleteTicket(String ticketId);
 
-    public Response updateTicket(String ticketId, TicketRequest ticketRequest, String username);
+    Response updateTicket(String ticketId, TicketRequest ticketRequest, String username);
 
-    public Response getTicketById(String ticketId);
+    Response getTicketById(String ticketId);
 
-    public Response getTicketsByUser(String username);
+    Response getTicketsByUser(String username);
 
-    public Response getTicketByEvent(String eventId);
+    Response getTicketByEvent(String eventId);
 }

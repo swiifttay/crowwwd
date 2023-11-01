@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -20,17 +20,17 @@ import com.cs203.g1t4.backend.models.User;
 @Service
 public interface JwtService {
 
-    public String extractUsername(String token);
+    String extractUsername(String token);
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
+    <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
 
-    public String generateToken(User user);
+    String generateToken(User user);
 
-    public String generateToken(Map<String, Object> extraClaim, User user);
+    String generateToken(Map<String, Object> extraClaim, User user);
 
-    public boolean isTokenValid(String token, UserDetails userDetails);
+    boolean isTokenValid(String token, UserDetails userDetails);
 
-    public Claims extractAllClaims(String token);
+    Claims extractAllClaims(String token);
 
 }
 

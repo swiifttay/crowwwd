@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +15,7 @@ public interface VenueService {
      * @param venueId a String object containing the venueId to be found
      * @return a SingleVenueResponse object containing the found Venue object
      */
-    public Response getVenue(String venueId);
+    Response getVenue(String venueId);
 
     /**
      * 
@@ -23,7 +23,7 @@ public interface VenueService {
      * @param image a MultipartFile object containing the image of the venue
      * @return SuccessResponse "Venue has been created successfully"
      */
-    public Response createVenue(VenueRequest venueRequest, MultipartFile image) ;
+    Response createVenue(VenueRequest venueRequest, MultipartFile image) ;
 
     /**
      * 
@@ -32,12 +32,12 @@ public interface VenueService {
      * @param image a MultipartFile object containing the new image to be updated
      * @return a SingleVenueResponse object containing the updated Venue object
      */
-    public Response updateVenue(String venueId, VenueRequest venueRequest, MultipartFile image);
+    Response updateVenue(String venueId, VenueRequest venueRequest, MultipartFile image);
 
     /**
      * 
      * @param venueId a String object containing the venueId of the venue to be removed
      * @return a SingleVenueResponse object containing the venue that was removed
      */
-    public Response removeVenue(String venueId);
+    Response removeVenue(String venueId);
 }

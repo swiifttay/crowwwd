@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import com.cs203.g1t4.backend.data.request.friend.FriendRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -8,18 +8,18 @@ import org.springframework.stereotype.Service;
 @Service
 public interface FriendService {
 
-    public Response addFriend(FriendRequest friendRequest, String username)
+    Response addFriend(FriendRequest friendRequest, String username)
             throws DuplicatedFriendException, FriendNotFoundException, InvalidTokenException;
 
-    public Response deleteFriend(FriendRequest friendRequest, String username)
+    Response deleteFriend(FriendRequest friendRequest, String username)
             throws InvalidTokenException, InvalidUserIdException;
 
-    public Response approveFriend(FriendRequest friendRequest, String username);
+    Response approveFriend(FriendRequest friendRequest, String username);
 
-    public Response getAllFriends(String username);
+    Response getAllFriends(String username);
 
-    public Response getApprovedFriends(String username);
+    Response getApprovedFriends(String username);
 
-    public Response getPendingFriends(String username);
+    Response getPendingFriends(String username);
 
 }

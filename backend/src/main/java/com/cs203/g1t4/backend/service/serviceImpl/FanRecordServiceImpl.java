@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.response.fanRecord.FanRecordResponse;
 import com.cs203.g1t4.backend.models.FanRecord;
@@ -6,6 +6,7 @@ import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
 import com.cs203.g1t4.backend.repository.FanRecordRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
+import com.cs203.g1t4.backend.service.services.FanRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -16,7 +16,7 @@ public interface EventService {
      * @return SuccessResponse "Event has been created successfully"
      */
     // Main Service Methods
-    public Response addFullEvent(EventRequest request, MultipartFile image);
+    Response addFullEvent(EventRequest request, MultipartFile image);
 
     /**
      * Deletes an event from the repository based on the eventId.
@@ -24,7 +24,7 @@ public interface EventService {
      * @param eventId a String object containing the eventId of the event to be deleted.
      * @return a SingleFullEventResponse object containing the deleted Event Object in the form of a FullEvent.
      */
-    public Response deleteFullEventById(String eventId);
+    Response deleteFullEventById(String eventId);
 
     /**
      * Updates an event from the repository based on the eventId, request and image.
@@ -34,7 +34,7 @@ public interface EventService {
      * @param image a MultipartFile object containing the new image to be updated
      * @return a SingleFullEventResponse object containing the updated Event Object in the form of a FullEvent.
      */
-    public Response updateFullEventById(String eventId, EventRequest request, MultipartFile image);
+    Response updateFullEventById(String eventId, EventRequest request, MultipartFile image);
 
     /**
      * Finds an ExploreEvent from the repository based on the eventId.
@@ -42,7 +42,7 @@ public interface EventService {
      * @param eventId a String object containing the eventId of the event to be found.
      * @return a SingleFullEventResponse object containing the found Event Object in the form of an ExploreEvent.
      */
-    public Response getFullEventById(String eventId);
+    Response getFullEventById(String eventId);
 
     /**
      * Finds a DetailsEvent from the repository based on the eventId.
@@ -50,12 +50,12 @@ public interface EventService {
      * @param eventId a String object containing the eventId of the event to be found.
      * @return a SingleDetailsEventResponse object containing the found Event Object in the form of an DetailsEvent.
      */
-    public Response getDetailsEventById(String eventId);
+    Response getDetailsEventById(String eventId);
 
     /**
      * Finds a list of ExploreEvent from the repository that happens after today.
      *
      * @return a ExploreEventsResponse object containing the List of ExploreEvent objects.
      */
-    public Response getAllExploreEvents();
+    Response getAllExploreEvents();
 }

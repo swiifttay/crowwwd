@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.request.artist.ArtistRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -8,6 +8,8 @@ import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.models.Artist;
 import com.cs203.g1t4.backend.models.exceptions.InvalidArtistIdException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
+import com.cs203.g1t4.backend.service.services.ArtistService;
+import com.cs203.g1t4.backend.service.services.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

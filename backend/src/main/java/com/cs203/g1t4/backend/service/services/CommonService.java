@@ -1,15 +1,13 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import com.cs203.g1t4.backend.data.request.user.UserRequest;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
 import com.cs203.g1t4.backend.models.exceptions.PasswordDoNotMatchException;
 
-import java.time.LocalDateTime;
-
 public interface CommonService {
 
-    public String returnOldUsername(String token);
+    String returnOldUsername(String token);
 
     /**
      * Creates User object from UserRequest object
@@ -21,6 +19,6 @@ public interface CommonService {
      * @param oldUser a User object containing the user info of the user that has to be updated. null for creation
      * @return the User object that has been created/updated
      */
-    public User getUserClassFromRequest(UserRequest userRequest, User oldUser)
+     User getUserClassFromRequest(UserRequest userRequest, User oldUser)
             throws DuplicatedUsernameException, PasswordDoNotMatchException;
 }

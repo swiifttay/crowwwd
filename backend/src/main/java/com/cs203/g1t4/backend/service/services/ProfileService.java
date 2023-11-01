@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public interface ProfileService {
      * @param username a String object containing the username of the user originally
      * @return SuccessResponse "User has been updated successfully"
      */
-    public Response updateProfile(UpdateProfileRequest request, String username)
+    Response updateProfile(UpdateProfileRequest request, String username)
             throws InvalidTokenException;
 
     /**
@@ -30,7 +30,7 @@ public interface ProfileService {
      * @param username a String object containing the username of the user
      * @return SingleUserResponse containing the User Object
      */
-    public Response findProfile(String username);
+    Response findProfile(String username);
 
     /**
      * Validates the spotify user that is connected with the user that is logged in 
@@ -41,5 +41,5 @@ public interface ProfileService {
      *                                  or if the spotify account user matches the loggedin user 
      *                          false if the spotify account user does not match the loggedin user
      */
-    public boolean validate(String spotifyUserId, String username);
+    boolean validate(String spotifyUserId, String username);
 }

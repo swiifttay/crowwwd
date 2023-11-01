@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.request.venue.VenueRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -7,6 +7,8 @@ import com.cs203.g1t4.backend.data.response.venue.SingleVenueResponse;
 import com.cs203.g1t4.backend.models.Venue;
 import com.cs203.g1t4.backend.models.exceptions.InvalidVenueException;
 import com.cs203.g1t4.backend.repository.VenueRepository;
+import com.cs203.g1t4.backend.service.services.S3Service;
+import com.cs203.g1t4.backend.service.services.VenueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-public class VenueServiceImpl implements VenueService{
+public class VenueServiceImpl implements VenueService {
     private final VenueRepository venueRepository;
     private final S3Service s3Service;
 

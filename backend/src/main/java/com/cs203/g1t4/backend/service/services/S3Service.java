@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -13,7 +13,7 @@ import java.io.IOException;
 @Service
 public interface S3Service {
 
-    public void putObject(String bucketName, String key, MultipartFile file);
+    void putObject(String bucketName, String key, MultipartFile file);
 
     // S3 objects successfully changed to public access
     // Instead of using presignedUrl, now is a formatted string

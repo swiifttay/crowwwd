@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import org.springframework.stereotype.Service;
 
@@ -8,7 +8,7 @@ import se.michaelthelin.spotify.SpotifyApi;
 @Service
 public interface SpotifyService {
 
-    public Response spotifyGetMyTopArtists(SpotifyApi spotifyApi, String username);
+    Response spotifyGetMyTopArtists(SpotifyApi spotifyApi, String username);
 
-    public Response validateAccount(SpotifyApi spotifyApi, String username);
+    Response validateAccount(SpotifyApi spotifyApi, String username);
 }

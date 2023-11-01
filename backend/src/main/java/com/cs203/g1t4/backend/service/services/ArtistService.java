@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import com.cs203.g1t4.backend.data.request.artist.ArtistRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -11,28 +11,28 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ArtistService {
 
     // for manually adding a artist for event creation
-    public Response addArtist(ArtistRequest request);
+    Response addArtist(ArtistRequest request);
 
-    public Response deleteArtistById(String artistId);
+    Response deleteArtistById(String artistId);
 
 
-    public Response updateArtistById(String artistId, ArtistRequest request);
+    Response updateArtistById(String artistId, ArtistRequest request);
 
     // for the purpose of updating artist when there is call to them again
-    public String updateArtistByName(Artist newArtist);
+    String updateArtistByName(Artist newArtist);
 
-    public Response findArtistById(String artistId);
+    Response findArtistById(String artistId);
 
-    public Response getAllArtist();
+    Response getAllArtist();
 
     // for manual changing of picture
-    public SuccessResponse uploadArtistImage(String artistId, MultipartFile multipartFile);
+    SuccessResponse uploadArtistImage(String artistId, MultipartFile multipartFile);
 
     // depending on whether you are finding the image by spotify or by s3
-    public SuccessResponse getArtistImageResponse(String artistId);
+    SuccessResponse getArtistImageResponse(String artistId);
 
-    public String getArtistImage(String artistId);
+    String getArtistImage(String artistId);
 
     // helper method
-    public String fanRecordsCreationAndUpdate(Artist artist);
+    String fanRecordsCreationAndUpdate(Artist artist);
 }
