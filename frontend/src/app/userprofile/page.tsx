@@ -15,7 +15,7 @@ import Modal from "../components/UserProfile/Modal";
 import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export interface User {
   id: string;
@@ -87,7 +87,10 @@ export default function UserProfile() {
   const checkSpotifyLoginStatus = async () => {
     const spotifyTokenResponse = await getSpotifyToken();
     console.log(spotifyTokenResponse.data?.response);
-    if (spotifyTokenResponse?.status === 200 && spotifyTokenResponse.data?.response != null) {
+    if (
+      spotifyTokenResponse?.status === 200 &&
+      spotifyTokenResponse.data?.response != null
+    ) {
       console.log("success");
       localStorage.setItem("spotifyToken", spotifyTokenResponse.data.response);
       setSpotifyButtonMsg("Update My Records");
@@ -208,7 +211,7 @@ export default function UserProfile() {
                   width={200}
                   height={200}
                 /> */}
-                <AccountCircleIcon style={{ fontSize: 140 }}/>
+                <AccountCircleIcon style={{ fontSize: 140 }} />
               </div>
             </div>
             <div className="flex flex-row justify-between mb-4 mt-20">

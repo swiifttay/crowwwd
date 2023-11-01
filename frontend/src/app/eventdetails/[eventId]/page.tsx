@@ -2,9 +2,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  concertDetails
-} from "../../axios/apiService";
+import { concertDetails } from "../../axios/apiService";
 import { StringLiteral } from "typescript";
 
 export interface Venue {
@@ -48,20 +46,16 @@ export default function EventDetails({ params }: any) {
   };
 
   const fetchDetails = async () => {
-
     try {
       const response = await concertDetails(eventId);
       setEventDetail(response.data.detailsEvent);
-
     } catch (error) {
       console.error(error);
       router.push("/pageNotFound");
     }
-
   };
 
   console.log("eventDetail is", eventDetail);
-
 
   return (
     <div className="flex w-full items-center justify-center mt-4">
@@ -74,16 +68,14 @@ export default function EventDetails({ params }: any) {
         </div>
 
         <div className="max-w-[1045px] mt-8">
-          <div className="text-3xl font-bold mb-4">
-            {eventDetail?.name}
-          </div>
+          <div className="text-3xl font-bold mb-4">{eventDetail?.name}</div>
 
           <div className="flex justify-between">
             <p className="text-lg mb-10">
               {eventDetail?.categories.map((category: string, index: any) => (
                 <span key={index}>
                   {category}
-                  {index < eventDetail?.categories.length - 1 && ' | '}
+                  {index < eventDetail?.categories.length - 1 && " | "}
                 </span>
               ))}
             </p>
@@ -109,11 +101,9 @@ export default function EventDetails({ params }: any) {
                   {date}
                 </div>
               ))}
-
             </div>
           </div>
           <div className="flex gap-3 ml-10 mt-3">
-
             <Image
               src="/images/icon-map-pin.svg"
               alt="Location"
@@ -125,9 +115,7 @@ export default function EventDetails({ params }: any) {
             </div>
           </div>
 
-          <p className="text-md mt-10 mb-10">
-            {eventDetail?.description}
-          </p>
+          <p className="text-md mt-10 mb-10">{eventDetail?.description}</p>
 
           <div className="font-semibold text-2xl mb-4">Price Details</div>
           <div className="grid text-md gap-2">

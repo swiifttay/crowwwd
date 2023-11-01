@@ -1,14 +1,14 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 const nameList = ["Alice", "Bob", "Charlie", "David"]; // Replace with your list of names
 
 export default function BasicSelect() {
-  const [selectedName, setSelectedName] = React.useState('');
+  const [selectedName, setSelectedName] = React.useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedName(event.target.value as string);
