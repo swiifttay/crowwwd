@@ -2,7 +2,6 @@ package com.cs203.g1t4.backend.service;
 
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
 import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
 import com.cs203.g1t4.backend.models.Ticket;
