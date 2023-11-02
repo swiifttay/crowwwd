@@ -1,15 +1,23 @@
-import { useState, useEffect } from 'react';
+import {  useState, useEffect } from 'react';
 import { useStripe } from "@stripe/react-stripe-js";
 import { useRouter } from 'next/navigation'
+import axios from 'axios';
+import { BiLoaderAlt } from 'react-icons/bi';
 
-const ProcessingPage = ({ clientSecret }) => {
-  const [loading, setLoading] = useState(true);
+const ProcessingPage = ({ clientSecret, paymentID }) => {
   const [message, setMessage] = useState("");
 
   const router = useRouter()
   
   const stripe = useStripe();
 
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+
+  const cancelPayment = async () => {
+    await axios.post("/api/cancel-payment-intent", {
+       paymentID
+    });
+  }
 
   useEffect(() => {
     if (stripe) { // Check if stripe is available
@@ -25,6 +33,7 @@ const ProcessingPage = ({ clientSecret }) => {
             console.log("Payment processing");
             break;
           default:
+            cancelPayment();
             router.push('/paymentunsuccessful');
             setMessage("Something went wrong.");
             console.log("Payment unsuccessful");
@@ -36,8 +45,10 @@ const ProcessingPage = ({ clientSecret }) => {
 
   return (
     <div>
-      {/* Render your component content */}
-      {loading ? <p>Loading...</p> : <p>{message}</p>}
+      <div className="my-5 w-full flex text-4xl text-center font-thin justify-center">
+          <h1 className="px-3">Processing...</h1>{" "}
+          <BiLoaderAlt className="animate-spin" />
+        </div>
     </div>
   );
 }

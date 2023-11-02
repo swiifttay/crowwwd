@@ -25,6 +25,8 @@ const config: Config = {
           "radial-gradient(circle at center, rgba(5, 16, 33, 0.4) 20%, rgba(7, 23, 47, 1) 65%), url('/images/login-bg.jpg')",
         checkout:
           "linear-gradient(to right, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.3) 90%), url('/videos/checkout.gif')",
+        failedpayment:
+          "linear-gradient(to right, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.3) 80%), url('/images/paymentfailed.jpg')"
 
       },
 

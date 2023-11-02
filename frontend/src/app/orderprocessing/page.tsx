@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+
 import { useSearchParams } from 'next/navigation';
 import {
     useStripe
@@ -13,7 +13,6 @@ import ProcessingPage from '../components/Processing/ProcessingPage';
 
 const orderprocessing = () => {
 
-  const [loading, isLoading] = useState<Boolean>(true); 
   
   const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -21,7 +20,7 @@ const orderprocessing = () => {
 
   const searchParams = useSearchParams();
   const clientSecret: string | null = searchParams.get('payment_intent_client_secret') != null ? searchParams.get('payment_intent_client_secret') : null;
-  
+  const paymentID: string | null = searchParams.get('payment_intent') != null ? searchParams.get('payment_intent') : null;
 
   const appearance = {
     theme: 'stripe',
@@ -37,7 +36,7 @@ const orderprocessing = () => {
     <div>
         {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          <ProcessingPage clientSecret ={clientSecret} />
+          <ProcessingPage clientSecret ={clientSecret} paymentID={paymentID} />
         </Elements>
       )}
     </div>

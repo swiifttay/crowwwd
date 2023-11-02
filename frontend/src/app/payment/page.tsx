@@ -43,7 +43,6 @@ export default function App() {
         <h1 className="m-2 text-5xl font-semibold text-center">
           You're on your way!
         </h1>
-        <h3></h3>
       </div>
       <div className="w-1/2">
       {clientSecret && (
