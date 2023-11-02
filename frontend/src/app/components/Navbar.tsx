@@ -4,16 +4,14 @@ import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGlobalState } from "../globalStateContext";
 import styles from "./Navbar.module.css";
 import Logo from "/public/images/Logo.png";
-import { useAuth } from "../AuthContext";
 
 export default function Navbar() {
   const { isOpen, setIsOpen } = useGlobalState();
-  // const [isLogin, setIsLogin] = useState(false);
-  const { isLogin } = useAuth();
+  const [isLogin, setIsLogin] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
 
@@ -37,9 +35,14 @@ export default function Navbar() {
     // router.push(`/search?query=${searchText}`);
   }
 
-  // function handleLoginSuccess() {
-  //   setIsLogin(true);
-  // }
+  const checkLoginStatus = async () => {
+    const token = localStorage.getItem("token");
+    setIsLogin(Boolean(token));
+  };
+
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   return (
     <div className="w-full font-bold text-base py-[20px] md:px-[128px] flex items-center z-40 justify-between px-20">
@@ -90,7 +93,9 @@ export default function Navbar() {
         </div>
 
         {searchVisible ? (
-          <div className=""> {/*{styles.searchContainer}*/}
+          <div className="">
+            {" "}
+            {/*{styles.searchContainer}*/}
             <form className={styles.searchForm} onSubmit={handleSearchSubmit}>
               <input
                 type="text"
