@@ -1,5 +1,6 @@
 package com.cs203.g1t4.backend.service;
 
+import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.queue.QueueResponse;
 import com.cs203.g1t4.backend.models.FanRecord;
 import com.cs203.g1t4.backend.models.User;
@@ -12,7 +13,9 @@ import com.cs203.g1t4.backend.models.queue.HoldingArea;
 import com.cs203.g1t4.backend.models.queue.QueueStatus;
 import com.cs203.g1t4.backend.models.queue.QueueingStatusValues;
 import com.cs203.g1t4.backend.repository.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,10 +34,12 @@ public class HoldingAreaService {
     private final QueueStatusRepository queueStatusRepository;
 
 
-    public QueueResponse enterHoldingArea(String username, String eventId) {
+    public Response enterHoldingArea(String username, String eventId) {
         // get the user and event
         User user = verifyUsername(username);
         Event event = verifyEventId(eventId);
+
+        verifyPurchaseValidity(event);
 
         Optional<QueueStatus> userQueueStatus = queueStatusRepository.findQueueByUserIdAndEventId(user.getId(), eventId);
 
@@ -48,7 +53,7 @@ public class HoldingAreaService {
         // if reach this code means user is not in queue yet
 
         // determine if user is a fan
-        boolean isFanOfEventArtist = verifyFan(userQueueStatus.get().getUserId(), event.getArtistId());
+        boolean isFanOfEventArtist = verifyFan(user.getId(), event.getArtistId());
 
         // get the holding area for the event
         HoldingArea holdingAreaForEvent = getHoldingAreaForEvent(eventId);
@@ -72,6 +77,7 @@ public class HoldingAreaService {
         QueueStatus createdUserQueueStatus = QueueStatus.builder()
                 .userId(user.getId())
                 .queueStatus(QueueingStatusValues.HOLDING)
+                .eventId(eventId)
                 .build();
 
         // save into repo
@@ -84,7 +90,7 @@ public class HoldingAreaService {
                 .build();
     }
 
-    public QueueResponse getQueueStatus(String username, String eventId) {
+    public Response getQueueStatus(String username, String eventId) {
         // determine if the user is in queue
         Optional<QueueStatus> userQueueStatus = findQueueStatusOfUser(username, eventId);
 
@@ -165,8 +171,10 @@ public class HoldingAreaService {
         List<String> fans = holdingArea.getFans();
         List<String> regulars = holdingArea.getRegulars();
 
+        int queueSize = Math.min(30, fans.size() + regulars.size());
+
         // make 30 of them
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < queueSize; i++) {
             int percentageChance = 100 - rand.nextInt(100) + 1;
             List<String> updatingList = regulars;
             if (percentageChance >= 70 && !fans.isEmpty()) {
