@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -15,7 +15,6 @@ import Modal from "../components/UserProfile/Modal";
 import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export interface User {
   id: string;
@@ -183,6 +182,11 @@ export default function UserProfile() {
     }
   }, [isOpen]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+  };
+
   return (
     <main className="flex flex-col items-center h-fit relative w-full px-8">
       <div className="flex flex-col justify-center align-center mt-4 w-full">
@@ -195,15 +199,22 @@ export default function UserProfile() {
                 </div>
                 <div className="text-md">{user?.username}</div>
                 <div className="text-md">{user?.email}</div>
-                <div
-                  className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer"
+                <button
+                  type="submit"
+                  className="mt-6 w-full hover:bg-theme-light-blue text-white py-2 px-4 rounded-lg bg-theme-blue"
                   onClick={handleUpdateProfile}
                 >
                   Update Profile
+                </button>
+                <div
+                  className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer"
+                  onClick={handleLogout}
+                >
+                  Logout
                 </div>
               </div>
 
-              <div className="flex items-center">
+              <div className="flex items-center justify-center flex-col">
                 {/* <Image
                   src="/images/Siyu.png"
                   alt="Profile Picture"
