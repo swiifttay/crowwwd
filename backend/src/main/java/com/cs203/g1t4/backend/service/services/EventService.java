@@ -58,4 +58,6 @@ public interface EventService {
      * @return a ExploreEventsResponse object containing the List of ExploreEvent objects.
      */
     Response getAllExploreEvents();
+
+    Response getFullEventByAlias(String alias);
 }

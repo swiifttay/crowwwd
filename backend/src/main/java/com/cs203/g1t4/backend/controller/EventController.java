@@ -35,6 +35,14 @@ public class EventController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/fullEvent/alias/{alias}")
+    public ResponseEntity<Response> getFullEventByAlias(@PathVariable String alias) {
+        // Get event using getFulLEventById in eventService
+        Response response = eventService.getFullEventByAlias(alias);
+
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("/fullEvent/{eventId}")
     public ResponseEntity<Response> deleteEvent(@PathVariable String eventId) {
         // Delete event using deleteFullEventById in eventService

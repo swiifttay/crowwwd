@@ -160,6 +160,17 @@ public class EventServiceImpl implements EventService {
                 .build();
     }
 
+    public Response getFullEventByAlias(String alias) {
+
+        //Use of private method getFullEventFromAlias() to generate FullEvent Object from alias
+        FullEvent fullEvent = getFullEventFromAlias(alias);
+
+        //Returns the event with id if successful
+        return SingleFullEventResponse.builder()
+                .fullEvent(fullEvent)
+                .build();
+    }
+
     /**
      * Finds a DetailsEvent from the repository based on the eventId.
      *
@@ -234,6 +245,23 @@ public class EventServiceImpl implements EventService {
         //Finds event from repository, or else throw InvalidEventIdException()
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new InvalidEventIdException(eventId));
+
+        // Find artist from repository, or else throw InvalidArtistIdException()
+        Artist artist = artistRepository.findById(event.getArtistId())
+                .orElseThrow(() -> new InvalidArtistIdException(event.getArtistId()));
+
+        // Find venue from repository, or else throw InvalidVenueException()
+        Venue venue = venueRepository.findById(event.getVenue())
+                .orElseThrow(() -> new InvalidVenueException());
+
+        //Returns OutputEvent object from Event Object
+        return event.returnFullEvent(artist, venue);
+    }
+
+    private FullEvent getFullEventFromAlias(String alias) throws InvalidEventIdException, InvalidArtistIdException {
+        //Finds event from repository, or else throw InvalidEventIdException()
+        Event event = eventRepository.findByAlias(alias)
+                .orElseThrow(() -> new IllegalArgumentException());
 
         // Find artist from repository, or else throw InvalidArtistIdException()
         Artist artist = artistRepository.findById(event.getArtistId())
