@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -19,14 +19,14 @@ import com.cs203.g1t4.backend.models.exceptions.InvalidVenueException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
 import com.cs203.g1t4.backend.repository.EventRepository;
 import com.cs203.g1t4.backend.repository.VenueRepository;
+import com.cs203.g1t4.backend.service.services.EventService;
+import com.cs203.g1t4.backend.service.services.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +35,7 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 @Service
 @RequiredArgsConstructor
-public class EventService {
+public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final ArtistRepository artistRepository;
     private final VenueRepository venueRepository;

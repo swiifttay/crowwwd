@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.request.seat.FindSeatRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatCancelRequest;
@@ -18,6 +18,9 @@ import com.cs203.g1t4.backend.models.exceptions.InvalidSeatingDetailsException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
 import com.cs203.g1t4.backend.repository.SeatingDetailsRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
+import com.cs203.g1t4.backend.service.services.SeatingDetailsService;
+import com.cs203.g1t4.backend.service.services.SeatsService;
+import com.cs203.g1t4.backend.service.services.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +30,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SeatsService {
-
+public class SeatsServiceImpl implements SeatsService {
     private final UserRepository userRepository;
     private final SeatingDetailsRepository seatingDetailsRepository;
     private final SeatingDetailsService seatingDetailsService;

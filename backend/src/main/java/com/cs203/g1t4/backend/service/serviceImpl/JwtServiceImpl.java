@@ -1,5 +1,7 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
+import com.cs203.g1t4.backend.models.User;
+import com.cs203.g1t4.backend.service.services.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,10 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.cs203.g1t4.backend.models.User;
-
 @Service
-public class JwtService {
+public class JwtServiceImpl implements JwtService {
 
     @Value("${crowwwd.backend.app.jwtSecretKey}")
     private String SECRET_KEY;

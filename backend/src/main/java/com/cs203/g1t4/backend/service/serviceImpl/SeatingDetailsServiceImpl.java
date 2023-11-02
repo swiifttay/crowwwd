@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.request.event.SeatingDetailsRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -12,6 +12,7 @@ import com.cs203.g1t4.backend.models.exceptions.InvalidEventIdException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidSeatingDetailsException;
 import com.cs203.g1t4.backend.repository.EventRepository;
 import com.cs203.g1t4.backend.repository.SeatingDetailsRepository;
+import com.cs203.g1t4.backend.service.services.SeatingDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SeatingDetailsService {
+public class SeatingDetailsServiceImpl implements SeatingDetailsService {
 
     private final EventRepository eventRepository;
     private final SeatingDetailsRepository seatingDetailsRepository;

@@ -4,7 +4,7 @@ import com.cs203.g1t4.backend.data.request.seat.FindSeatRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatCancelRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatsConfirmRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.service.SeatsService;
+import com.cs203.g1t4.backend.service.services.SeatsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
