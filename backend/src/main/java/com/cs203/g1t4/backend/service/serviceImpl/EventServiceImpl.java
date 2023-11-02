@@ -368,10 +368,16 @@ public class EventServiceImpl implements EventService {
         Artist artist = artistRepository.findById(eventRequest.getArtistId())
                 .orElseThrow(() -> new InvalidArtistIdException(eventRequest.getArtistId()));
 
+        //Create eventName without punctuation and spaces
+        String aliasEventName = returnStringWithoutPunctuation(eventRequest.getName());
+
+        //Create artistName without punctuation and spaces
+        String aliasArtistName = returnStringWithoutPunctuation(artist.getName());
+
         // Build event
         Event event = Event.builder()
                 .name(eventRequest.getName())
-                .alias(ticketSalesDateList.get(0).getYear() + "_" + eventRequest.getName() + "_" + artist.getName())
+                .alias(ticketSalesDateList.get(0).getYear() + "_" + aliasEventName + "_" + aliasArtistName)
                 .eventImageName(eventRequest.getEventImageName())
                 .description(eventRequest.getDescription())
                 .dates(datesList)
@@ -388,6 +394,16 @@ public class EventServiceImpl implements EventService {
         }
 
         return event;
+    }
+
+    private String returnStringWithoutPunctuation(String s) {
+        StringBuilder stringWithoutPunctuation = new StringBuilder("");
+        for (int i = 0 ; i < s.length() ; i++) {
+            if (Character.isLetter(s.charAt(i))) {
+                stringWithoutPunctuation.append(s.charAt(i));
+            }
+        }
+        return stringWithoutPunctuation.toString();
     }
 
     /**
