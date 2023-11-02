@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   PaymentElement,
   LinkAuthenticationElement,
@@ -11,11 +11,11 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [email, setEmail] = React.useState<string>('');
-  const [message, setMessage] = React.useState<string|undefined>('');
-  const [isLoading, setIsLoading] = React.useState(false);
-
-  React.useEffect(() => {
+  const [email, setEmail] = useState<string>('');
+  const [message, setMessage] = useState<string|undefined>('');
+  const [isLoading, setIsLoading] = useState(false);
+  
+  useEffect(() => {
     if (!stripe) {
       return;
     }
@@ -28,22 +28,25 @@ export default function CheckoutForm() {
       return;
     }
 
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }:any) => {
-      switch (paymentIntent.status) {
-        case "succeeded":
-          setMessage("Payment succeeded!");
-          break;
-        case "processing":
-          setMessage("Your payment is processing.");
-          break;
-        case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
-          break;
-        default:
-          setMessage("Something went wrong.");
-          break;
-      }
-    });
+    // stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }:any) => {
+    //   switch (paymentIntent.status) {
+    //     case "succeeded":
+    //       setMessage("Payment succeeded!");
+    //       console.log("Payment success")
+    //       break;
+    //     case "processing":
+    //       setMessage("Your payment is processing.");
+    //       console.log("Payment processing")
+    //       break;
+    //     case "requires_payment_method":
+    //       setMessage("Your payment was not successful, please try again.");
+    //       break;
+    //     default:
+    //       setMessage("Something went wrong.");
+    //       console.log("Payment unsuccessful")
+    //       break;
+    //   }
+    // });
   }, [stripe]);
 
   const handleSubmit:any = async (e: React.FormEvent<HTMLFormElement>) => 
@@ -63,7 +66,8 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000/order",
+        return_url: `${window.location.origin}/orderprocessing`,
+        
       },
     });
 
@@ -77,6 +81,7 @@ export default function CheckoutForm() {
     } else {
       setMessage("An unexpected error occurred.");
     }
+    
 
     setIsLoading(false);
   };
