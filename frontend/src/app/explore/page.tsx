@@ -16,7 +16,7 @@ export interface Event {
   eventImageName: string
   venue: string | null;
   categories: string[];
-  artist: { name: string };
+  artistName: string;
   dates: string[];
   description: string;
 }
@@ -53,7 +53,7 @@ export default function Explore() {
   const queriedEvents = events?.filter(
     (event) =>
       event.name.toLocaleLowerCase().indexOf(query) !== -1 ||
-      event.artist.name.toLocaleLowerCase().indexOf(query) !== -1,
+      event.artistName.toLocaleLowerCase().indexOf(query) !== -1,
   );
 
   //---------- Set Selected Categories ----------

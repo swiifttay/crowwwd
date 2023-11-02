@@ -26,7 +26,7 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
     }
     //Call fetchEvent();
     fetchEvent();
-  });
+  }, []);
 
   //For effect of scrolling to ticket details once category selected
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
 
   return (
     <main className="w-full">
-      <figure className="relative flex justify-center items-center bg-gradient-to-r from-theme-accent to-theme-blue-40 w-full h-[32rem] rounded-[4rem] shadow-lg shadow-zinc-900">
+      <figure className="w-11/12 mx-auto my-20 relative flex justify-center items-center bg-gradient-to-r from-theme-accent to-theme-blue-40 h-[32rem] rounded-[4rem] shadow-lg shadow-zinc-900">
         <figcaption className="absolute left-0 top-0 p-16 hidden md:block">
           <h1 className="font-black text-4xl">Select Category</h1>
           <h3 className="font-bold text-zinc-300">View seat availabilities</h3>
