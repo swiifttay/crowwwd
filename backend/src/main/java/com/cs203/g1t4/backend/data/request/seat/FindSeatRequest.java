@@ -21,6 +21,5 @@ public class FindSeatRequest implements Response {
     @NotBlank
     private String category;
 
-    @NotBlank
     private int numSeats;
 }

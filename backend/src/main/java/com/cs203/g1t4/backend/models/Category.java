@@ -16,4 +16,5 @@ public class Category {
 
     private String seatsInformationString;
 
+    private int availableSeats;
 }

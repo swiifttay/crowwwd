@@ -5,6 +5,7 @@ import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.event.SeatingDetailsResponse;
 import com.cs203.g1t4.backend.models.Category;
+import com.cs203.g1t4.backend.models.event.Event;
 import com.cs203.g1t4.backend.models.event.EventSeatingDetails;
 import com.cs203.g1t4.backend.models.exceptions.DuplicateSeatingDetailsException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidCategoryException;
@@ -79,29 +80,17 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
     }
 
     //Public Helper methods
-    public Response updateSeatingDetails(String eventId, String category, String seatsInformationString) {
+    public Response findAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats) {
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
-        //Find listOfCategories in eventSeatingDetails
-        List<Category> listOfCategory = eventSeatingDetails.getCategories();
+        //Find Category
+        Category cat = findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
 
-        //Instantiate found with false to assume that the category is not found.
-        boolean found = false;
-
-        //Loops through each category in the listOfCategory
-        for (int index = 0 ; index < listOfCategory.size() && !found; index++) {
-
-            Category c = listOfCategory.get(index);
-
-            if (c.getCategory().equals(category)) {
-                found = true;
-                c.setSeatsInformationString(seatsInformationString);
-            }
-        }
-
-        if (!found) { throw new InvalidCategoryException(category); }
+        //Update Seats Information String and available seats
+        cat.setSeatsInformationString(seatsInformationString);
+        cat.setAvailableSeats(cat.getAvailableSeats() - numSeats);
 
         //Save the updated seatingDetails into the repository
         seatingDetailsRepository.save(eventSeatingDetails);
@@ -109,6 +98,61 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
         return SeatingDetailsResponse.builder()
                 .seatingDetails(eventSeatingDetails)
                 .build();
+    }
+
+    public Response confirmAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString) {
+        //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
+        EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
+                .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
+
+        //Find Category
+        Category cat = findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
+
+        //Update Seats Information String
+        cat.setSeatsInformationString(seatsInformationString);
+
+        //Save the updated seatingDetails into the repository
+        seatingDetailsRepository.save(eventSeatingDetails);
+
+        return SeatingDetailsResponse.builder()
+                .seatingDetails(eventSeatingDetails)
+                .build();
+    }
+
+    public Response deleteAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats) {
+        //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
+        EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
+                .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
+
+        //Find Category
+        Category cat = findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
+
+        //Update Seats Information String and available seats
+        cat.setSeatsInformationString(seatsInformationString);
+        cat.setAvailableSeats(cat.getAvailableSeats() + numSeats);
+
+        //Save the updated seatingDetails into the repository
+        seatingDetailsRepository.save(eventSeatingDetails);
+
+        return SeatingDetailsResponse.builder()
+                .seatingDetails(eventSeatingDetails)
+                .build();
+    }
+
+    //Public Helper method
+    public Category findCategoryFromEventSeatingDetails(EventSeatingDetails eventSeatingDetails, String category) {
+        //Find listOfCategories in eventSeatingDetails
+        List<Category> listOfCategory = eventSeatingDetails.getCategories();
+
+        //Loops through each category in the listOfCategory
+        for (int index = 0 ; index < listOfCategory.size(); index++) {
+            Category c = listOfCategory.get(index);
+            if (c.getCategory().equals(category)) {
+                return c;
+            }
+        }
+
+        throw new InvalidCategoryException(category);
     }
 
     //Private Helper methods
@@ -151,6 +195,9 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
 
             //Assign the String to the category object
             category.setSeatsInformationString(stringBuilder.toString());
+
+            //Assign the availSeat for all
+            category.setAvailableSeats(totalSeats);
 
             //Update the category in the list
             listOfCategory.set(i, category);

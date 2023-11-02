@@ -14,10 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SeatCancelRequest implements Response {
-  @NotBlank
-  private String eventId;
-  @NotBlank
-  private String category;
-  @NotBlank
-  private List<String> allocatedSeats;
+    @NotBlank
+    private String eventId;
+    @NotBlank
+    private String category;
+
+    private List<String> allocatedSeats;
 }
