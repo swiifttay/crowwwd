@@ -3,6 +3,7 @@ package com.cs203.g1t4.backend.data.request.ticket;
 import com.cs203.g1t4.backend.models.Ticket;
 import com.cs203.g1t4.backend.models.User;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
