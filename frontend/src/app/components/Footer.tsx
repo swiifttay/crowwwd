@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="grid grid-cols-12 py-10 items-center h-64 bg-footer w-full xl:rounded-3xl xl:my-6">
+    <footer className="grid grid-cols-12 py-10 items-center h-64 bg-footer w-full xl:rounded-3xl xl:my-40">
       <div className="col-span-full md:col-start-2 md:col-span-3 md:border-e border-slate-600 text-center md:text-left text-sm md:text-xs">
         <a className="my-2 font-bold text-2xl text-indigo-100 md:text-xl hover:text-white transition-colors duration-700 hover:animate-pulse">CROWWWD.</a>
         {[

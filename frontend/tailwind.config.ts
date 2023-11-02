@@ -44,6 +44,7 @@ const config: Config = {
         "theme-light-blue": "#1D90F4",
         "theme-grey": "#868B99",
         "theme-offwhite": "#F3EFE0",
+        "theme-accent": "#1C1D2B",
       },
     },
   },

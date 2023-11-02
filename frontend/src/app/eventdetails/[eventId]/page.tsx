@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import {
   getEvent
 } from "../../axios/apiService";
-import { StringLiteral } from "typescript";
 
 export interface Venue {
   venueId: string;
@@ -27,7 +26,7 @@ export interface Event {
   description: string;
 }
 
-export default function EventDetails({ params }: any) {
+export default function EventDetails({ params }: {params: {eventId: string}}) {
   const router = useRouter();
   const { eventId } = params;
   const [event, setEvent] = useState<Event>();

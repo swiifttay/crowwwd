@@ -210,3 +210,8 @@ export const updateUserProfile = async (updateDetails: {
     return Promise.reject(error);
   }
 };
+
+export const getCategoryPrice = async (eventId: string) => {
+  const res = await api.get("/event/{eventId}/event-seating-details");
+  return res.data;
+}
