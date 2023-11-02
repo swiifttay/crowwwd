@@ -212,6 +212,6 @@ export const updateUserProfile = async (updateDetails: {
 };
 
 export const getCategoryPrice = async (eventId: string) => {
-  const res = await api.get("/event/{eventId}/event-seating-details");
+  const res = await api.get(`/event/${eventId}/event-seating-details`);
   return res.data;
 }

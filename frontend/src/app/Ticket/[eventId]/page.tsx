@@ -3,27 +3,37 @@ import { useEffect, useRef, useState } from "react";
 import { Seats } from "../../components/Ticket/selectCategory";
 import { getCategoryPrice, getEvent } from "../../axios/apiService";
 import { Event } from "@/app/explore/page";
+import { catPriceDisplay } from "../../components/Ticket/catPriceDisplay";
+
+type CatPrice = {
+  category: string;
+  price: number;
+}
 
 export default function Ticket({ params }: { params: { eventId: string } }) {
   const { eventId } = params;
   const [category, setCategory] = useState<string>("");
   const [event, setEvent] = useState<Event>();
-  const [prices, setPrices] = useState();
+  const [prices, setPrices] = useState<CatPrice[]>();
   const ticketRef = useRef<HTMLSelectElement | null>(null);
 
   useEffect(() => {
     //fetch the price of the event. Called inside fetchEvent
     const fetchPrices = async () => {
       const res = await getCategoryPrice(eventId);
+      console.log(res);
       setPrices(res);
     };
 
     //fetch the event based on eventId. Then calls fetchPrices.
     const fetchEvent = () => {
-      getEvent(eventId).then((event: Event) => {
-        setEvent(event);
-      }).then(fetchPrices);
-    }
+      getEvent(eventId)
+        .then((event: Event) => {
+          console.log(event);
+          setEvent(event);
+        })
+        .then(fetchPrices);
+    };
     //Call fetchEvent();
     fetchEvent();
   }, []);
@@ -40,14 +50,18 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
   }
 
   return (
-    <main className="w-full">
-      <figure className="w-11/12 mx-auto my-20 relative flex justify-center items-center bg-gradient-to-r from-theme-accent to-theme-blue-40 h-[32rem] rounded-[4rem] shadow-lg shadow-zinc-900">
+    <main className="w-11/12 mx-auto">
+      <figure className="w-full my-20 relative flex justify-center items-center bg-gradient-to-r from-theme-accent to-theme-blue-40 h-[32rem] rounded-[4rem] shadow-lg shadow-zinc-900">
         <figcaption className="absolute left-0 top-0 p-16 hidden md:block">
           <h1 className="font-black text-4xl">Select Category</h1>
           <h3 className="font-bold text-zinc-300">View seat availabilities</h3>
         </figcaption>
         <Seats selectCategory={handleSelect} />
       </figure>
+
+      <div className="w-1/2 grid grid-rows-6">
+        <catPriceDisplay cat={prices[0].category} price={prices[0].price} colour={} />
+      </div>
 
       {category != "" && (
         <section
@@ -67,7 +81,7 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
 
           <div className="row-span-1 grid grid-cols-6">
             <div className="col-span-2 border border-theme-grey font-bold flex justify-center items-center">
-              {category}
+              {prices[0]}
             </div>
             <div className="col-span-1 border border-theme-grey font-bold flex justify-center items-center">
               {}
