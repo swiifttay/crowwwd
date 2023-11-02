@@ -364,9 +364,14 @@ public class EventServiceImpl implements EventService {
         //Checks if venue exists in the repository
         venueRepository.findById(eventRequest.getVenue()).orElseThrow(() -> new InvalidVenueException());
 
+        //Retrieve Artist from database
+        Artist artist = artistRepository.findById(eventRequest.getArtistId())
+                .orElseThrow(() -> new InvalidArtistIdException(eventRequest.getArtistId()));
+
         // Build event
         Event event = Event.builder()
                 .name(eventRequest.getName())
+                .alias(ticketSalesDateList.get(0).getYear() + "_" + eventRequest.getName() + "_" + artist.getName())
                 .eventImageName(eventRequest.getEventImageName())
                 .description(eventRequest.getDescription())
                 .dates(datesList)
