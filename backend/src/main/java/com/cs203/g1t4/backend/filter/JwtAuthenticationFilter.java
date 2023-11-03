@@ -1,6 +1,6 @@
 package com.cs203.g1t4.backend.filter;
 
-import com.cs203.g1t4.backend.service.JwtService;
+import com.cs203.g1t4.backend.service.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor

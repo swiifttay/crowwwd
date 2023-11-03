@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
@@ -8,6 +8,8 @@ import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
 import com.cs203.g1t4.backend.models.exceptions.PasswordDoNotMatchException;
 import com.cs203.g1t4.backend.repository.UserRepository;
+import com.cs203.g1t4.backend.service.services.CommonService;
+import com.cs203.g1t4.backend.service.services.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,7 +21,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class CommonService {
+public class CommonServiceImpl implements CommonService {
     //    This defaultResponse is on purpose so that it @Autowired DefaultResponse class instead of Response implementation
     private final Response defaultResponse;
     private final JwtService jwtService;

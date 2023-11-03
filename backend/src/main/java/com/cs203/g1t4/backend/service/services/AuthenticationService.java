@@ -1,11 +1,13 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.services;
 
 import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
 import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidCredentialsException;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface AuthenticationService {
 
     /**
@@ -17,7 +19,7 @@ public interface AuthenticationService {
      * @param request a RegisterRequest object containing the new user info to be created
      * @return SuccessResponse "User has been created successfully"
      */
-    public Response register(RegisterRequest request);
+    Response register(RegisterRequest request);
 
     /**
      * Authenticate a user.
@@ -26,7 +28,7 @@ public interface AuthenticationService {
      * @param request a AuthenticationRequest object containing the username and password of user to be authenticated
      * @return SuccessResponse "User has been created successfully"
      */
-    public Response authenticate(AuthenticationRequest request) throws InvalidCredentialsException;
+    Response authenticate(AuthenticationRequest request) throws InvalidCredentialsException;
 
     /**
      * Finds if user with inputted username exists in repository.
@@ -35,5 +37,5 @@ public interface AuthenticationService {
      * @param username a String object containing the username to be checked
      * @return SuccessResponse "Username is available"
      */
-    public Response findUsername(String username) throws DuplicatedUsernameException;
+    Response findUsername(String username) throws DuplicatedUsernameException;
 }

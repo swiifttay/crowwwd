@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -19,14 +19,14 @@ import com.cs203.g1t4.backend.models.exceptions.InvalidVenueException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
 import com.cs203.g1t4.backend.repository.EventRepository;
 import com.cs203.g1t4.backend.repository.VenueRepository;
+import com.cs203.g1t4.backend.service.services.EventService;
+import com.cs203.g1t4.backend.service.services.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +35,7 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 @Service
 @RequiredArgsConstructor
-public class EventService {
+public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final ArtistRepository artistRepository;
     private final VenueRepository venueRepository;
@@ -160,6 +160,17 @@ public class EventService {
                 .build();
     }
 
+    public Response getFullEventByAlias(String alias) {
+
+        //Use of private method getFullEventFromAlias() to generate FullEvent Object from alias
+        FullEvent fullEvent = getFullEventFromAlias(alias);
+
+        //Returns the event with id if successful
+        return SingleFullEventResponse.builder()
+                .fullEvent(fullEvent)
+                .build();
+    }
+
     /**
      * Finds a DetailsEvent from the repository based on the eventId.
      *
@@ -234,6 +245,23 @@ public class EventService {
         //Finds event from repository, or else throw InvalidEventIdException()
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new InvalidEventIdException(eventId));
+
+        // Find artist from repository, or else throw InvalidArtistIdException()
+        Artist artist = artistRepository.findById(event.getArtistId())
+                .orElseThrow(() -> new InvalidArtistIdException(event.getArtistId()));
+
+        // Find venue from repository, or else throw InvalidVenueException()
+        Venue venue = venueRepository.findById(event.getVenue())
+                .orElseThrow(() -> new InvalidVenueException());
+
+        //Returns OutputEvent object from Event Object
+        return event.returnFullEvent(artist, venue);
+    }
+
+    private FullEvent getFullEventFromAlias(String alias) throws InvalidEventIdException, InvalidArtistIdException {
+        //Finds event from repository, or else throw InvalidEventIdException()
+        Event event = eventRepository.findByAlias(alias)
+                .orElseThrow(() -> new IllegalArgumentException());
 
         // Find artist from repository, or else throw InvalidArtistIdException()
         Artist artist = artistRepository.findById(event.getArtistId())
@@ -364,9 +392,20 @@ public class EventService {
         //Checks if venue exists in the repository
         venueRepository.findById(eventRequest.getVenue()).orElseThrow(() -> new InvalidVenueException());
 
+        //Retrieve Artist from database
+        Artist artist = artistRepository.findById(eventRequest.getArtistId())
+                .orElseThrow(() -> new InvalidArtistIdException(eventRequest.getArtistId()));
+
+        //Create eventName without punctuation and spaces
+        String aliasEventName = returnStringWithoutPunctuation(eventRequest.getName());
+
+        //Create artistName without punctuation and spaces
+        String aliasArtistName = returnStringWithoutPunctuation(artist.getName());
+
         // Build event
         Event event = Event.builder()
                 .name(eventRequest.getName())
+                .alias(ticketSalesDateList.get(0).getYear() + "_" + aliasEventName + "_" + aliasArtistName)
                 .eventImageName(eventRequest.getEventImageName())
                 .description(eventRequest.getDescription())
                 .dates(datesList)
@@ -383,6 +422,16 @@ public class EventService {
         }
 
         return event;
+    }
+
+    private String returnStringWithoutPunctuation(String s) {
+        StringBuilder stringWithoutPunctuation = new StringBuilder("");
+        for (int i = 0 ; i < s.length() ; i++) {
+            if (Character.isLetter(s.charAt(i))) {
+                stringWithoutPunctuation.append(s.charAt(i));
+            }
+        }
+        return stringWithoutPunctuation.toString();
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.request.seat.FindSeatRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatCancelRequest;
@@ -18,6 +18,9 @@ import com.cs203.g1t4.backend.models.exceptions.InvalidSeatingDetailsException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
 import com.cs203.g1t4.backend.repository.SeatingDetailsRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
+import com.cs203.g1t4.backend.service.services.SeatingDetailsService;
+import com.cs203.g1t4.backend.service.services.SeatsService;
+import com.cs203.g1t4.backend.service.services.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +30,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SeatsService {
-
+public class SeatsServiceImpl implements SeatsService {
     private final UserRepository userRepository;
     private final SeatingDetailsRepository seatingDetailsRepository;
     private final SeatingDetailsService seatingDetailsService;
@@ -55,7 +57,7 @@ public class SeatsService {
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
         //Obtain pricing for each seat
-        Category cat = findCategory(eventSeatingDetails, category);
+        Category cat = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
 
         //Obtain the pricePerSeat from cat
         seats.setPricePerSeat(cat.getPrice());
@@ -71,7 +73,7 @@ public class SeatsService {
 
         //Update Seats Allocation Pending status into the seatingDetails
         String updatedSeatsString = returnUpdatedSeatsString(cat.getSeatsInformationString(), seatAllocation, '2');
-        seatingDetailsService.updateSeatingDetails(eventId, category, updatedSeatsString);
+        seatingDetailsService.findAndUpdateSeatingDetails(eventId, category, updatedSeatsString, numSeats);
 
         //Update Seating allocation into seats
         String[] array = new String[seatAllocation.size()];
@@ -98,13 +100,13 @@ public class SeatsService {
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
         //Find Category
-        Category c = findCategory(eventSeatingDetails, category);
+        Category c = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
 
         //Update Seats Allocation Pending status into the seatingDetails
         List<String> allocatedSeats = seatsConfirmRequest.getAllocatedSeats();
         String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(),
                 allocatedSeats, '1');
-        seatingDetailsService.updateSeatingDetails(eventId, category, updatedSeatsString);
+        seatingDetailsService.confirmAndUpdateSeatingDetails(eventId, category, updatedSeatsString);
 
         //Return Tickets
         List<Ticket> ticketList = new ArrayList<>();
@@ -129,30 +131,19 @@ public class SeatsService {
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
         //Find Category
-        Category c = findCategory(eventSeatingDetails, category);
+        Category c = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
 
         //Update Seats Allocation Pending status into the seatingDetails
         String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(),
                 seatRequest.getAllocatedSeats(), '0');
-        seatingDetailsService.updateSeatingDetails(eventId, category, updatedSeatsString);
+        seatingDetailsService.deleteAndUpdateSeatingDetails(eventId, category, updatedSeatsString, seatRequest.getAllocatedSeats().size());
 
         return SuccessResponse.builder()
                 .response("Seats cancelled.")
                 .build();
     }
 
-    private Category findCategory(final EventSeatingDetails eventSeatingDetails, final String category)
-            throws InvalidCategoryException{
-        List<Category> categoryList = eventSeatingDetails.getCategories();
-        for (int i = 0 ; i < categoryList.size(); i++) {
-            Category cat = categoryList.get(i);
-            if (cat.getCategory().equals(category)) {
-                return cat;
-            }
-        }
-        throw new InvalidCategoryException(category);
-    }
-
+    //Main Call (Wrapper) Method
     private List<String> getSeats(int numTickets, String seatsInformationString) {
         List<Integer> combination = getCombi(numTickets);
         return getSeats(numTickets, seatsInformationString, combination);
@@ -191,8 +182,8 @@ public class SeatsService {
         return allocatedSeatsInformation;
     }
 
-    // positive result: represents the starting num in the seatsInformationString
-    // negative result: no suitable seat found
+    // Positive result: represents the starting num in the seatsInformationString
+    // Negative result: no suitable seat found
     private int find(int numTickets, String seatsInformationString) {
         // find the first occurrence of the empty seats
         int firstEmpty = seatsInformationString.indexOf('0');
@@ -226,13 +217,13 @@ public class SeatsService {
         return -1;
     }
 
-    // initial getCombi
+    // Initial getCombi
     private List<Integer> getCombi(int numConsecutiveTickets) {
 
         return Arrays.asList(numConsecutiveTickets);
     }
 
-    // subsequent getCombi
+    // Subsequent getCombi
     private List<Integer> getCombi(List<Integer> previousCombi, int numConsecutiveTickets) {
         if (previousCombi.size() == numConsecutiveTickets) {
             return null;
@@ -267,7 +258,7 @@ public class SeatsService {
     }
 
     private String returnUpdatedSeatsString(String seatsInformation, List<String> seats, char type) {
-        char lookFor = (type == '1') ? '0' : '1';
+//        char lookFor = (type == '1') ? '0' : '1';
         if (seats == null) {
             throw new IllegalArgumentException();
         }

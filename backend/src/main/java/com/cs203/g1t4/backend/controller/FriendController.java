@@ -2,7 +2,7 @@ package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.friend.FriendRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.service.FriendService;
+import com.cs203.g1t4.backend.service.services.FriendService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

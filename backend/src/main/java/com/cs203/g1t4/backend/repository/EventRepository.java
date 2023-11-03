@@ -14,6 +14,8 @@ public interface EventRepository extends MongoRepository<Event, String>{
 
     Optional<Event> findByArtistIdAndName(String ArtistId, String eventName);
 
+    Optional<Event> findByAlias(String alias);
+
 
     // TO FIND ALL THE EVENTS OCCURRING AFTER TODAY'S DATE
     List<Event> findByDatesGreaterThan(LocalDateTime date);

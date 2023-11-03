@@ -21,13 +21,10 @@ public class SeatsConfirmRequest {
     @NotBlank
     private String category;
 
-    @NotBlank
     private List<String> allocatedSeats;
 
-    @NotBlank
     private List<String> userIdsAttending;
 
-    @NotBlank
     private int noOfSurpriseTickets;
 
     public List<TicketRequest> returnTicketRequestListFromRequest(String eventId) {

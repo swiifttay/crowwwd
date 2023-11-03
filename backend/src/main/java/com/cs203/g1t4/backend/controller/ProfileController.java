@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.service.CommonService;
-import com.cs203.g1t4.backend.service.ProfileService;
+import com.cs203.g1t4.backend.service.services.CommonService;
+import com.cs203.g1t4.backend.service.services.ProfileService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
