@@ -18,7 +18,7 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
   const [event, setEvent] = useState<Event>();
   const [prices, setPrices] = useState<CategoryAndPrice[]>([]);
   const [numSeatsPurchasable, setNumSeatsPurchasable] = useState(0);
-
+  const [renderedNumSeats, setRenderedNumSeats] = useState<JSX.Element[]>([]);
   const ticketRef = useRef<HTMLSelectElement | null>(null);
 
 
@@ -26,16 +26,16 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
     //fetch the price of the event. Called inside fetchEvent
     const fetchPrices = async () => {
       const res = await getCategoryPrice(eventId);
-      console.log(res);
+      //console.log(res);
       setPrices(res.seatingDetails.categories);
     };
 
     //fetch the event based on eventId. Then calls fetchPrices.
     const fetchEvent = () => {
       getEvent(eventId)
-        .then((event: Event) => {
-          console.log(event);
-          setEvent(event);
+        .then((event) => {
+          //console.log(event);
+          setEvent(event.fullEvent as Event);
         })
         .then(fetchPrices);
     };
@@ -48,21 +48,33 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
     ticketRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   });
 
+  //Change seat quntity available for selection by user
+  useEffect(() => {
+    const availableSeatsDefined = category?.availableSeats ?? 0;
+    const numSeatsAvailable = (category?.availableSeats ?? 0) > 4 ? 4 : availableSeatsDefined;
+    renderNumSeatsSelection(numSeatsAvailable);
+  },[category]);
+
   //Event handler for category selection
   function handleSelect(selected: string) {
-    console.log("category selected is: " + category);
     setCategory(prices.find((cat) => cat.category === selected) ?? undefined);
-    const availableSeats = category?.availableSeats ?? 0;
-    setNumSeatsPurchasable(availableSeats > 4 ? 4 : availableSeats);
   }
 
-  function renderNumSeatsSelection(numSeats) {
+  function renderNumSeatsSelection(numSeats: number) {
     const list = Array.from({length: numSeats}, (_, index) => index + 1)
-    return list.map((num) => <option key={num}>{num}</option>)
+    setRenderedNumSeats(list.map((num) => <option key={num}>{num}</option>));
   }
 
   return (
     <main className="w-11/12 mx-auto">
+      <header className="flex w-full">
+        <img src={event?.eventImageURL} className="object-cover object-center w-1/4 h-20" />
+        <div>
+          <h3 className="text-xl">{event?.artistName} {event?.name}</h3>
+          <h5 className="rounded-full bg-theme-blue-30 px-3 py-1">{`${event?.dates[0]} ${event?.venue}`}</h5>
+        </div>
+      </header>
+
       <figure className="w-full my-16 relative flex justify-center items-center bg-gradient-to-r from-theme-accent to-theme-blue-40 h-[32rem] rounded-[4rem] shadow-lg shadow-zinc-900">
         <figcaption className="absolute left-0 top-0 p-16 hidden md:block">
           <h1 className="font-black text-4xl">Select Category</h1>
@@ -92,17 +104,17 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
       {category && (
         <section
           ref={ticketRef}
-          className="w-5/6 my-10 grid grid-rows-2 mx-auto"
+          className="w-5/6 my-10 grid grid-rows-2 text-center align-middle"
         >
           <div className="row-span-1 bg-theme-blue-40 grid grid-cols-6 text-center p-3">
-            <div className="col-span-2 font-white text-lg">
+            <div className="col-span-2 font-white">
               Selected Category
             </div>
 
-            <div className="col-span-1 font-white text-lg">Seat Price</div>
+            <div className="col-span-1 font-white">Seat Price</div>
 
-            <div className="col-span-1 font-white text-lg">Quantity</div>
-            <div className="col-span-2 font-white text-lg">Ticket Info</div>
+            <div className="col-span-1 font-white">Quantity</div>
+            <div className="col-span-2 font-white">Ticket Info</div>
           </div>
 
           <div className="row-span-1 grid grid-cols-6">
@@ -113,18 +125,15 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
               ${category?.price}
             </div>
             <div className="col-span-1 border border-theme-grey p-3">
-              <select className="bg-theme-blue-50 rounded-md border border-theme-light-blue w-full">
-                {/*Need to call api to check how many seats are left*/}
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
+              <select className="bg-theme-blue-50 rounded-md border border-theme-light-blue w-full text-sm" defaultValue="default" >
+                <option value="default">Select Qty</option>
+                {renderedNumSeats}
               </select>
             </div>
             <div className="col-span-2 border border-theme-grey"></div>
           </div>
         </section>
       )}
-      {/* {category !== "" && <div></div>} */}
     </main>
   );
 }
