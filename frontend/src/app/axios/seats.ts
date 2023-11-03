@@ -19,4 +19,6 @@ export const getSeatsByEventAndCategory = async (
   }
 };
 
-export const postConfirmSeats() = async ()
+export const postConfirmSeats() = async () {
+  
+}

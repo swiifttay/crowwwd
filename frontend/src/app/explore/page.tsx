@@ -9,12 +9,21 @@ import { SearchBar } from "../components/Explore/SearchBar";
 import { Card } from "../components/Explore/Card";
 import { BiLoaderAlt } from "react-icons/bi";
 
+export interface Venue {
+  address: string;
+  description: string;
+  id: string;
+  locationName: string;
+  postalCode: string;
+  venueImageName: string;
+}
+
 export interface Event {
   eventId: string;
   name: string;
   eventImageURL: string;
   eventImageName: string;
-  venue: string | null;
+  venue: Venue;
   categories: string[];
   artistName: string;
   dates: string[];
