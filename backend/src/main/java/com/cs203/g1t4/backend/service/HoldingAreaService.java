@@ -91,6 +91,11 @@ public class HoldingAreaService {
     }
 
     public Response getQueueStatus(String username, String eventId) {
+
+        // verify the username and eventId provided
+        User user = verifyUsername(username);
+        Event event = verifyEventId(eventId);
+
         // determine if the user is in queue
         Optional<QueueStatus> userQueueStatus = findQueueStatusOfUser(username, eventId);
 
@@ -112,7 +117,7 @@ public class HoldingAreaService {
 
         // create a new queue if it was 5 minutes after the last time
         // a queue was created
-        if (holdingAreaLastQueueCreateTime.isBefore(currentTime.plusMinutes(5))) {
+        if (holdingAreaLastQueueCreateTime.isBefore(currentTime.minusMinutes(5))) {
             int numQueuesMade = holdingArea.getQueuesMade();
 
             // update the holding area information
@@ -129,7 +134,7 @@ public class HoldingAreaService {
 
         // update the queueNumber pushed to purchase if it was 7 minutes after the last time a
         // queue was pushed to purchase
-        if (holdingAreaLastQueueMoveToPurchaseTime.isBefore(currentTime.plusMinutes(7))) {
+        if (holdingAreaLastQueueMoveToPurchaseTime.isBefore(currentTime.minusMinutes(7))) {
             queuesToPurchase++;
 
             // update holdingArea information
@@ -154,7 +159,8 @@ public class HoldingAreaService {
                 .findById(queueStatusId)
                 .orElseThrow(() -> new MissingQueueException());
 
-        if (userQueueStatus.getQueueId() >= queuesToPurchase) {
+        if (userQueueStatus.getQueueStatus().equals(QueueingStatusValues.PENDING) &&
+                    (userQueueStatus.getQueueId() <= queuesToPurchase)) {
             userQueueStatus.setQueueStatus(QueueingStatusValues.OK);
             queueStatusRepository.save(userQueueStatus);
         }
