@@ -1,5 +1,6 @@
 package com.cs203.g1t4.backend.models;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,12 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class Category {
-    private String category;
+public class OutputFriend {
 
-    private int price;
+    @NotBlank
+    private User friend;
 
-    private String seatsInformationString;
-
-    private int availableSeats;
+    @NotBlank
+    private boolean isApproved;
 }

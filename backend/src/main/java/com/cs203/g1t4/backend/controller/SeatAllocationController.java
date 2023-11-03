@@ -1,9 +1,10 @@
 package com.cs203.g1t4.backend.controller;
 
-import com.cs203.g1t4.backend.data.request.seat.SeatRequest;
+import com.cs203.g1t4.backend.data.request.seat.FindSeatRequest;
+import com.cs203.g1t4.backend.data.request.seat.SeatCancelRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatsConfirmRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.service.SeatsService;
+import com.cs203.g1t4.backend.service.services.SeatsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,42 +13,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/seatAllocation")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class SeatAllocationController {
 
     private final SeatsService seatsService;
 
-    @GetMapping("{eventId}/{category}/{numSeats}")
-    public ResponseEntity<Response> findSeats(@PathVariable("eventId") String eventId,
-                                              @PathVariable("category") String category,
-                                              @PathVariable("numSeats") String numSeats) {
+    @GetMapping("/seat")
+    public ResponseEntity<Response> findSeats(@Valid @RequestBody FindSeatRequest findSeatRequest) {
 
-        Response response = seatsService.findSeats(eventId, category, numSeats);
+        Response response = seatsService.findSeats(findSeatRequest);
 
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("{eventId}/{category}")
-    public ResponseEntity<Response> confirmSeats(@PathVariable("eventId") String eventId,
-                                                 @PathVariable("category") String category,
-                                                 @AuthenticationPrincipal UserDetails userDetails,
-                                                 @Valid @RequestBody SeatsConfirmRequest request) {
+    @PutMapping("/seat")
+    public ResponseEntity<Response> confirmSeats(@AuthenticationPrincipal UserDetails userDetails,
+                                                 @Valid @RequestBody SeatsConfirmRequest seatsConfirmRequest) {
 
         // Get the username from the userDetails of the authenticated user
         String username = userDetails.getUsername();
 
-        Response response = seatsService.confirmSeats(eventId, category, username, request);
+        Response response = seatsService.confirmSeats(username, seatsConfirmRequest);
 
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("{eventId}/{category}")
-    public ResponseEntity<Response> cancelSeats(@PathVariable("eventId") String eventId,
-                                                 @PathVariable("category") String category,
-                                                 @Valid @RequestBody SeatRequest request) {
+    @DeleteMapping("/seat")
+    public ResponseEntity<Response> cancelSeats(@Valid @RequestBody SeatCancelRequest request) {
 
-        Response response = seatsService.cancelSeats(eventId, category, request);
+        Response response = seatsService.cancelSeats(request);
 
         return ResponseEntity.ok(response);
     }

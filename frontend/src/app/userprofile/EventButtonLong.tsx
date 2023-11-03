@@ -7,6 +7,7 @@ interface EventButtonProps {
   artist: string;
   datetime: string;
   venue: string;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 const EventButtonLong: React.FC<EventButtonProps> = ({
@@ -15,10 +16,18 @@ const EventButtonLong: React.FC<EventButtonProps> = ({
   artist,
   datetime,
   venue,
+  setIsOpen,
 }) => {
+  const handleButtonClick = () => {
+    setIsOpen(true);
+  };
+
   return (
     <div>
-      <button className="w-full bg-zinc-900 hover:bg-zinc-800 text-white pt-2 pb-1 px-5 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]">
+      <button
+        className="w-full bg-zinc-900 hover:bg-zinc-800 text-white pt-2 pb-1 px-5 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
+        onClick={handleButtonClick}
+      >
         <div className="flex">
           <div className="mr-6">
             <Image

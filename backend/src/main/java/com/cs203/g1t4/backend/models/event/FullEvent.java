@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 public class FullEvent {
   private String eventId;
+  private String alias;
   private String name;
   private String eventImageName;
   private String eventImageURL; // Image URL

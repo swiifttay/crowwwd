@@ -1,6 +1,7 @@
 package com.cs203.g1t4.backend.data.request.seat;
 
 import com.cs203.g1t4.backend.data.response.Response;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,13 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SeatRequest implements Response {
-  private List<String> allocatedSeats;
+public class FindSeatRequest implements Response {
+
+    @NotBlank
+    private String eventId;
+
+    @NotBlank
+    private String category;
+
+    private int numSeats;
 }

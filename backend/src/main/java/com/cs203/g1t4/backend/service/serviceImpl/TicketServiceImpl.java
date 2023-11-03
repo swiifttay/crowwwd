@@ -1,8 +1,7 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
 import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
 import com.cs203.g1t4.backend.models.Ticket;
@@ -12,6 +11,7 @@ import com.cs203.g1t4.backend.models.exceptions.*;
 import com.cs203.g1t4.backend.repository.EventRepository;
 import com.cs203.g1t4.backend.repository.TicketRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
+import com.cs203.g1t4.backend.service.services.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +20,10 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TicketService {
+public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
-
 
     public SingleTicketResponse createTicket(TicketRequest ticketRequest, String username) {
         // Get the buying user's id

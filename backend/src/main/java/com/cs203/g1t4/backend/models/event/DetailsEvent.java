@@ -15,6 +15,7 @@ import java.util.List;
 public class DetailsEvent {
     private String eventId;
     private String name;
+    private String alias;
     private String eventImageName;
     private String eventImageURL; // Image URL
     private List<String> dates; // date and time of the actual concert

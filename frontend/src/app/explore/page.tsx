@@ -13,7 +13,7 @@ export interface Event {
   eventId: string;
   name: string;
   eventImageURL: string;
-  eventImageName: string
+  eventImageName: string;
   venue: string | null;
   categories: string[];
   artistName: string;
