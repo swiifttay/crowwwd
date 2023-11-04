@@ -9,6 +9,6 @@ public class InvalidArtistIdException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public InvalidArtistIdException(String artistId) {
-        super("Artist with artistId: " + artistId + " does not exists");
+        super("Artist with artistId: " + artistId + " does not exist");
     }
 }

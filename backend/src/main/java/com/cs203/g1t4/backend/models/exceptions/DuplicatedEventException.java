@@ -11,6 +11,6 @@ public class DuplicatedEventException extends RuntimeException {
     public DuplicatedEventException(String artistId, String eventName) {
         //Might consider needing to check by date instead of eventName as Artist can have multiple events
         //of the same name
-        super("Artist: " + artistId + "already has an event " + eventName + " exists");
+        super("Artist: " + artistId + " already has an event " + eventName);
     }
 }
