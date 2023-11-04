@@ -47,7 +47,7 @@ export default function App() {
       <div className="w-1/2">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm />
+          <CheckoutForm clientSecret={clientSecret}/>
         </Elements>
       )}
       </div>

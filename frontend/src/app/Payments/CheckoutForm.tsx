@@ -5,49 +5,58 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
-import axios from "axios";
+import axios from 'axios';
+import { useRouter } from "next/navigation";
+import PaymentTimeout from "../components/Processing/PaymentTimeout"
 
-export default function CheckoutForm() {
+export default function CheckoutForm({clientSecret}:any) {
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
 
   const [email, setEmail] = useState<string>('');
   const [message, setMessage] = useState<string|undefined>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentID, setPaymentID] = useState<string|undefined>("");
+  let timeoutId: NodeJS.Timeout | null = null;
   
+
+  const retrievePaymentID = async (clientSecret:any) =>{
+    if (stripe){
+      const response = await stripe.retrievePaymentIntent(clientSecret)
+      const id = response.paymentIntent?.id
+      setPaymentID(id);
+    }
+  }
+
   useEffect(() => {
-    if (!stripe) {
-      return;
-    }
+    console.log(clientSecret)
+    retrievePaymentID(clientSecret);
 
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
+    timeoutId = setTimeout(async () => {
+      if (!stripe || !clientSecret) {
+        return;
+      }
+    
+    
+      try {
+        await axios.post("/api/cancel-payment-intent", {
+          paymentID: paymentID
+       });
+       router.push('/timeout');
+      } catch (error) {
+        console.error("Error cancelling payment:", error);
+      }
+    }, 120000); 
 
-    if (!clientSecret) {
-      return;
-    }
+    return () => {
+      // Cleanup function to clear the timeout when the component unmounts
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
 
-    // stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }:any) => {
-    //   switch (paymentIntent.status) {
-    //     case "succeeded":
-    //       setMessage("Payment succeeded!");
-    //       console.log("Payment success")
-    //       break;
-    //     case "processing":
-    //       setMessage("Your payment is processing.");
-    //       console.log("Payment processing")
-    //       break;
-    //     case "requires_payment_method":
-    //       setMessage("Your payment was not successful, please try again.");
-    //       break;
-    //     default:
-    //       setMessage("Something went wrong.");
-    //       console.log("Payment unsuccessful")
-    //       break;
-    //   }
-    // });
-  }, [stripe]);
+  }, [stripe, clientSecret, paymentID]);
 
   const handleSubmit:any = async (e: React.FormEvent<HTMLFormElement>) => 
   {
@@ -105,5 +114,5 @@ export default function CheckoutForm() {
       {/* Show any error or success messages */}
       {message && <div id="payment-message">{message}</div>}
     </form>
-  );
+   );
 }

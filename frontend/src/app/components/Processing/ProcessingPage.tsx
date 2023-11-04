@@ -4,15 +4,14 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios';
 import { BiLoaderAlt } from 'react-icons/bi';
 
-const ProcessingPage = ({ clientSecret, paymentID }) => {
+const ProcessingPage = ({ clientSecret, paymentID }: any) => {
   const [message, setMessage] = useState("");
 
   const router = useRouter()
   
   const stripe = useStripe();
 
-  const secretKey = process.env.STRIPE_SECRET_KEY;
-
+  
   const cancelPayment = async () => {
     await axios.post("/api/cancel-payment-intent", {
        paymentID
@@ -45,8 +44,8 @@ const ProcessingPage = ({ clientSecret, paymentID }) => {
 
   return (
     <div>
-      <div className="my-5 w-full flex text-4xl text-center font-thin justify-center">
-          <h1 className="px-3">Processing...</h1>{" "}
+      <div className="my-5 w-full flex text-4xl text-center font-thin justify-center items-center">
+          <h1 className="px-3">Processing...</h1>
           <BiLoaderAlt className="animate-spin" />
         </div>
     </div>
