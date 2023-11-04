@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-build_frontend:
+  build_frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
