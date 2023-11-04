@@ -50,7 +50,7 @@ public class Event {
     @NotBlank
     private String seatingImagePlan; // imageName to look for in S3 Bucket
 
-    @NotBlank
+//    @NotBlank
     private List<LocalDateTime> ticketSalesDate; // date and time at which the ticket sales will be available
 
     /**
