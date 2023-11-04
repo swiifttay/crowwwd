@@ -5,26 +5,26 @@ on:
     branches: [main]
 
 jobs:
-  build_frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
-      - name: List Files in Current Directory
-        run: ls
-        working-directory: ${{github.workspace}}/.
-      - name: Build Frontend Image
-        run: |
-          cd frontend
-          docker build -t crowwwdsync/frontend .
-        working-directory: ${{github.workspace}}/.
-      - name: Login to Docker Hub
-        run: docker login -u ${{secrets.DOCKET_USERNAME}} -p ${{secrets.DOCKET_PASSWORD}}
-      - name: Push Frontend Image
-        run: |
-          cd frontend
-          docker push crowwwdsync/frontend:latest
-        working-directory: ${{github.workspace}}/.
+  # build_frontend:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout source
+  #       uses: actions/checkout@v3
+  #     - name: List Files in Current Directory
+  #       run: ls
+  #       working-directory: ${{github.workspace}}/.
+  #     - name: Build Frontend Image
+  #       run: |
+  #         cd frontend
+  #         docker build -t crowwwdsync/frontend .
+  #       working-directory: ${{github.workspace}}/.
+  #     - name: Login to Docker Hub
+  #       run: docker login -u ${{secrets.DOCKET_USERNAME}} -p ${{secrets.DOCKET_PASSWORD}}
+  #     - name: Push Frontend Image
+  #       run: |
+  #         cd frontend
+  #         docker push crowwwdsync/frontend:latest
+  #       working-directory: ${{github.workspace}}/.
 
   build_backend:
     runs-on: ubuntu-latest
@@ -50,21 +50,23 @@ jobs:
         run: docker tag crowwwdsync/backend:latest ${{secrets.DOCKER_USERNAME}}/dockerhub:crowwwdsync
       - name: Push Backend Image
         run: 
-          docker push ${{secrets.DOCKER_USERNAME}}/dockerhub:crowwwdsync
+          docker push ${{secrets.DOCKER_USERNAME}}/dockerhub:crowwwdsync-backend
 
-  deploy:
-    needs: [build_frontend, build_backend]
+  deploy_backend:
+    # needs: [build_frontend, build_backend]
+    needs: build_backend
     runs-on: aws-ec2
     steps:
-      - name: Pull Frontend Image from Docker Hub
-        run: docker pull crowwwdsync/frontend:latest
+      # - name: Pull Frontend Image from Docker Hub
+      #   run: docker pull crowwwdsync/frontend:latest
       - name: Pull Backend Image from Docker Hub
-        run: docker pull crowwwdsync/backend:latest
+        run: docker pull ${{secrets.DOCKER_USERNAME}}/dockerhub:crowwwdsync-backend
       - name: Delete old containers
-        run: |
-          docker rm -f crowwwdsync-frontend-container
-          docker rm -f crowwwdsync-backend-container
-      - name: Run Frontend Container
-        run: docker run -d -p 80:80 --name crowwwdsync-frontend-container crowwwdsync/frontend
+        # run: |
+        #   docker rm -f crowwwdsync-frontend-container
+        #   docker rm -f crowwwdsync-backend-container
+        run: docker rm -f crowwwdsync-backend-container
+      # - name: Run Frontend Container
+      #   run: docker run -d -p 80:80 --name crowwwdsync-frontend-container crowwwdsync/frontend
       - name: Run Backend Container
         run: docker run -d -p 8080:8080 --name crowwwdsync-backend-container crowwwdsync/backend
