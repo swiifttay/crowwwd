@@ -9,6 +9,6 @@ public class InvalidEventIdException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public InvalidEventIdException(String eventId) {
-        super("Event with eventId: " + eventId + " does not exists");
+        super("Event with eventId: " + eventId + " does not exist");
     }
 }

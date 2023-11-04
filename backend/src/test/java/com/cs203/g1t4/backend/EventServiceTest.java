@@ -1,9 +1,11 @@
 package com.cs203.g1t4.backend;
 
+import com.amazonaws.services.cloudformation.model.Output;
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.artist.SingleArtistResponse;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
+import com.cs203.g1t4.backend.data.response.event.EventResponse;
 import com.cs203.g1t4.backend.data.response.event.SingleEventResponse;
 import com.cs203.g1t4.backend.models.Artist;
 import com.cs203.g1t4.backend.models.event.Event;
@@ -15,6 +17,7 @@ import com.cs203.g1t4.backend.repository.ArtistRepository;
 import com.cs203.g1t4.backend.repository.EventRepository;
 import com.cs203.g1t4.backend.service.EventService;
 import com.cs203.g1t4.backend.service.S3Service;
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,9 +57,12 @@ public class EventServiceTest {
 
     Event customEvent;
 
+    Artist customArtist;
+
     @BeforeEach
     void setUp() {
 
+        // arrange
         customEvent = Event.builder()
                 .id("1234")
                 .name("The Eras Tour")
@@ -68,6 +74,11 @@ public class EventServiceTest {
                 .artistId("1234")
                 .seatingImagePlan("theerastourseatingplanimage")
                 .ticketSalesDate(new ArrayList<LocalDateTime>())
+                .build();
+
+        customArtist = Artist.builder()
+                .id("1234")
+                .name("Taylor Swift")
                 .build();
 
         ReflectionTestUtils.setField(eventService, "bucketName", "your_bucket_name");
@@ -89,15 +100,10 @@ public class EventServiceTest {
                 .ticketSalesDate(new String[0])
                 .build();
 
-        Artist artist = Artist.builder()
-                .id("1235")
-                .name("Coldplay")
-                .build();
-
         ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
 
         // mock artistRepository "findById" operation
-        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(artist));
+        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(customArtist));
 
         // mock eventRepository "findByArtistIdAndName" operation
         when(eventRepository.findByArtistIdAndName(any(String.class), any(String.class))).thenReturn(Optional.empty());
@@ -115,8 +121,8 @@ public class EventServiceTest {
         // assert
         assertTrue(response instanceof SuccessResponse);
         assertEquals("Event has been created successfully", ((SuccessResponse) response).getResponse());
-        verify(artistRepository).findById(artist.getId());
-        verify(eventRepository).findByArtistIdAndName(artist.getId(),eventRequest.getName());
+        verify(artistRepository).findById(customArtist.getId());
+        verify(eventRepository).findByArtistIdAndName(customArtist.getId(),eventRequest.getName());
         verify(eventRepository).save(eventCaptor.getValue());
     }
 
@@ -136,11 +142,6 @@ public class EventServiceTest {
                 .ticketSalesDate(new String[0])
                 .build();
 
-        Artist artist = Artist.builder()
-                .id("1235")
-                .name("Coldplay")
-                .build();
-
         // mock artistRepository "findById" operation
         when(artistRepository.findById(any(String.class))).thenReturn(Optional.empty());
 
@@ -149,7 +150,7 @@ public class EventServiceTest {
         });
 
         assertEquals("Artist with artistId: 1235 does not exist", e.getMessage());
-        verify(artistRepository).findById(artist.getId());
+        verify(artistRepository).findById(customArtist.getId());
     }
 
     @Test
@@ -167,13 +168,8 @@ public class EventServiceTest {
                 .ticketSalesDate(new String[0])
                 .build();
 
-        Artist artist = Artist.builder()
-                .id("1234")
-                .name("Taylor Swift")
-                .build();
-
         // mock artistRepository "findById" operation
-        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(artist));
+        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(customArtist));
 
         //mock eventRepository "findByArtistIdAndName" operation
         when(eventRepository.findByArtistIdAndName(any(String.class), any(String.class))).thenReturn(Optional.of(customEvent));
@@ -183,26 +179,20 @@ public class EventServiceTest {
         });
 
         assertEquals("Artist: 1234 already has an event The Eras Tour", e.getMessage());
-        verify(artistRepository).findById(artist.getId());
-        verify(eventRepository).findByArtistIdAndName(artist.getId(), customEvent.getName());
+        verify(artistRepository).findById(customArtist.getId());
+        verify(eventRepository).findByArtistIdAndName(customArtist.getId(), customEvent.getName());
     }
 
     @Test
     void deleteEvent_ExistingEvent_ReturnSingleEventResponse() {
 
-        // arrange
-        Artist artist = Artist.builder()
-                .id("1234")
-                .name("Taylor Swift")
-                .build();
-
-        OutputEvent outputEvent = customEvent.returnOutputEvent(artist);
+        OutputEvent outputEvent = customEvent.returnOutputEvent(customArtist);
 
         // mock eventRepository "findById" operation
         when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
 
         // mock artistRepository "findById" operation
-        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(artist));
+        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(customArtist));
 
         // mock eventRepository "deleteById" operation
         doNothing().when(eventRepository).deleteById(any(String.class));
@@ -216,7 +206,7 @@ public class EventServiceTest {
         assertEquals(outputEvent, singleEventResponse.getOutputEvent());
 
         verify(eventRepository).findById(customEvent.getId());
-        verify(artistRepository).findById(artist.getId());
+        verify(artistRepository).findById(customArtist.getId());
         verify(eventRepository).deleteById(customEvent.getId());
     }
 
@@ -235,18 +225,12 @@ public class EventServiceTest {
         });
 
         // assert
-        assertEquals("Event with eventId: 1236 does not exists", e.getMessage());
+        assertEquals("Event with eventId: 1236 does not exist", e.getMessage());
         verify(eventRepository).findById(invalidEventId);
     }
 
     @Test
     void deleteEvent_InvalidArtistId_ReturnInvalidArtistIdException() {
-
-        // arrange
-        Artist artist = Artist.builder()
-                .id("1234")
-                .name("Taylor Swift")
-                .build();
 
         // mock eventRepository "findById" operation
         when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
@@ -262,7 +246,7 @@ public class EventServiceTest {
         // assert
         assertEquals("Artist with artistId: 1234 does not exist", e.getMessage());
         verify(eventRepository).findById(customEvent.getId());
-        verify(artistRepository).findById(artist.getId());
+        verify(artistRepository).findById(customArtist.getId());
     }
 
     @Test
@@ -301,20 +285,17 @@ public class EventServiceTest {
 
         OutputEvent outputEvent = updatedEvent.returnOutputEvent(artist);
 
-        System.out.println(outputEvent.getName());
-
         ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
 
         // mock eventRepository "findById" operation
-        when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
+        when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent)).thenReturn(Optional.of(updatedEvent));
 
         // mock artistRepository "findById" operation
-        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(artist));
+        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(artist)).thenReturn(Optional.of(artist));
 
         // mock eventRepository "findById" operation
         when(eventRepository.save(eventCaptor.capture())).thenAnswer(invocation -> {
-            Event savedEvent = eventCaptor.getValue();
-            return savedEvent;
+            return eventCaptor.getValue();
         });
 
         //act
@@ -325,9 +306,127 @@ public class EventServiceTest {
         SingleEventResponse singleEventResponse = (SingleEventResponse) response;
         assertEquals(outputEvent, singleEventResponse.getOutputEvent());
 
-        verify(eventRepository.findById(customEvent.getId()));
-        verify(artistRepository).findById(artist.getId());
+        verify(eventRepository, atLeastOnce()).findById(customEvent.getId());
+        verify(artistRepository, atLeastOnce()).findById(artist.getId());
         verify(eventRepository).save(eventCaptor.getValue());
+    }
+
+    @Test
+    void findEventById_ExistingEvent_ReturnSingleEventResponse() {
+
+        // arrange
+        OutputEvent outputEvent = customEvent.returnOutputEvent(customArtist);
+
+        // mock eventRepository "findById" operation
+        when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
+
+        // mock artistRepository "findById" operation
+        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(customArtist));
+
+        // act
+        Response response = eventService.findEventById(customEvent.getId());
+
+        // assert
+        assertTrue(response instanceof SingleEventResponse);
+        SingleEventResponse singleEventResponse = (SingleEventResponse) response;
+        assertEquals(outputEvent, singleEventResponse.getOutputEvent());
+        verify(eventRepository).findById(customEvent.getId());
+        verify(artistRepository).findById(customArtist.getId());
+    }
+
+    @Test
+    void findEventById_EventNotFound_ReturnInvalidEventIdException() {
+
+        // arrange
+        String invalidEventId = "1236";
+
+        // mock eventRepository "findById" operation
+        when(eventRepository.findById(any(String.class))).thenReturn(Optional.empty());
+
+        // act
+        InvalidEventIdException e = assertThrows(InvalidEventIdException.class, () -> {
+            eventService.findEventById(invalidEventId);
+        });
+
+        // assert
+        assertEquals("Event with eventId: 1236 does not exist", e.getMessage());
+        verify(eventRepository).findById(invalidEventId);
+    }
+
+    @Test
+    void findEventById_ArtistNotFound_ReturnInvalidEventIdException() {
+
+        // mock eventRepository "findById" operation
+        when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
+
+        // mock artistRepository "findById" operation
+        when(artistRepository.findById(any(String.class))).thenReturn(Optional.empty());
+
+        // act
+        InvalidArtistIdException e = assertThrows(InvalidArtistIdException.class, () -> {
+            eventService.findEventById(customEvent.getArtistId());
+        });
+
+        // assert
+        assertEquals("Artist with artistId: 1234 does not exist", e.getMessage());
+        verify(eventRepository).findById(customEvent.getArtistId());
+    }
+
+    @Test
+    void getAllEventsAfterToday_EventsAfterTodayFound_Return_EventResponse() {
+
+        // arrange
+        LocalDateTime currDateTime = LocalDateTime.now();
+
+        LocalDateTime futureDateTime = currDateTime.plusDays(30L);
+
+        List<LocalDateTime> dateList = new ArrayList<>();
+        dateList.add(futureDateTime);
+
+        Event futureEvent = Event.builder()
+                .id("1234")
+                .name("The Eras Tour")
+                .eventImageName("theerastourimage")
+                .description("description")
+                .dates(dateList)
+                .venue("National Stadium")
+                .categories(new ArrayList<String>())
+                .artistId("1234")
+                .seatingImagePlan("theerastourseatingplanimage")
+                .ticketSalesDate(new ArrayList<LocalDateTime>())
+                .build();
+
+        OutputEvent outputEvent = futureEvent.returnOutputEvent(customArtist);
+        outputEvent.setEventImageURL("https://%s.s3.ap-southeast-1.amazonaws.com/event-images/%s/%s"
+                .formatted("your_bucket_name", "1234", "theerastourimage"));
+
+        List<Event> events = new ArrayList<>();
+        events.add(futureEvent);
+
+        List<OutputEvent> outputEvents = new ArrayList<>();
+        outputEvents.add(outputEvent);
+
+        ArgumentCaptor<LocalDateTime> timeArgumentCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
+
+        // mock eventRepository "findByDatesGreaterThan" operation
+        when(eventRepository.findByDatesGreaterThan(any(LocalDateTime.class))).thenReturn(events);
+
+        // mock eventRepository "findById" operation
+        when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(futureEvent));
+
+        // mock artistRepository "findById" operation
+        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(customArtist));
+
+        // act
+        Response response = eventService.getAllEventsAfterToday();
+
+        // assert
+        assertTrue(response instanceof EventResponse);
+        EventResponse eventResponse = (EventResponse) response;
+        assertEquals(outputEvents, eventResponse.getEvents());
+        verify(eventRepository).findByDatesGreaterThan(timeArgumentCaptor.capture());
+        verify(eventRepository).findById(futureEvent.getId());
+        verify(artistRepository).findById(customArtist.getId());
     }
 }
 
