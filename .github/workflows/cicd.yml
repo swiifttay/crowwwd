@@ -45,7 +45,7 @@ jobs:
           docker build -t crowwwdsync/backend .
         working-directory:  ${{github.workspace}}/.
       - name: Login to Docker Hub
-        run: docker login -u ${{secrets.DOCKET_USERNAME}} -p ${{secrets.DOCKET_PASSWORD}}
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
       - name: Push Backend Image
         run: |
           cd backend
