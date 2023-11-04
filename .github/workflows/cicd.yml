@@ -1,0 +1,65 @@
+name: CICD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Build Frontend Image
+        run: |
+          cd frontend
+          docker build -t crowwwdsync/frontend .
+        working-directory: ./frontend
+      - name: Login to Docker Hub
+        run: docker login -u ${{secrets.DOCKET_USERNAME}} -p ${{secrets.DOCKET_PASSWORD}}
+      - name: Push Frontend Image
+        run: |
+          cd frontend
+          docker push crowwwdsync/frontend:latest
+        working-directory: ./frontend
+
+  build_backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Build Backend Project
+        run: mvn clean install -DskipTests
+      - name: Build Backend Image
+        run: |
+          cd backend
+          docker build -t crowwwdsync/backend .
+      - name: Login to Docker Hub
+        run: docker login -u ${{secrets.DOCKET_USERNAME}} -p ${{secrets.DOCKET_PASSWORD}}
+      - name: Push Backend Image
+        run: |
+          cd frontend
+          docker push crowwwdsync/backend:latest
+        working-directory: ./backend
+
+  deploy:
+    needs: [build_frontend, build_backend]
+    runs-on: aws-ec2
+    steps:
+      - name: Pull Frontend Image from Docker Hub
+        run: docker pull crowwwdsync/frontend:latest
+      - name: Pull Backend Image from Docker Hub
+        run: docker pull crowwwdsync/backend:latest
+      - name: Delete old containers
+        run: |
+          docker rm -f crowwwdsync-frontend-container
+          docker rm -f crowwwdsync-backend-container
+      - name: Run Frontend Container
+        run: docker run -d -p 80:80 --name crowwwdsync-frontend-container crowwwdsync/frontend
+      - name: Run Backend Container
+        run: docker run -d -p 8080:8080 --name crowwwdsync-backend-container crowwwdsync/backend
