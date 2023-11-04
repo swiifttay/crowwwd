@@ -47,10 +47,8 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
       - name: Push Backend Image
-        run: |
-          cd backend
+        run: 
           docker push crowwwdsync/backend:latest
-        working-directory: ${{github.workspace}}/.
 
   deploy:
     needs: [build_frontend, build_backend]
