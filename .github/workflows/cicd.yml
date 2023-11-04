@@ -12,19 +12,19 @@ jobs:
         uses: actions/checkout@v3
       - name: List Files in Current Directory
         run: ls
-        working-directory: ${{github.workspace}}/frontend
+        working-directory: ${{github.workspace}}/.
       - name: Build Frontend Image
         run: |
           cd frontend
           docker build -t crowwwdsync/frontend .
-        working-directory: ${{github.workspace}}/frontend
+        working-directory: ${{github.workspace}}/.
       - name: Login to Docker Hub
         run: docker login -u ${{secrets.DOCKET_USERNAME}} -p ${{secrets.DOCKET_PASSWORD}}
       - name: Push Frontend Image
         run: |
           cd frontend
           docker push crowwwdsync/frontend:latest
-        working-directory: ${{github.workspace}}/frontend
+        working-directory: ${{github.workspace}}/.
 
   build_backend:
     runs-on: ubuntu-latest
@@ -42,14 +42,14 @@ jobs:
         run: |
           cd backend
           docker build -t crowwwdsync/backend .
-        working-directory:  ${{github.workspace}}/backend
+        working-directory:  ${{github.workspace}}/.
       - name: Login to Docker Hub
         run: docker login -u ${{secrets.DOCKET_USERNAME}} -p ${{secrets.DOCKET_PASSWORD}}
       - name: Push Backend Image
         run: |
           cd frontend
           docker push crowwwdsync/backend:latest
-        working-directory: ${{github.workspace}}/backend
+        working-directory: ${{github.workspace}}/.
 
   deploy:
     needs: [build_frontend, build_backend]
