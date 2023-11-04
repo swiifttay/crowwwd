@@ -59,8 +59,11 @@ jobs:
     steps:
       # - name: Pull Frontend Image from Docker Hub
       #   run: docker pull crowwwdsync/frontend:latest
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Pull Backend Image from Docker Hub
         run: docker pull crowwwdsync/backend:latest
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/dockerhub:crowwwdsync-backend
       - name: Delete old containers
         # run: |
         #   docker rm -f crowwwdsync-frontend-container
