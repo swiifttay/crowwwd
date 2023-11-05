@@ -25,7 +25,6 @@ export const GlobalStateProvider = ({ children }: any) => {
 
   function storeToken(token: string) {
     setToken(token)
-    //localStorage.setItem("token", token);
     setIsAuthenticated(true);
   }
 

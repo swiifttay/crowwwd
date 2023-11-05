@@ -49,7 +49,8 @@ export default function EventDetails({ params }: {params: {eventId: string}}) {
   }, []);
 
   const handleBuyTickets = async () => {
-    router.push("/order");
+    console.log("going to queue");
+    router.push("/queue");
   };
 
 
@@ -95,7 +96,7 @@ export default function EventDetails({ params }: {params: {eventId: string}}) {
 
             <div className="flex ml-3 flex-wrap gap-3 ">
               {event?.dates?.map((date: string, index: any) => (
-                <div className="text-md mr-20 hover:text-theme-grey hover:underline cursor-pointer">
+                <div key={date} className="text-md mr-20 hover:text-theme-grey hover:underline cursor-pointer">
                   {date}
                 </div>
               ))}

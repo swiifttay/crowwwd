@@ -5,7 +5,7 @@ import axios from "axios";
 
 const api = axios.create({
   //TODO: backend to provide
-  baseURL: "http://localhost:8080/api",
+  baseURL: `http://localhost:8080/api`,
 });
 
 // api interceptor to place the jwt token

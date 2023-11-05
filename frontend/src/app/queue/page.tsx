@@ -6,13 +6,17 @@ import Stepper from "../components/WaitingRoom/Stepper";
 import "./style.css";
 
 export default function Queue() {
+  //find the user's
+
+
   const [sliderValue, setSliderValue] = useState(5);
-  const [peopleCount, setPeopleCount] = useState("2000+");
+  const [count, setCount] = useState(0);
+  const [peopleCount, setPeopleCount] = useState("");
 
   const updateSlider = () => {
     setSliderValue((prevValue) => {
       const newValue = prevValue + 1;
-      return newValue > 100 ? 0 : newValue;
+      return newValue > 100 ? 0 : newValue
     });
   };
 
@@ -43,22 +47,23 @@ export default function Queue() {
         sx={{
           width: "auto",
           height: "auto",
-          backgroundColor: "#e2e8f0",
           marginTop: 8,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          borderRadius: "20px",
+          backgroundImage: "linear-gradient(to right, #f44369 10%, #3e3b92 95%)",
         }}
       >
-        <div className="text-black justify-center text-center items-center align-middle flex flex-col p-12 lg:px-28 pb-16">
+        <div className="text-white justify-center text-center items-center align-middle flex flex-col p-12 lg:px-28 pb-16">
           <div className="font-bold text-2xl mb-6">
             You are now in the queue.
           </div>
 
           <div className="font-bold text-8xl">{peopleCount}</div>
           <div className="font-bold text-lg mb-5">people ahead of you</div>
-          <Slider value={sliderValue} aria-label="Default" />
+          <Slider color="success" value={sliderValue} aria-label="Default" />
         </div>
       </Box>
     </main>
