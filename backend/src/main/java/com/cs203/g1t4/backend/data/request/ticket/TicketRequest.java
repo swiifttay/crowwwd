@@ -21,7 +21,7 @@ public class TicketRequest {
     @NotBlank(message = "Attending userID is required")
     private String userIdAttending;
 
-    @NotNull
+    @NotBlank
     private String seatNo;
 
     //If not filled, assume false.

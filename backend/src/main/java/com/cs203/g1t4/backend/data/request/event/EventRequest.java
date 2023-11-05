@@ -1,5 +1,6 @@
 package com.cs203.g1t4.backend.data.request.event;
 
+import com.cs203.g1t4.backend.models.Venue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

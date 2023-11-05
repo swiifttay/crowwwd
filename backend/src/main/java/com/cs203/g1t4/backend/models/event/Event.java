@@ -24,6 +24,9 @@ public class Event {
     private String id;
 
     @NotBlank
+    private String alias;
+
+    @NotBlank
     private String name;
 
     @NotBlank
@@ -56,11 +59,12 @@ public class Event {
      * @param artist a Artist object obtained from the ArtistId of the Event object.
      * @return the FullEvent object converted from the Event object.
      */
-    public FullEvent returnFullEvent(Artist artist) {
+    public FullEvent returnFullEvent(Artist artist, Venue venue) {
 
         return FullEvent.builder()
                 .eventId(id)
                 .name(name)
+                .alias(alias)
                 .eventImageName(eventImageName)
                 .description(description)
                 .dates(convertLocalDateTimeListToStrList(dates))
@@ -83,6 +87,7 @@ public class Event {
         return ExploreEvent.builder()
                 .eventId(id)
                 .name(name)
+                .alias(alias)
                 .eventImageName(eventImageName)
                 .dates(convertLocalDateTimeListToStrList(dates))
                 .categories(categories)
@@ -95,6 +100,7 @@ public class Event {
         return DetailsEvent.builder()
                 .eventId(id)
                 .name(name)
+                .alias(alias)
                 .eventImageName(eventImageName)
                 .dates(convertLocalDateTimeListToStrList(dates))
                 .ticketSalesDate(convertLocalDateTimeListToStrList(ticketSalesDate))

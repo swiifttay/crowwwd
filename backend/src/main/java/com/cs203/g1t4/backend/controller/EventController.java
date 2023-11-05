@@ -2,7 +2,7 @@ package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.service.EventService;
+import com.cs203.g1t4.backend.service.services.EventService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,14 @@ public class EventController {
     public ResponseEntity<Response> getFullEvent(@PathVariable String eventId) {
         // Get event using getFulLEventById in eventService
         Response response = eventService.getFullEventById(eventId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/fullEvent/alias/{alias}")
+    public ResponseEntity<Response> getFullEventByAlias(@PathVariable String alias) {
+        // Get event using getFulLEventById in eventService
+        Response response = eventService.getFullEventByAlias(alias);
 
         return ResponseEntity.ok(response);
     }

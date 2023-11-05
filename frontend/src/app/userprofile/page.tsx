@@ -1,21 +1,21 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import {
+  getArtistById,
+  getFanRecords,
+  getSpotifyLogin,
+  getSpotifyToken,
+  getUserProfile,
+  updateFanRecords,
+} from "../axios/apiService";
+import Modal from "../components/UserProfile/Modal";
+import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
-import EventButtonLong from "./EventButtonLong";
-import { StringLiteral } from "typescript";
-import {
-  getFanRecords,
-  getUserProfile,
-  getArtistById,
-  getSpotifyLogin,
-  updateFanRecords,
-  getSpotifyToken,
-} from "../axios/apiService";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import React from "react";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export interface User {
   id: string;
@@ -169,6 +169,18 @@ export default function UserProfile() {
   const handleUpdateProfile = async () => {
     router.push("/updateprofile");
   };
+  const [isOpen, setIsOpen] = useState(false);
+  const [overlayOpacity, setOverlayOpacity] = useState(0);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      setOverlayOpacity(0.6);
+    } else {
+      document.body.style.overflow = "auto";
+      setOverlayOpacity(0);
+    }
+  }, [isOpen]);
 
   return (
     <main className="flex flex-col items-center h-fit relative w-full px-8">
@@ -190,14 +202,15 @@ export default function UserProfile() {
                 </div>
               </div>
 
-              <div className="">
-                <Image
+              <div className="flex items-center">
+                {/* <Image
                   src="/images/Siyu.png"
                   alt="Profile Picture"
                   className="rounded-full"
                   width={200}
                   height={200}
-                />
+                /> */}
+                <AccountCircleIcon style={{ fontSize: 140 }}/>
               </div>
             </div>
             <div className="flex flex-row justify-between mb-4 mt-20">
@@ -264,12 +277,49 @@ export default function UserProfile() {
           </div>
         </div>
       </div>
+
       <div className="flex flex-col w-full">
         <div className="text-xl font-bold mt-16 mb-4">
           Your purchased concerts
         </div>
+
         <div className="flex flex-col gap-3">
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "black",
+              zIndex: 40,
+              transition: "opacity 0.3s",
+              pointerEvents: "none",
+              opacity: overlayOpacity,
+            }}
+            onClick={() => setIsOpen(false)}
+          ></div>
+          <div className="z-50">
+            {isOpen && (
+              <Modal
+                title="Reputation Tour"
+                artist="Taylor Swift"
+                datetime="Fri 15 Sep 2023, 7pm"
+                venue="The Star Theatre, The Star Performing Arts Centre"
+                setIsOpen={setIsOpen}
+              />
+            )}
+          </div>
           <EventButtonLong
+            image="/images/TaylorSwift.jpg"
+            title="Reputation Tour"
+            artist="Taylor Swift"
+            datetime="Fri 15 Sep 2023, 7pm"
+            venue="The Star Theatre, The Star Performing Arts Centre"
+            setIsOpen={setIsOpen}
+          />
+
+          {/* <EventButtonLong
             image="/images/TaylorSwift.jpg"
             title="Reputation Tour"
             artist="Taylor Swift"
@@ -289,14 +339,7 @@ export default function UserProfile() {
             artist="Taylor Swift"
             datetime="Fri 15 Sep 2023, 7pm"
             venue="The Star Theatre, The Star Performing Arts Centre"
-          />
-          <EventButtonLong
-            image="/images/TaylorSwift.jpg"
-            title="Reputation Tour"
-            artist="Taylor Swift"
-            datetime="Fri 15 Sep 2023, 7pm"
-            venue="The Star Theatre, The Star Performing Arts Centre"
-          />
+          /> */}
         </div>
       </div>
 
