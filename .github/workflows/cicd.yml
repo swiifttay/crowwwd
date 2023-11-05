@@ -37,11 +37,15 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
       - name: Clean Backend Project
-        run: mvn clean
-        working-directory: ${{github.workspace}}/backend
+        run: |
+          cd backend
+          mvn clean
+        working-directory: ${{github.workspace}}/.
       - name: Install Backend Project
-        run: mvn install -DskipTests
-        working-directory: ${{github.workspace}}/backend
+        run: |
+          cd backend
+          mvn install -DskipTests
+        working-directory: ${{github.workspace}}/.
       - name: Build Backend Image
         run: |
           cd backend
