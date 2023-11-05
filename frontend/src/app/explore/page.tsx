@@ -9,14 +9,23 @@ import { SearchBar } from "../components/Explore/SearchBar";
 import { Card } from "../components/Explore/Card";
 import { BiLoaderAlt } from "react-icons/bi";
 
+export interface Venue {
+  address: string;
+  description: string;
+  id: string;
+  locationName: string;
+  postalCode: string;
+  venueImageName: string;
+}
+
 export interface Event {
   eventId: string;
   name: string;
   eventImageURL: string;
   eventImageName: string;
-  venue: string | null;
+  venue: Venue;
   categories: string[];
-  artist: { name: string };
+  artistName: string;
   dates: string[];
   description: string;
 }
@@ -38,17 +47,9 @@ export default function Explore() {
 
   const fetchEvents = async () => {
     // check if response valid
-    const response = await getAllEvents();
-    if (response.request?.status === 200) {
-      const eventList: Event[] = response.data.exploreEventList;
-      console.log(eventList);
-      setEvents(eventList);
-      setIsLoaded(true);
-
-      // will come here if it was from a token error
-    } else {
-      window.location.reload();
-    }
+    const data = await getAllEvents();
+    setEvents(data.exploreEventList);
+    setIsLoaded(true);
   };
 
   //--------- Search Filter ----------
@@ -61,7 +62,7 @@ export default function Explore() {
   const queriedEvents = events?.filter(
     (event) =>
       event.name.toLocaleLowerCase().indexOf(query) !== -1 ||
-      event.artist.name.toLocaleLowerCase().indexOf(query) !== -1,
+      event.artistName.toLocaleLowerCase().indexOf(query) !== -1,
   );
 
   //---------- Set Selected Categories ----------
