@@ -16,8 +16,10 @@ export default function UserFriends() {
     if (searchTerm.trim() === "") return;
 
     try {
+      console.log(searchTerm);
       const response = await searchProfile(searchTerm);
-      setSearchResult(response.data.firstName);
+      console.log(response.data);
+      setSearchResult(response.data?.user.firstName);
     } catch (error) {
       console.error("Error searching for profiles:", error);
     }
