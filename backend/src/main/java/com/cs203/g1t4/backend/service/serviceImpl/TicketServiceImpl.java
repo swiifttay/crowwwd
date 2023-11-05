@@ -31,7 +31,7 @@ public class TicketServiceImpl implements TicketService {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
-    public Response createTicket(TicketRequest ticketRequest, String username) {
+    public SingleTicketResponse createTicket(TicketRequest ticketRequest, String username) {
         // Get the buying user's id
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());

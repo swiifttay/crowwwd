@@ -27,6 +27,7 @@ import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
 import com.cs203.g1t4.backend.models.exceptions.PasswordDoNotMatchException;
 import com.cs203.g1t4.backend.repository.UserRepository;
+import com.cs203.g1t4.backend.service.serviceImpl.CommonServiceImpl;
 import com.cs203.g1t4.backend.service.services.CommonService;
 import com.cs203.g1t4.backend.service.services.JwtService;
 
@@ -49,7 +50,7 @@ public class CommonServiceTest {
 
     private User existingUser;
     private User secondExistingUser;
-    private CommonService commonService;
+    private CommonServiceImpl commonService;
 
 
     @BeforeEach
@@ -93,7 +94,7 @@ public class CommonServiceTest {
                 .spotifyAccount(null)
                 .build();
 
-        commonService = new CommonService(
+        commonService = new CommonServiceImpl(
                 defaultResponse,
                 jwtService,
                 passwordEncoder,
