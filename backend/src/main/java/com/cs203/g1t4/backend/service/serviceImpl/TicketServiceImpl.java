@@ -1,5 +1,10 @@
 package com.cs203.g1t4.backend.service.serviceImpl;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
@@ -7,16 +12,17 @@ import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
 import com.cs203.g1t4.backend.models.Ticket;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.event.Event;
-import com.cs203.g1t4.backend.models.exceptions.*;
+import com.cs203.g1t4.backend.models.exceptions.DuplicateTicketException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidEventIdException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidTicketIdException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
+import com.cs203.g1t4.backend.models.exceptions.NoTicketsAvailableException;
 import com.cs203.g1t4.backend.repository.EventRepository;
 import com.cs203.g1t4.backend.repository.TicketRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import com.cs203.g1t4.backend.service.services.TicketService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +31,7 @@ public class TicketServiceImpl implements TicketService {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
-    public SingleTicketResponse createTicket(TicketRequest ticketRequest, String username) {
+    public Response createTicket(TicketRequest ticketRequest, String username) {
         // Get the buying user's id
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());

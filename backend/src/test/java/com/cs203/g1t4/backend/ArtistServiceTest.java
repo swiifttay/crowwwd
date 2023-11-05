@@ -12,6 +12,8 @@ import com.cs203.g1t4.backend.models.exceptions.InvalidCredentialsException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
 import com.cs203.g1t4.backend.service.serviceImpl.ArtistServiceImpl;
 import com.cs203.g1t4.backend.service.serviceImpl.S3ServiceImpl;
+import com.cs203.g1t4.backend.service.services.S3Service;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +38,7 @@ public class ArtistServiceTest {
     ArtistRepository artistRepository;
 
     @Mock
-    S3ServiceImpl s3Service;
+    S3Service s3Service;
 
     @InjectMocks
     private ArtistServiceImpl artistService;

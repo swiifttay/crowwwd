@@ -1,15 +1,14 @@
 package com.cs203.g1t4.backend;
 
-import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
-import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
-import com.cs203.g1t4.backend.data.request.user.UserRequest;
-import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
-import com.cs203.g1t4.backend.models.exceptions.PasswordDoNotMatchException;
-import com.cs203.g1t4.backend.repository.UserRepository;
-import com.cs203.g1t4.backend.service.CommonService;
-import com.cs203.g1t4.backend.service.JwtService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,14 +19,16 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
+import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
+import com.cs203.g1t4.backend.data.request.user.UserRequest;
+import com.cs203.g1t4.backend.data.response.Response;
+import com.cs203.g1t4.backend.models.User;
+import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
+import com.cs203.g1t4.backend.models.exceptions.PasswordDoNotMatchException;
+import com.cs203.g1t4.backend.repository.UserRepository;
+import com.cs203.g1t4.backend.service.services.CommonService;
+import com.cs203.g1t4.backend.service.services.JwtService;
 
 @ExtendWith(MockitoExtension.class)
 public class CommonServiceTest {
