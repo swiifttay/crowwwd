@@ -34,7 +34,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'openjdk'
+          distribution: 'adopt'
           java-version: '17'
       - name: Clean Backend Project
         run: mvn clean
