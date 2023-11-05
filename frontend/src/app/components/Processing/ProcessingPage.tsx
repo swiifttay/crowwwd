@@ -4,6 +4,22 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios';
 import { BiLoaderAlt } from 'react-icons/bi';
 
+
+export interface SeatsConfirmRequest {
+    eventId: string;
+    category: string;
+    allocatedSeats: string[];
+    userIdsAttending: string[];
+    noOfSurpriseTickets: number
+}
+
+export interface SeatsCancelRequest {
+    eventId: string;
+    category: string;
+    allocatedSeats: string[];
+}
+
+
 const ProcessingPage = ({ clientSecret, paymentID }: any) => {
   const [message, setMessage] = useState("");
 
