@@ -1,15 +1,14 @@
 package com.cs203.g1t4.backend;
 
-import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
-import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
-import com.cs203.g1t4.backend.data.request.user.UserRequest;
-import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
-import com.cs203.g1t4.backend.models.exceptions.PasswordDoNotMatchException;
-import com.cs203.g1t4.backend.repository.UserRepository;
-import com.cs203.g1t4.backend.service.CommonService;
-import com.cs203.g1t4.backend.service.JwtService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,14 +19,17 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
+import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
+import com.cs203.g1t4.backend.data.request.user.UserRequest;
+import com.cs203.g1t4.backend.data.response.Response;
+import com.cs203.g1t4.backend.models.User;
+import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
+import com.cs203.g1t4.backend.models.exceptions.PasswordDoNotMatchException;
+import com.cs203.g1t4.backend.repository.UserRepository;
+import com.cs203.g1t4.backend.service.serviceImpl.CommonServiceImpl;
+import com.cs203.g1t4.backend.service.services.CommonService;
+import com.cs203.g1t4.backend.service.services.JwtService;
 
 @ExtendWith(MockitoExtension.class)
 public class CommonServiceTest {
@@ -48,7 +50,7 @@ public class CommonServiceTest {
 
     private User existingUser;
     private User secondExistingUser;
-    private CommonService commonService;
+    private CommonServiceImpl commonService;
 
 
     @BeforeEach
@@ -92,7 +94,7 @@ public class CommonServiceTest {
                 .spotifyAccount(null)
                 .build();
 
-        commonService = new CommonService(
+        commonService = new CommonServiceImpl(
                 defaultResponse,
                 jwtService,
                 passwordEncoder,
@@ -198,6 +200,56 @@ public class CommonServiceTest {
 
         // assert
         verify(userRepository).findByUsername("AliceTan");
+    }
+
+    @Test
+    void getUserClassFromRequest_UpdateUserChangeValidUsernameAndPassword_ReturnUpdatedUser() {
+        // arrange
+        UserRequest userRequest = UpdateProfileRequest.builder()
+                .firstName("Alice-update")
+                .lastName("Tan-update")
+                .username("AliceTanUpdate")
+                .email("aliceTan-update@test.com")
+                .oldPassword("12345678")
+                .newPassword("87654321")
+                .repeatNewPassword("87654321")
+                .phoneNo("97654321")
+                .userCreationDate(newUserCreationDate)
+                .countryOfResidence("Singapore-update")
+                .address("Sentosa Cove Avenue 1-update")
+                .postalCode("S654321")
+                .city("Singapore-update")
+                .state("Singapore-update")
+                .isPreferredMarketing(false)
+                .spotifyAccount(null)
+                .build();
+
+        User updatedUser = User.builder()
+                .id("1234")
+                .firstName("Alice-update")
+                .lastName("Tan-update")
+                .username("AliceTanUpdate")
+                .email("aliceTan-update@test.com")
+                .password("87654321")
+                .phoneNo("97654321")
+                .userCreationDate(newUserCreationDate)
+                .countryOfResidence("Singapore-update")
+                .address("Sentosa Cove Avenue 1-update")
+                .postalCode("S654321")
+                .city("Singapore-update")
+                .state("Singapore-update")
+                .isPreferredMarketing(false)
+                .spotifyAccount(null)
+                .build();
+
+        // mock userRepository "findByName" method
+        when(userRepository.findByUsername(any(String.class))).thenReturn(Optional.empty());
+
+        // act
+        User userResponse = commonService.getUserClassFromRequest(userRequest, existingUser);
+
+        // assert
+        assertEquals(updatedUser, userResponse);
     }
 
     @Test

@@ -1,30 +1,26 @@
 package com.cs203.g1t4.backend;
 
-import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.service.JwtService;
+import static org.bson.assertions.Assertions.assertNotNull;
+
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDateTime;
-
-import static org.bson.assertions.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import com.cs203.g1t4.backend.models.User;
+import com.cs203.g1t4.backend.service.serviceImpl.JwtServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class JwtServiceTest {
 
     @Spy
-    private JwtService jwtService;
+    private JwtServiceImpl jwtService;
 
     @Mock
     private UserDetailsService userDetailsService;

@@ -4,19 +4,30 @@ import FilterBar from "../components/Explore/FilterBar";
 import "../globals.css";
 
 import { useState, useEffect, ChangeEvent } from "react";
-import { concertsList } from "../axios/apiService";
+import { getAllEvents } from "../axios/apiService";
 import { SearchBar } from "../components/Explore/SearchBar";
 import { Card } from "../components/Explore/Card";
 import { BiLoaderAlt } from "react-icons/bi";
+
+export interface Venue {
+  address: string;
+  description: string;
+  id: string;
+  locationName: string;
+  postalCode: string;
+  venueImageName: string;
+}
 
 export interface Event {
   eventId: string;
   name: string;
   eventImageURL: string;
-  venue: string | null;
+  eventImageName: string;
+  venue: Venue;
   categories: string[];
-  artist: { name: string };
+  artistName: string;
   dates: string[];
+  description: string;
 }
 
 export default function Explore() {
@@ -36,17 +47,9 @@ export default function Explore() {
 
   const fetchEvents = async () => {
     // check if response valid
-    const response = await concertsList();
-    if (response.request?.status === 200) {
-      const eventList: Event[] = response.data.events;
-      console.log(eventList);
-      setEvents(eventList);
-      setIsLoaded(true);
-
-      // will come here if it was from a token error
-    } else {
-      window.location.reload();
-    }
+    const data = await getAllEvents();
+    setEvents(data.exploreEventList);
+    setIsLoaded(true);
   };
 
   //--------- Search Filter ----------
@@ -59,7 +62,7 @@ export default function Explore() {
   const queriedEvents = events?.filter(
     (event) =>
       event.name.toLocaleLowerCase().indexOf(query) !== -1 ||
-      event.artist.name.toLocaleLowerCase().indexOf(query) !== -1,
+      event.artistName.toLocaleLowerCase().indexOf(query) !== -1,
   );
 
   //---------- Set Selected Categories ----------
@@ -147,8 +150,8 @@ export default function Explore() {
           {displayedItems}
         </div>
       ) : (
-        <div className="my-5 w-full flex text-4xl text-center font-thin justify-center">
-          <h1 className="px-3">Loading</h1>{" "}
+        <div className="my-5 w-full flex text-2xl text-center font-bold justify-center">
+          <div className="px-3">Loading</div>{" "}
           <BiLoaderAlt className="animate-spin" />
         </div>
       )}

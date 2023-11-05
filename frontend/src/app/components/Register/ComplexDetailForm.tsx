@@ -52,7 +52,7 @@ export function ComplexDetailForm() {
       return;
     }
 
-    setMsg("loading...");
+    setMsg("Loading...");
     setFormData((prev: any) => ({ ...prev, ...data }));
     await handleRegister(data);
   };
@@ -63,9 +63,10 @@ export function ComplexDetailForm() {
     // check if the status given is correct
     if (response.request?.status === 200) {
       setMsg("Saving...");
-      router.push("/login");
+      router.push("/userprofile");
     } else {
-      setMsg("Try Again Later!");
+      // setMsg("Try Again Later!");
+      setMsg(response.data?.message);
     }
   }
 
@@ -198,6 +199,7 @@ export function ComplexDetailForm() {
                 color="primary"
                 value="no"
                 className="text-white"
+                sx={{ color: "white" }}
                 {...register("saveAddress")}
               />
             }

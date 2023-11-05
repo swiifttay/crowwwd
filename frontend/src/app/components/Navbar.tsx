@@ -11,6 +11,7 @@ import { useGlobalState } from "../globalStateContext";
 
 export default function Navbar() {
   const { isOpen, setIsOpen } = useGlobalState();
+  const [isLogin, setIsLogin] = useState(false);
 
   function toggleMenu() {
     setIsOpen(!isOpen);
@@ -57,9 +58,15 @@ export default function Navbar() {
         <MagnifyingGlassIcon className="h-6 stroke-white hover:text-gray-300 cursor-pointer mr-2" />
         <div className="hover:text-gray-300 cursor-pointer">Search</div>
       </div>
-      <Link href="/login" className="hidden md:flex">
-        <div className="hover:text-gray-300 cursor-pointer">Login</div>
-      </Link>
+      {isLogin ? (
+        <Link href="/userprofile" className="hidden md:flex">
+          <div className="hover:text-gray-300 cursor-pointer">Profile</div>
+        </Link>
+      ) : (
+        <Link href="/login" className="hidden md:flex">
+          <div className="hover:text-gray-300 cursor-pointer">Login</div>
+        </Link>
+      )}
     </div>
   );
 }

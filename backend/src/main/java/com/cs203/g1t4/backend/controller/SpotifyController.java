@@ -2,9 +2,8 @@ package com.cs203.g1t4.backend.controller;
 
 
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.models.exceptions.InvalidSpotifyAccountException;
-import com.cs203.g1t4.backend.service.SpotifyService;
+import com.cs203.g1t4.backend.service.services.SpotifyService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -75,11 +74,10 @@ public class SpotifyController {
         response.sendRedirect("http://localhost:3000/userprofile");
     }
 
-    @GetMapping(value = "/getSpotifyToken") 
-    public ResponseEntity<Response> getSpotifyAccessToken() {
-        Response response = SuccessResponse.builder()
-                    .response(spotifyAPI.getAccessToken())
-                    .build();
+    @GetMapping(value ="/getSpotifyToken")
+    public ResponseEntity<Response> validateMySpotifyAccount(@AuthenticationPrincipal UserDetails userDetails) {
+        Response response = spotifyService.validateAccount(spotifyAPI, userDetails.getUsername());
+
         return ResponseEntity.ok(response);
     }
 

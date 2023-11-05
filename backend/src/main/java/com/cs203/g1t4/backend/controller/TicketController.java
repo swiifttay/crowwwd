@@ -1,10 +1,9 @@
 package com.cs203.g1t4.backend.controller;
 
-import com.cs203.g1t4.backend.data.request.event.EventRequest;
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.service.ProfileService;
-import com.cs203.g1t4.backend.service.TicketService;
+import com.cs203.g1t4.backend.service.services.ProfileService;
+import com.cs203.g1t4.backend.service.services.TicketService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +22,14 @@ public class TicketController {
     private final ProfileService profileService;
 
     @PostMapping("/createTicket")
-    public ResponseEntity<Response> createTicket(@Valid @RequestBody TicketRequest TicketRequest, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Response> createTicket(@Valid @RequestBody TicketRequest ticketRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
         // Get the username from the userDetails of the authenticated user
         String username = userDetails.getUsername();
 
         // Provide information from both CreateTicketRequest and userid to createTicket in TicketService
         //Throws a InvalidTokenException if username cannot be found in repository
-        Response response = ticketService.createTicket(TicketRequest, username);
+        Response response = ticketService.createTicket(ticketRequest, username);
 
         //Else, return ok response
         return ResponseEntity.ok(response);
@@ -45,14 +44,14 @@ public class TicketController {
     }
 
     @PutMapping("/updateTicket/{ticketId}")
-    public ResponseEntity<Response> updateTicket(@PathVariable String ticketId, @Valid @RequestBody TicketRequest TicketRequest, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Response> updateTicket(@PathVariable String ticketId, @Valid @RequestBody TicketRequest ticketRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
         // Get the username from the userDetails of the authenticated user
         String username = userDetails.getUsername();
 
         // Provide information from both CreateTicketRequest and userid to createTicket in TicketService
         //Throws a InvalidTokenException if username cannot be found in repository
-        Response response = ticketService.updateTicket(ticketId, TicketRequest, username);
+        Response response = ticketService.updateTicket(ticketId, ticketRequest, username);
 
         //Else, return ok response
         return ResponseEntity.ok(response);

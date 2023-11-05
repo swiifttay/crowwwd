@@ -1,8 +1,26 @@
 package com.cs203.g1t4.backend;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
 import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
 import com.cs203.g1t4.backend.models.Ticket;
@@ -15,19 +33,7 @@ import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
 import com.cs203.g1t4.backend.repository.EventRepository;
 import com.cs203.g1t4.backend.repository.TicketRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
-import com.cs203.g1t4.backend.service.TicketService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import com.cs203.g1t4.backend.service.services.TicketService;
 
 @ExtendWith(MockitoExtension.class)
 public class TicketServiceTest {
@@ -77,11 +83,12 @@ public class TicketServiceTest {
         when(ticketRepository.save(any(Ticket.class))).thenReturn(ticket);
 
         // act
-        SuccessResponse response = ticketService.createTicket(ticketRequest, user.getUsername());
+        Response response = ticketService.createTicket(ticketRequest, user.getUsername());
 
         // assert
-        assertNotNull(response);
-        assertEquals("Ticket has been created successfully", response.getResponse());
+        assertTrue(response instanceof SingleTicketResponse);
+        SingleTicketResponse singleTicketResponse = (SingleTicketResponse) response;
+        assertNotNull(singleTicketResponse.getTicket());
         verify(userRepository).findByUsername(user.getUsername());
         verify(ticketRepository).findByEventIdAndUserIdAttending(ticket.getEventId(), user.getId());
         verify(ticketRepository).save(ticket);

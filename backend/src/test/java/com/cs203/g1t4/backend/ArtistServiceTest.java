@@ -10,8 +10,10 @@ import com.cs203.g1t4.backend.models.exceptions.DuplicatedArtistException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidArtistIdException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidCredentialsException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
-import com.cs203.g1t4.backend.service.ArtistService;
-import com.cs203.g1t4.backend.service.S3Service;
+import com.cs203.g1t4.backend.service.serviceImpl.ArtistServiceImpl;
+import com.cs203.g1t4.backend.service.serviceImpl.S3ServiceImpl;
+import com.cs203.g1t4.backend.service.services.S3Service;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +41,7 @@ public class ArtistServiceTest {
     S3Service s3Service;
 
     @InjectMocks
-    private ArtistService artistService;
+    private ArtistServiceImpl artistService;
 
     Artist customArtist;
 
@@ -68,7 +70,7 @@ public class ArtistServiceTest {
 
         image = mock(MultipartFile.class);
 
-        artistService = new ArtistService(artistRepository, s3Service);
+        artistService = new ArtistServiceImpl(artistRepository, s3Service);
         ReflectionTestUtils.setField(artistService, "bucketName", "your_bucket_name");
     }
 
