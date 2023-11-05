@@ -64,10 +64,6 @@ export const authenticate = async (credentials: {
   const response = await api.post("/auth/authenticate", credentials);
 
   // check if valid response
-  if (response.status === 200) {
-    const { token } = response.data;
-    localStorage.setItem("token", token);
-  }
 
   return response;
 };

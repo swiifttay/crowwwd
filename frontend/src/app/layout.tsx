@@ -50,19 +50,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <GlobalStateProvider>
       <html>
         <body
           className={`${mont.className} flex flex-col items-center w-full h-fit`}
         >
+          <GlobalStateProvider>
           <div className="flex flex-col items-start max-w-7xl w-full">
             <SidePanel />
             <Navbar />
             {children}
             <Footer />
           </div>
+          </GlobalStateProvider>
         </body>
       </html>
-    </GlobalStateProvider>
   );
 }
