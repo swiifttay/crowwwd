@@ -389,9 +389,6 @@ public class EventServiceImpl implements EventService {
         // Create a ArrayList<LocalDateTime> from String[] ticketSalesDate
         List<LocalDateTime> ticketSalesDateList = convertArrToList(eventRequest.getTicketSalesDate());
 
-        //Checks if venue exists in the repository
-        venueRepository.findById(eventRequest.getVenue()).orElseThrow(() -> new InvalidVenueException());
-
         //Retrieve Artist from database
         Artist artist = artistRepository.findById(eventRequest.getArtistId())
                 .orElseThrow(() -> new InvalidArtistIdException(eventRequest.getArtistId()));
