@@ -79,4 +79,4 @@ jobs:
       # - name: Run Frontend Container
       #   run: docker run -d -p 80:80 --name crowwwdsync-frontend-container crowwwdsync/frontend
       - name: Run Backend Container
-        run: docker run -d -p 8080:8080 --name crowwwdsync-backend-container ${{ secrets.DOCKER_USERNAME }}/dockerhub:crowwwdsync-backend
+        run: docker run -d -p 8080:8080 --name crowwwdsync-backend-container ${{secrets.SECRETS_PROPERTIES}} ${{ secrets.DOCKER_USERNAME }}/dockerhub:crowwwdsync-backend

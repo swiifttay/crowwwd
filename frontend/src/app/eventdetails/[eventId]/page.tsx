@@ -2,8 +2,9 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { concertDetails } from "../../axios/apiService";
-import { StringLiteral } from "typescript";
+import {
+  getEvent
+} from "../../axios/apiService";
 
 export interface Venue {
   venueId: string;
@@ -16,6 +17,7 @@ export interface Venue {
 export interface Event {
   eventId: string;
   name: string;
+  eventImageName: string;
   eventImageURL: string;
   dates: string[];
   ticketSalesDate: string[];
@@ -24,58 +26,54 @@ export interface Event {
   description: string;
 }
 
-export default function EventDetails({ params }: any) {
+export default function EventDetails({ params }: {params: {eventId: string}}) {
   const router = useRouter();
   const { eventId } = params;
-  const [eventDetail, setEventDetail] = useState<Event>();
+  const [event, setEvent] = useState<Event>();
 
   const rulesHeader = "font-bold text-md ml-8 mb-2 mt-4";
   const rulesDetails = "list-disc ml-16";
 
   useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        const response = await getEvent(eventId);
+        setEvent(response.fullEvent);
+        console.log(response.fullEvent);
+      } catch (error) {
+        console.error(error);
+        router.push("/pageNotFound");
+      }
+    };
     fetchDetails();
   }, []);
-  // useEffect(() => {
-  //   if (eventDetail === null) {
-  //     fetchDetails();
-  //   }
-  // }, []);
 
   const handleBuyTickets = async () => {
     router.push("/order");
   };
 
-  const fetchDetails = async () => {
-    try {
-      const response = await concertDetails(eventId);
-      setEventDetail(response.data.detailsEvent);
-    } catch (error) {
-      console.error(error);
-      router.push("/pageNotFound");
-    }
-  };
-
-  console.log("eventDetail is", eventDetail);
 
   return (
     <div className="flex w-full items-center justify-center mt-4">
       <main className="w-11/12">
         <div className="w-full h-1/2">
           <img
-            src={eventDetail?.eventImageURL}
+            src={event?.eventImageURL}
             className="max-h-1/2 rounded-3xl cover"
           />
         </div>
 
         <div className="max-w-[1045px] mt-8">
-          <div className="text-3xl font-bold mb-4">{eventDetail?.name}</div>
+          <div className="text-3xl font-bold mb-4">
+            {event?.name}
+          </div>
 
           <div className="flex justify-between">
             <p className="text-lg mb-10">
-              {eventDetail?.categories.map((category: string, index: any) => (
+              {event?.categories?.map((category: string, index: any) => (
                 <span key={index}>
                   {category}
-                  {index < eventDetail?.categories.length - 1 && " | "}
+                  {index < event?.categories.length - 1 && ' | '}
                 </span>
               ))}
             </p>
@@ -96,7 +94,7 @@ export default function EventDetails({ params }: any) {
             />
 
             <div className="flex ml-3 flex-wrap gap-3 ">
-              {eventDetail?.dates.map((date: string, index: any) => (
+              {event?.dates?.map((date: string, index: any) => (
                 <div className="text-md mr-20 hover:text-theme-grey hover:underline cursor-pointer">
                   {date}
                 </div>
@@ -111,11 +109,13 @@ export default function EventDetails({ params }: any) {
               height={20}
             />
             <div className="text-md mr-20 hover:text-theme-grey hover:underline cursor-pointer">
-              {eventDetail?.venue?.locationName}
+              {event?.venue?.locationName}
             </div>
           </div>
 
-          <p className="text-md mt-10 mb-10">{eventDetail?.description}</p>
+          <p className="text-md mt-10 mb-10">
+            {event?.description}
+          </p>
 
           <div className="font-semibold text-2xl mb-4">Price Details</div>
           <div className="grid text-md gap-2">
