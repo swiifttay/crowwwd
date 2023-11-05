@@ -1,39 +1,15 @@
 "use client";
 
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useGlobalState } from "../globalStateContext";
-import styles from "./Navbar.module.css";
 import Logo from "/public/images/Logo.png";
 
-export default function Navbar() {
+const Navbar = () => {
   const { isOpen, setIsOpen } = useGlobalState();
   const [isLogin, setIsLogin] = useState(false);
-  const [searchVisible, setSearchVisible] = useState(false);
-  const [searchText, setSearchText] = useState("");
-
-  function toggleMenu() {
-    setIsOpen(!isOpen);
-  }
-
-  function handleSearchClick() {
-    setSearchVisible(true);
-  }
-
-  function handleSearchInputChange(event) {
-    setSearchText(event.target.value);
-  }
-
-  function handleSearchSubmit(event) {
-    event.preventDefault();
-
-    // Perform the search or navigation logic here based on the searchText
-    // For example, you can redirect the user to a search results page.
-    // router.push(`/search?query=${searchText}`);
-  }
 
   const checkLoginStatus = async () => {
     const token = localStorage.getItem("token");
@@ -44,8 +20,16 @@ export default function Navbar() {
     checkLoginStatus();
   }, []);
 
+  function toggleMenu() {
+    setIsOpen(!isOpen);
+  }
+
   return (
     <div className="w-full font-bold text-base py-[20px] md:px-[128px] flex items-center z-40 justify-between px-20">
+      <Link href="/">
+        <Image src={Logo} alt="Logo" className="w-48 h-20 object-cover" />
+      </Link>
+
       <a
         href="/explore"
         className="hover:text-gray-300 cursor-pointer hidden md:flex"
@@ -78,49 +62,19 @@ export default function Navbar() {
         onClick={toggleMenu}
       />
 
-      <Link href="/">
-        <Image src={Logo} alt="Logo" className="w-48 h-20 object-cover" />
-      </Link>
-
-      <div className="flex">
-        <div
-          className={`hover-text-gray-300 cursor-pointer ${
-            searchVisible ? "hidden" : ""
-          }`}
-          onClick={handleSearchClick}
-        >
-          Search Friend
-        </div>
-
-        {searchVisible ? (
-          <div className="">
-            {" "}
-            {/*{styles.searchContainer}*/}
-            <form className={styles.searchForm} onSubmit={handleSearchSubmit}>
-              <input
-                type="text"
-                value={searchText}
-                onChange={handleSearchInputChange}
-                placeholder="Search..."
-                className={styles.searchInput}
-              />
-              <button type="submit" className={styles.searchButton}>
-                <MagnifyingGlassIcon className="h-6 stroke-white hover-text-gray-300 cursor-pointer" />
-              </button>
-            </form>
-          </div>
-        ) : null}
-      </div>
-
       {isLogin ? (
         <Link href="/userprofile" className="hidden md:flex">
-          <div className="hover-text-gray-300 cursor-pointer">Profile</div>
+          <div className="hover-text-gray-300 cursor-pointer pr-16">
+            Profile
+          </div>
         </Link>
       ) : (
         <Link href="/login" className="hidden md:flex">
-          <div className="hover-text-gray-300 cursor-pointer">Login</div>
+          <div className="hover-text-gray-300 cursor-pointer pr-16">Login</div>
         </Link>
       )}
     </div>
   );
-}
+};
+
+export default Navbar;

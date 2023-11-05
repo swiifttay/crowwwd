@@ -11,6 +11,7 @@ import {
   getUserProfile,
   updateFanRecords,
 } from "../axios/apiService";
+import UserFriends from "../components/SearchFriend/UserFriends";
 import Modal from "../components/UserProfile/Modal";
 import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
@@ -145,7 +146,7 @@ export default function UserProfile() {
             fanRecordsData.map(async (fanRecord: FanRecord) => {
               const artistResponse = await getArtistById(fanRecord.artistId);
               return artistResponse?.data.artist;
-            }),
+            })
           );
           const flattenedArtistResponses = artistResponses.flat();
 
@@ -190,7 +191,7 @@ export default function UserProfile() {
   return (
     <main className="flex flex-col items-center h-fit relative w-full px-8">
       <div className="flex flex-col justify-center align-center mt-4 w-full">
-        <div className="flex flex-row ">
+        <div className="flex flex-row justify-between w-full">
           <div className="flex flex-col sm:w-full lg:w-2/3">
             <div className="flex gap-12">
               <div className="">
@@ -215,14 +216,7 @@ export default function UserProfile() {
               </div>
 
               <div className="flex items-center justify-center flex-col">
-                {/* <Image
-                  src="/images/Siyu.png"
-                  alt="Profile Picture"
-                  className="rounded-full"
-                  width={200}
-                  height={200}
-                /> */}
-                <AccountCircleIcon style={{ fontSize: 140 }} />
+                <AccountCircleIcon style={{ fontSize: 140, color: "#e5e7eb" }} />
               </div>
             </div>
             <div className="flex flex-row justify-between mb-4 mt-20">
@@ -257,7 +251,7 @@ export default function UserProfile() {
             </div>
           </div>
 
-          <div className="ml-10 w-1/3">
+          <div className="ml-16 w-1/3">
             <div className="text-xl font-bold mt-6 mb-4">What you may like</div>
             <div className="flex flex-col gap-3">
               <EventButtonShort
@@ -354,19 +348,7 @@ export default function UserProfile() {
           /> */}
         </div>
       </div>
-
-      <div className="flex flex-col w-full">
-        <div className="text-xl font-bold mb-4 mt-16">Friends</div>
-        <div className="flex overflow-x-auto max-w-full mb-32 px-4">
-          <div className="flex gap-5">
-            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-          </div>
-        </div>
-      </div>
+      <UserFriends />
     </main>
   );
 }

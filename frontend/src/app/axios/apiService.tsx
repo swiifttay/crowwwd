@@ -141,6 +141,25 @@ export const getEvent = async (eventId: string) => {
   }
 };
 
+// http://localhost:8080/api/profile/searchProfile/siyuyu
+export const searchProfile = async (username: string) => {
+  try {
+    const response = await api.get(`/profile/searchProfile/${username}`);
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
+export const addFriend = async (friendId: string) => {
+  try {
+    const response = await api.post('/api/addFriend',  friendId);
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 export const getFanRecords = async () => {
   try {
     const response = await api.get("/fanRecord/myFanRecords");
