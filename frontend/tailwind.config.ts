@@ -22,7 +22,7 @@ const config: Config = {
         footer:
           "linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%)",
         login:
-          "radial-gradient(circle at center, rgba(5, 16, 33, 0.4) 20%, rgba(7, 23, 47, 1) 65%), url('/images/login-bg.jpg')",
+          "radial-gradient(circle at center, rgba(5, 16, 33, 0.4) 20%, rgba(6, 18, 38, 1) 65%), url('/images/login-bg.jpg')",
       },
 
       fontFamily: {
