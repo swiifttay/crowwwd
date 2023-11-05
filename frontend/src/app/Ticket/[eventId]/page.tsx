@@ -50,8 +50,7 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
   //Change seat quntity available for selection by user
   useEffect(() => {
     const availableSeatsDefined = category?.availableSeats ?? 0;
-    const numSeatsAvailable =
-      (category?.availableSeats ?? 0) > 4 ? 4 : availableSeatsDefined;
+    const numSeatsAvailable = availableSeatsDefined > 4 ? 4 : availableSeatsDefined;
     renderNumSeatsSelection(numSeatsAvailable);
   }, [category]);
 
