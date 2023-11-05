@@ -203,6 +203,56 @@ public class CommonServiceTest {
     }
 
     @Test
+    void getUserClassFromRequest_UpdateUserChangeValidUsernameAndPassword_ReturnUpdatedUser() {
+        // arrange
+        UserRequest userRequest = UpdateProfileRequest.builder()
+                .firstName("Alice-update")
+                .lastName("Tan-update")
+                .username("AliceTanUpdate")
+                .email("aliceTan-update@test.com")
+                .oldPassword("12345678")
+                .newPassword("87654321")
+                .repeatNewPassword("87654321")
+                .phoneNo("97654321")
+                .userCreationDate(newUserCreationDate)
+                .countryOfResidence("Singapore-update")
+                .address("Sentosa Cove Avenue 1-update")
+                .postalCode("S654321")
+                .city("Singapore-update")
+                .state("Singapore-update")
+                .isPreferredMarketing(false)
+                .spotifyAccount(null)
+                .build();
+
+        User updatedUser = User.builder()
+                .id("1234")
+                .firstName("Alice-update")
+                .lastName("Tan-update")
+                .username("AliceTanUpdate")
+                .email("aliceTan-update@test.com")
+                .password("87654321")
+                .phoneNo("97654321")
+                .userCreationDate(newUserCreationDate)
+                .countryOfResidence("Singapore-update")
+                .address("Sentosa Cove Avenue 1-update")
+                .postalCode("S654321")
+                .city("Singapore-update")
+                .state("Singapore-update")
+                .isPreferredMarketing(false)
+                .spotifyAccount(null)
+                .build();
+
+        // mock userRepository "findByName" method
+        when(userRepository.findByUsername(any(String.class))).thenReturn(Optional.empty());
+
+        // act
+        User userResponse = commonService.getUserClassFromRequest(userRequest, existingUser);
+
+        // assert
+        assertEquals(updatedUser, userResponse);
+    }
+
+    @Test
     void getUserClassFromRequest_UpdateUserKeepUsernameAndPassword_ReturnUpdatedUser() {
         // arrange
         UserRequest userRequest = UpdateProfileRequest.builder()
