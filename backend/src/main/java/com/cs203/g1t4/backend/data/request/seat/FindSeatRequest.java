@@ -21,5 +21,8 @@ public class FindSeatRequest implements Response {
     @NotBlank
     private String category;
 
+    @NotBlank
+    private String eventDate;
+
     private int numSeats;
 }
