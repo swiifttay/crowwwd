@@ -34,10 +34,13 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
+          distribution: 'openjdk'
           java-version: '17'
-      - name: Build Backend Project
-        run: mvn clean install -DskipTests
+      - name: Clean Backend Project
+        run: mvn clean
+        working-directory: ${{github.workspace}}/backend
+      - name: Install Backend Project
+        run: mvn install -DskipTests
         working-directory: ${{github.workspace}}/backend
       - name: Build Backend Image
         run: |
