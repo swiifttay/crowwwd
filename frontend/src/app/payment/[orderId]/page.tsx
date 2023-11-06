@@ -36,8 +36,9 @@ export default function App({ params }: { params: { orderId: string } }) {
   const [order, setOrder] = useState<Order>();
   const [totalCost, setTotalCost] = useState<Number>();
   
-
+  
   useEffect(() => {
+    console.log(localStorage.getItem('token'));
     fetchOrderByOrderId(orderId).then((response)=> {setOrder(response.data)})
 
     setTotalCost(order?.totalCost); // change to order?.totalCost

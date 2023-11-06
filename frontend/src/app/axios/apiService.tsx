@@ -46,7 +46,7 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.data?.status === 500) {
       console.log("Handling 500 error");
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
       // return a false value that shows that the token was invalid
       // return false;
     }
