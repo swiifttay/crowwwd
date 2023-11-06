@@ -4,7 +4,7 @@ import {useState, useEffect} from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
-import CheckoutForm from "../Payments/CheckoutForm";
+import CheckoutForm from "../../Payments/CheckoutForm";
 import axios from "axios";
 
 // Make sure to call loadStripe outside of a component’s render to avoid
@@ -14,7 +14,7 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
-export default function App() {
+export default function App(params: {params: orderid}) {
   const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {

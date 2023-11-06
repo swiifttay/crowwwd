@@ -169,3 +169,29 @@ export const updateFanRecords = async () => {
     return Promise.reject(error);
   }
 };
+
+export const confirmSeats = async (SeatsConfirmRequest: 
+  {eventId: string;
+  category: string;
+  allocatedSeats: string[];
+  userIdsAttending: string[];
+  noOfSurpriseTickets: number}) => {
+  try {
+    const response = await api.put("", SeatsConfirmRequest);
+    return response;
+  } catch(error){
+    return Promise.reject(error);
+  }
+  }
+
+  export const cancelSeats = async (SeatsCancelRequest: {
+    eventId: string;
+    category: string;
+    allocatedSeats: string[] }) => {
+    try {
+      const response = await api.delete("",SeatsCancelRequest)
+      return response;
+    } catch(error){
+      return Promise.reject(error);
+    }
+  }

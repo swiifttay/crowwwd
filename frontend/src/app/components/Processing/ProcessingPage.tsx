@@ -10,7 +10,7 @@ export interface SeatsConfirmRequest {
     category: string;
     allocatedSeats: string[];
     userIdsAttending: string[];
-    noOfSurpriseTickets: number
+    noOfSurpriseTickets: number;
 }
 
 export interface SeatsCancelRequest {
