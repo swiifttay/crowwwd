@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class ProfileController {
 
     private final ProfileService profileService;
-    private final ProfileServiceImpl profileServiceImpl;
     private final CommonService commonService;
 
     @PutMapping("/updateProfile")

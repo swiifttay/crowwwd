@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement(name = "bearerAuth")
 public class OrderController {
 
-    private OrderService orderService;
+    private final OrderService orderService;
 
     @PutMapping("/order/{orderId}/payment/{paymentId}")
     public ResponseEntity<Response> updateOrder(@PathVariable String orderId, @PathVariable String paymentId) {
