@@ -7,6 +7,11 @@ import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../../Payments/CheckoutForm";
 import axios from "axios";
 
+
+export interface Seats {
+
+}
+
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
 // This is your test publishable API key.
@@ -14,10 +19,14 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
-export default function App(params: {params: orderid}) {
+export default function App({ params }: { params: { orderId: string } }) {
+  const { orderId } = params;
+
   const [clientSecret, setClientSecret] = useState("");
+  
 
   useEffect(() => {
+
     const paymentIntent = async () => {
       const { data } = await axios.post("/api/create-payment-intent", {
         data: { amount: 89 },
@@ -26,7 +35,7 @@ export default function App(params: {params: orderid}) {
         // console.log(response)
     }
     paymentIntent();
-  }, []);
+  }, [orderId]);
 
   const appearance = {
     theme: 'stripe',
