@@ -5,7 +5,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-const nameList = ["Alice", "Bob", "Charlie", "David"]; // Replace with your list of names
+// const nameList = ["Alice", "Bob", "Charlie", "David"];
+const nameList = ["Charlie Puth", "Shawn Mendes"];
 
 export default function BasicSelect() {
   const [selectedName, setSelectedName] = React.useState("");

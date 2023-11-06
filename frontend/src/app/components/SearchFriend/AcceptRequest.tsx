@@ -48,12 +48,12 @@ const AcceptRequest: React.FC<EventButtonProps> = ({
             {/* {isAcceptedFriend ? (
               <div className="text-theme-blue text-md">Accepted</div>
             ) : ( */}
-              <button
-                className=" px-2 bg-theme-blue text-sm text-white py-2 rounded-lg hover:bg-theme-light-blue"
-                onClick={handleAcceptRequest}
-              >
-                Accept Request
-              </button>
+            <button
+              className=" px-2 bg-theme-blue text-sm text-white py-2 rounded-lg hover:bg-theme-light-blue"
+              onClick={handleAcceptRequest}
+            >
+              Accept Request
+            </button>
             {/* )} */}
           </div>
         </div>

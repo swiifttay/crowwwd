@@ -146,7 +146,7 @@ export default function UserProfile() {
             fanRecordsData.map(async (fanRecord: FanRecord) => {
               const artistResponse = await getArtistById(fanRecord.artistId);
               return artistResponse?.data.artist;
-            })
+            }),
           );
           const flattenedArtistResponses = artistResponses.flat();
 
@@ -257,29 +257,29 @@ export default function UserProfile() {
             <div className="text-xl font-bold mt-6 mb-4">What you may like</div>
             <div className="flex flex-col gap-3">
               <EventButtonShort
-                image="/images/TaylorSwift.jpg"
-                title="Reputation Tour"
+                image="/images/ErasTour.jpg"
+                title="The Eras Tour"
                 artist="Taylor Swift"
               />
               <EventButtonShort
-                image="/images/TaylorSwift.jpg"
-                title="Reputation Tour"
-                artist="Taylor Swift"
+                image="/images/SingularTour.jpg"
+                title="The Singular Tour"
+                artist="Sabrina Carpenter"
               />
               <EventButtonShort
-                image="/images/TaylorSwift.jpg"
-                title="Reputation Tour"
-                artist="Taylor Swift"
+                image="/images/QueenofHearts.jpg"
+                title="Queen of Hearts"
+                artist="G.E.M"
               />
               <EventButtonShort
-                image="/images/TaylorSwift.jpg"
-                title="Reputation Tour"
-                artist="Taylor Swift"
+                image="/images/CarnivalWorldTour.jpg"
+                title="CarnivalWorldTour"
+                artist="Jay Chou"
               />
               <EventButtonShort
-                image="/images/TaylorSwift.jpg"
-                title="Reputation Tour"
-                artist="Taylor Swift"
+                image="/images/Mamamoo.jpg"
+                title="My Con"
+                artist="Mamamoo"
               />
             </div>
           </div>

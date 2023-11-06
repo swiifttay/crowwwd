@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { addFriend } from "@/app/axios/apiService";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -14,7 +14,6 @@ const PendingRequest: React.FC<EventButtonProps> = ({
   firstName,
   lastName,
 }) => {
-
   const [isPendingFriend, setIsPendingFriend] = useState(false);
 
   // const [isFriendAdded, setIsFriendAdded] = useState(false);

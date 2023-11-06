@@ -7,7 +7,11 @@ interface EventButtonProps {
   lastName: string;
 }
 
-const VerticalCard: React.FC<EventButtonProps> = ({ image, firstName, lastName }) => {
+const VerticalCard: React.FC<EventButtonProps> = ({
+  image,
+  firstName,
+  lastName,
+}) => {
   return (
     <div>
       <button className="w-[200px] bg-zinc-900 hover:bg-zinc-800 text-white px-6 pt-4 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]">

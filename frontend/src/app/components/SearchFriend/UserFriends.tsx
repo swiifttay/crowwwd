@@ -77,19 +77,14 @@ export default function UserFriends() {
       </div>
 
       <div className="flex flex-col overflow-x-auto max-w-full mb-32">
-        {/* <PendingRequest
-          image="/images/ShawnMendes.jpg"
-          firstName={"Shawn"}
-          lastName={"Mendes"}
-        /> */}
-        {/* {!isAcceptedFriend && (
+        {!isAcceptedFriend && (
           <AcceptRequest
             image="/images/ShawnMendes.jpg"
             firstName="Shawn"
             lastName="Mendes"
             onAcceptRequest={handleAcceptRequest}
           />
-        )} */}
+        )}
         <div className="flex gap-5">
           <VerticalCard
             image="/images/CharliePuth.jpg"
