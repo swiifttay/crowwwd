@@ -76,6 +76,7 @@ export default function UserProfile() {
 
   const fetchUser = async () => {
     const response = await getUserProfile();
+    console.log(response);
 
     if (response.request?.status === 200) {
       setUser(response.data.user);
@@ -86,7 +87,6 @@ export default function UserProfile() {
 
   const checkSpotifyLoginStatus = async () => {
     const spotifyTokenResponse = await getSpotifyToken();
-    console.log(spotifyTokenResponse.data?.response);
     if (
       spotifyTokenResponse?.status === 200 &&
       spotifyTokenResponse.data?.response != null
@@ -236,7 +236,7 @@ export default function UserProfile() {
               <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-8">
                 <div className={`${isArtistLoaded ? "hidden" : "display"}`}>
                   {" "}
-                  Loading...{" "}
+                  Connect to spotify to view your favourite artists!{" "}
                 </div>
                 {favArtist
                   ?.slice(0, Math.min(10, favArtist.length))
@@ -245,7 +245,8 @@ export default function UserProfile() {
                       <VerticalCard
                         key={i}
                         image={artist.artistImageURL}
-                        name={artist.name}
+                        firstName={artist.name}
+                        lastName=""
                       />
                     );
                   })}
