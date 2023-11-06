@@ -14,6 +14,7 @@ import com.cs203.g1t4.backend.models.queue.HoldingArea;
 import com.cs203.g1t4.backend.models.queue.QueueStatus;
 import com.cs203.g1t4.backend.models.queue.QueueingStatusValues;
 import com.cs203.g1t4.backend.repository.*;
+import com.cs203.g1t4.backend.service.services.HoldingAreaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class HoldingAreaServiceImpl {
+public class HoldingAreaServiceImpl implements HoldingAreaService {
     private final HoldingAreaRepository holdingAreaRepository;
     private final FanRecordRepository fanRecordRepository;
     private final UserRepository userRepository;
