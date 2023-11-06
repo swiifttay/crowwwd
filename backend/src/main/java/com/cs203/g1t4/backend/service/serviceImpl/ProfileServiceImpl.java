@@ -5,7 +5,7 @@ import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.user.SingleUserResponse;
 import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.models.exceptions.InvalidUsernameException;
+import com.cs203.g1t4.backend.models.exceptions.invalidFieldsException.InvalidUsernameException;
 import com.cs203.g1t4.backend.models.exceptions.unauthorisedLoginException.InvalidTokenException;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import com.cs203.g1t4.backend.service.services.CommonService;

@@ -1,5 +1,11 @@
 package com.cs203.g1t4.backend.service.serviceImpl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.cs203.g1t4.backend.data.request.OrderRequest;
 import com.cs203.g1t4.backend.data.request.seat.FindSeatRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatCancelRequest;
@@ -10,10 +16,13 @@ import com.cs203.g1t4.backend.data.response.SingleOrderResponse;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
 import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
-import com.cs203.g1t4.backend.models.*;
+import com.cs203.g1t4.backend.models.Category;
+import com.cs203.g1t4.backend.models.Order;
+import com.cs203.g1t4.backend.models.Ticket;
+import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.event.EventSeatingDetails;
-import com.cs203.g1t4.backend.models.exceptions.InvalidOrderIdException;
 import com.cs203.g1t4.backend.models.exceptions.invalidFieldsException.InvalidCategoryException;
+import com.cs203.g1t4.backend.models.exceptions.invalidIdException.InvalidOrderIdException;
 import com.cs203.g1t4.backend.models.exceptions.invalidIdException.InvalidSeatingDetailsException;
 import com.cs203.g1t4.backend.models.exceptions.unauthorisedLoginException.InvalidTokenException;
 import com.cs203.g1t4.backend.repository.OrderRepository;
@@ -23,13 +32,8 @@ import com.cs203.g1t4.backend.service.services.OrderService;
 import com.cs203.g1t4.backend.service.services.SeatingDetailsService;
 import com.cs203.g1t4.backend.service.services.SeatsService;
 import com.cs203.g1t4.backend.service.services.TicketService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
