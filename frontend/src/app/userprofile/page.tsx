@@ -1,6 +1,9 @@
 "use client";
 
+<<<<<<< Updated upstream
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+=======
+>>>>>>> Stashed changes
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -16,6 +19,10 @@ import VerticalCard from "../components/SearchFriend/VerticalCard";
 import Modal from "../components/UserProfile/Modal";
 import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
+<<<<<<< Updated upstream
+=======
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+>>>>>>> Stashed changes
 import { useUserDetails } from "../contexts/UserDetailsContext";
 
 export interface User {
