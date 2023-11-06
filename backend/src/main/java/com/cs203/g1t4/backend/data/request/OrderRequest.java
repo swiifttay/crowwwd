@@ -1,44 +1,42 @@
-package com.cs203.g1t4.backend.models;
+package com.cs203.g1t4.backend.data.request;
 
+import com.cs203.g1t4.backend.models.Ticket;
+import com.cs203.g1t4.backend.models.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("order")
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
 @Builder
-public class Order {
+@AllArgsConstructor
+@NoArgsConstructor
+public class OrderRequest {
 
     @Id
     private String id;
 
-    @NotBlank
+    @NotBlank(message = "Payment ID is required")
     private String paymentId;
 
-    @NotBlank
+    @NotBlank(message = "Seats is required")
     private String[] seats;
 
-    @NotBlank
+    @NotBlank(message = "Paying User ID is required")
     private String payingUserId;
 
-    @NotBlank
+    @NotBlank(message = "Event ID is required")
     private String eventId;
 
-    @NotBlank
+    @NotBlank(message = "Category is required")
     private String category;
 
-    @NotBlank
+    @NotBlank(message = "Event Date is required")
     private String eventDate;
 
-    @NotBlank
     private int totalCost;
 
-    @NotBlank
     private int pricePerSeat;
 }

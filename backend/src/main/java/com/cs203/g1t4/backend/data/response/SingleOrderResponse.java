@@ -13,4 +13,8 @@ import lombok.NoArgsConstructor;
 public class SingleOrderResponse implements Response {
 
     private Order order;
+
+    public Order getOrder() {
+        return order;
+    }
 }

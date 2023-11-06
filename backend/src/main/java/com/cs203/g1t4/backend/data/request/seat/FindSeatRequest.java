@@ -22,4 +22,6 @@ public class FindSeatRequest implements Response {
     private String category;
 
     private int numSeats;
+
+    private String eventDate;
 }

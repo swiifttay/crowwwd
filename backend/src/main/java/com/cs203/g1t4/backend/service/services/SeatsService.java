@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface SeatsService {
 
-    Response findSeats(final FindSeatRequest findSeatRequest)
+    Response findSeats(final String username, final FindSeatRequest findSeatRequest)
             throws InvalidCategoryException, InvalidSeatingDetailsException;
 
     Response confirmSeats(final String username, final SeatsConfirmRequest seatsConfirmRequest);
