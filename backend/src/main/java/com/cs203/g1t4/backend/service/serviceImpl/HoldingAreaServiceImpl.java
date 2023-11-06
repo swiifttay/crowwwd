@@ -181,7 +181,7 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
 
         // determine and check whether there is anyone still in the early queue
         // if there is then start sending them into the respective queue numbers
-        while (earlyQueueCounter < holdingAreaEarlyQueue.size() - 1) {
+        while (holdingAreaEarlyQueue != null && earlyQueueCounter < holdingAreaEarlyQueue.size() - 1) {
 
             // get the first person in queue and update them with queueNumber
             enterQueue(holdingAreaEarlyQueue.get(earlyQueueCounter), queuesMade, eventId);
@@ -214,7 +214,7 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
         int normalQueueCounter = 0;
 
         // determine if there is enough people to keep creating a new queue
-        while (normalQueueCounter < holdingAreaNormalQueue.size() - 30) {
+        while (holdingAreaNormalQueue != null && normalQueueCounter < holdingAreaNormalQueue.size() - 30) {
 
             // get the first person in queue
             enterQueue(holdingAreaNormalQueue.get(normalQueueCounter), queuesMade, eventId);
@@ -247,7 +247,7 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
                 .isAfter(holdingAreaForEvent.getLastQueueCreateTime().plusSeconds(15))) {
 
             // loop until there's no more
-            while (holdingAreaNormalQueue.size() > normalQueueCounter) {
+            while (holdingAreaNormalQueue != null && holdingAreaNormalQueue.size() > normalQueueCounter) {
 
                 // get the first person in queue
                 enterQueue(holdingAreaNormalQueue.get(normalQueueCounter), queuesMade, eventId);
