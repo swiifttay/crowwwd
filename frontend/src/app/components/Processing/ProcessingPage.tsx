@@ -5,18 +5,14 @@ import axios from 'axios';
 import { BiLoaderAlt } from 'react-icons/bi';
 
 
-export interface SeatsConfirmRequest {
-    eventId: string;
-    category: string;
-    allocatedSeats: string[];
+export interface SeatsConfirmRequest { 
+    id: string
     userIdsAttending: string[];
-    noOfSurpriseTickets: number;
+    noOfSurpriseTickets: number
 }
 
 export interface SeatsCancelRequest {
-    eventId: string;
-    category: string;
-    allocatedSeats: string[];
+    id: string
 }
 
 

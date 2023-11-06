@@ -170,7 +170,16 @@ export const updateFanRecords = async () => {
   }
 };
 
-export const fetchSeats = async (orderId: string) => {
+export const fetchOrderByOrderId = async (id: string) => {
+  try {
+    const response = await api.get("");
+    return response;
+  } catch(error){
+    return Promise.reject(error);
+  }
+}
+
+export const fetchOrderByPaymentId = async (id: string) => {
   try {
     const response = await api.get("");
     return response;
@@ -180,25 +189,20 @@ export const fetchSeats = async (orderId: string) => {
 }
 
 export const confirmSeats = async (SeatsConfirmRequest: 
-  {eventId: string;
-  category: string;
-  allocatedSeats: string[];
-  userIdsAttending: string[];
-  noOfSurpriseTickets: number}) => {
+  { id: string
+    userIdsAttending: string[];
+    noOfSurpriseTickets: number}) => {
   try {
-    const response = await api.put("", SeatsConfirmRequest);
+    const response = await api.put("/seat", SeatsConfirmRequest);
     return response;
   } catch(error){
     return Promise.reject(error);
   }
 }
 
-  export const cancelSeats = async (SeatsCancelRequest: {
-    eventId: string;
-    category: string;
-    allocatedSeats: string[] }) => {
+  export const cancelSeats = async (id:string) => {
     try {
-      const response = await api.delete("",SeatsCancelRequest)
+      const response = await api.delete("/seat",{data: id})
       return response;
     } catch(error){
       return Promise.reject(error);

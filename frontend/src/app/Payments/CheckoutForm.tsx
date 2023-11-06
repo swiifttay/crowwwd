@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useRouter } from "next/navigation";
 import PaymentTimeout from "../components/Processing/PaymentTimeout"
 
-export default function CheckoutForm({clientSecret}:any) {
+export default function CheckoutForm({clientSecret, totalCost}:any) {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
@@ -19,6 +19,7 @@ export default function CheckoutForm({clientSecret}:any) {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentID, setPaymentID] = useState<string|undefined>("");
   let timeoutId: NodeJS.Timeout | null = null;
+  
   
 
   const retrievePaymentID = async (clientSecret:any) =>{
@@ -97,6 +98,11 @@ export default function CheckoutForm({clientSecret}:any) {
 
   const paymentElementOptions: any = {
     layout: "tabs",
+    style: {
+      base: {
+        color: '#FFFFFF'
+      }
+    }
   };
 
   return (
@@ -105,10 +111,10 @@ export default function CheckoutForm({clientSecret}:any) {
         id="link-authentication-element"
         onChange={(e) => setEmail(e.target.value)}
       />
-      <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <button disabled={isLoading || !stripe || !elements} id="submit" className="rounded-md my-5 p-5 bg-white text-black">
+      <PaymentElement id="payment-element" options={paymentElementOptions} className="text-white" />
+      <button disabled={isLoading || !stripe || !elements} id="submit" className="rounded-md my-5 p-5 bg-white text-black hover:scale-110 hover:border-white transition duration-300">
         <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
+          {isLoading ? <div className="spinner" id="spinner"></div> : `Pay $${totalCost}`}
         </span>
       </button>
       {/* Show any error or success messages */}

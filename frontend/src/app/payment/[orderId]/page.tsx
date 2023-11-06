@@ -6,15 +6,20 @@ import { Elements } from "@stripe/react-stripe-js";
 
 import CheckoutForm from "../../Payments/CheckoutForm";
 import axios from "axios";
-import { fetchSeats } from "@/app/axios/apiService";
+import { fetchOrderByOrderId } from "@/app/axios/apiService";
 
 
-export interface Seats {
-  orderId: string
+export interface Order {
+  id: string
+  paymentId: string
+  seats: string[]
+  payingUserId: string
+  eventId: string
   category: string
-  allocatedSeats: string[]
-  pricePerSeat: number
+  eventDate: string
   totalCost: number
+  pricePerSeat: number
+  
 }
 
 // Make sure to call loadStripe outside of a component’s render to avoid
@@ -28,24 +33,31 @@ export default function App({ params }: { params: { orderId: string } }) {
   const { orderId } = params;
 
   const [clientSecret, setClientSecret] = useState("");
-  const [seats, setSeats] = useState<Seats>();
+  const [order, setOrder] = useState<Order>();
+  const [totalCost, setTotalCost] = useState<Number>();
   
 
   useEffect(() => {
-    const response = fetchSeats(orderId);
-    setSeats(response);
+    // fetchOrderByOrderId(orderId).then((response)=> {setOrder(response.data)})
 
-    const { totalCost }:any = seats
+    setTotalCost(100); // change to order?.totalCost
+
 
     const paymentIntent = async () => {
-      const { data } = await axios.post("/api/create-payment-intent", {
-        data: { amount: {totalCost} },
-      });
-        setClientSecret(data);
-        // console.log(response)
+      try{
+        const { data } = await axios.post("/api/create-payment-intent", {
+          data: { amount: totalCost },
+        });
+          setClientSecret(data);
+          console.log(clientSecret)
+      } catch (error){
+        console.log(error)
+      }
     }
     paymentIntent();
-  }, [orderId]);
+    //add in api call to store paymentId
+
+  }, [totalCost]);
 
   const appearance = {
     theme: 'stripe',
@@ -60,13 +72,15 @@ export default function App({ params }: { params: { orderId: string } }) {
     <div className="w-full h-full p-5 flex space-x-10">
       <div className="w-1/2 mb-10 rounded-3xl bg-checkout bg-cover bg-center flex flex-col justify-center items-center shadow-lg shadow-slate-950">
         <h1 className="m-2 text-5xl font-semibold text-center">
-          You're on your way!
+          {`Pay $${totalCost}`}
         </h1>
+        <br />
+        <h2 className="m-2 text-2xl font-semibold text-center">You're on your way</h2>
       </div>
       <div className="w-1/2">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm clientSecret={clientSecret}/>
+          <CheckoutForm clientSecret={clientSecret} totalCost={totalCost}/>
         </Elements>
       )}
       </div>
