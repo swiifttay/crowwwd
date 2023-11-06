@@ -1,13 +1,22 @@
-"use client"
+"use client";
 
 import { Box } from "@mui/material";
 import Stepper from "../../../components/Queue/Stepper";
 import { useRouter } from "next/navigation";
+import { useUserDetails } from "@/app/contexts/UserDetailsContext";
+import { putJoinQueue } from "@/app/axios/queue";
 
-export default function Lobby() {
+export default function Lobby({ params }: { params: { eventId: string } }) {
+  const {eventId} = params;
+  const {user} = useUserDetails();
   const router = useRouter();
+
   const handleJoinQueue = async () => {
-    router.push("/waitingroom");
+    const res = await putJoinQueue(eventId);
+    console.log("Join Queue Status:" + res);
+    if (res === "success") {
+      router.push(`/Ticket/${eventId}/waitingroom`);
+    }
   };
 
   return (
@@ -35,7 +44,10 @@ export default function Lobby() {
               additional information.
             </div>
           </div>
-          <button className="mt-4 w-2/3 bg-theme-blue text-white p-2 rounded-md hover:bg-theme-light-blue" onClick={handleJoinQueue}>
+          <button
+            className="mt-4 w-2/3 bg-theme-blue text-white p-2 rounded-md hover:bg-theme-light-blue"
+            onClick={handleJoinQueue}
+          >
             Join the Queue
           </button>
           <div className="mt-6 text-sm flex flex-col sm:flex-row">

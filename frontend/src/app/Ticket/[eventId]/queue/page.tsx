@@ -45,7 +45,7 @@ export default function Queue({ params }: { params: { eventId: string } }) {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  });
 
   //[EDIT] Make the slider reflect relative position in queue
   useEffect(() => {

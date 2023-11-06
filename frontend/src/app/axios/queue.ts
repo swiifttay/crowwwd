@@ -12,6 +12,7 @@ export const putJoinQueue = async (eventId: string) => {
 
 export const getCheckQueue = async (user: User, eventId: string) => {
   const res = await api.put(`/queue/check/${eventId}`)
+  return res.data;
 };
 
 export const getFrontQueue = async () => {
