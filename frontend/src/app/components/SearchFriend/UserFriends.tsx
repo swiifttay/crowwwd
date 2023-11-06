@@ -11,6 +11,7 @@ export default function UserFriends() {
   const [searchTerm, setSearchTerm] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
 
   async function handleSearchSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -22,6 +23,7 @@ export default function UserFriends() {
       console.log(response.data);
       setFirstName(response.data?.user.firstName);
       setLastName(response.data?.user.lastName);
+      setUsername(response.data?.user.username);
     } catch (error) {
       console.error("Error searching for profiles:", error);
     }
@@ -59,7 +61,11 @@ export default function UserFriends() {
               </button>
             </form>
             {firstName && (
-              <FriendResult firstName={firstName} lastName={lastName} />
+              <FriendResult
+                username={username}
+                firstName={firstName}
+                lastName={lastName}
+              />
             )}
           </div>
         )}

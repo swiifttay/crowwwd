@@ -155,7 +155,7 @@ export const searchProfile = async (username: string) => {
 
 export const addFriend = async (friendId: string) => {
   try {
-    const response = await api.post("/api/addFriend", friendId);
+    const response = await api.post("/friend", friendId);
     return response;
   } catch (error) {
     return Promise.reject(error);

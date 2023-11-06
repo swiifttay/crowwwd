@@ -1,6 +1,6 @@
 import { User } from "@/app/userprofile/page";
 import React from "react";
-import VerticalCard from "../../userprofile/VerticalCard";
+import VerticalCard from "./VerticalCard";
 
 /* CURRENTLY NOT IN USE */
 interface SearchResultsProps {

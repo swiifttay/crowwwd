@@ -2,10 +2,11 @@ import Image from "next/image";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 interface EventButtonProps {
-  name: string;
+  firstName: string;
+  lastName: string;
 }
 
-const VerticalCard: React.FC<EventButtonProps> = ({ name }) => {
+const VerticalCard: React.FC<EventButtonProps> = ({ firstName, lastName }) => {
   return (
     <div>
       <button className="w-[200px] bg-zinc-900 hover:bg-zinc-800 text-white px-6 pt-4 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]">
@@ -22,7 +23,8 @@ const VerticalCard: React.FC<EventButtonProps> = ({ name }) => {
           <AccountCircleIcon sx={{ fontSize: 76, color: "#e5e7eb" }} />
         </div>
 
-        <div className="font-bold mb-2 truncate">{name}</div>
+        <div className="mr-1 ml-1 mt-1">{firstName}</div>
+        <div className="mt-1">{lastName}</div>
       </button>
     </div>
   );

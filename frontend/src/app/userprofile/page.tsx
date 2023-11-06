@@ -12,10 +12,10 @@ import {
   updateFanRecords,
 } from "../axios/apiService";
 import UserFriends from "../components/SearchFriend/UserFriends";
+import VerticalCard from "../components/SearchFriend/VerticalCard";
 import Modal from "../components/UserProfile/Modal";
 import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
-import VerticalCard from "./VerticalCard";
 
 export interface User {
   id: string;
@@ -146,7 +146,7 @@ export default function UserProfile() {
             fanRecordsData.map(async (fanRecord: FanRecord) => {
               const artistResponse = await getArtistById(fanRecord.artistId);
               return artistResponse?.data.artist;
-            }),
+            })
           );
           const flattenedArtistResponses = artistResponses.flat();
 
@@ -326,28 +326,6 @@ export default function UserProfile() {
             venue="The Star Theatre, The Star Performing Arts Centre"
             setIsOpen={setIsOpen}
           />
-
-          {/* <EventButtonLong
-            image="/images/TaylorSwift.jpg"
-            title="Reputation Tour"
-            artist="Taylor Swift"
-            datetime="Fri 15 Sep 2023, 7pm"
-            venue="The Star Theatre, The Star Performing Arts Centre"
-          />
-          <EventButtonLong
-            image="/images/TaylorSwift.jpg"
-            title="Reputation Tour"
-            artist="Taylor Swift"
-            datetime="Fri 15 Sep 2023, 7pm"
-            venue="The Star Theatre, The Star Performing Arts Centre"
-          />
-          <EventButtonLong
-            image="/images/TaylorSwift.jpg"
-            title="Reputation Tour"
-            artist="Taylor Swift"
-            datetime="Fri 15 Sep 2023, 7pm"
-            venue="The Star Theatre, The Star Performing Arts Centre"
-          /> */}
         </div>
       </div>
       <UserFriends />
