@@ -24,6 +24,7 @@ import com.cs203.g1t4.backend.service.services.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +46,7 @@ public class SeatsServiceImpl implements SeatsService {
         //Initialise variables
         String eventId = findSeatRequest.getEventId();
         String category = findSeatRequest.getCategory();
+        String eventDate = findSeatRequest.getEventDate();
         int numSeats = findSeatRequest.getNumSeats();
 
         //Create Seats to store information to be returned to frontend
@@ -57,7 +59,7 @@ public class SeatsServiceImpl implements SeatsService {
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
         //Obtain pricing for each seat
-        Category cat = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
+        Category cat = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category, eventDate.toString());
 
         //Obtain the pricePerSeat from cat
         seats.setPricePerSeat(cat.getPrice());
@@ -73,7 +75,7 @@ public class SeatsServiceImpl implements SeatsService {
 
         //Update Seats Allocation Pending status into the seatingDetails
         String updatedSeatsString = returnUpdatedSeatsString(cat.getSeatsInformationString(), seatAllocation, '2');
-        seatingDetailsService.findAndUpdateSeatingDetails(eventId, category, updatedSeatsString, numSeats);
+        seatingDetailsService.findAndUpdateSeatingDetails(eventId, category, updatedSeatsString, numSeats, eventDate);
 
         //Update Seating allocation into seats
         String[] array = new String[seatAllocation.size()];
@@ -91,6 +93,7 @@ public class SeatsServiceImpl implements SeatsService {
 
         String eventId = seatsConfirmRequest.getEventId();
         String category = seatsConfirmRequest.getCategory();
+        String eventDate = seatsConfirmRequest.getEventDate();
 
         //Find User object from username
         userRepository.findByUsername(username).orElseThrow(() -> new InvalidTokenException());
@@ -100,13 +103,13 @@ public class SeatsServiceImpl implements SeatsService {
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
         //Find Category
-        Category c = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
+        Category c = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category, eventDate);
 
         //Update Seats Allocation Pending status into the seatingDetails
         List<String> allocatedSeats = seatsConfirmRequest.getAllocatedSeats();
         String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(),
                 allocatedSeats, '1');
-        seatingDetailsService.confirmAndUpdateSeatingDetails(eventId, category, updatedSeatsString);
+        seatingDetailsService.confirmAndUpdateSeatingDetails(eventId, category, updatedSeatsString, eventDate);
 
         //Return Tickets
         List<Ticket> ticketList = new ArrayList<>();
@@ -125,18 +128,19 @@ public class SeatsServiceImpl implements SeatsService {
 
         String eventId = seatRequest.getEventId();
         String category = seatRequest.getCategory();
+        String eventDate = seatRequest.getEventDate();
 
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
         //Find Category
-        Category c = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
+        Category c = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category, eventDate);
 
         //Update Seats Allocation Pending status into the seatingDetails
         String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(),
                 seatRequest.getAllocatedSeats(), '0');
-        seatingDetailsService.deleteAndUpdateSeatingDetails(eventId, category, updatedSeatsString, seatRequest.getAllocatedSeats().size());
+        seatingDetailsService.deleteAndUpdateSeatingDetails(eventId, category, updatedSeatsString, seatRequest.getAllocatedSeats().size(), eventDate);
 
         return SuccessResponse.builder()
                 .response("Seats cancelled.")

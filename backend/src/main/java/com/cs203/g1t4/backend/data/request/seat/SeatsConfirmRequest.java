@@ -21,6 +21,9 @@ public class SeatsConfirmRequest {
     @NotBlank
     private String category;
 
+    @NotBlank
+    private String eventDate;
+
     private List<String> allocatedSeats;
 
     private List<String> userIdsAttending;
