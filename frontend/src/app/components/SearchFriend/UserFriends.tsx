@@ -58,7 +58,9 @@ export default function UserFriends() {
                 <MagnifyingGlassIcon className="h-6 stroke-white hover-text-gray-300 cursor-pointer " />
               </button>
             </form>
-            {firstName && <FriendResult firstName={firstName} lastName={lastName} />}
+            {firstName && (
+              <FriendResult firstName={firstName} lastName={lastName} />
+            )}
           </div>
         )}
       </div>

@@ -2,9 +2,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  getEvent
-} from "../../axios/apiService";
+import { getEvent } from "../../axios/apiService";
 
 export interface Venue {
   venueId: string;
@@ -26,7 +24,11 @@ export interface Event {
   description: string;
 }
 
-export default function EventDetails({ params }: {params: {eventId: string}}) {
+export default function EventDetails({
+  params,
+}: {
+  params: { eventId: string };
+}) {
   const router = useRouter();
   const { eventId } = params;
   const [event, setEvent] = useState<Event>();
@@ -52,7 +54,6 @@ export default function EventDetails({ params }: {params: {eventId: string}}) {
     router.push("/order");
   };
 
-
   return (
     <div className="flex w-full items-center justify-center mt-4">
       <main className="w-11/12">
@@ -64,16 +65,14 @@ export default function EventDetails({ params }: {params: {eventId: string}}) {
         </div>
 
         <div className="max-w-[1045px] mt-8">
-          <div className="text-3xl font-bold mb-4">
-            {event?.name}
-          </div>
+          <div className="text-3xl font-bold mb-4">{event?.name}</div>
 
           <div className="flex justify-between">
             <p className="text-lg mb-10">
               {event?.categories?.map((category: string, index: any) => (
                 <span key={index}>
                   {category}
-                  {index < event?.categories.length - 1 && ' | '}
+                  {index < event?.categories.length - 1 && " | "}
                 </span>
               ))}
             </p>
@@ -113,9 +112,7 @@ export default function EventDetails({ params }: {params: {eventId: string}}) {
             </div>
           </div>
 
-          <p className="text-md mt-10 mb-10">
-            {event?.description}
-          </p>
+          <p className="text-md mt-10 mb-10">{event?.description}</p>
 
           <div className="font-semibold text-2xl mb-4">Price Details</div>
           <div className="grid text-md gap-2">

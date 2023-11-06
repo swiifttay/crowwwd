@@ -7,7 +7,7 @@ interface EventButtonProps {
 const FriendResult: React.FC<EventButtonProps> = ({ firstName, lastName }) => {
   return (
     <div>
-      <button className="flex flex-row justify-between align-middle w-[250px] h-auto bg-zinc-900 text-white py-2 px-3 rounded-md drop-shadow-[1px_1px_2px_rgba(113,113,113)]">
+      <button className="mt-1 flex flex-row justify-between align-middle w-[250px] h-auto bg-zinc-900 text-white py-2 px-3 rounded-md drop-shadow-[1px_1px_2px_rgba(113,113,113)]">
         <div className="align-middle font-bold flex flex-row overflow-hidden">
           <AccountCircleIcon sx={{ fontSize: 32, color: "#e5e7eb" }} />
           <div className="mr-1 ml-1 mt-1">{firstName}</div>

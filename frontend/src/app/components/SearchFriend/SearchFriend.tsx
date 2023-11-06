@@ -1,10 +1,9 @@
-"use client"
+"use client";
 
 import { searchProfile, addFriend } from "../axios/apiService";
 
 /* CURRENTLY NOT IN USE */
 const SearchFriend = () => {
-
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);

@@ -146,7 +146,7 @@ export default function UserProfile() {
             fanRecordsData.map(async (fanRecord: FanRecord) => {
               const artistResponse = await getArtistById(fanRecord.artistId);
               return artistResponse?.data.artist;
-            })
+            }),
           );
           const flattenedArtistResponses = artistResponses.flat();
 
@@ -216,7 +216,9 @@ export default function UserProfile() {
               </div>
 
               <div className="flex items-center justify-center flex-col">
-                <AccountCircleIcon style={{ fontSize: 140, color: "#e5e7eb" }} />
+                <AccountCircleIcon
+                  style={{ fontSize: 140, color: "#e5e7eb" }}
+                />
               </div>
             </div>
             <div className="flex flex-row justify-between mb-4 mt-20">

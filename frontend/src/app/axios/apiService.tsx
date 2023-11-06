@@ -130,7 +130,7 @@ export const getEvent = async (eventId: string) => {
       console.error(error.response);
     }
   }
-}
+};
 
 //User Profile Page
 
@@ -151,11 +151,11 @@ export const searchProfile = async (username: string) => {
   } catch (error) {
     return Promise.reject(error);
   }
-}
+};
 
 export const addFriend = async (friendId: string) => {
   try {
-    const response = await api.post('/api/addFriend',  friendId);
+    const response = await api.post("/api/addFriend", friendId);
     return response;
   } catch (error) {
     return Promise.reject(error);
@@ -233,4 +233,4 @@ export const updateUserProfile = async (updateDetails: {
 export const getCategoryPrice = async (eventId: string) => {
   const res = await api.get(`/event/${eventId}/event-seating-details`);
   return res.data;
-}
+};
