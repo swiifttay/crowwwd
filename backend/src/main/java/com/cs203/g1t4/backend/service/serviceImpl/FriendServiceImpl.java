@@ -7,10 +7,7 @@ import com.cs203.g1t4.backend.data.response.friend.SingleFriendResponse;
 import com.cs203.g1t4.backend.models.Friend;
 import com.cs203.g1t4.backend.models.OutputFriend;
 import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.models.exceptions.DuplicatedFriendException;
-import com.cs203.g1t4.backend.models.exceptions.FriendNotFoundException;
-import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
-import com.cs203.g1t4.backend.models.exceptions.InvalidUserIdException;
+import com.cs203.g1t4.backend.models.exceptions.*;
 import com.cs203.g1t4.backend.repository.FriendRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import com.cs203.g1t4.backend.service.services.FriendService;
@@ -43,6 +40,26 @@ public class FriendServiceImpl implements FriendService {
             throw new DuplicatedFriendException(friend.getUsername());
         }
 
+        return createFriendship(user, friend);
+    }
+
+    public Response addFriendByUsername(String friendUsername, String username) {
+        // check if friend username is valid
+        User friend = userRepository.findByUsername(friendUsername).orElseThrow(() -> new InvalidUsernameException(friendUsername));
+
+        // check if the user object is valid
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new InvalidUsernameException(username));
+
+        //Checks if the friendship exists already, if so throws DuplicatedFriendException()
+        if (friendRepository.findByUserIdAndFriendId(user.getId(), friend.getId()).isPresent()) {
+            throw new DuplicatedFriendException(friend.getUsername());
+        }
+
+        return createFriendship(user, friend);
+    }
+
+    public Response createFriendship(User user, User friend) {
+
         //Create friend object from the friend userId
         Friend friendship1 = buildFriendObject(user, friend);
 
@@ -62,6 +79,7 @@ public class FriendServiceImpl implements FriendService {
         return SingleFriendResponse.builder()
                 .friend(outputFriend)
                 .build();
+
     }
 
     private Friend buildFriendObject(User user, User friend) {
