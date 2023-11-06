@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import Stepper from "../../../components/Queue/Stepper";
 import { useRouter } from "next/navigation";
 import { useUserDetails } from "@/app/contexts/UserDetailsContext";
-import { putJoinQueue } from "@/app/axios/queue";
+import { getJoinQueue } from "@/app/axios/queue";
 
 export default function Lobby({ params }: { params: { eventId: string } }) {
   const {eventId} = params;
@@ -12,9 +12,9 @@ export default function Lobby({ params }: { params: { eventId: string } }) {
   const router = useRouter();
 
   const handleJoinQueue = async () => {
-    const res = await putJoinQueue(eventId);
-    console.log("Join Queue Status:" + res);
-    if (res === "success") {
+    const res = await getJoinQueue(eventId);
+    console.log(res);
+    if (res.queueingStatus === "HOLDING") {
       router.push(`/Ticket/${eventId}/waitingroom`);
     }
   };

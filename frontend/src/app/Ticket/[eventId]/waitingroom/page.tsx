@@ -18,33 +18,35 @@ export default function WaitingRoom({
   const router = useRouter();
   const [countdownFinished, setCountdownFinished] = useState(false);
 
-  const handleCountdownFinish = () => {
-    setCountdownFinished(true);
-  };
+  // const handleCountdownFinish = () => {
+  //   setCountdownFinished(true);
+  // };
 
-  useEffect(() => {
-    if (countdownFinished) {
-      router.push("/queue");
-    }
-  }, [countdownFinished, router]);
+  // useEffect(() => {
+  //   if (countdownFinished) {
+  //     router.push("/queue");
+  //   }
+  // }, [countdownFinished, router]);
 
   useEffect(() => {
     //const interval = setInterval(updateSlider, 1000);
     const fetchQueueStatus = async () => {
       if (user) {
-        const status = await getCheckQueue(user, eventId);
-        console.log("Status:" + status);
+        const status = await getCheckQueue(eventId);
+        //console.log("Status:" + status);
         if (status.statusName === "PENDING") {
           router.push(`/Ticket/${eventId}/queue`);
         }
       }
-      const interval = setInterval(fetchQueueStatus, 1000);
-
-      return () => {
-        clearInterval(interval);
-      };
     };
-  });
+    // const interval = setInterval(fetchQueueStatus, 10000);
+
+    // return () => {
+    //   console.log("hi");
+    //   clearInterval(interval);
+    // };
+    fetchQueueStatus();
+  }, []);
 
   return (
     <main className="flex flex-col items-center w-full h-screen px-8">
@@ -59,8 +61,10 @@ export default function WaitingRoom({
           justifyContent: "center",
           alignItems: "center",
           borderRadius: "20px",
-          backgroundImage: "linear-gradient(to right, #f44369 10%, #3e3b92 95%)",
-          boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+          backgroundImage:
+            "linear-gradient(to right, #f44369 10%, #3e3b92 95%)",
+          boxShadow:
+            "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
         }}
       >
         <div className="text-white justify-center text-center items-center align-middle flex flex-col p-12">

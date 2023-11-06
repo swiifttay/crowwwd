@@ -13,7 +13,6 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, Dispatch<S
   });
 
   useEffect(() => {
-    console.log(value)
     if (value !== null)
      localStorage.setItem(key, typeof value === "string" ? value : JSON.stringify(value));
   }, [key, value]);

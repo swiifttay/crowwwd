@@ -33,19 +33,22 @@ export default function Queue({ params }: { params: { eventId: string } }) {
 
     const fetchQueueStatus = async () => {
       if (user) {
-        const status = await getCheckQueue(user, eventId);
+        const status = await getCheckQueue(eventId);
+        console.log(status);
       }
       const res = await getWholeQueue(eventId);
+      console.log(res);
       setFrontCount(res.countBefore);
       setTotalCount(res.countPending);
     };
 
-    const interval = setInterval(fetchQueueStatus, 10000);
+    // const interval = setInterval(fetchQueueStatus, 1000000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  });
+    // return () => {
+    //   clearInterval(interval);
+    // };
+    fetchQueueStatus();
+  },[]);
 
   //[EDIT] Make the slider reflect relative position in queue
   useEffect(() => {
