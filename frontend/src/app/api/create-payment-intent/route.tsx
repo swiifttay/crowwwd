@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       currency: "SGD",
     });
 
-    return new NextResponse(paymentIntent.client_secret, { status: 200 });
+    return new NextResponse(JSON.stringify({ clientSecret: paymentIntent.client_secret }), { status: 200 });
   } catch (error: any) {
     return new NextResponse(error, {
       status: 400,

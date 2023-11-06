@@ -218,7 +218,7 @@ export const fetchOrderByOrderId = async (orderId: string) => {
 
 export const updateOrder = async (orderId: string, paymentId: string|undefined) => {
   try {
-    const response = await api.get(`/order/${orderId}/payment/${paymentId}`);
+    const response = await api.put(`/order/${orderId}/payment/${paymentId}`);
     return response;
   } catch(error){
     return Promise.reject(error);

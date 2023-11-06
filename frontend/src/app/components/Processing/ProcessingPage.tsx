@@ -26,16 +26,22 @@ const ProcessingPage = ({ clientSecret, paymentID }: any) => {
 
   const getFriendList = async () =>{
     const response = await approvedFriend();
-    setFriendsList(response.data);
+    setFriendsList(response.data.friends);
+    // console.log(response)
   }
   
   const confirmPayment = () => {
-    const confirmParam: SeatsConfirmRequest = {
-        orderId: order?.id,
-        userIdsAttending: ["123", "456"],
-        noOfSurpriseTickets: 1
-    }
-    confirmSeats(confirmParam);
+    getFriendList();
+    const numFriends = friendsList?.length
+    console.log(numFriends)
+    const numTickets = order?.seats.length
+    console.log(numTickets)
+    const surpriseTickets = numTickets - numFriends
+    console.log(surpriseTickets)
+
+    
+    
+    confirmSeats(SeatsConfirm);
   }
 
 
@@ -53,17 +59,17 @@ const ProcessingPage = ({ clientSecret, paymentID }: any) => {
   }
   
 
-  useEffect(() => {
-    //set order on receiving paymentId
-    fetchOrderByPaymentId(paymentID).then((response) => {setOrder(response.data)})
-    
 
-    if (stripe) { // Check if stripe is available
+  useEffect(() => {
+    if (stripe && clientSecret) { 
+      fetchOrderByPaymentId(paymentID).then((response) => {setOrder(response.data.order)})
+       console.log(order?.id) 
+
       stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
         switch (paymentIntent.status) {
           case "succeeded":
             confirmPayment();
-            router.push("/order");
+            // router.push(`/order/${order?.id}`);
             setMessage("Payment success");
             console.log("Payment success");
             break;
@@ -73,14 +79,14 @@ const ProcessingPage = ({ clientSecret, paymentID }: any) => {
             break;
           default:
             cancelPayment();
-            router.push('/paymentunsuccessful');
+            // router.push('/paymentunsuccessful');
             setMessage("Something went wrong.");
             console.log("Payment unsuccessful");
             break;
         }
       });
     }
-  }, [paymentID, stripe, clientSecret]); 
+  }, [stripe, clientSecret, order]); 
 
   return (
     <div>

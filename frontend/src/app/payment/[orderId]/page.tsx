@@ -36,29 +36,72 @@ export default function App({ params }: { params: { orderId: string } }) {
   const [order, setOrder] = useState<Order>();
   const [totalCost, setTotalCost] = useState<Number>();
   
-  
+  // useEffect(() => {
+
+  //   const fetchOrderAndCreateIntent = async () => {
+  //     try {
+  //       const orderResponse = await fetchOrderByOrderId(orderId);
+  //       setOrder(orderResponse.data); // Set the order data received from the response
+  //       console.log(order)
+
+  //       // Check if orderResponse.data.totalCost is not undefined before attempting to create a payment intent
+        
+        
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchOrderAndCreateIntent();
+
+  // }, [orderId]);
+
+  //   useEffect(()=>{
+  //     if (order){
+  //       setTotalCost(order?.totalCost)
+  //     }
+  //     console.log(totalCost)
+  //     const createPaymentIntent = async()=>{
+  //       const { data } = await axios.post("/api/create-payment-intent", 
+  //         {data: {amount: totalCost }},
+  //       );
+  //     setClientSecret(data.clientSecret); // Ensure you are setting the clientSecret correctly from the response
+  //     }
+  //     createPaymentIntent();
+      
+
+  //   }, [order, totalCost]);
+
+  function getTotalCost(order:Order|undefined){
+    return order?.id
+  }
   useEffect(() => {
-    console.log(localStorage.getItem('token'));
-    fetchOrderByOrderId(orderId).then((response)=> {setOrder(response.data)})
+    const fetchOrderAndCreateIntent = async () => {
+      try {
+        const orderResponse = await fetchOrderByOrderId(orderId);
+        const fetchedOrder = orderResponse.data.order;
+        setOrder(fetchedOrder); 
+        console.log(orderResponse.data.order)
 
-    setTotalCost(order?.totalCost); // change to order?.totalCost
-    console.log(totalCost)
+        const totalCost = getTotalCost(fetchedOrder)
+        console.log(totalCost)
+        if (fetchedOrder && fetchedOrder.totalCost != null) {
 
+          setTotalCost(fetchedOrder.totalCost); 
 
-    const paymentIntent = async () => {
-      try{
-        const { data } = await axios.post("/api/create-payment-intent", {
-          data: { amount: totalCost },
-        });
-          setClientSecret(data);
-          console.log(clientSecret)
-      } catch (error){
-        console.log(error)
+          const { data } = await axios.post("/api/create-payment-intent", {
+            data: { amount: fetchedOrder.totalCost },
+          });
+          setClientSecret(data.clientSecret);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    }
-    paymentIntent();
-
-  }, []);
+    };
+  
+    fetchOrderAndCreateIntent();
+  }, [orderId]);
+  
 
   const appearance = {
     theme: 'stripe',

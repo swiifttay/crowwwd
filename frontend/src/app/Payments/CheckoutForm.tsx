@@ -35,10 +35,17 @@ export default function CheckoutForm({clientSecret, order}:any) {
 
   useEffect(() => {
     setOrderId(order?.id)
+    console.log(orderId)
 
     console.log(clientSecret)
     retrievePaymentID(clientSecret);
-    updateOrder(orderId, paymentID);
+    console.log(paymentID)
+    try {
+      updateOrder(orderId, paymentID);
+    } catch (error){
+      console.log(error)
+    }
+    
 
     timeoutId = setTimeout(async () => {
       if (!stripe || !clientSecret) {
@@ -55,7 +62,7 @@ export default function CheckoutForm({clientSecret, order}:any) {
       } catch (error) {
         console.error("Error cancelling payment:", error);
       }
-    }, 120000); 
+    }, 1200000000); 
 
     return () => {
       // Cleanup function to clear the timeout when the component unmounts
