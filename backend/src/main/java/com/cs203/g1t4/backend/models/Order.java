@@ -19,6 +19,9 @@ public class Order {
     private String id;
 
     @NotBlank
+    private String paymentId;
+
+    @NotBlank
     private String[] seats;
 
     @NotBlank
