@@ -62,7 +62,7 @@ export default function CheckoutForm({clientSecret, order}:any) {
       } catch (error) {
         console.error("Error cancelling payment:", error);
       }
-    }, 1200000000); 
+    }, 300000); 
 
     return () => {
       // Cleanup function to clear the timeout when the component unmounts

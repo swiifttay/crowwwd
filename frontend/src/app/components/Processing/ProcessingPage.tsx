@@ -96,14 +96,14 @@ const ProcessingPage = ({ clientSecret, paymentID }: any) => {
             break;
           default:
             cancelPayment();
-            // router.push('/paymentunsuccessful');
+            router.push('/paymentunsuccessful');
             setMessage("Something went wrong.");
             console.log("Payment unsuccessful");
             break;
         }
       });
     }
-  }, [stripe, clientSecret,order]); 
+  }, [stripe, clientSecret, order]); 
 
   return (
     <div>
