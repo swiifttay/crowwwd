@@ -170,6 +170,15 @@ export const updateFanRecords = async () => {
   }
 };
 
+export const fetchSeats = async (orderId: string) => {
+  try {
+    const response = await api.get("");
+    return response;
+  } catch(error){
+    return Promise.reject(error);
+  }
+}
+
 export const confirmSeats = async (SeatsConfirmRequest: 
   {eventId: string;
   category: string;
@@ -182,7 +191,7 @@ export const confirmSeats = async (SeatsConfirmRequest:
   } catch(error){
     return Promise.reject(error);
   }
-  }
+}
 
   export const cancelSeats = async (SeatsCancelRequest: {
     eventId: string;

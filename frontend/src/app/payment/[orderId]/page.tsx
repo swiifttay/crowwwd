@@ -6,10 +6,15 @@ import { Elements } from "@stripe/react-stripe-js";
 
 import CheckoutForm from "../../Payments/CheckoutForm";
 import axios from "axios";
+import { fetchSeats } from "@/app/axios/apiService";
 
 
 export interface Seats {
-
+  orderId: string
+  category: string
+  allocatedSeats: string[]
+  pricePerSeat: number
+  totalCost: number
 }
 
 // Make sure to call loadStripe outside of a component’s render to avoid
@@ -23,13 +28,18 @@ export default function App({ params }: { params: { orderId: string } }) {
   const { orderId } = params;
 
   const [clientSecret, setClientSecret] = useState("");
+  const [seats, setSeats] = useState<Seats>();
   
 
   useEffect(() => {
+    const response = fetchSeats(orderId);
+    setSeats(response);
+
+    const { totalCost }:any = seats
 
     const paymentIntent = async () => {
       const { data } = await axios.post("/api/create-payment-intent", {
-        data: { amount: 89 },
+        data: { amount: {totalCost} },
       });
         setClientSecret(data);
         // console.log(response)
