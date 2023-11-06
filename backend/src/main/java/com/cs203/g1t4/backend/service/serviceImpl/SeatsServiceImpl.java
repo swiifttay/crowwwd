@@ -109,6 +109,7 @@ public class SeatsServiceImpl implements SeatsService {
 
         String eventId = order.getEventId();
         String category = order.getCategory();
+        String eventDate = order.getEventDate();
 
         //Find User object from username
         userRepository.findByUsername(username).orElseThrow(() -> new InvalidTokenException());
@@ -149,6 +150,7 @@ public class SeatsServiceImpl implements SeatsService {
 
         String eventId = order.getEventId();
         String category = order.getCategory();
+        String eventDate = order.getEventDate();
 
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
@@ -160,7 +162,7 @@ public class SeatsServiceImpl implements SeatsService {
         //Update Seats Allocation Pending status into the seatingDetails
         String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(),
                 List.of(order.getSeats()), '0');
-        seatingDetailsService.deleteAndUpdateSeatingDetails(eventId, category, updatedSeatsString, List.of(order.getSeats()).size());
+        seatingDetailsService.deleteAndUpdateSeatingDetails(eventId, category, updatedSeatsString, List.of(order.getSeats()).size(), eventDate);
 
         //Delete Order from repository
         orderService.deleteByOrderId(order.getId());
