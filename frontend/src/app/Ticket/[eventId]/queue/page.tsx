@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Slider } from "@mui/material";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Stepper from "../../../components/Queue/Stepper";
 import "./style.css";
 import {
@@ -9,14 +9,16 @@ import {
   getWholeQueue,
 } from "../../../axios/queue";
 import { useUserDetails } from "@/app/contexts/UserDetailsContext";
+import {useRouter} from "next/navigation";
 
 export default function Queue({ params }: { params: { eventId: string } }) {
   const {eventId} = params;
   //find location in the queue
   const { user } = useUserDetails();
-  const [sliderValue, setSliderValue] = useState(5);
+  const router = useRouter();
+  const [sliderValue, setSliderValue] = useState(0);
   const [frontCount, setFrontCount] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(5);
 
   const [peopleCount, setPeopleCount] = useState("");
 
@@ -28,27 +30,44 @@ export default function Queue({ params }: { params: { eventId: string } }) {
   };
 
   //[EDIT] Make an api call every 10 seconds to get an update from the server
+  // useEffect(() => {
+  //   //const interval = setInterval(updateSlider, 1000);
+
+  //   const fetchQueueStatus = async () => {
+  //     if (user) {
+  //       const status = await getCheckQueue(eventId);
+  //       console.log(status);
+  //     }
+  //     if (frontCount === 0) {
+  //       router.push(`/Ticket/${eventId}/seats`);
+  //     }
+  //     setFrontCount(prev => prev - 1)
+  //     const res = await getWholeQueue(eventId);
+  //     console.log(res);
+  //     setFrontCount(res.countBefore ?? 0);
+  //     setTotalCount(res.countPending);
+  //   };
+
+  //   const interval = setInterval(fetchQueueStatus, 3000);
+
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // },[]);
+
   useEffect(() => {
-    //const interval = setInterval(updateSlider, 1000);
-
-    const fetchQueueStatus = async () => {
-      if (user) {
-        const status = await getCheckQueue(eventId);
-        console.log(status);
+    const interval = setInterval(() => {
+      if (sliderValue < 5) {
+        setSliderValue(sliderValue + 1);
+      } else if (sliderValue === 5) {
+        router.push(`/Ticket/${eventId}/seats`);
       }
-      const res = await getWholeQueue(eventId);
-      console.log(res);
-      setFrontCount(res.countBefore);
-      setTotalCount(res.countPending);
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
     };
-
-    // const interval = setInterval(fetchQueueStatus, 1000000);
-
-    // return () => {
-    //   clearInterval(interval);
-    // };
-    fetchQueueStatus();
-  },[]);
+  }, [sliderValue]);
 
   //[EDIT] Make the slider reflect relative position in queue
   useEffect(() => {
@@ -60,7 +79,7 @@ export default function Queue({ params }: { params: { eventId: string } }) {
     } else if (frontCount > 1000) {
       setPeopleCount("1000+")
     } else {
-      setPeopleCount(frontCount + "")
+      setPeopleCount(sliderValue + "")
     }
   }, [frontCount]);
 
@@ -88,12 +107,14 @@ export default function Queue({ params }: { params: { eventId: string } }) {
             You are now in the queue.
           </div>
 
-          <div className="font-bold text-8xl">{peopleCount}</div>
+          <div className="font-bold text-8xl">{5 - sliderValue}</div>
           <div className="font-bold text-lg mb-5">People Ahead Of You</div>
           <Slider
             className=" text-theme-blue-20"
-            max={totalCount}
             value={sliderValue}
+            min={0}
+            max={5}
+            step={2}
             aria-label="Default"
           />
         </div>

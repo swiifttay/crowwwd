@@ -17,6 +17,7 @@ export default function WaitingRoom({
   const { user } = useUserDetails();
   const router = useRouter();
   const [countdownFinished, setCountdownFinished] = useState(false);
+  const [count, setCount] = useState(1);
 
   // const handleCountdownFinish = () => {
   //   setCountdownFinished(true);
@@ -33,20 +34,23 @@ export default function WaitingRoom({
     const fetchQueueStatus = async () => {
       if (user) {
         const status = await getCheckQueue(eventId);
-        //console.log("Status:" + status);
+        //console.log(status);
+        setCount((prev) => prev + 1);
         if (status.statusName === "PENDING") {
+          router.push(`/Ticket/${eventId}/queue`);
+        }
+        if (count === 2) {
           router.push(`/Ticket/${eventId}/queue`);
         }
       }
     };
-    // const interval = setInterval(fetchQueueStatus, 10000);
+    const interval = setInterval(fetchQueueStatus, 5000);
 
-    // return () => {
-    //   console.log("hi");
-    //   clearInterval(interval);
-    // };
-    fetchQueueStatus();
-  }, []);
+    return () => {
+      console.log("hi");
+      clearInterval(interval);
+    };
+  });
 
   return (
     <main className="flex flex-col items-center w-full h-screen px-8">
