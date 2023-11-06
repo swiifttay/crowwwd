@@ -1,0 +1,32 @@
+.searchForm {
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  padding: 5px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  margin-right: 5px;
+  width: 250px;
+  background-color: #07172f;
+}
+
+.searchButton {
+  background-color: #07172f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.searchContainer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  margin-right: 20px; /* Adjust this value to control the spacing between the search bar and other content */
+  z-index: 10; /* Ensures the search bar is on top of other content */
+}

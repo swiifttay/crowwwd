@@ -15,9 +15,5 @@ import java.util.List;
 @NoArgsConstructor
 public class SeatCancelRequest implements Response {
     @NotBlank
-    private String eventId;
-    @NotBlank
-    private String category;
-
-    private List<String> allocatedSeats;
+    private String orderId;
 }

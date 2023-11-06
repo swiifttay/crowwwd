@@ -15,7 +15,7 @@ export function Card(event: Event) {
     router.push(`/eventdetails/${event.eventId}`);
   };
   return (
-    <a href={`/explore/${event.eventId}`}>
+    <a href={`/eventdetails/${event.eventId}`}>
       <button className="w-full grid-rows-2 h-72 rounded-md transition-transform group text-left">
         <img
           src={event.eventImageURL}

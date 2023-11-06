@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface TicketRepository extends MongoRepository<Ticket, String> {
     Optional<Ticket> findById(String ticketId);
 
-    Optional<Ticket> findByEventIdAndUserIdAttending(String eventId, String userIdAttending);
+    List<Ticket> findAllByEventIdAndUserIdBuyer(String eventId, String userIdBuyer);
 
     List<Ticket> findAllByUserIdAttending(String userIdAttending);
 

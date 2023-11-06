@@ -6,6 +6,7 @@ import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.user.SingleUserResponse;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidUsernameException;
 import com.cs203.g1t4.backend.repository.UserRepository;
 import com.cs203.g1t4.backend.service.services.CommonService;
 import com.cs203.g1t4.backend.service.services.ProfileService;
@@ -74,6 +75,25 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     /**
+     * Finds a user from the repository.
+     * If provided username cannot be found based on username from token, throw a InvalidUsernameException.
+     *
+     * @param username a String object containing the username of the user
+     * @return SingleUserResponse containing the User Object
+     */
+    public Response searchProfile(String username) {
+
+        //Finds user from repository, or else throw Invalid token exception
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new InvalidUsernameException(username));
+
+        //Returns a SingleUserResponse if successful
+        return SingleUserResponse.builder()
+                .user(user)
+                .build();
+    }
+
+    /**
      * Validates the spotify user that is connected with the user that is logged in 
      * 
      * @param spotifyUserId a String object containing the userId of the spotify user that logged in
@@ -112,4 +132,5 @@ public class ProfileServiceImpl implements ProfileService {
 
         return user.getSpotifyAccount().equals(spotifyUserId);
     }
+
 }

@@ -110,16 +110,28 @@ export const getEvent = async (eventId: string) => {
   }
 };
 
-export const concertDetails = async (eventId: string) => {
-  const response = await api.get(`/event/detailsEvent/${eventId}`);
-  return response;
-};
-
 //User Profile Page
-
 export const getUserProfile = async () => {
   try {
     const response = await api.get("/profile/findProfile");
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const searchProfile = async (username: string) => {
+  try {
+    const response = await api.get(`/profile/searchProfile/${username}`);
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const addFriend = async (friendId: string) => {
+  try {
+    const response = await api.post(`/friend/${friendId}`);
     return response;
   } catch (error) {
     return Promise.reject(error);
@@ -197,4 +209,4 @@ export const updateUserProfile = async (updateDetails: {
 export const getCategoryPrice = async (eventId: string) => {
   const res = await api.get(`/event/${eventId}/event-seating-details`);
   return res.data;
-}
+};

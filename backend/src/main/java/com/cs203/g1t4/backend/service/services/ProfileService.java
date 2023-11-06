@@ -32,6 +32,17 @@ public interface ProfileService {
      */
     Response findProfile(String username);
 
+
+    /**
+     * Finds a user from the repository.
+     * If username provided cannot be found based on username from token, throw a InvalidUsernameException.
+     *
+     * @param username a String object containing the username of the user
+     * @return SingleUserResponse containing the User Object
+     */
+    Response searchProfile(String username);
+
+
     /**
      * Validates the spotify user that is connected with the user that is logged in 
      * 

@@ -17,7 +17,10 @@ import com.cs203.g1t4.backend.service.services.SeatingDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -80,13 +83,13 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
     }
 
     //Public Helper methods
-    public Response findAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats) {
+    public Response findAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats, String eventDate) {
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
         //Find Category
-        Category cat = findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
+        Category cat = findCategoryFromEventSeatingDetails(eventSeatingDetails, category, eventDate);
 
         //Update Seats Information String and available seats
         cat.setSeatsInformationString(seatsInformationString);
@@ -100,13 +103,13 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
                 .build();
     }
 
-    public Response confirmAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString) {
+    public Response confirmAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, String eventDate) {
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
         //Find Category
-        Category cat = findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
+        Category cat = findCategoryFromEventSeatingDetails(eventSeatingDetails, category, eventDate);
 
         //Update Seats Information String
         cat.setSeatsInformationString(seatsInformationString);
@@ -119,13 +122,13 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
                 .build();
     }
 
-    public Response deleteAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats) {
+    public Response deleteAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats, String eventDate) {
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
 
         //Find Category
-        Category cat = findCategoryFromEventSeatingDetails(eventSeatingDetails, category);
+        Category cat = findCategoryFromEventSeatingDetails(eventSeatingDetails, category, eventDate);
 
         //Update Seats Information String and available seats
         cat.setSeatsInformationString(seatsInformationString);
@@ -140,14 +143,14 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
     }
 
     //Public Helper method
-    public Category findCategoryFromEventSeatingDetails(EventSeatingDetails eventSeatingDetails, String category) {
+    public Category findCategoryFromEventSeatingDetails(EventSeatingDetails eventSeatingDetails, String category, String eventDate) {
         //Find listOfCategories in eventSeatingDetails
         List<Category> listOfCategory = eventSeatingDetails.getCategories();
 
         //Loops through each category in the listOfCategory
         for (int index = 0 ; index < listOfCategory.size(); index++) {
             Category c = listOfCategory.get(index);
-            if (c.getCategory().equals(category)) {
+            if (c.getCategory().equals(category) && c.getEventDate().equals(eventDate)) {
                 return c;
             }
         }
@@ -159,10 +162,16 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
     private EventSeatingDetails getEventSeatingDetailsFromRequest(String eventId, SeatingDetailsRequest request, boolean isUpdate)
             throws InvalidEventIdException, InvalidSeatingDetailsException, DuplicateSeatingDetailsException {
 
+        // get the event
+        Optional<Event> event = eventRepository.findById(eventId);
+
         //Checks if Event ID can be found in eventRepository
-        if (eventRepository.findById(eventId).isEmpty()) {
+        if (event.isEmpty()) {
             throw new InvalidEventIdException(eventId);
         }
+
+        // Determine all the different dates to have each category
+        List<LocalDateTime> eventDates = event.get().getDates();
 
         //SeatingDetailsRepository should not contain an event of specific eventId for new EventSeatingDetails AND
         //SeatingDetailsRepository should contain an event of specific eventId for updating EventSeatingDetails
@@ -188,6 +197,8 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
 
         //Loops through each Category in the request and add in the seatInformationString for each
         List<Category> listOfCategory = request.getCategories();
+
+        List<Category> updatedCategories = new ArrayList<>();
         for (int i = 0 ; i < listOfCategory.size() ; i++) {
 
             //Obtain each Category object
@@ -199,14 +210,20 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
             //Assign the availSeat for all
             category.setAvailableSeats(totalSeats);
 
-            //Update the category in the list
-            listOfCategory.set(i, category);
+            // loop through each date of the event
+            for (LocalDateTime date: eventDates) {
+                // Assign each date to the category object
+                category.setEventDate(date.toString());
+
+                //Update the category in the list
+                updatedCategories.add(category);
+            }
         }
 
         //Generates a seatingDetails for the specific event using the details from both the requestBody and the eventId.
         EventSeatingDetails seatingDetails = EventSeatingDetails.builder()
                 .eventId(eventId)
-                .categories(request.getCategories())
+                .categories(updatedCategories)
                 .build();
         return seatingDetails;
     }
