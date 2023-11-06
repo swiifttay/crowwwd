@@ -38,9 +38,9 @@ export default function App({ params }: { params: { orderId: string } }) {
   
 
   useEffect(() => {
-    // fetchOrderByOrderId(orderId).then((response)=> {setOrder(response.data)})
+    fetchOrderByOrderId(orderId).then((response)=> {setOrder(response.data)})
 
-    setTotalCost(100); // change to order?.totalCost
+    setTotalCost(order?.totalCost); // change to order?.totalCost
 
 
     const paymentIntent = async () => {
@@ -55,9 +55,8 @@ export default function App({ params }: { params: { orderId: string } }) {
       }
     }
     paymentIntent();
-    //add in api call to store paymentId
 
-  }, [totalCost]);
+  }, [orderId, totalCost]);
 
   const appearance = {
     theme: 'stripe',
@@ -80,7 +79,7 @@ export default function App({ params }: { params: { orderId: string } }) {
       <div className="w-1/2">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm clientSecret={clientSecret} totalCost={totalCost}/>
+          <CheckoutForm clientSecret={clientSecret} order={order}/>
         </Elements>
       )}
       </div>

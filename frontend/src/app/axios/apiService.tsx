@@ -5,7 +5,7 @@ import axios from "axios";
 
 const api = axios.create({
   //TODO: backend to provide
-  baseURL: "http://localhost:8080/api/",
+  baseURL: "http://localhost:8080/api",
 });
 
 // api interceptor to place the jwt token
@@ -44,16 +44,14 @@ api.interceptors.response.use(
     return response;
   },
   async (error) => {
-    // console.error('Error:', {error});
-
     if (error.response?.data?.status === 500) {
       console.log("Handling 500 error");
       localStorage.removeItem("token");
       // return a false value that shows that the token was invalid
       // return false;
     }
-    console.log(error.toJSON());
-    return error.toJSON();
+    console.log(error.response);
+    return error.response;
   },
 );
 
@@ -108,11 +106,32 @@ export const usernameCheck = async (username: string) => {
   }
 };
 
-export const concertsList = async () => {
-  const response = await api.get("/event/getAllEvents");
+export const getAllEvents = async () => {
+  const response = await api.get("/event/exploreEvent/all");
+  console.log(response);
 
-  return response;
+  return response.data;
 };
+
+export const getEvent = async (eventId: string) => {
+  try {
+    const response = await api.get(`/event/fullEvent/${eventId}`);
+    console.log(response);
+    if (response.request?.status === 200) {
+      return response.data;
+      // will come here if it was from a token error
+    } else {
+      window.location.reload();
+    }
+
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.status);
+      console.error(error.response);
+    }
+  }
+}
 
 //User Profile Page
 
@@ -152,14 +171,14 @@ export const getSpotifyLogin = async () => {
   }
 };
 
-export const getSpotifyToken = async() => {
+export const getSpotifyToken = async () => {
   try {
     const response = await api.get("/spotify/getSpotifyToken");
     return response;
   } catch (error) {
     return Promise.reject(error);
   }
-}
+};
 
 export const updateFanRecords = async () => {
   try {
@@ -170,26 +189,36 @@ export const updateFanRecords = async () => {
   }
 };
 
-export const fetchOrderByOrderId = async (id: string) => {
+export const fetchOrderByOrderId = async (orderId: string) => {
   try {
-    const response = await api.get("");
+    const response = await api.get(`/order/${orderId}`);
     return response;
   } catch(error){
     return Promise.reject(error);
   }
 }
 
-export const fetchOrderByPaymentId = async (id: string) => {
+export const updateOrder = async (orderId: string, paymentId: string|undefined) => {
   try {
-    const response = await api.get("");
+    const response = await api.get(`/order/${orderId}/payment/${paymentId}`);
     return response;
   } catch(error){
     return Promise.reject(error);
   }
 }
+
+export const fetchOrderByPaymentId = async (paymentId: string) => {
+  try {
+    const response = await api.get(`/orderPayment/${paymentId}`);
+    return response;
+  } catch(error){
+    return Promise.reject(error);
+  }
+}
+
 
 export const confirmSeats = async (SeatsConfirmRequest: 
-  { id: string
+  { orderId: string
     userIdsAttending: string[];
     noOfSurpriseTickets: number}) => {
   try {
@@ -200,11 +229,14 @@ export const confirmSeats = async (SeatsConfirmRequest:
   }
 }
 
-  export const cancelSeats = async (id:string) => {
+  export const deleteOrderByOrderId = async (orderId:string|undefined) => {
     try {
-      const response = await api.delete("/seat",{data: id})
+      const response = await api.delete(`/order/${orderId}`)
       return response;
     } catch(error){
       return Promise.reject(error);
     }
   }
+
+
+

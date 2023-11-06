@@ -1,21 +1,21 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import {
+  getArtistById,
+  getFanRecords,
+  getSpotifyLogin,
+  getSpotifyToken,
+  getUserProfile,
+  updateFanRecords,
+} from "../axios/apiService";
+import Modal from "../components/UserProfile/Modal";
+import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
-import EventButtonLong from "./EventButtonLong";
-import { StringLiteral } from "typescript";
-import {
-  getFanRecords,
-  getUserProfile,
-  getArtistById,
-  getSpotifyLogin,
-  updateFanRecords,
-  getSpotifyToken
-} from "../axios/apiService";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import React from "react";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export interface User {
   id: string;
@@ -86,7 +86,7 @@ export default function UserProfile() {
 
   const checkSpotifyLoginStatus = async () => {
     const spotifyTokenResponse = await getSpotifyToken();
-    console.log(spotifyTokenResponse.data.response);
+    console.log(spotifyTokenResponse.data?.response);
     if (spotifyTokenResponse?.status === 200 && spotifyTokenResponse.data?.response != null) {
       console.log("success");
       localStorage.setItem("spotifyToken", spotifyTokenResponse.data.response);
@@ -97,7 +97,11 @@ export default function UserProfile() {
       setSpotifyButtonMsg("Connect to Spotify");
       setIsLoggedInSpotify(false);
     }
-  }
+  };
+
+  const handleUpdateProfile = async () => {
+    router.push("/updateprofile");
+  };
 
   const handleSpotifyButton = async () => {
     if (isLoggedInSpotify) {
@@ -114,8 +118,8 @@ export default function UserProfile() {
       if (getAccountResponse.request?.status == 200) {
         window.location.replace(getAccountResponse?.data);
       } else {
-        if (!localStorage.getItem('token')) {
-          router.push('/login');
+        if (!localStorage.getItem("token")) {
+          router.push("/login");
         }
       }
     }
@@ -163,11 +167,24 @@ export default function UserProfile() {
     }
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [overlayOpacity, setOverlayOpacity] = useState(0);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      setOverlayOpacity(0.6);
+    } else {
+      document.body.style.overflow = "auto";
+      setOverlayOpacity(0);
+    }
+  }, [isOpen]);
+
   return (
     <main className="flex flex-col items-center h-fit relative w-full px-8">
       <div className="flex flex-col justify-center align-center mt-4 w-full">
         <div className="flex flex-row ">
-          <div className="flex flex-col w-2/3">
+          <div className="flex flex-col sm:w-full lg:w-2/3">
             <div className="flex gap-12">
               <div className="">
                 <div className="text-3xl font-bold mt-8 mb-4">
@@ -175,19 +192,23 @@ export default function UserProfile() {
                 </div>
                 <div className="text-md">{user?.username}</div>
                 <div className="text-md">{user?.email}</div>
-                <div className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer">
+                <div
+                  className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer"
+                  onClick={handleUpdateProfile}
+                >
                   Update Profile
                 </div>
               </div>
 
-              <div className="">
-                <Image
+              <div className="flex items-center">
+                {/* <Image
                   src="/images/Siyu.png"
                   alt="Profile Picture"
                   className="rounded-full"
                   width={200}
                   height={200}
-                />
+                /> */}
+                <AccountCircleIcon style={{ fontSize: 140 }}/>
               </div>
             </div>
             <div className="flex flex-row justify-between mb-4 mt-20">
@@ -195,7 +216,7 @@ export default function UserProfile() {
                 Your favourite artists
               </div>
               <button
-                className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]"
+                className="bg-green-900 hover:bg-green-800 text-white text-center px-6 py-2 rounded-lg"
                 onClick={handleSpotifyButton}
               >
                 {spotifyButtonMsg}
@@ -203,12 +224,21 @@ export default function UserProfile() {
             </div>
             <div className="flex overflow-x-auto max-w-full">
               <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-8">
-                <div className={`${isArtistLoaded ? 'hidden' : 'display'}`}> Loading... </div>
-                {favArtist?.slice(0, Math.min(10, favArtist.length)).map((artist, i) => {
-                  return (
-                    <VerticalCard key={i} image={artist.artistImageURL} name={artist.name} />
-                  );
-                })}
+                <div className={`${isArtistLoaded ? "hidden" : "display"}`}>
+                  {" "}
+                  Loading...{" "}
+                </div>
+                {favArtist
+                  ?.slice(0, Math.min(10, favArtist.length))
+                  .map((artist, i) => {
+                    return (
+                      <VerticalCard
+                        key={i}
+                        image={artist.artistImageURL}
+                        name={artist.name}
+                      />
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -245,12 +275,49 @@ export default function UserProfile() {
           </div>
         </div>
       </div>
+
       <div className="flex flex-col w-full">
         <div className="text-xl font-bold mt-16 mb-4">
           Your purchased concerts
         </div>
+
         <div className="flex flex-col gap-3">
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "black",
+              zIndex: 40,
+              transition: "opacity 0.3s",
+              pointerEvents: "none",
+              opacity: overlayOpacity,
+            }}
+            onClick={() => setIsOpen(false)}
+          ></div>
+          <div className="z-50">
+            {isOpen && (
+              <Modal
+                title="Reputation Tour"
+                artist="Taylor Swift"
+                datetime="Fri 15 Sep 2023, 7pm"
+                venue="The Star Theatre, The Star Performing Arts Centre"
+                setIsOpen={setIsOpen}
+              />
+            )}
+          </div>
           <EventButtonLong
+            image="/images/TaylorSwift.jpg"
+            title="Reputation Tour"
+            artist="Taylor Swift"
+            datetime="Fri 15 Sep 2023, 7pm"
+            venue="The Star Theatre, The Star Performing Arts Centre"
+            setIsOpen={setIsOpen}
+          />
+
+          {/* <EventButtonLong
             image="/images/TaylorSwift.jpg"
             title="Reputation Tour"
             artist="Taylor Swift"
@@ -270,20 +337,13 @@ export default function UserProfile() {
             artist="Taylor Swift"
             datetime="Fri 15 Sep 2023, 7pm"
             venue="The Star Theatre, The Star Performing Arts Centre"
-          />
-          <EventButtonLong
-            image="/images/TaylorSwift.jpg"
-            title="Reputation Tour"
-            artist="Taylor Swift"
-            datetime="Fri 15 Sep 2023, 7pm"
-            venue="The Star Theatre, The Star Performing Arts Centre"
-          />
+          /> */}
         </div>
       </div>
 
       <div className="flex flex-col w-full">
         <div className="text-xl font-bold mb-4 mt-16">Friends</div>
-        <div className="flex overflow-x-auto max-w-full mb-32 px-4 py-8">
+        <div className="flex overflow-x-auto max-w-full mb-32 px-4">
           <div className="flex gap-5">
             <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
             <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />

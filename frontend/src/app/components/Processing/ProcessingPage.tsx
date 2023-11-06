@@ -3,38 +3,61 @@ import { useStripe } from "@stripe/react-stripe-js";
 import { useRouter } from 'next/navigation'
 import axios from 'axios';
 import { BiLoaderAlt } from 'react-icons/bi';
+import { Order } from '@/app/payment/[orderId]/page';
+import { confirmSeats, deleteOrderByOrderId, fetchOrderByPaymentId } from '@/app/axios/apiService';
 
 
 export interface SeatsConfirmRequest { 
-    id: string
+    orderId: string
     userIdsAttending: string[];
     noOfSurpriseTickets: number
 }
 
-export interface SeatsCancelRequest {
-    id: string
-}
-
 
 const ProcessingPage = ({ clientSecret, paymentID }: any) => {
-  const [message, setMessage] = useState("");
+  const[message, setMessage] = useState("");
+  const[order, setOrder] = useState<Order>();
+
 
   const router = useRouter()
   
   const stripe = useStripe();
-
+    
+  const get
   
-  const cancelPayment = async () => {
-    await axios.post("/api/cancel-payment-intent", {
-       paymentID
-    });
+  const confirmPayment = () => {
+    const confirmParam: SeatsConfirmRequest = {
+        orderId: order?.id,
+        userIdsAttending: ["123", "456"],
+        noOfSurpriseTickets: 1
+    }
+    confirmSeats(confirmParam);
   }
 
+
+  const cancelPayment = async () => {
+    try {
+        await axios.post("/api/cancel-payment-intent", {
+            paymentID
+         });
+        deleteOrderByOrderId(order?.id)
+    } catch (error){
+        console.log(error);
+    }
+    
+
+  }
+  
+
   useEffect(() => {
+    fetchOrderByPaymentId(paymentID).then((response) => {setOrder(response.data)})
+    
+
     if (stripe) { // Check if stripe is available
       stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
         switch (paymentIntent.status) {
           case "succeeded":
+            confirmPayment();
             router.push("/order");
             setMessage("Payment success");
             console.log("Payment success");
@@ -52,7 +75,7 @@ const ProcessingPage = ({ clientSecret, paymentID }: any) => {
         }
       });
     }
-  }, [stripe, clientSecret]); 
+  }, [paymentID, stripe, clientSecret]); 
 
   return (
     <div>

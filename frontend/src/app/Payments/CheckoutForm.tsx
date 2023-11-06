@@ -8,8 +8,10 @@ import {
 import axios from 'axios';
 import { useRouter } from "next/navigation";
 import PaymentTimeout from "../components/Processing/PaymentTimeout"
+import { deleteOrderByOrderId, updateOrder } from "../axios/apiService";
+import { Order } from "@stripe/stripe-js";
 
-export default function CheckoutForm({clientSecret, totalCost}:any) {
+export default function CheckoutForm({clientSecret, order}:any) {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
@@ -18,6 +20,7 @@ export default function CheckoutForm({clientSecret, totalCost}:any) {
   const [message, setMessage] = useState<string|undefined>('');
   const [isLoading, setIsLoading] = useState(false);
   const [paymentID, setPaymentID] = useState<string|undefined>("");
+  const [orderId, setOrderId] = useState<string>('');
   let timeoutId: NodeJS.Timeout | null = null;
   
   
@@ -31,8 +34,11 @@ export default function CheckoutForm({clientSecret, totalCost}:any) {
   }
 
   useEffect(() => {
+    setOrderId(order?.id)
+
     console.log(clientSecret)
     retrievePaymentID(clientSecret);
+    updateOrder(orderId, paymentID);
 
     timeoutId = setTimeout(async () => {
       if (!stripe || !clientSecret) {
@@ -44,6 +50,7 @@ export default function CheckoutForm({clientSecret, totalCost}:any) {
         await axios.post("/api/cancel-payment-intent", {
           paymentID: paymentID
        });
+       deleteOrderByOrderId(orderId)
        router.push('/timeout');
       } catch (error) {
         console.error("Error cancelling payment:", error);
@@ -114,7 +121,7 @@ export default function CheckoutForm({clientSecret, totalCost}:any) {
       <PaymentElement id="payment-element" options={paymentElementOptions} className="text-white" />
       <button disabled={isLoading || !stripe || !elements} id="submit" className="rounded-md my-5 p-5 bg-white text-black hover:scale-110 hover:border-white transition duration-300">
         <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : `Pay $${totalCost}`}
+          {isLoading ? <div className="spinner" id="spinner"></div> : `Pay $${order?.totalCost}`}
         </span>
       </button>
       {/* Show any error or success messages */}

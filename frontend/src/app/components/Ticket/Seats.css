@@ -1,0 +1,7 @@
+.leaflet-container {
+    background: none;
+}
+
+.leaflet-control-attribution {
+    display: none !important;
+  }

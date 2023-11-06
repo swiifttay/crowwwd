@@ -26,33 +26,33 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
 
     public static final String[] whiteListedRoutes = new String[] {
-            // normal user paths
-            "/api/auth/register",
-            "/api/auth/authenticate",
-            "/api/event/getEvent/.*",
-            "/api/event/getAllEvents",
-            "/api/event/getEventsBetween/start/.*?/end/.*?",
+        // normal user paths
+        "/api/auth/register",
+        "/api/auth/authenticate",
+        "/api/auth/findUsername/.*",
+        "/api/event/getEvent/.*",
+        "/api/event/getAllEvents",
+        "/api/event/getEventsBetween/start/.*?/end/.*?",
 
-            // admin user (additional features in the future)
-            "/api/event/addEvent",
-            "/api/event/deleteEvent/.*",
-            "/api/event/updateEvent/.*",
+        // admin user (additional features in the future)
+        "/api/event/fullEvent/.*",
+        "/api/event/exploreEvent/all",
 
-            // others
-            "/api/spotify/get-user-code",
-            "/error",
+        // others
+        "/api/spotify/get-user-code",
+        "/error",
 
-            // swagger
-            "/v2/api-docs",
-            "/v3/api-docs",
-            "/v3/api-docs/.*",
-            "/swagger-resources/.*",
-            "swagger-resources/.*",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui/.*",
-            "webjars/.*",
-            "/swagger-ui.html"
+        // swagger
+        "/v2/api-docs",
+        "/v3/api-docs",
+        "/v3/api-docs/.*",
+        "/swagger-resources/.*",
+        "swagger-resources/.*",
+        "/configuration/ui",
+        "/configuration/security",
+        "/swagger-ui/.*",
+        "webjars/.*",
+        "/swagger-ui.html"
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;
