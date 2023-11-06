@@ -132,6 +132,25 @@ export const getEvent = async (eventId: string) => {
   }
 };
 
+//Friends
+export const addFriend = async (friendId: string) => {
+  try {
+    const response = await api.post(`/friend/${friendId}`);
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const getPendingFriends = async () => {
+  try {
+    const response = await api.get("/pendingFriend");
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 //User Profile Page
 export const getUserProfile = async () => {
   try {
@@ -145,15 +164,6 @@ export const getUserProfile = async () => {
 export const searchProfile = async (username: string) => {
   try {
     const response = await api.get(`/profile/searchProfile/${username}`);
-    return response;
-  } catch (error) {
-    return Promise.reject(error);
-  }
-};
-
-export const addFriend = async (friendId: string) => {
-  try {
-    const response = await api.post(`/friend/${friendId}`);
     return response;
   } catch (error) {
     return Promise.reject(error);

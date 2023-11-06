@@ -15,17 +15,17 @@ const PendingRequest: React.FC<EventButtonProps> = ({
   firstName,
   lastName,
 }) => {
-  const [isPendingFriend, setIsPendingFriend] = useState(false);
+  // const [isPendingFriend, setIsPendingFriend] = useState(false);
 
   const pathToImage = `/images/${username}.jpg`;
 
-  const [isFriendAdded, setIsFriendAdded] = useState(false);
+  const [isRequestSent, setIsRequestSent] = useState(false);
 
   const handleAddFriend = async () => {
     try {
       const response = await addFriend(username);
       if (response.status === 200) {
-        setIsFriendAdded(true);
+        setIsRequestSent(true);
         console.log("Friend added successfully");
       } else {
         console.error("Error adding friend:", response.data);
@@ -53,12 +53,12 @@ const PendingRequest: React.FC<EventButtonProps> = ({
           </div>
         </div>
         <div className="flex items-center">
-          {isPendingFriend ? (
+          {isRequestSent ? (
             <div className="text-theme-blue text-md mt-1">Pending</div>
           ) : (
             <button
               className="px-2 bg-theme-blue text-sm text-white py-2 rounded-lg hover:bg-theme-light-blue"
-              onClick={() => setIsPendingFriend(true)}
+              onClick={handleAddFriend}
             >
               Add Friend
             </button>
