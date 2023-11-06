@@ -133,7 +133,6 @@ export const getEvent = async (eventId: string) => {
 };
 
 //User Profile Page
-
 export const getUserProfile = async () => {
   try {
     const response = await api.get("/profile/findProfile");
@@ -143,7 +142,6 @@ export const getUserProfile = async () => {
   }
 };
 
-// http://localhost:8080/api/profile/searchProfile/siyuyu
 export const searchProfile = async (username: string) => {
   try {
     const response = await api.get(`/profile/searchProfile/${username}`);
@@ -155,7 +153,7 @@ export const searchProfile = async (username: string) => {
 
 export const addFriend = async (friendId: string) => {
   try {
-    const response = await api.post("/friend", friendId);
+    const response = await api.post(`/friend/${friendId}`);
     return response;
   } catch (error) {
     return Promise.reject(error);
