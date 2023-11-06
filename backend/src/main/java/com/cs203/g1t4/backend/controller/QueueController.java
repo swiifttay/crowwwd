@@ -1,7 +1,7 @@
 package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.service.HoldingAreaService;
+import com.cs203.g1t4.backend.service.services.HoldingAreaService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
