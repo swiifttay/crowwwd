@@ -5,7 +5,7 @@ import axios from "axios";
 
 const api = axios.create({
   //TODO: backend to provide
-  baseURL: "http://localhost:8080/api/",
+  baseURL: "http://localhost:8080/api",
 });
 
 // api interceptor to place the jwt token
@@ -128,6 +128,15 @@ export const getUserProfile = async () => {
   }
 };
 
+export const getUserTickets = async() => {
+  try {
+    const response = await api.get("/ticket/getEventFullTickets");
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 export const getEvent = async (eventId: string) => {
   try {
     const response = await api.get(`/event/getEvent/6501c2167e60d210c8875fc6`);
@@ -153,7 +162,7 @@ export const getFanRecords = async () => {
 
 export const getArtistById = async (artistId: string) => {
   try {
-    const response = await api.get(`artist/getArtist/${artistId}`);
+    const response = await api.get(`/artist/getArtist/${artistId}`);
     return response;
   } catch (error) {
     return Promise.reject(error);

@@ -2,11 +2,15 @@ package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
+import com.cs203.g1t4.backend.data.response.ticket.FullTicketResponse;
 import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
 import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
+import com.cs203.g1t4.backend.models.FullTicket;
 import com.cs203.g1t4.backend.models.Ticket;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.event.Event;
+import com.cs203.g1t4.backend.models.event.FullEvent;
+import com.cs203.g1t4.backend.models.event.TicketEvent;
 import com.cs203.g1t4.backend.models.exceptions.duplicatedException.DuplicateTicketException;
 import com.cs203.g1t4.backend.models.exceptions.invalidIdException.InvalidEventIdException;
 import com.cs203.g1t4.backend.models.exceptions.invalidIdException.InvalidTicketIdException;
@@ -15,10 +19,12 @@ import com.cs203.g1t4.backend.models.exceptions.unauthorisedLoginException.Inval
 import com.cs203.g1t4.backend.repository.EventRepository;
 import com.cs203.g1t4.backend.repository.TicketRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
+import com.cs203.g1t4.backend.service.services.EventService;
 import com.cs203.g1t4.backend.service.services.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +34,7 @@ public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final EventService eventService;
 
     public SingleTicketResponse createTicket(TicketRequest ticketRequest, String username) {
         // Get the buying user's id
@@ -51,6 +58,36 @@ public class TicketServiceImpl implements TicketService {
         return SingleTicketResponse.builder()
                 .ticket(ticket)
                 .build();
+    }
+
+    public Response getEventFullTicketByUser(String username) {
+        // Get the buying user's id
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new InvalidTokenException());
+
+        // find all the tickets in the repository that is under the user
+        List<Ticket> allUserTickets = ticketRepository.findAllByUserIdAttending(user.getId());
+
+        // loop through each of those tickets and add the important details
+        List<FullTicket> allUserFullTickets = new ArrayList<>();
+        for (Ticket ticket : allUserTickets) {
+            TicketEvent ticketEvent = eventService.getTicketEventFromEventId(ticket.getEventId());
+            FullTicket fullTicket = FullTicket.builder()
+                    .id(ticket.getId())
+                    .ticketEvent(ticketEvent)
+                    .userIdAttending(ticket.getUserIdAttending())
+                    .userIdBuyer(ticket.getUserIdBuyer())
+                    .seatNo(ticket.getSeatNo())
+                    .isSurpriseTicket(ticket.isSurpriseTicket())
+                    .build();
+
+            allUserFullTickets.add(fullTicket);
+        }
+        //If Everything goes smoothly, SuccessResponse will be created
+        return FullTicketResponse.builder()
+                .fullTickets(allUserFullTickets)
+                .build();
+
     }
 
     public Response deleteTicket(String ticketId) {

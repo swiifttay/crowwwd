@@ -8,10 +8,7 @@ import com.cs203.g1t4.backend.data.response.event.SingleDetailsEventResponse;
 import com.cs203.g1t4.backend.data.response.event.SingleFullEventResponse;
 import com.cs203.g1t4.backend.models.Artist;
 import com.cs203.g1t4.backend.models.Venue;
-import com.cs203.g1t4.backend.models.event.DetailsEvent;
-import com.cs203.g1t4.backend.models.event.Event;
-import com.cs203.g1t4.backend.models.event.ExploreEvent;
-import com.cs203.g1t4.backend.models.event.FullEvent;
+import com.cs203.g1t4.backend.models.event.*;
 import com.cs203.g1t4.backend.models.exceptions.duplicatedException.DuplicatedEventException;
 import com.cs203.g1t4.backend.models.exceptions.invalidIdException.InvalidArtistIdException;
 import com.cs203.g1t4.backend.models.exceptions.invalidIdException.InvalidEventIdException;
@@ -450,6 +447,21 @@ public class EventServiceImpl implements EventService {
             outList.add(exploreEvent);
         }
         return outList;
+    }
+
+    public TicketEvent getTicketEventFromEventId(String eventId) {
+        //Finds event from repository, or else throw InvalidEventIdException()
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new InvalidEventIdException(eventId));
+
+        Venue venue = venueRepository.findById(event.getVenue())
+                .orElseThrow(() -> new InvalidVenueException());
+
+        Artist artist = artistRepository.findById(event.getArtistId())
+                .orElseThrow(() -> new InvalidArtistIdException(event.getArtistId()));
+
+        //Returns OutputEvent object from Event Object
+        return event.returnTicketEvent(venue, artist);
     }
 
 }
