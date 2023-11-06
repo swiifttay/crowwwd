@@ -51,7 +51,7 @@ export default function EventDetails({ params }: {params: {eventId: string}}) {
 
   const handleBuyTickets = async () => {
     console.log("going to queue");
-    router.push("/queue");
+    router.push(`/Ticket/${eventId}/lobby`);
   };
 
 

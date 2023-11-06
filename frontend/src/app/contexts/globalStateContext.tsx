@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface GlobalStateContextType {
   isOpen: boolean;

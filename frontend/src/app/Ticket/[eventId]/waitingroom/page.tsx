@@ -3,10 +3,14 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import CountdownTimer from "../components/WaitingRoom/CountdownTimer";
-import Stepper from "../components/WaitingRoom/Stepper";
+import CountdownTimer from "../../../components/Queue/CountdownTimer";
+import Stepper from "../../../components/Queue/Stepper";
+import { useUserDetails } from "@/app/contexts/UserDetailsContext";
+import { getCheckQueue, getWholeQueue } from "@/app/axios/queue";
 
-export default function WaitingRoom() {
+export default function WaitingRoom({params} : {params: {eventId:string}}) {
+  const {eventId} = params;
+  const {user} = useUserDetails();
   const router = useRouter();
   const [countdownFinished, setCountdownFinished] = useState(false);
 
@@ -19,6 +23,16 @@ export default function WaitingRoom() {
       router.push("/queue");
     }
   }, [countdownFinished, router]);
+
+  useEffect(() => {
+    //const interval = setInterval(updateSlider, 1000);
+
+    const fetchQueueStatus = async () => {
+      if (user) {
+        const status = await getCheckQueue(user, eventId);
+        if (status )
+      }
+    };
 
   return (
     <main className="flex flex-col items-center w-full h-screen px-8">
@@ -45,7 +59,6 @@ export default function WaitingRoom() {
               you will be moved into the Queue.
             </div>
           </div>
-          <CountdownTimer onCountdownFinish={handleCountdownFinish} />
         </div>
       </Box>
     </main>

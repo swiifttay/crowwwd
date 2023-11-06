@@ -3,7 +3,7 @@
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useState } from "react";
-import { useGlobalState } from "../globalStateContext";
+import { useGlobalState } from "../contexts/globalStateContext";
 
 const SidePanel = () => {
   const { isOpen, setIsOpen }: any = useGlobalState();

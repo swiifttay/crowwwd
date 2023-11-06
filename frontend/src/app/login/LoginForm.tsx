@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { authenticate } from "../axios/apiService";
 import { useFormState } from "../components/Login/FormContext";
-import { useGlobalState } from "../globalStateContext";
+import { useGlobalState } from "../contexts/globalStateContext";
 
 type TFormValues = {
   username: string;

@@ -16,8 +16,7 @@ import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { StringLiteral } from "typescript";
-import React from "react";
+import { useUserDetails } from "../contexts/UserDetailsContext";
 
 export interface User {
   id: string;
@@ -55,7 +54,7 @@ export interface Artist {
 }
 
 export default function UserProfile() {
-  const [user, setUser] = useState<User>();
+  const {user, setUser} = useUserDetails();
   const [fanRecords, setFanRecords] = useState<FanRecord[]>();
   const [favArtist, setFavArtist] = useState<Artist[]>();
 

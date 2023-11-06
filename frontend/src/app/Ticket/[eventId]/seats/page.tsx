@@ -1,9 +1,9 @@
 "use client";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { Seats } from "../../components/Ticket/selectCategory";
-import { getCategoryPrice, getEvent } from "../../axios/apiService";
+import { Seats } from "../../../components/Ticket/selectCategory";
+import { getCategoryPrice, getEvent } from "../../../axios/apiService";
 import { Event } from "@/app/explore/page";
-import { CatPriceDisplay } from "../../components/Ticket/CatPriceDisplay";
+import { CatPriceDisplay } from "../../../components/Ticket/CatPriceDisplay";
 
 type CategoryAndPrice = {
   category: string;

@@ -7,7 +7,7 @@ import Link from "next/link";
 import Logo from "/public/images/Logo.png";
 import { useState } from "react";
 import SidePanel from "./SidePanel";
-import { useGlobalState } from "../globalStateContext";
+import { useGlobalState } from "../contexts/globalStateContext";
 
 export default function Navbar() {
   const { isOpen, setIsOpen } = useGlobalState();

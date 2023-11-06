@@ -1,12 +1,12 @@
 "use client"
 
 import { Box } from "@mui/material";
-import Stepper from "../components/WaitingRoom/Stepper";
+import Stepper from "../../../components/Queue/Stepper";
 import { useRouter } from "next/navigation";
 
 export default function Lobby() {
   const router = useRouter();
-  const handleJoinQueue = () => {
+  const handleJoinQueue = async () => {
     router.push("/waitingroom");
   };
 

@@ -6,7 +6,10 @@ import Navbar from "./components/Navbar";
 import SidePanel from "./components/SidePanel";
 import Footer from "./components/Footer";
 import { useState } from "react";
-import { GlobalStateProvider, useGlobalState } from "./globalStateContext";
+import {
+  GlobalStateProvider,
+  useGlobalState,
+} from "./contexts/globalStateContext";
 import { Providers } from "./providers";
 
 export const mont = localFont({
@@ -55,13 +58,14 @@ export default function RootLayout({
       <body
         className={`${mont.className} flex flex-col items-center w-full h-fit`}
       >
-
-          <div className="flex flex-col items-start max-w-7xl w-full">
+        <div className="flex flex-col items-start max-w-7xl w-full">
+          <Providers>
             <SidePanel />
             <Navbar />
             {children}
             <Footer />
-          </div>
+          </Providers>
+        </div>
       </body>
     </html>
   );
