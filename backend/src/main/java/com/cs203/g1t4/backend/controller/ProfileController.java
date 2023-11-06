@@ -1,6 +1,5 @@
 package com.cs203.g1t4.backend.controller;
 
-import com.cs203.g1t4.backend.service.serviceImpl.ProfileServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
