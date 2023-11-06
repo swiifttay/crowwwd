@@ -1,10 +1,10 @@
 import { searchProfile } from "@/app/axios/apiService";
-import { User } from "@/app/userprofile/page";
-// backend\src\main\java\com\cs203\g1t4\backend\models\User.java
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
-import FriendResult from "./FriendResult";
+import PendingRequest from "./PendingRequest";
 import styles from "./SearchFriend.module.css";
+import VerticalCard from "./VerticalCard";
+import AcceptRequest from "./AcceptRequest";
 
 export default function UserFriends() {
   const [searchVisible, setSearchVisible] = useState(false);
@@ -12,6 +12,7 @@ export default function UserFriends() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
+  const [isAcceptedFriend, setIsAcceptedFriend] = useState(false);
 
   async function handleSearchSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -31,6 +32,10 @@ export default function UserFriends() {
 
   function handleSearchClick() {
     setSearchVisible(true);
+  }
+
+  function handleAcceptRequest() {
+    setIsAcceptedFriend(true);
   }
 
   return (
@@ -61,7 +66,7 @@ export default function UserFriends() {
               </button>
             </form>
             {firstName && (
-              <FriendResult
+              <PendingRequest
                 username={username}
                 firstName={firstName}
                 lastName={lastName}
@@ -71,10 +76,33 @@ export default function UserFriends() {
         )}
       </div>
 
-      <div className="flex overflow-x-auto max-w-full mb-32 px-4">
+      <div className="flex flex-col overflow-x-auto max-w-full mb-32">
+        {/* <PendingRequest
+          image="/images/ShawnMendes.jpg"
+          firstName={"Shawn"}
+          lastName={"Mendes"}
+        /> */}
+        {/* {!isAcceptedFriend && (
+          <AcceptRequest
+            image="/images/ShawnMendes.jpg"
+            firstName="Shawn"
+            lastName="Mendes"
+            onAcceptRequest={handleAcceptRequest}
+          />
+        )} */}
         <div className="flex gap-5">
-          {/* <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-          <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" /> */}
+          <VerticalCard
+            image="/images/CharliePuth.jpg"
+            firstName="Charlie"
+            lastName="Puth"
+          />
+          {isAcceptedFriend && (
+            <VerticalCard
+              image="/images/ShawnMendes.jpg"
+              firstName="Shawn"
+              lastName="Mendes"
+            />
+          )}
         </div>
       </div>
     </div>
