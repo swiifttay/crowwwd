@@ -71,6 +71,19 @@ public class TicketController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/getEventFullTickets")
+    public ResponseEntity<Response> getEventFullTicketsByUser(@AuthenticationPrincipal UserDetails userDetails) {
+        // get the username from the userDetails of the authenticated user
+        String username = userDetails.getUsername();
+
+        // provide information to find all the tickets by the user
+        // throws a InvalidTokenException if username cannot be found in repository
+        Response response = ticketService.getEventFullTicketByUser(username);
+
+        // return ok response
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/getAllTicketsByEvent/{eventId}")
     public ResponseEntity<Response> getTicketsByEvent(@PathVariable String eventId) {
 

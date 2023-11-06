@@ -1,6 +1,7 @@
 package com.cs203.g1t4.backend.models.event;
 
 import com.cs203.g1t4.backend.models.Artist;
+import com.cs203.g1t4.backend.models.Ticket;
 import com.cs203.g1t4.backend.models.Venue;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -110,6 +111,15 @@ public class Event {
                 .build();
     }
 
+    public TicketEvent returnTicketEvent(Venue venue, Artist artist) {
+        return TicketEvent.builder()
+                .eventId(id)
+                .eventName(name)
+                .artist(artist)
+                .venueName(venue.getLocationName())
+                .build();
+    }
+
     /**
      * Converts a List of LocalDateTime objects to a List of Strings for storage
      *
@@ -123,7 +133,5 @@ public class Event {
         }
         return strList;
     }
-
-
 
 }

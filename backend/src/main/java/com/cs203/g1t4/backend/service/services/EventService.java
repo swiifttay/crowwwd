@@ -2,6 +2,7 @@ package com.cs203.g1t4.backend.service.services;
 
 import com.cs203.g1t4.backend.data.request.event.EventRequest;
 import com.cs203.g1t4.backend.data.response.Response;
+import com.cs203.g1t4.backend.models.event.TicketEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,4 +61,6 @@ public interface EventService {
     Response getAllExploreEvents();
 
     Response getFullEventByAlias(String alias);
+
+    TicketEvent getTicketEventFromEventId(String eventId);
 }

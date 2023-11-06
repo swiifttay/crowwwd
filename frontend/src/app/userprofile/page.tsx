@@ -10,6 +10,7 @@ import {
   getSpotifyToken,
   getUserProfile,
   updateFanRecords,
+  getUserTickets
 } from "../axios/apiService";
 import UserFriends from "../components/SearchFriend/UserFriends";
 import VerticalCard from "../components/SearchFriend/VerticalCard";
@@ -52,12 +53,23 @@ export interface Artist {
   description: string;
 }
 
+// export interface Ticket {
+//   id: string;
+//   eventId: string;
+//   userIdAttending: string;
+//   userIdBuying: string;
+//   seatNo: string;
+//   isSurpriseTicket: boolean;
+// }
+
 export default function UserProfile() {
   const [user, setUser] = useState<User>();
   const [fanRecords, setFanRecords] = useState<FanRecord[]>();
   const [favArtist, setFavArtist] = useState<Artist[]>();
+  const [tickets, setTickets] = useState<Ticket[]>();
 
   const [msg, setMsg] = useState("");
+  const [ticketMsg, setTicketMsg] = useState("");
   const [isLoggedInSpotify, setIsLoggedInSpotify] = useState(false);
   const [isArtistLoaded, setIsArtistLoaded] = useState(false);
   const [spotifyButtonMsg, setSpotifyButtonMsg] = useState("");
@@ -71,6 +83,7 @@ export default function UserProfile() {
     checkSpotifyLoginStatus();
     fetchUser();
     fetchFanRecords();
+    fetchUserTickets();
     // console.log(fanRecords);
   }, []);
 
@@ -101,6 +114,16 @@ export default function UserProfile() {
       setIsLoggedInSpotify(false);
     }
   };
+
+  const fetchUserTickets = async () => {
+    const ticketsResponse = await getUserTickets();
+    console.log(ticketsResponse)
+    if (ticketsResponse?.status === 200) {
+      setTickets(ticketsResponse.data?.fullTickets);
+    } else {
+      setTicketMsg("Buy a ticket now!")
+    }
+  }
 
   const handleUpdateProfile = async () => {
     router.push("/updateprofile");
@@ -236,7 +259,7 @@ export default function UserProfile() {
               <div className="flex gap-5 overflow-x-auto max-w-2xl h-full px-4 py-8">
                 <div className={`${isArtistLoaded ? "hidden" : "display"}`}>
                   {" "}
-                  Loading...{" "}
+                  Login to Spotify to update your favourite artists!{" "}
                 </div>
                 {favArtist
                   ?.slice(0, Math.min(10, favArtist.length))
@@ -318,14 +341,41 @@ export default function UserProfile() {
               />
             )}
           </div>
-          <EventButtonLong
+          {tickets?.slice(0, Math.min(5, tickets.length))
+            .map((ticket, i) => {
+              return (
+                <EventButtonLong
+                  image={ticket.ticketEvent.artist.artistImageURL}
+                  title={ticket.ticketEvent.eventName}
+                  artist={ticket.ticketEvent.artist.name}
+                  datetime="Fri 15 Sep 2023, 7pm"
+                  venue={ticket.ticketEvent.venueName}
+                  setIsOpen={setIsOpen}
+                />
+              );
+            })
+          }
+          {/* <EventButtonLong
             image="/images/TaylorSwift.jpg"
             title="Reputation Tour"
             artist="Taylor Swift"
             datetime="Fri 15 Sep 2023, 7pm"
             venue="The Star Theatre, The Star Performing Arts Centre"
             setIsOpen={setIsOpen}
-          />
+          /> */}
+        </div>
+      </div>
+
+      <div className="flex flex-col w-full">
+        <div className="text-xl font-bold mb-4 mt-16">Friends</div>
+        <div className="flex overflow-x-auto max-w-full mb-32 px-4">
+          <div className="flex gap-5">
+            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
+          </div>
         </div>
       </div>
       <UserFriends />

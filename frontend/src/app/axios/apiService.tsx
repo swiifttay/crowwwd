@@ -142,6 +142,15 @@ export const getUserProfile = async () => {
   }
 };
 
+export const getUserTickets = async() => {
+  try {
+    const response = await api.get("/ticket/getEventFullTickets");
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 export const searchProfile = async (username: string) => {
   try {
     const response = await api.get(`/profile/searchProfile/${username}`);
@@ -171,7 +180,7 @@ export const getFanRecords = async () => {
 
 export const getArtistById = async (artistId: string) => {
   try {
-    const response = await api.get(`artist/getArtist/${artistId}`);
+    const response = await api.get(`/artist/getArtist/${artistId}`);
     return response;
   } catch (error) {
     return Promise.reject(error);

@@ -16,6 +16,8 @@ public interface TicketService {
 
     Response getTicketById(String ticketId);
 
+    Response getEventFullTicketByUser(String username);
+
     Response getTicketsByUser(String username);
 
     Response getTicketByEvent(String eventId);
