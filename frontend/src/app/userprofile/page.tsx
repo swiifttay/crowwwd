@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -11,11 +11,11 @@ import {
   getUserProfile,
   updateFanRecords,
 } from "../axios/apiService";
+import UserFriends from "../components/SearchFriend/UserFriends";
+import VerticalCard from "../components/SearchFriend/VerticalCard";
 import Modal from "../components/UserProfile/Modal";
 import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
-import VerticalCard from "./VerticalCard";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export interface User {
   id: string;
@@ -87,7 +87,10 @@ export default function UserProfile() {
   const checkSpotifyLoginStatus = async () => {
     const spotifyTokenResponse = await getSpotifyToken();
     console.log(spotifyTokenResponse.data?.response);
-    if (spotifyTokenResponse?.status === 200 && spotifyTokenResponse.data?.response != null) {
+    if (
+      spotifyTokenResponse?.status === 200 &&
+      spotifyTokenResponse.data?.response != null
+    ) {
       console.log("success");
       localStorage.setItem("spotifyToken", spotifyTokenResponse.data.response);
       setSpotifyButtonMsg("Update My Records");
@@ -180,10 +183,15 @@ export default function UserProfile() {
     }
   }, [isOpen]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+  };
+
   return (
     <main className="flex flex-col items-center h-fit relative w-full px-8">
       <div className="flex flex-col justify-center align-center mt-4 w-full">
-        <div className="flex flex-row ">
+        <div className="flex flex-row justify-between w-full">
           <div className="flex flex-col sm:w-full lg:w-2/3">
             <div className="flex gap-12">
               <div className="">
@@ -192,23 +200,25 @@ export default function UserProfile() {
                 </div>
                 <div className="text-md">{user?.username}</div>
                 <div className="text-md">{user?.email}</div>
-                <div
-                  className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer"
+                <button
+                  type="submit"
+                  className="mt-6 w-full hover:bg-theme-light-blue text-white py-2 px-4 rounded-lg bg-theme-blue"
                   onClick={handleUpdateProfile}
                 >
                   Update Profile
+                </button>
+                <div
+                  className="mt-6 hover:underline hover:text-sky-400 text-theme-light-blue cursor-pointer"
+                  onClick={handleLogout}
+                >
+                  Logout
                 </div>
               </div>
 
-              <div className="flex items-center">
-                {/* <Image
-                  src="/images/Siyu.png"
-                  alt="Profile Picture"
-                  className="rounded-full"
-                  width={200}
-                  height={200}
-                /> */}
-                <AccountCircleIcon style={{ fontSize: 140 }}/>
+              <div className="flex items-center justify-center flex-col">
+                <AccountCircleIcon
+                  style={{ fontSize: 140, color: "#e5e7eb" }}
+                />
               </div>
             </div>
             <div className="flex flex-row justify-between mb-4 mt-20">
@@ -243,33 +253,33 @@ export default function UserProfile() {
             </div>
           </div>
 
-          <div className="ml-10 w-1/3">
+          <div className="ml-16 w-1/3">
             <div className="text-xl font-bold mt-6 mb-4">What you may like</div>
             <div className="flex flex-col gap-3">
               <EventButtonShort
-                image="/images/TaylorSwift.jpg"
-                title="Reputation Tour"
+                image="/images/ErasTour.jpg"
+                title="The Eras Tour"
                 artist="Taylor Swift"
               />
               <EventButtonShort
-                image="/images/TaylorSwift.jpg"
-                title="Reputation Tour"
-                artist="Taylor Swift"
+                image="/images/SingularTour.jpg"
+                title="The Singular Tour"
+                artist="Sabrina Carpenter"
               />
               <EventButtonShort
-                image="/images/TaylorSwift.jpg"
-                title="Reputation Tour"
-                artist="Taylor Swift"
+                image="/images/QueenofHearts.jpg"
+                title="Queen of Hearts"
+                artist="G.E.M"
               />
               <EventButtonShort
-                image="/images/TaylorSwift.jpg"
-                title="Reputation Tour"
-                artist="Taylor Swift"
+                image="/images/CarnivalWorldTour.jpg"
+                title="CarnivalWorldTour"
+                artist="Jay Chou"
               />
               <EventButtonShort
-                image="/images/TaylorSwift.jpg"
-                title="Reputation Tour"
-                artist="Taylor Swift"
+                image="/images/Mamamoo.jpg"
+                title="My Con"
+                artist="Mamamoo"
               />
             </div>
           </div>
@@ -316,43 +326,9 @@ export default function UserProfile() {
             venue="The Star Theatre, The Star Performing Arts Centre"
             setIsOpen={setIsOpen}
           />
-
-          {/* <EventButtonLong
-            image="/images/TaylorSwift.jpg"
-            title="Reputation Tour"
-            artist="Taylor Swift"
-            datetime="Fri 15 Sep 2023, 7pm"
-            venue="The Star Theatre, The Star Performing Arts Centre"
-          />
-          <EventButtonLong
-            image="/images/TaylorSwift.jpg"
-            title="Reputation Tour"
-            artist="Taylor Swift"
-            datetime="Fri 15 Sep 2023, 7pm"
-            venue="The Star Theatre, The Star Performing Arts Centre"
-          />
-          <EventButtonLong
-            image="/images/TaylorSwift.jpg"
-            title="Reputation Tour"
-            artist="Taylor Swift"
-            datetime="Fri 15 Sep 2023, 7pm"
-            venue="The Star Theatre, The Star Performing Arts Centre"
-          /> */}
         </div>
       </div>
-
-      <div className="flex flex-col w-full">
-        <div className="text-xl font-bold mb-4 mt-16">Friends</div>
-        <div className="flex overflow-x-auto max-w-full mb-32 px-4">
-          <div className="flex gap-5">
-            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-            <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
-          </div>
-        </div>
-      </div>
+      <UserFriends />
     </main>
   );
 }

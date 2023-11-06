@@ -1,5 +1,6 @@
 package com.cs203.g1t4.backend.service.serviceImpl;
 
+import com.cs203.g1t4.backend.data.request.OrderRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.SingleOrderResponse;
 import com.cs203.g1t4.backend.models.Order;
@@ -7,6 +8,7 @@ import com.cs203.g1t4.backend.models.exceptions.InvalidOrderIdException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidPaymentIdException;
 import com.cs203.g1t4.backend.repository.OrderRepository;
 import com.cs203.g1t4.backend.service.services.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,23 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+
+    public Response createOrder(@Valid OrderRequest orderRequest) {
+        Order order = Order.builder()
+                .category(orderRequest.getCategory())
+                .eventDate(orderRequest.getEventDate())
+                .payingUserId(orderRequest.getPayingUserId())
+                .seats(orderRequest.getSeats())
+                .eventId(orderRequest.getEventId())
+                .pricePerSeat(orderRequest.getPricePerSeat())
+                .totalCost(orderRequest.getTotalCost())
+                .build();
+        orderRepository.save(order);
+
+        return SingleOrderResponse.builder()
+                .order(order)
+                .build();
+    }
 
     public Response updateOrder(String orderId, String paymentId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new InvalidOrderIdException(orderId));

@@ -12,10 +12,12 @@ type TFormValues = {
   username: string;
   password: string;
 };
+
 export default function LoginForm() {
   const router = useRouter();
 
   const [msg, setMsg] = useState("");
+
   const onHandleFormSubmit = async (data: TFormValues) => {
     setFormData((prev: any) => ({ ...prev, ...data }));
 
@@ -25,7 +27,6 @@ export default function LoginForm() {
     if (response.request?.status === 200) {
       setMsg("Loading...");
       router.push("/userprofile");
-
       // if it is incorrect,
     } else if (response?.status === 401) {
       setMsg("The username or password entered is incorrect.");
