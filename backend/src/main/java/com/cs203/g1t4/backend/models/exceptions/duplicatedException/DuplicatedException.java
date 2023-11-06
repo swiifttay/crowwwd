@@ -1,4 +1,4 @@
-package com.cs203.g1t4.backend.models.exceptions;
+package com.cs203.g1t4.backend.models.exceptions.duplicatedException;
 
 public class DuplicatedException extends RuntimeException {
 

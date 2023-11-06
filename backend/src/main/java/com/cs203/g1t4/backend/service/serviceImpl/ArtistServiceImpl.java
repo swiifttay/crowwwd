@@ -6,7 +6,7 @@ import com.cs203.g1t4.backend.data.response.artist.ArtistResponse;
 import com.cs203.g1t4.backend.data.response.artist.SingleArtistResponse;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.models.Artist;
-import com.cs203.g1t4.backend.models.exceptions.InvalidArtistIdException;
+import com.cs203.g1t4.backend.models.exceptions.invalidIdException.InvalidArtistIdException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
 import com.cs203.g1t4.backend.service.services.ArtistService;
 import com.cs203.g1t4.backend.service.services.S3Service;

@@ -2,7 +2,7 @@ package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
-import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
+import com.cs203.g1t4.backend.models.exceptions.unauthorisedLoginException.InvalidTokenException;
 import com.cs203.g1t4.backend.service.services.ArtistService;
 import com.cs203.g1t4.backend.service.services.FanRecordService;
 import com.cs203.g1t4.backend.service.services.ProfileService;

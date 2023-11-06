@@ -2,8 +2,8 @@ package com.cs203.g1t4.backend.service.services;
 
 import com.cs203.g1t4.backend.data.request.user.UserRequest;
 import com.cs203.g1t4.backend.models.User;
-import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
-import com.cs203.g1t4.backend.models.exceptions.PasswordDoNotMatchException;
+import com.cs203.g1t4.backend.models.exceptions.duplicatedException.DuplicatedUsernameException;
+import com.cs203.g1t4.backend.models.exceptions.unauthorisedLoginException.PasswordDoNotMatchException;
 
 public interface CommonService {
 

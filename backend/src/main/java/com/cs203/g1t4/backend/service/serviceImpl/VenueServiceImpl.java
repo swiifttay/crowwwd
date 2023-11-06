@@ -5,7 +5,7 @@ import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.venue.SingleVenueResponse;
 import com.cs203.g1t4.backend.models.Venue;
-import com.cs203.g1t4.backend.models.exceptions.InvalidVenueException;
+import com.cs203.g1t4.backend.models.exceptions.invalidIdException.InvalidVenueException;
 import com.cs203.g1t4.backend.repository.VenueRepository;
 import com.cs203.g1t4.backend.service.services.S3Service;
 import com.cs203.g1t4.backend.service.services.VenueService;
