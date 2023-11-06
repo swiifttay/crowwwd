@@ -1,7 +1,8 @@
-package com.cs203.g1t4.backend.service;
+package com.cs203.g1t4.backend.service.serviceImpl;
 
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.queue.QueueResponse;
+import com.cs203.g1t4.backend.data.response.queue.QueueSizesResponse;
 import com.cs203.g1t4.backend.models.FanRecord;
 import com.cs203.g1t4.backend.models.User;
 import com.cs203.g1t4.backend.models.event.Event;
@@ -13,9 +14,7 @@ import com.cs203.g1t4.backend.models.queue.HoldingArea;
 import com.cs203.g1t4.backend.models.queue.QueueStatus;
 import com.cs203.g1t4.backend.models.queue.QueueingStatusValues;
 import com.cs203.g1t4.backend.repository.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,7 +25,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class HoldingAreaService {
+public class HoldingAreaServiceImpl {
     private final HoldingAreaRepository holdingAreaRepository;
     private final FanRecordRepository fanRecordRepository;
     private final UserRepository userRepository;
@@ -150,6 +149,30 @@ public class HoldingAreaService {
 
         return QueueResponse.builder()
                 .queueingStatus(currentStatus.getStatusName())
+                .build();
+    }
+
+    public Response getQueueSizes(String eventId) {
+        // verify the event
+        Event event = verifyEventId(eventId);
+
+        // get all the queues under the event
+        List<QueueStatus> allQueues = queueStatusRepository.findByEventId(eventId);
+
+        // create variables to count the number of people
+        int countHolding = 0;
+        int countPending = 0;
+        for(QueueStatus queueStatus : allQueues) {
+            if(queueStatus.getQueueStatus().equals(QueueingStatusValues.HOLDING)) {
+                countHolding++;
+            } else if (queueStatus.getQueueStatus().equals(QueueingStatusValues.PENDING)) {
+                countPending++;
+            }
+        }
+
+        return QueueSizesResponse.builder()
+                .countHolding(countHolding)
+                .countPending(countPending)
                 .build();
     }
 

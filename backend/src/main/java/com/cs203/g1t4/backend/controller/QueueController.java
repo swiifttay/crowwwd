@@ -1,7 +1,7 @@
 package com.cs203.g1t4.backend.controller;
 
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.service.HoldingAreaService;
+import com.cs203.g1t4.backend.service.serviceImpl.HoldingAreaServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class QueueController {
-    private final HoldingAreaService holdingAreaService;
+    private final HoldingAreaServiceImpl holdingAreaService;
 
 
     @GetMapping("/join/{eventId}")
@@ -35,4 +35,10 @@ public class QueueController {
         return ResponseEntity.ok(isNextInQueue);
     }
 
+    @GetMapping("/sizes/{eventId}")
+    public ResponseEntity<Response> getSizesOfQueue(@PathVariable String eventId) {
+        Response queueSizes = holdingAreaService.getQueueSizes(eventId);
+
+        return ResponseEntity.ok(queueSizes);
+    }
 }
