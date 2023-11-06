@@ -9,6 +9,7 @@ import { approvedFriend, confirmSeats, deleteOrderByOrderId, fetchOrderByPayment
 
 export interface SeatsConfirmRequest { 
     orderId: string
+    paymentId: string
     userIdsAttending: string[];
     noOfSurpriseTickets: number
 }
@@ -32,17 +33,33 @@ const ProcessingPage = ({ clientSecret, paymentID }: any) => {
   
   const confirmPayment = () => {
     getFriendList();
-    const numFriends = friendsList?.length
+
+    const numFriends = friendsList?.length || 0
     console.log(numFriends)
-    const numTickets = order?.seats.length
+
+    const numTickets = order?.seats.length || 0
     console.log(numTickets)
+
     const surpriseTickets = numTickets - numFriends
     console.log(surpriseTickets)
 
+    console.log(paymentID)
+
+    if (typeof order?.id === 'string' && order.id && Array.isArray(friendsList)) {
+        try {
+          const response = confirmSeats({
+            orderId: order.id,
+            paymentId: paymentID,
+            userIdsAttending: friendsList,
+            noOfSurpriseTickets: surpriseTickets,
+          })
+          console.log(response)
+    } catch (error){
+        console.log(error)
+    }
     
-    
-    confirmSeats(SeatsConfirm);
   }
+}
 
 
   const cancelPayment = async () => {
@@ -69,7 +86,7 @@ const ProcessingPage = ({ clientSecret, paymentID }: any) => {
         switch (paymentIntent.status) {
           case "succeeded":
             confirmPayment();
-            // router.push(`/order/${order?.id}`);
+            router.push(`/order/${order?.id}`);
             setMessage("Payment success");
             console.log("Payment success");
             break;
@@ -86,7 +103,7 @@ const ProcessingPage = ({ clientSecret, paymentID }: any) => {
         }
       });
     }
-  }, [stripe, clientSecret, order]); 
+  }, [stripe, clientSecret,order]); 
 
   return (
     <div>

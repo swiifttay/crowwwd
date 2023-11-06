@@ -1,4 +1,5 @@
 import axios from "axios";
+import { SeatsConfirmRequest } from "../components/Processing/ProcessingPage";
 // import { Event } from "../explore/page";
 // import { Concert } from "../explore/page";
 // import { User } from "../userprofile/page";
@@ -235,12 +236,9 @@ export const fetchOrderByPaymentId = async (paymentId: string) => {
 }
 
 
-export const confirmSeats = async (SeatsConfirmRequest: 
-  { orderId: string
-    userIdsAttending: string[];
-    noOfSurpriseTickets: number}) => {
+export const confirmSeats = async ({orderId, paymentId, userIdsAttending, noOfSurpriseTickets}: SeatsConfirmRequest) => {
   try {
-    const response = await api.put("/seat", SeatsConfirmRequest);
+    const response = await api.put("/seat", {orderId, paymentId, userIdsAttending, noOfSurpriseTickets});
     return response;
   } catch(error){
     return Promise.reject(error);

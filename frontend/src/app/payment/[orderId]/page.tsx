@@ -36,42 +36,6 @@ export default function App({ params }: { params: { orderId: string } }) {
   const [order, setOrder] = useState<Order>();
   const [totalCost, setTotalCost] = useState<Number>();
   
-  // useEffect(() => {
-
-  //   const fetchOrderAndCreateIntent = async () => {
-  //     try {
-  //       const orderResponse = await fetchOrderByOrderId(orderId);
-  //       setOrder(orderResponse.data); // Set the order data received from the response
-  //       console.log(order)
-
-  //       // Check if orderResponse.data.totalCost is not undefined before attempting to create a payment intent
-        
-        
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchOrderAndCreateIntent();
-
-  // }, [orderId]);
-
-  //   useEffect(()=>{
-  //     if (order){
-  //       setTotalCost(order?.totalCost)
-  //     }
-  //     console.log(totalCost)
-  //     const createPaymentIntent = async()=>{
-  //       const { data } = await axios.post("/api/create-payment-intent", 
-  //         {data: {amount: totalCost }},
-  //       );
-  //     setClientSecret(data.clientSecret); // Ensure you are setting the clientSecret correctly from the response
-  //     }
-  //     createPaymentIntent();
-      
-
-  //   }, [order, totalCost]);
-
   function getTotalCost(order:Order|undefined){
     return order?.id
   }
