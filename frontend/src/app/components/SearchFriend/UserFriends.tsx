@@ -9,7 +9,8 @@ import styles from "./SearchFriend.module.css";
 export default function UserFriends() {
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResult, setSearchResult] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   async function handleSearchSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -19,7 +20,8 @@ export default function UserFriends() {
       console.log(searchTerm);
       const response = await searchProfile(searchTerm);
       console.log(response.data);
-      setSearchResult(response.data?.user.firstName);
+      setFirstName(response.data?.user.firstName);
+      setLastName(response.data?.user.lastName);
     } catch (error) {
       console.error("Error searching for profiles:", error);
     }
@@ -56,7 +58,7 @@ export default function UserFriends() {
                 <MagnifyingGlassIcon className="h-6 stroke-white hover-text-gray-300 cursor-pointer " />
               </button>
             </form>
-            {searchResult && <FriendResult name={searchResult} />}
+            {firstName && <FriendResult firstName={firstName} lastName={lastName} />}
           </div>
         )}
       </div>
