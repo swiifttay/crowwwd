@@ -11,6 +11,7 @@ import com.cs203.g1t4.backend.models.exceptions.InvalidPurchasingTimeException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
 import com.cs203.g1t4.backend.models.exceptions.MissingQueueException;
 import com.cs203.g1t4.backend.models.queue.HoldingArea;
+import com.cs203.g1t4.backend.models.queue.HoldingAreaComparator;
 import com.cs203.g1t4.backend.models.queue.QueueStatus;
 import com.cs203.g1t4.backend.models.queue.QueueingStatusValues;
 import com.cs203.g1t4.backend.repository.*;
@@ -19,10 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +37,17 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
         User user = verifyUsername(username);
         Event event = verifyEventId(eventId);
 
-        verifyPurchaseValidity(event);
+        // get the current time
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        // verify if this is the time to purchase
+        boolean validityToPurchase = timeBetween(currentTime,
+                event.getTicketSalesDate().get(0).minusMinutes(10),
+                event.getDates().get(0));
+
+        if (!validityToPurchase) {
+            throw new InvalidPurchasingTimeException(event.getName());
+        }
 
         Optional<QueueStatus> userQueueStatus = queueStatusRepository.findQueueByUserIdAndEventId(user.getId(), eventId);
 
@@ -52,32 +60,51 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
 
         // if reach this code means user is not in queue yet
 
-        // determine if user is a fan
-        boolean isFanOfEventArtist = verifyFan(user.getId(), event.getArtistId());
+        boolean isEarly = false;
+
+        // determine if now we should enter the early queue
+        if (timeBetween(currentTime,
+                event.getTicketSalesDate().get(0).minusMinutes(10),
+                event.getTicketSalesDate().get(0))
+        ) {
+            isEarly = true;
+        }
+
+        // determine if the user is a fan
+        boolean isFan = verifyFan(user.getId(), event.getArtistId());
 
         // get the holding area for the event
         HoldingArea holdingAreaForEvent = getHoldingAreaForEvent(eventId);
 
-        // determine which arraylist to add user to
-        List<String> fans = holdingAreaForEvent.getFans();
-        List<String> regulars = holdingAreaForEvent.getRegulars();
+        // get a random number generator
+        Random rand = new Random();
 
-        // add user to the respective arrayList
-        if (isFanOfEventArtist) {
-            fans.add(user.getId());
+
+        // get the two queues and implement a number generator
+        PriorityQueue<String> earlyQueue = new PriorityQueue<>(holdingAreaForEvent.getEarlyQueue().size() + 1, new HoldingAreaComparator(isFan));
+
+        PriorityQueue<String> normalQueue = new PriorityQueue<>(holdingAreaForEvent.getNormalQueue().size() + 1, new HoldingAreaComparator(isFan));
+
+        // add the user to the queue
+        if (isEarly) {
+            earlyQueue.add(user.getId());
         } else {
-            regulars.add(user.getId());
+            normalQueue.add(user.getId());
         }
 
-        // update the fans and regulars list
-        holdingAreaForEvent.setFans(fans);
-        holdingAreaForEvent.setRegulars(regulars);
+        // insert into the holding area
+        holdingAreaForEvent.setEarlyQueue(earlyQueue.stream().toList());
+        holdingAreaForEvent.setNormalQueue(normalQueue.stream().toList());
+
+        // save into repository
+        holdingAreaRepository.save(holdingAreaForEvent);
 
         // create the queueStatus for user
         QueueStatus createdUserQueueStatus = QueueStatus.builder()
                 .userId(user.getId())
                 .queueStatus(QueueingStatusValues.HOLDING)
                 .eventId(eventId)
+                .isFan(isFan)
                 .build();
 
         // save into repo
@@ -89,6 +116,7 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
                 .queueingStatus(createdUserQueueStatus.getQueueStatus().getStatusName())
                 .build();
     }
+
 
     public Response getQueueStatus(String username, String eventId) {
 
@@ -107,43 +135,108 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
         }
 
         // determine which holding area this is
-        HoldingArea holdingArea = getHoldingAreaForEvent(eventId);
+        HoldingArea holdingAreaForEvent = getHoldingAreaForEvent(eventId);
 
         // determine the current time
         LocalDateTime currentTime = LocalDateTime.now();
 
-        // determine the last time a queue was made
-        LocalDateTime holdingAreaLastQueueCreateTime = holdingArea.getLastQueueCreateTime();
-
-        // create a new queue if it was 5 minutes after the last time
-        // a queue was created
-        if (holdingAreaLastQueueCreateTime.isBefore(currentTime.minusMinutes(5))) {
-            int numQueuesMade = holdingArea.getQueuesMade();
-
-            // update the holding area information
-            holdingArea = makeQueuesInHoldingArea(holdingArea, userQueueStatus.get().getUserId());
-            holdingArea.setQueuesMade(numQueuesMade + 1);
-            holdingArea.setLastQueueCreateTime(currentTime);
+        // if it is early then update to say still holding
+        if (timeBetween(currentTime,
+                event.getTicketSalesDate().get(0).minusMinutes(10),
+                event.getTicketSalesDate().get(0).minusMinutes(5))) {
+            return QueueResponse.builder()
+                    .queueingStatus(QueueingStatusValues.HOLDING.getStatusName())
+                    .build();
         }
 
+        // if reach here means that it is time to get the ids
+        // determine what is the current queue number or if there is nothing
+        int queuesMade = holdingAreaForEvent.getQueuesMade();
+
+        // this should max out at 30 to determine that 30 people are in a set of queue
+        int newQueueSizeCounter = 0;
+
+        List<String> holdingAreaEarlyQueue = holdingAreaForEvent.getEarlyQueue();
+        // start from the early queue
+        // and start sending them into the respective queue numbers
+        while (holdingAreaEarlyQueue.size() != 0) {
+
+            // get the first person in queue
+            enterQueue(holdingAreaEarlyQueue.remove(0), queuesMade, holdingAreaForEvent.getEventId());
+
+            // update the number of people in the queue
+            newQueueSizeCounter++;
+
+            // change queueSet
+            if (newQueueSizeCounter >= 30) {
+                queuesMade++;
+                newQueueSizeCounter = 0;
+            }
+        }
+
+        // once that is done, do it for the normal queue,
+        // get the normal queue
+        List<String> holdingAreaNormalQueue = holdingAreaForEvent.getNormalQueue();
+
+        // determine if there is enough people to keep creating a new queue
+        if (holdingAreaNormalQueue.size() >= 30) {
+            // loop until there's not enough
+            while (holdingAreaNormalQueue.size() > 30) {
+
+                // get the first person in queue
+                enterQueue(holdingAreaNormalQueue.remove(0), queuesMade, holdingAreaForEvent.getEventId());
+
+                // update the number of people in the queue
+                newQueueSizeCounter++;
+
+                // change queueSet
+                if (newQueueSizeCounter >= 30) {
+                    queuesMade++;
+                    newQueueSizeCounter = 0;
+                }
+            }
+
+
+        // otherwise look at the last time a queue was made
+        } else if (currentTime.isAfter(
+                holdingAreaForEvent.getLastQueueCreateTime().plusMinutes(5))) {
+
+            // loop until there's not enough
+            while (holdingAreaNormalQueue.size() != 0) {
+
+                // get the first person in queue
+                enterQueue(holdingAreaNormalQueue.remove(0), queuesMade, holdingAreaForEvent.getEventId());
+
+                // update the number of people in the queue
+                newQueueSizeCounter++;
+
+                // change queueSet
+                if (newQueueSizeCounter >= 30) {
+                    queuesMade++;
+                    newQueueSizeCounter = 0;
+                }
+            }
+        }
+
+        // now determine if the queues to be purchasing should move forward
         // determine when was the last time a queue was pushed to purchase
-        LocalDateTime holdingAreaLastQueueMoveToPurchaseTime = holdingArea.getLastQueueMoveToPurchaseTime();
+        LocalDateTime holdingAreaLastQueueMoveToPurchaseTime = holdingAreaForEvent.getLastQueueMoveToPurchaseTime();
 
         // what was the latest queueNumber pushed to purchase
-        int queuesToPurchase = holdingArea.getQueuesToPurchase();
+        int queuesToPurchase = holdingAreaForEvent.getQueuesToPurchase();
 
         // update the queueNumber pushed to purchase if it was 7 minutes after the last time a
-        // queue was pushed to purchase
-        if (holdingAreaLastQueueMoveToPurchaseTime.isBefore(currentTime.minusMinutes(7))) {
+        // queue was pushed to purchase and if there are queues to move forward
+        if (holdingAreaLastQueueMoveToPurchaseTime.isBefore(currentTime.minusMinutes(7)) && queuesToPurchase < queuesMade) {
             queuesToPurchase++;
 
             // update holdingArea information
-            holdingArea.setQueuesToPurchase(queuesToPurchase);
-            holdingArea.setLastQueueMoveToPurchaseTime(currentTime);
+            holdingAreaForEvent.setQueuesToPurchase(queuesToPurchase);
+            holdingAreaForEvent.setLastQueueMoveToPurchaseTime(currentTime);
         }
 
         // save into repository the updates to holding area
-        holdingAreaRepository.save(holdingArea);
+        holdingAreaRepository.save(holdingAreaForEvent);
 
         // determine if the user is newly queued
         QueueingStatusValues currentStatus = moveUserToPurchase(userQueueStatus.get().getId(), queuesToPurchase);
@@ -151,6 +244,15 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
         return QueueResponse.builder()
                 .queueingStatus(currentStatus.getStatusName())
                 .build();
+    }
+
+    // give the user a queue number
+    public void enterQueue(String userId, int queueId, String eventId) {
+        QueueStatus queueStatus = queueStatusRepository.findQueueByUserIdAndEventId(userId, eventId)
+                .orElseThrow(() -> new MissingQueueException());
+        queueStatus.setQueueStatus(QueueingStatusValues.PENDING);
+        queueStatus.setQueueId(queueId);
+        queueStatusRepository.save(queueStatus);
     }
 
     public Response getQueueSizes(String eventId) {
@@ -192,58 +294,6 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
         return userQueueStatus.getQueueStatus();
     }
 
-    // update 30 people into the new queue
-    public HoldingArea makeQueuesInHoldingArea(HoldingArea holdingArea, String userId) {
-        int newQueueId = holdingArea.getQueuesMade() + 1;
-        Random rand = new Random();
-        String eventId = holdingArea.getEventId();
-
-        List<String> fans = holdingArea.getFans();
-        List<String> regulars = holdingArea.getRegulars();
-
-        int queueSize = Math.min(30, fans.size() + regulars.size());
-
-        // make 30 of them
-        for (int i = 0; i < queueSize; i++) {
-            int percentageChance = 100 - rand.nextInt(100) + 1;
-            List<String> updatingList = regulars;
-            if (percentageChance >= 70 && !fans.isEmpty()) {
-                updatingList = fans;
-            } else if (regulars.isEmpty()) {
-                updatingList = fans;
-            }
-
-            changeStatus(updatingList, percentageChance, eventId, newQueueId);
-        }
-
-        holdingArea.setFans(fans);
-        holdingArea.setRegulars(regulars);
-//        holdingAreaRepository.save(holdingArea);
-
-        return holdingArea;
-    }
-
-    public void changeStatus(List<String> listToUpdate, int percentageChance, String eventId, int newQueueId) {
-
-        // determine number to take from
-        int numInList = (int) (percentageChance / 100.0 * listToUpdate.size());
-
-        // determine who is the user, and also remove from the list
-        String userId = listToUpdate.remove(numInList);
-
-        // find the queueStatus of user
-        QueueStatus queueStatus = queueStatusRepository.findQueueByUserIdAndEventId(userId, eventId)
-                .orElseThrow(() -> new MissingQueueException());
-
-        // update the status
-        queueStatus.setQueueId(newQueueId);
-        queueStatus.setQueueStatus(QueueingStatusValues.PENDING);
-
-        // update the queueStatusRepository
-        queueStatusRepository.save(queueStatus);
-    }
-
-
     public Optional<QueueStatus> findQueueStatusOfUser(String username, String eventId) {
 
         // get the user from the username
@@ -252,8 +302,6 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
         // get the event from the eventId
         Event event = verifyEventId(eventId);
 
-        // determine if it is time for buying tickets yet
-        verifyPurchaseValidity(event);
 
         // check if this user is in holding area already
         Optional<QueueStatus> userQueueStatus = queueStatusRepository
@@ -270,8 +318,8 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
 
             HoldingArea holdingArea = HoldingArea.builder()
                     .eventId(eventId)
-                    .fans(new ArrayList<>())
-                    .regulars(new ArrayList<>())
+                    .earlyQueue(new ArrayList<>())
+                    .normalQueue(new ArrayList<>())
                     .queuesToPurchase(0)
                     .queuesMade(0)
                     .lastQueueCreateTime(currentTime)
@@ -298,20 +346,8 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
         return event;
     }
 
-    public void verifyPurchaseValidity(Event event) {
-
-        // determine if the current time is valid to buy tickets yet
-        LocalDateTime today = LocalDateTime.now();
-        LocalDateTime salesDate = event.getTicketSalesDate().get(0);
-        LocalDateTime eventDate = event.getDates().get(0);
-
-        // if it is not yet time to buy tickets, throw the exception
-        if (!(today.isAfter(salesDate.minusMinutes(5)) && today.isBefore(eventDate))) {
-            throw new InvalidPurchasingTimeException(event.getName());
-        }
-
-        // determine if the event's sales time is now yet
-        return;
+    public boolean timeBetween(LocalDateTime current, LocalDateTime start, LocalDateTime end) {
+        return current.isBefore(end) && current.isAfter(start);
     }
 
     public boolean verifyFan(String userId, String artistId) {

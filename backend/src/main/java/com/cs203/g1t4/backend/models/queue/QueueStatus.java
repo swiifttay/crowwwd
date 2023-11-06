@@ -34,5 +34,7 @@ public class QueueStatus {
   // can be blank depending on if user is in the queue
   // if not blank, this records the queue number of the user (in batches)
   private Integer queueId;
+
+  private boolean isFan;
   
 }

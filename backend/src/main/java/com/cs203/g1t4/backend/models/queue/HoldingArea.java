@@ -26,13 +26,10 @@ public class HoldingArea {
   private String eventId;
 
   @NotBlank
-  private List<String> fans;
+  private List<String> earlyQueue;
 
   @NotBlank
-  private List<String> regulars;
-
-  @NotBlank
-  private boolean isEarlyHolder;
+  private List<String> normalQueue;
 
   @NotBlank
   private Integer queuesToPurchase;

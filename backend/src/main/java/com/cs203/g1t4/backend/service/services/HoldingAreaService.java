@@ -8,7 +8,7 @@ import com.cs203.g1t4.backend.models.queue.QueueStatus;
 import com.cs203.g1t4.backend.models.queue.QueueingStatusValues;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -18,13 +18,11 @@ public interface HoldingAreaService {
 
     public Response getQueueStatus(String username, String eventId);
 
+    public void enterQueue(String userId, int queueId, String eventId);
+
     public Response getQueueSizes(String eventId);
 
     public QueueingStatusValues moveUserToPurchase(String queueStatusId, int queuesToPurchase);
-
-    public HoldingArea makeQueuesInHoldingArea(HoldingArea holdingArea, String userId);
-
-    public void changeStatus(List<String> listToUpdate, int percentageChange, String eventId, int newQueueId);
 
     public Optional<QueueStatus> findQueueStatusOfUser(String username, String eventId);
 
@@ -34,7 +32,7 @@ public interface HoldingAreaService {
 
     public Event verifyEventId(String eventId);
 
-    public void verifyPurchaseValidity(Event event);
+    public boolean timeBetween(LocalDateTime current, LocalDateTime start, LocalDateTime end);
 
     public boolean verifyFan(String userId, String artistId);
 
