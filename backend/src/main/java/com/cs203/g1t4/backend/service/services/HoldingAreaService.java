@@ -20,7 +20,7 @@ public interface HoldingAreaService {
 
     public void enterQueue(String userId, int queueId, String eventId);
 
-    public Response getQueueSizes(String eventId);
+    public Response getQueueSizes(String eventId, String userId);
 
     public QueueingStatusValues moveUserToPurchase(String queueStatusId, int queuesToPurchase);
 

@@ -36,8 +36,8 @@ public class QueueController {
     }
 
     @GetMapping("/sizes/{eventId}")
-    public ResponseEntity<Response> getSizesOfQueue(@PathVariable String eventId) {
-        Response queueSizes = holdingAreaService.getQueueSizes(eventId);
+    public ResponseEntity<Response> getSizesOfQueue(@PathVariable String eventId, @AuthenticationPrincipal UserDetails userDetails) {
+        Response queueSizes = holdingAreaService.getQueueSizes(eventId, userDetails.getUsername());
 
         return ResponseEntity.ok(queueSizes);
     }

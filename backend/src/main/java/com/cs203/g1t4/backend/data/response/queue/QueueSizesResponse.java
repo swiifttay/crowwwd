@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QueueSizesResponse implements Response {
-    private int countHolding;
-    private int countPending;
+    private int userPosition;
+    private int total;
 }
