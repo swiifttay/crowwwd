@@ -268,7 +268,8 @@ export default function UserProfile() {
                       <VerticalCard
                         key={i}
                         image={artist.artistImageURL}
-                        name={artist.name}
+                        firstName={artist.name}
+                        lastName=""
                       />
                     );
                   })}
@@ -366,7 +367,7 @@ export default function UserProfile() {
         </div>
       </div>
 
-      <div className="flex flex-col w-full">
+      {/* <div className="flex flex-col w-full">
         <div className="text-xl font-bold mb-4 mt-16">Friends</div>
         <div className="flex overflow-x-auto max-w-full mb-32 px-4">
           <div className="flex gap-5">
@@ -377,7 +378,7 @@ export default function UserProfile() {
             <VerticalCard image="/images/TaylorSwift.jpg" name="Taylor Swift" />
           </div>
         </div>
-      </div>
+      </div> */}
       <UserFriends />
     </main>
   );
