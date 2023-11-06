@@ -126,7 +126,12 @@ export const getEvent = async (eventId: string) => {
       console.error(error.response);
     }
   }
-}
+};
+
+export const concertDetails = async (eventId: string) => {
+  const response = await api.get(`/event/detailsEvent/${eventId}`);
+  return response;
+};
 
 //User Profile Page
 

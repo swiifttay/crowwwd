@@ -3,8 +3,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  getEvent
-} from "../../axios/apiService";
+  getEvent,
+  concertDetails } from "../../axios/apiService";
+import { StringLiteral } from "typescript";
 
 export interface Venue {
   venueId: string;
@@ -52,6 +53,7 @@ export default function EventDetails({ params }: {params: {eventId: string}}) {
     console.log("going to queue");
     router.push("/queue");
   };
+
 
 
   return (

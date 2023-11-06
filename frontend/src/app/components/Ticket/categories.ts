@@ -36,7 +36,7 @@ export const catE = new L.Icon({
     iconSize: [290, 290], 
     iconAnchor: [145, 145], 
   });
-
+  
 export const catF = new L.Icon({
   iconUrl: "/svg/catF.svg",
   iconSize: [280, 270],

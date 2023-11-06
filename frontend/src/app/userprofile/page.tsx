@@ -16,6 +16,8 @@ import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
 import VerticalCard from "./VerticalCard";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { StringLiteral } from "typescript";
+import React from "react";
 
 export interface User {
   id: string;

@@ -35,4 +35,10 @@ public class QueueController {
         return ResponseEntity.ok(isNextInQueue);
     }
 
+    @GetMapping("/sizes/{eventId}")
+    public ResponseEntity<Response> getSizesOfQueue(@PathVariable String eventId) {
+        Response queueSizes = holdingAreaService.getQueueSizes(eventId);
+
+        return ResponseEntity.ok(queueSizes);
+    }
 }
