@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios';
 import { BiLoaderAlt } from 'react-icons/bi';
 import { Order } from '@/app/payment/[orderId]/page';
-import { confirmSeats, deleteOrderByOrderId, fetchOrderByPaymentId } from '@/app/axios/apiService';
+import { approvedFriend, confirmSeats, deleteOrderByOrderId, fetchOrderByPaymentId } from '@/app/axios/apiService';
 
 
 export interface SeatsConfirmRequest { 
@@ -17,13 +17,17 @@ export interface SeatsConfirmRequest {
 const ProcessingPage = ({ clientSecret, paymentID }: any) => {
   const[message, setMessage] = useState("");
   const[order, setOrder] = useState<Order>();
+  const [friendsList, setFriendsList] = useState<string[]>();
 
 
   const router = useRouter()
   
   const stripe = useStripe();
-    
-  const get
+
+  const getFriendList = async () =>{
+    const response = await approvedFriend();
+    setFriendsList(response.data);
+  }
   
   const confirmPayment = () => {
     const confirmParam: SeatsConfirmRequest = {
@@ -50,6 +54,7 @@ const ProcessingPage = ({ clientSecret, paymentID }: any) => {
   
 
   useEffect(() => {
+    //set order on receiving paymentId
     fetchOrderByPaymentId(paymentID).then((response) => {setOrder(response.data)})
     
 

@@ -41,6 +41,7 @@ export default function App({ params }: { params: { orderId: string } }) {
     fetchOrderByOrderId(orderId).then((response)=> {setOrder(response.data)})
 
     setTotalCost(order?.totalCost); // change to order?.totalCost
+    console.log(totalCost)
 
 
     const paymentIntent = async () => {
@@ -56,7 +57,7 @@ export default function App({ params }: { params: { orderId: string } }) {
     }
     paymentIntent();
 
-  }, [orderId, totalCost]);
+  }, []);
 
   const appearance = {
     theme: 'stripe',

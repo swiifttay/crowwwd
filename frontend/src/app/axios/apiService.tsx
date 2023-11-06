@@ -238,5 +238,14 @@ export const confirmSeats = async (SeatsConfirmRequest:
     }
   }
 
+  export const approvedFriend = async () => {
+    try {
+      const response = await api.get("/approvedFriend")
+      return response;
+    } catch(error){
+      return Promise.reject(error);
+    }
+  }
+
 
 
