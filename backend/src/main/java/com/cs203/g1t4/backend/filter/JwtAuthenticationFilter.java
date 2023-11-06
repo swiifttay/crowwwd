@@ -72,7 +72,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String username;
 
-        System.out.println(request.getServletPath());
         /*
          * Checks the following:
          * 1. Checks if the API path is in the array of whiteListed paths
@@ -81,7 +80,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
          *
          */
         if (isWhiteListed(request.getServletPath())) {
-            System.out.println("is white listed");
             /*
              * If condition is met, the filterChain continues processing the request and
              * response without any additional
@@ -95,9 +93,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // for this request.
             return;
         }
-
-        System.out.println("test");
-        System.out.println(authHeader);
+        
         // Obtains the JWT token from the String, substring(7) removes the "Bearer "
         // before the actual jwt token
         jwt = authHeader.substring(7);

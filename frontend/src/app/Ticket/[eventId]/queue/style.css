@@ -1,0 +1,9 @@
+.MuiSlider-root {
+  height: 90% !important;
+}
+
+.MuiSlider-thumb {
+  color: #1d90f4;
+  height: 140%;
+  width: 12%;
+}

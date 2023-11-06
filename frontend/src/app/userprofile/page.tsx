@@ -16,6 +16,7 @@ import VerticalCard from "../components/SearchFriend/VerticalCard";
 import Modal from "../components/UserProfile/Modal";
 import EventButtonLong from "./EventButtonLong";
 import EventButtonShort from "./EventButtonShort";
+import { useUserDetails } from "../contexts/UserDetailsContext";
 
 export interface User {
   id: string;
@@ -53,7 +54,7 @@ export interface Artist {
 }
 
 export default function UserProfile() {
-  const [user, setUser] = useState<User>();
+  const {user, setUser} = useUserDetails();
   const [fanRecords, setFanRecords] = useState<FanRecord[]>();
   const [favArtist, setFavArtist] = useState<Artist[]>();
 
@@ -100,10 +101,6 @@ export default function UserProfile() {
       setSpotifyButtonMsg("Connect to Spotify");
       setIsLoggedInSpotify(false);
     }
-  };
-
-  const handleUpdateProfile = async () => {
-    router.push("/updateprofile");
   };
 
   const handleSpotifyButton = async () => {
@@ -170,6 +167,9 @@ export default function UserProfile() {
     }
   };
 
+  const handleUpdateProfile = async () => {
+    router.push("/updateprofile");
+  };
   const [isOpen, setIsOpen] = useState(false);
   const [overlayOpacity, setOverlayOpacity] = useState(0);
 

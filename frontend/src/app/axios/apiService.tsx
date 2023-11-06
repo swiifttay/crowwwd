@@ -5,27 +5,9 @@ import axios from "axios";
 
 const api = axios.create({
   //TODO: backend to provide
-  baseURL: "http://localhost:8080/api",
+  baseURL: `http://localhost:8080/api`,
 });
 
-// api interceptor to place the jwt token
-// api.interceptors.request.use(
-//   (config) => {
-//     const token = localStorage.getItem('token');
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   (error) => {
-//     console.log({error});
-//     if (error.response?.data?.status === 500) {
-//       console.log("here");
-//       localStorage.removeItem('token');
-//     }
-//     return Promise.reject(error)
-//   }
-// );
 api.interceptors.request.use(async (config) => {
   try {
     const token = localStorage.getItem("token");
@@ -64,10 +46,6 @@ export const authenticate = async (credentials: {
   const response = await api.post("/auth/authenticate", credentials);
 
   // check if valid response
-  if (response.status === 200) {
-    const { token } = response.data;
-    localStorage.setItem("token", token);
-  }
 
   return response;
 };
