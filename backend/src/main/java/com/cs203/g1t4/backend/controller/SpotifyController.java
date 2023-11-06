@@ -2,7 +2,7 @@ package com.cs203.g1t4.backend.controller;
 
 
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.models.exceptions.InvalidSpotifyAccountException;
+import com.cs203.g1t4.backend.models.exceptions.unauthorisedLoginException.InvalidSpotifyAccountException;
 import com.cs203.g1t4.backend.service.services.SpotifyService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;

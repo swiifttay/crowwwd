@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
+import com.cs203.g1t4.backend.models.exceptions.unauthorisedLoginException.InvalidTokenException;
 
 @Service
 public interface ProfileService {

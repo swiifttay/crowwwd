@@ -3,8 +3,9 @@ package com.cs203.g1t4.backend.service.services;
 import com.cs203.g1t4.backend.data.request.user.AuthenticationRequest;
 import com.cs203.g1t4.backend.data.request.user.RegisterRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.models.exceptions.DuplicatedUsernameException;
-import com.cs203.g1t4.backend.models.exceptions.InvalidCredentialsException;
+import com.cs203.g1t4.backend.models.exceptions.duplicatedException.DuplicatedUsernameException;
+import com.cs203.g1t4.backend.models.exceptions.unauthorisedLoginException.InvalidCredentialsException;
+
 import org.springframework.stereotype.Service;
 
 @Service

@@ -2,7 +2,11 @@ package com.cs203.g1t4.backend.service.services;
 
 import com.cs203.g1t4.backend.data.request.friend.FriendRequest;
 import com.cs203.g1t4.backend.data.response.Response;
-import com.cs203.g1t4.backend.models.exceptions.*;
+import com.cs203.g1t4.backend.models.exceptions.duplicatedException.DuplicatedFriendException;
+import com.cs203.g1t4.backend.models.exceptions.invalidFieldsException.FriendNotFoundException;
+import com.cs203.g1t4.backend.models.exceptions.invalidIdException.InvalidUserIdException;
+import com.cs203.g1t4.backend.models.exceptions.unauthorisedLoginException.InvalidTokenException;
+
 import org.springframework.stereotype.Service;
 
 @Service
