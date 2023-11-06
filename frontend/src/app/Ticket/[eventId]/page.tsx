@@ -50,7 +50,8 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
   //Change seat quntity available for selection by user
   useEffect(() => {
     const availableSeatsDefined = category?.availableSeats ?? 0;
-    const numSeatsAvailable = availableSeatsDefined > 4 ? 4 : availableSeatsDefined;
+    const numSeatsAvailable =
+      availableSeatsDefined > 4 ? 4 : availableSeatsDefined;
     renderNumSeatsSelection(numSeatsAvailable);
   }, [category]);
 
@@ -69,9 +70,7 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
   }
 
   //makes api call to get seats for cat and seat qty.
-  function handleGetSeats() {
-
-  }
+  function handleGetSeats() {}
 
   return (
     <main className="w-11/12 mx-auto">
@@ -170,13 +169,22 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
                 className="bg-theme-blue-50 rounded-md border border-theme-light-blue w-full text-sm"
                 defaultValue="default"
               >
-                <option value="default" disabled>Select Qty</option>
+                <option value="default" disabled>
+                  Select Qty
+                </option>
                 {renderedNumSeats}
               </select>
             </div>
 
             <div className="col-span-2 border border-theme-grey object-center h-full flex justify-center items-center">
-              {isValidQuantity && <button className="h-fit w-fit rounded-md py-1 px-4 text-sm bg-theme-blue-50 hover:bg-theme-light-blue" onClick={handleGetSeats}>Find Best Seats</button>}
+              {isValidQuantity && (
+                <button
+                  className="h-fit w-fit rounded-md py-1 px-4 text-sm bg-theme-blue-50 hover:bg-theme-light-blue"
+                  onClick={handleGetSeats}
+                >
+                  Find Best Seats
+                </button>
+              )}
             </div>
           </div>
         </section>

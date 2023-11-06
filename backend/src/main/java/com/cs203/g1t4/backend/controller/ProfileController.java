@@ -1,13 +1,10 @@
 package com.cs203.g1t4.backend.controller;
 
+import com.cs203.g1t4.backend.service.serviceImpl.ProfileServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cs203.g1t4.backend.data.request.user.UpdateProfileRequest;
 import com.cs203.g1t4.backend.data.response.Response;
@@ -25,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final ProfileServiceImpl profileServiceImpl;
     private final CommonService commonService;
 
     @PutMapping("/updateProfile")
@@ -52,6 +50,15 @@ public class ProfileController {
         Response response = profileService.findProfile(username);
 
         //If successful, the response is encapsulated with HTTP code of 200(ok) and contains the User object
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/searchProfile/{username}")
+    public ResponseEntity<Response> searchProfile(@PathVariable String username) {
+        // Find a profile based on the username provided
+        // Throws a InvalidUsername if username cannot be found in repository
+        Response response = profileService.searchProfile(username);
+
         return ResponseEntity.ok(response);
     }
 }

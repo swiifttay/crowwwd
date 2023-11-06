@@ -32,6 +32,19 @@ public class FriendController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/friend/{friendUsername}")
+    public ResponseEntity<Response> addFriend(@PathVariable String friendUsername, @AuthenticationPrincipal UserDetails userDetails) {
+
+        //Get the username from the userDetails of the authenticated user
+        String username = userDetails.getUsername();
+
+        //Provide information for FriendService to perform addFriend
+        Response response = friendService.addFriendByUsername(friendUsername, username);
+
+        //Else, return ok response
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("/friend")
     public ResponseEntity<Response> deleteFriend(@Valid @RequestBody FriendRequest friendRequest, @AuthenticationPrincipal UserDetails userDetails) {
 

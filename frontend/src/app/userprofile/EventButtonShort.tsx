@@ -13,7 +13,7 @@ const EventButtonShort: React.FC<EventButtonProps> = ({
 }) => {
   return (
     <div>
-      <button className="w-5/6 bg-zinc-900 hover:bg-zinc-800 text-white pt-1.5 pb-1 px-3 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]">
+      <button className="w-full bg-zinc-900 hover:bg-zinc-800 text-white pt-1.5 pb-1 px-3 rounded-lg drop-shadow-[1px_1px_2px_rgba(113,113,113)]">
         <div className="flex">
           <div className="mr-4">
             <Image
