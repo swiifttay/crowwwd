@@ -1,23 +1,25 @@
 package com.cs203.g1t4.backend.service.serviceImpl;
 
+import com.cs203.g1t4.backend.data.request.OrderRequest;
 import com.cs203.g1t4.backend.data.request.seat.FindSeatRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatCancelRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatsConfirmRequest;
 import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
 import com.cs203.g1t4.backend.data.response.Response;
+import com.cs203.g1t4.backend.data.response.SingleOrderResponse;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
-import com.cs203.g1t4.backend.data.response.seat.SeatResponse;
 import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
 import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
-import com.cs203.g1t4.backend.models.Category;
-import com.cs203.g1t4.backend.models.Seats;
-import com.cs203.g1t4.backend.models.Ticket;
+import com.cs203.g1t4.backend.models.*;
 import com.cs203.g1t4.backend.models.event.EventSeatingDetails;
 import com.cs203.g1t4.backend.models.exceptions.InvalidCategoryException;
+import com.cs203.g1t4.backend.models.exceptions.InvalidOrderIdException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidSeatingDetailsException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
+import com.cs203.g1t4.backend.repository.OrderRepository;
 import com.cs203.g1t4.backend.repository.SeatingDetailsRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
+import com.cs203.g1t4.backend.service.services.OrderService;
 import com.cs203.g1t4.backend.service.services.SeatingDetailsService;
 import com.cs203.g1t4.backend.service.services.SeatsService;
 import com.cs203.g1t4.backend.service.services.TicketService;
@@ -36,12 +38,17 @@ public class SeatsServiceImpl implements SeatsService {
     private final SeatingDetailsRepository seatingDetailsRepository;
     private final SeatingDetailsService seatingDetailsService;
     private final TicketService ticketService;
+    private final OrderService orderService;
+    private final OrderRepository orderRepository;
 
     private static final int NUM_SEATS_PER_ROW = 4;
     private static final int NUM_ROWS = 4;
 
-    public Response findSeats(final FindSeatRequest findSeatRequest)
+    public Response findSeats(final String username, final FindSeatRequest findSeatRequest)
             throws InvalidCategoryException, InvalidSeatingDetailsException {
+
+        //Obtain Paying User
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new InvalidTokenException());
 
         //Initialise variables
         String eventId = findSeatRequest.getEventId();
@@ -50,8 +57,11 @@ public class SeatsServiceImpl implements SeatsService {
         int numSeats = findSeatRequest.getNumSeats();
 
         //Create Seats to store information to be returned to frontend
-        Seats seats = Seats.builder()
+        OrderRequest orderRequest = OrderRequest.builder()
+                .payingUserId(user.getId())
                 .category(category)
+                .eventDate(findSeatRequest.getEventDate())
+                .eventId(findSeatRequest.getEventId())
                 .build();
 
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
@@ -62,10 +72,10 @@ public class SeatsServiceImpl implements SeatsService {
         Category cat = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category, eventDate.toString());
 
         //Obtain the pricePerSeat from cat
-        seats.setPricePerSeat(cat.getPrice());
+        orderRequest.setPricePerSeat(cat.getPrice());
 
         //Calculate total cost of seats and update in seats
-        seats.setTotalCost(seats.getPricePerSeat() * numSeats);
+        orderRequest.setTotalCost(orderRequest.getPricePerSeat() * numSeats);
 
         //Find seats using Seats Allocation
         List<String> seatAllocation = getSeats(numSeats, cat.getSeatsInformationString());
@@ -77,23 +87,28 @@ public class SeatsServiceImpl implements SeatsService {
         String updatedSeatsString = returnUpdatedSeatsString(cat.getSeatsInformationString(), seatAllocation, '2');
         seatingDetailsService.findAndUpdateSeatingDetails(eventId, category, updatedSeatsString, numSeats, eventDate);
 
-        //Update Seating allocation into seats
+        //Update Seating allocation into order
         String[] array = new String[seatAllocation.size()];
         for (int i = 0 ; i < seatAllocation.size() ; i++) {
             array[i] = seatAllocation.get(i);
         }
-        seats.setAllocatedSeats(array);
+        orderRequest.setSeats(array);
 
-        return SeatResponse.builder()
-                        .seats(seats)
+        Response response = orderService.createOrder(orderRequest);
+        Order order = ((SingleOrderResponse)response).getOrder();
+
+        return SingleOrderResponse.builder()
+                        .order(order)
                         .build();
     }
 
     public Response confirmSeats(final String username, final SeatsConfirmRequest seatsConfirmRequest) {
 
-        String eventId = seatsConfirmRequest.getEventId();
-        String category = seatsConfirmRequest.getCategory();
-        String eventDate = seatsConfirmRequest.getEventDate();
+        Order order = orderRepository.findById(seatsConfirmRequest.getOrderId())
+                .orElseThrow(() -> new InvalidOrderIdException(seatsConfirmRequest.getOrderId()));
+
+        String eventId = order.getEventId();
+        String category = order.getCategory();
 
         //Find User object from username
         userRepository.findByUsername(username).orElseThrow(() -> new InvalidTokenException());
@@ -106,18 +121,21 @@ public class SeatsServiceImpl implements SeatsService {
         Category c = seatingDetailsService.findCategoryFromEventSeatingDetails(eventSeatingDetails, category, eventDate);
 
         //Update Seats Allocation Pending status into the seatingDetails
-        List<String> allocatedSeats = seatsConfirmRequest.getAllocatedSeats();
+        List<String> allocatedSeats = List.of(order.getSeats());
         String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(),
                 allocatedSeats, '1');
         seatingDetailsService.confirmAndUpdateSeatingDetails(eventId, category, updatedSeatsString, eventDate);
 
         //Return Tickets
         List<Ticket> ticketList = new ArrayList<>();
-        List<TicketRequest> ticketRequestList = seatsConfirmRequest.returnTicketRequestListFromRequest(eventId);
+        List<TicketRequest> ticketRequestList = seatsConfirmRequest.returnTicketRequestListFromRequest(eventId, order);
         for (int i = 0 ; i < ticketRequestList.size() ; i++) {
             SingleTicketResponse singleTicketResponse = ticketService.createTicket(ticketRequestList.get(i), username);
             ticketList.add(singleTicketResponse.getTicket());
         }
+
+        //Update Order
+        orderService.updateOrder(order.getId(), seatsConfirmRequest.getPaymentId());
 
         return TicketResponse.builder()
                 .tickets(ticketList)
@@ -126,9 +144,11 @@ public class SeatsServiceImpl implements SeatsService {
 
     public Response cancelSeats(final SeatCancelRequest seatRequest) {
 
-        String eventId = seatRequest.getEventId();
-        String category = seatRequest.getCategory();
-        String eventDate = seatRequest.getEventDate();
+        Order order = orderRepository.findById(seatRequest.getOrderId())
+                .orElseThrow(() -> new InvalidOrderIdException(seatRequest.getOrderId()));
+
+        String eventId = order.getEventId();
+        String category = order.getCategory();
 
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
@@ -139,8 +159,11 @@ public class SeatsServiceImpl implements SeatsService {
 
         //Update Seats Allocation Pending status into the seatingDetails
         String updatedSeatsString = returnUpdatedSeatsString(c.getSeatsInformationString(),
-                seatRequest.getAllocatedSeats(), '0');
-        seatingDetailsService.deleteAndUpdateSeatingDetails(eventId, category, updatedSeatsString, seatRequest.getAllocatedSeats().size(), eventDate);
+                List.of(order.getSeats()), '0');
+        seatingDetailsService.deleteAndUpdateSeatingDetails(eventId, category, updatedSeatsString, List.of(order.getSeats()).size());
+
+        //Delete Order from repository
+        orderService.deleteByOrderId(order.getId());
 
         return SuccessResponse.builder()
                 .response("Seats cancelled.")

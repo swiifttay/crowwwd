@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST) // 400 Error
-public class DuplicateTicketException extends DuplicatedException {
+public class InvalidPaymentIdException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public DuplicateTicketException(String eventId, String userBuyerId) {
-        super("User " + userBuyerId + " already bought a maximum of 4 tickets for " + eventId + " event.");
+    public InvalidPaymentIdException(String id) {
+        super("Order with paymentId: " + id + " does not exists");
     }
 }

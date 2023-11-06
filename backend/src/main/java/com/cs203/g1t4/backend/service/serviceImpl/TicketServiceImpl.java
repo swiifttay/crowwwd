@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,14 +29,13 @@ public class TicketServiceImpl implements TicketService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());
 
-        // Check if the ticket already exists
-        Optional<Ticket> duplicateTicket = ticketRepository.findByEventIdAndUserIdAttending(ticketRequest.getEventId(), ticketRequest.getUserIdAttending());
-
-        if (duplicateTicket.isPresent()) {
-            throw new DuplicateTicketException(ticketRequest.getEventId(), ticketRequest.getUserIdAttending());
+        // Check if user has purchased 4 tickets already
+        List<Ticket> purchasedTickets = ticketRepository.findAllByEventIdAndUserIdBuyer(ticketRequest.getEventId(), user.getId());
+        if (purchasedTickets.size() > 4) {
+            throw new DuplicateTicketException(ticketRequest.getEventId(), user.getId());
         }
 
-       // Create the Ticket object
+        // Create the Ticket object
         Ticket ticket = ticketRequest.returnTicketFromRequest(user);
 
         //Saves ticket into database

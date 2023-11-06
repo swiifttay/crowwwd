@@ -20,9 +20,13 @@ public class SeatAllocationController {
     private final SeatsService seatsService;
 
     @GetMapping("/seat")
-    public ResponseEntity<Response> findSeats(@Valid @RequestBody FindSeatRequest findSeatRequest) {
+    public ResponseEntity<Response> findSeats(@AuthenticationPrincipal UserDetails userDetails,
+                                              @Valid @RequestBody FindSeatRequest findSeatRequest) {
 
-        Response response = seatsService.findSeats(findSeatRequest);
+        // Get the username from the userDetails of the authenticated user
+        String username = userDetails.getUsername();
+
+        Response response = seatsService.findSeats(username, findSeatRequest);
 
         return ResponseEntity.ok(response);
     }
