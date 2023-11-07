@@ -1,9 +1,10 @@
 package com.cs203.g1t4.backend.service.services;
 
-import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
-import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
 import org.springframework.stereotype.Service;
+
+import com.cs203.g1t4.backend.data.request.ticket.TicketRequest;
+import com.cs203.g1t4.backend.data.response.Response;
 
 @Service
 public interface TicketService {

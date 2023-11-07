@@ -11,27 +11,22 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ArtistService {
 
     // for manually adding a artist for event creation
-    Response addArtist(ArtistRequest request);
+    Response addArtist(ArtistRequest request, MultipartFile image);
 
+    // for the purpose of deleting an artist by id
     Response deleteArtistById(String artistId);
 
-
-    Response updateArtistById(String artistId, ArtistRequest request);
+    // for the purpose of updating an artist manually 
+    Response updateArtistById(String artistId, ArtistRequest request, MultipartFile image);
 
     // for the purpose of updating artist when there is call to them again
-    String updateArtistByName(Artist newArtist);
+    String updateSpotifyArtistByName(Artist newArtist, String originalArtist);
 
-    Response findArtistById(String artistId);
+    // for the purpose of getting the artist by their id
+    Response getArtistById(String artistId);
 
+    // for the purpose of getting all the artists in the database
     Response getAllArtist();
-
-    // for manual changing of picture
-    SuccessResponse uploadArtistImage(String artistId, MultipartFile multipartFile);
-
-    // depending on whether you are finding the image by spotify or by s3
-    SuccessResponse getArtistImageResponse(String artistId);
-
-    String getArtistImage(String artistId);
 
     // helper method
     String fanRecordsCreationAndUpdate(Artist artist);

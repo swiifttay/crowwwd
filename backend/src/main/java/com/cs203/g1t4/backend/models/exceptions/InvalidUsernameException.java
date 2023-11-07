@@ -9,6 +9,6 @@ public class InvalidUsernameException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public InvalidUsernameException(String username) {
-        super(username + " does not exist");
+        super("Username" + username + "is not found");
     }
 }
