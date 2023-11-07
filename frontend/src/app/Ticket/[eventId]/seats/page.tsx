@@ -4,6 +4,7 @@ import { Seats } from "../../../components/Ticket/selectCategory";
 import { getCategoryPrice, getEvent } from "../../../axios/apiService";
 import { Event } from "@/app/explore/page";
 import { CatPriceDisplay } from "../../../components/Ticket/CatPriceDisplay";
+import { useRouter } from "next/navigation";
 
 type CategoryAndPrice = {
   category: string;
@@ -11,14 +12,48 @@ type CategoryAndPrice = {
   availableSeats: number;
 };
 
+const defaultPrices: CategoryAndPrice[] = [
+  {
+    category: "A",
+    price: 100,
+    availableSeats: 2,
+  },
+  {
+    category: "B",
+    price: 80,
+    availableSeats: 10,
+  },
+  {
+    category: "C",
+    price: 70,
+    availableSeats: 10,
+  },
+  {
+    category: "D",
+    price: 60,
+    availableSeats: 10,
+  },
+  {
+    category: "E",
+    price: 60,
+    availableSeats: 10,
+  },
+  {
+    category: "F",
+    price: 30,
+    availableSeats: 5,
+  },
+];
+
 export default function Ticket({ params }: { params: { eventId: string } }) {
   const { eventId } = params;
-
+  const router = useRouter();
   const [category, setCategory] = useState<CategoryAndPrice>();
   const [event, setEvent] = useState<Event>();
-  const [prices, setPrices] = useState<CategoryAndPrice[]>([]);
+  const [prices, setPrices] = useState<CategoryAndPrice[]>(defaultPrices);
   const [isValidQuantity, setIsValidQuantity] = useState(false);
   const [renderedNumSeats, setRenderedNumSeats] = useState<JSX.Element[]>([]);
+  const [showTicket, setShowTicket] = useState(false);
   const ticketRef = useRef<HTMLSelectElement | null>(null);
 
   useEffect(() => {
@@ -26,7 +61,9 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
     const fetchPrices = async () => {
       const res = await getCategoryPrice(eventId);
       //console.log(res);
-      setPrices(res.seatingDetails.categories);
+      if (res && res.seatingDetails) {
+        setPrices(res.seatingDetails.categories);
+      }
     };
 
     //fetch the event based on eventId. Then calls fetchPrices.
@@ -70,7 +107,14 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
   }
 
   //makes api call to get seats for cat and seat qty.
-  function handleGetSeats() {}
+  function handleGetSeats() {
+    setShowTicket(true);
+  }
+
+  function handleCheckout() {
+    console.log("to payment gateway");
+    router.push('/payment/654984096969b4e7b4e545b0');
+  }
 
   return (
     <main className="w-11/12 mx-auto">
@@ -188,6 +232,22 @@ export default function Ticket({ params }: { params: { eventId: string } }) {
             </div>
           </div>
         </section>
+      )}
+      {showTicket && (
+        <div className="grid grid-rows-2 w-1/5">
+          <div className="row-span-1 bg-theme-blue-50 text-center">
+            Allocated Tickets
+          </div>
+          <div className="guide text-center flex p-2">
+            {"A3, A7"}
+            <button
+              className="bg-theme-blue h-fit w-fit rounded-md py-1 px-4 mx-3 text-sm hover:bg-theme-light-blue"
+              onClick={handleCheckout}
+            >
+              Checkout
+            </button>
+          </div>
+        </div>
       )}
     </main>
   );
