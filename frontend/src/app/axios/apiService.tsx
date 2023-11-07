@@ -1,4 +1,5 @@
 import axios from "axios";
+import { SeatsConfirmRequest } from "../components/Processing/ProcessingPage";
 // import { Event } from "../explore/page";
 // import { Concert } from "../explore/page";
 // import { User } from "../userprofile/page";
@@ -28,7 +29,7 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.data?.status === 500) {
       console.log("Handling 500 error");
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
       // return a false value that shows that the token was invalid
       // return false;
     }
@@ -36,6 +37,7 @@ api.interceptors.response.use(
     return error.response;
   },
 );
+
 
 //Login
 export const authenticate = async (credentials: {
@@ -183,30 +185,64 @@ export const updateFanRecords = async () => {
   }
 };
 
-export const updateUserProfile = async (updateDetails: {
-  firstName: string;
-  lastName: string;
-  username: string | null;
-  email: string;
-  oldPassword: string | null;
-  newPassword: string | null;
-  repeatNewPassword: string | null;
-  countryOfResidence: string;
-  city: string;
-  state: string;
-  address: string;
-  postalCode: string;
-  phoneNo: string;
-}) => {
+export const fetchOrderByOrderId = async (orderId: string) => {
   try {
-    const response = await api.put("/profile/updateProfile", updateDetails);
+    const response = await api.get(`/order/${orderId}`);
     return response;
-  } catch (error) {
+  } catch(error){
     return Promise.reject(error);
   }
-};
+
+}
+
+export const updateOrder = async (orderId: string, paymentId: string|undefined) => {
+  try {
+    const response = await api.put(`/order/${orderId}/payment/${paymentId}`);
+    return response;
+  } catch(error){
+    return Promise.reject(error);
+  }
+}
+
+export const fetchOrderByPaymentId = async (paymentId: string) => {
+  try {
+    const response = await api.get(`/orderPayment/${paymentId}`);
+    return response;
+  } catch(error){
+    return Promise.reject(error);
+  }
+}
+
+
+export const confirmSeats = async ({orderId, paymentId, userIdsAttending, noOfSurpriseTickets}: SeatsConfirmRequest) => {
+  try {
+    const response = await api.put("/seat", {orderId, paymentId, userIdsAttending, noOfSurpriseTickets});
+    return response;
+  } catch(error){
+    return Promise.reject(error);
+  }
+}
+
+  export const deleteOrderByOrderId = async (orderId:string|undefined) => {
+    try {
+      const response = await api.delete(`/order/${orderId}`)
+      return response;
+    } catch(error){
+      return Promise.reject(error);
+    }
+  }
+
+  export const approvedFriend = async () => {
+    try {
+      const response = await api.get("/approvedFriend")
+      return response;
+    } catch(error){
+      return Promise.reject(error);
+    }
+  }
 
 export const getCategoryPrice = async (eventId: string) => {
   const res = await api.get(`/event/${eventId}/event-seating-details`);
   return res.data;
 };
+
