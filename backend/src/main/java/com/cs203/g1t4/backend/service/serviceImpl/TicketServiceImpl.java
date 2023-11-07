@@ -39,7 +39,7 @@ public class TicketServiceImpl implements TicketService {
 
         // Check if user has purchased 4 tickets already
         List<Ticket> purchasedTickets = ticketRepository.findAllByEventIdAndUserIdBuyer(ticketRequest.getEventId(), user.getId());
-        if (purchasedTickets.size() > 4) {
+        if (purchasedTickets.size() >= 4) {
             throw new DuplicateTicketException(ticketRequest.getEventId(), user.getId());
         }
 

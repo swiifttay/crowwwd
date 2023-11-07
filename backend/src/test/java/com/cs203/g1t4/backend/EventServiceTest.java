@@ -63,6 +63,8 @@ public class EventServiceTest {
 
     Artist customArtist;
 
+    FullEvent customFullEvent;
+
     Venue venue;
 
 
@@ -105,6 +107,30 @@ public class EventServiceTest {
                 .postalCode("S123456")
                 .description("Singapores beautiful national stadium")
                 .venueImageName("NationalStadiumImage")
+                .build();
+
+        List<String> dateList = new ArrayList<>();
+        for (LocalDateTime date : customEvent.getDates()) {
+            dateList.add(date.toString());
+        }
+
+        List<String> salesDateList = new ArrayList<>();
+        for (LocalDateTime date : customEvent.getTicketSalesDate()) {
+            salesDateList.add(date.toString());
+        }
+
+        customFullEvent = FullEvent.builder()
+                .eventId("1234")
+                .alias("alias")
+                .name("The Eras Tour")
+                .eventImageName("theerastourimage")
+                .description("description")
+                .dates(dateList)
+                .venue(venue)
+                .categories(new ArrayList<String>())
+                .artist(customArtist)
+                .seatingImagePlan("theerastourseatingplanimage")
+                .ticketSalesDate(salesDateList)
                 .build();
 
         image = mock(MultipartFile.class);
@@ -221,20 +247,6 @@ public class EventServiceTest {
 
     @Test
     void deleteFullEvent_ExistingEvent_ReturnSingleEventResponse() {
-
-        // arrange
-        FullEvent customFullEvent = FullEvent.builder()
-                        .eventId("1234")
-                        .name("The Eras Tour")
-                        .eventImageName("theerastourimage")
-                        .description("description")
-                        .dates(new ArrayList<String>())
-                        .venue(venue)
-                        .categories(new ArrayList<String>())
-                        .artist(customArtist)
-                        .seatingImagePlan("theerastourseatingplanimage")
-                        .ticketSalesDate(new ArrayList<String>())
-                        .build();
 
         // mock eventRepository "findById" operation
         when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
@@ -379,6 +391,7 @@ public class EventServiceTest {
 
         FullEvent fullEvent = FullEvent.builder()
                 .eventId("1234")
+                .alias("alias")
                 .name("The Eras Tour")
                 .eventImageName("theerastourimage")
                 .description("description")
@@ -457,30 +470,6 @@ public class EventServiceTest {
         // arrange
         String alias = "alias";
 
-        List<String> dateList = new ArrayList<>();
-        for (LocalDateTime date : customEvent.getDates()) {
-            dateList.add(date.toString());
-        }
-
-        List<String> salesDateList = new ArrayList<>();
-        for (LocalDateTime date : customEvent.getTicketSalesDate()) {
-            salesDateList.add(date.toString());
-        }
-
-        FullEvent fullEvent = FullEvent.builder()
-                .eventId("1234")
-                .alias("alias")
-                .name("The Eras Tour")
-                .eventImageName("theerastourimage")
-                .description("description")
-                .dates(dateList)
-                .venue(venue)
-                .categories(new ArrayList<String>())
-                .artist(customArtist)
-                .seatingImagePlan("theerastourseatingplanimage")
-                .ticketSalesDate(salesDateList)
-                .build();
-
         // mock eventRepository "findByAlias" operation
         when(eventRepository.findByAlias(any(String.class))).thenReturn(Optional.of(customEvent));
 
@@ -494,7 +483,7 @@ public class EventServiceTest {
 
         assertTrue(response instanceof SingleFullEventResponse);
         SingleFullEventResponse singleFullEventResponse = (SingleFullEventResponse) response;
-        assertEquals(fullEvent, singleFullEventResponse.getFullEvent());
+        assertEquals(customFullEvent, singleFullEventResponse.getFullEvent());
     }
 
 //    @Test

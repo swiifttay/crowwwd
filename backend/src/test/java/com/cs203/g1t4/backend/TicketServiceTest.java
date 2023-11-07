@@ -10,12 +10,16 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.cs203.g1t4.backend.service.serviceImpl.TicketServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -38,20 +42,20 @@ import com.cs203.g1t4.backend.service.services.TicketService;
 @ExtendWith(MockitoExtension.class)
 public class TicketServiceTest {
 
-    @Spy
+    @Mock
     private TicketRepository ticketRepository;
 
-    @Spy
+    @Mock
     private UserRepository userRepository;
 
-    @Spy
+    @Mock
     private EventRepository eventRepository;
 
     @InjectMocks
-    private TicketService ticketService;
+    private TicketServiceImpl ticketService;
 
     @Test
-    void createTicket_UserFoundNoDuplicates_ReturnSuccessResponse() {
+    void createTicket_UserFoundLessThan4Purchased_ReturnSuccessResponse() {
 
         // arrange
         User user = User.builder()
@@ -69,18 +73,21 @@ public class TicketServiceTest {
                 .userIdAttending("1234")
                 .eventId("1234")
                 .userIdBuyer(user.getId())
-                .seatNo("01A")
                 .isSurpriseTicket(false)
                 .build();
+
+        ArgumentCaptor<Ticket> ticketCaptor = ArgumentCaptor.forClass(Ticket.class);
 
         // mock userRepository "findByUsername" operation
         when(userRepository.findByUsername(any(String.class))).thenReturn(Optional.of(user));
 
         // mock ticketRepository "findByEventIdAndUserIdAttending" operation
-        when(ticketRepository.findByEventIdAndUserIdAttending(any(String.class), any(String.class))).thenReturn(Optional.empty());
+        when(ticketRepository.findAllByEventIdAndUserIdBuyer(any(String.class), any(String.class))).thenReturn(List.of());
 
         // mock "save" operation
-        when(ticketRepository.save(any(Ticket.class))).thenReturn(ticket);
+        when(ticketRepository.save(ticketCaptor.capture())).thenAnswer(invocation -> {
+            return ticketCaptor.getValue();
+        });
 
         // act
         Response response = ticketService.createTicket(ticketRequest, user.getUsername());
@@ -88,10 +95,10 @@ public class TicketServiceTest {
         // assert
         assertTrue(response instanceof SingleTicketResponse);
         SingleTicketResponse singleTicketResponse = (SingleTicketResponse) response;
-        assertNotNull(singleTicketResponse.getTicket());
+        assertEquals(ticket, singleTicketResponse.getTicket());
         verify(userRepository).findByUsername(user.getUsername());
-        verify(ticketRepository).findByEventIdAndUserIdAttending(ticket.getEventId(), user.getId());
-        verify(ticketRepository).save(ticket);
+        verify(ticketRepository).findAllByEventIdAndUserIdBuyer(ticket.getEventId(), user.getId());
+        verify(ticketRepository).save(ticketCaptor.getValue());
     }
 
     @Test
@@ -120,7 +127,7 @@ public class TicketServiceTest {
     }
 
     @Test
-    void createTicket_UserFoundDuplicateTicket_DuplicateTicketExceptionThrown() {
+    void createTicket_UserFoundMoreThan4Purchased_DuplicateTicketExceptionThrown() {
 
         // arrange
         User user = User.builder()
@@ -137,11 +144,18 @@ public class TicketServiceTest {
                 .eventId("1234")
                 .userIdAttending("1234").build();
 
+        // simulate 4 purchased tickets found
+        List<Ticket> ticketList = new ArrayList<>();
+        ticketList.add(ticket);
+        ticketList.add(ticket);
+        ticketList.add(ticket);
+        ticketList.add(ticket);
+
         // mock userRepository "findByUsername" operation
         when(userRepository.findByUsername(any(String.class))).thenReturn(Optional.of(user));
 
         // mock ticketRepository "findByEventIdAndUserIdAttending" operation
-        when(ticketRepository.findByEventIdAndUserIdAttending(any(String.class), any(String.class))).thenReturn(Optional.of(ticket));
+        when(ticketRepository.findAllByEventIdAndUserIdBuyer(any(String.class), any(String.class))).thenReturn(ticketList);
 
         DuplicateTicketException e = assertThrows(DuplicateTicketException.class, () -> {
             // act
@@ -149,9 +163,9 @@ public class TicketServiceTest {
         });
 
         // assert
-        assertEquals("User 1234 already bought a ticket for 1234 event.", e.getMessage());
+        assertEquals("User 1234 already bought a maximum of 4 tickets for 1234 event.", e.getMessage());
         verify(userRepository).findByUsername(user.getUsername());
-        verify(ticketRepository).findByEventIdAndUserIdAttending(ticket.getEventId(), user.getId());
+        verify(ticketRepository).findAllByEventIdAndUserIdBuyer(ticket.getEventId(), user.getId());
     }
 
     @Test
@@ -559,7 +573,7 @@ public class TicketServiceTest {
         });
 
         // assert
-        assertEquals("Event with eventId: 1234 does not exists", e.getMessage());
+        assertEquals("Event with eventId: 1234 does not exist", e.getMessage());
         verify(eventRepository).findById(event.getId());
     }
 }
