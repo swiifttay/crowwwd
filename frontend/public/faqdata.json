@@ -5,18 +5,17 @@
     [
       {
         "idx": 0,
-        "question": "Question 1",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Non odio euismod lacinia at quis risus sed vulputate. Viverra ipsum nunc aliquet bibendum enim facilisis. Massa enim nec dui nunc mattis enim."
+        "question": "Where can I purchase tickets?",
+        "answer": "You can purchase the tickets on our website. This can be done by going to the explore page and selecting the event you want tickets to. When ticketing sales for that event opens, you will be allowed to enter the queue for the ticket and subsequently purchase the ticket"
       },
       {
         "idx": 1,
-        "question": "Question 2",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "Am I able to choose my seats when purchasing online?",
+        "answer": "n order to facilitate a fast and efficient online purchase process for fans, our system automatically assigns the \"Best available\" option to each fan based on the price category they have chosen."
       },
       {
-        "idx": 2,
-        "question": "Question 3",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "I want to purchase tickets. Why is there a ticket limit?",
+        "answer": "In essence, our goal is to ensure that every individual has an equal opportunity to purchase tickets. The ticket limits are implemented to prevent the first person in line from purchasing all the seats, leaving none for others. These limits are in place to promote fairness and reduce the occurrence of ticket scalping."
       }
     ]
   },
@@ -27,17 +26,17 @@
       {
         "idx": 0,
         "question": "Can I get a refund for my ticket?",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "answer": "Please submit a support ticket and proceed from there."
       },
       {
         "idx": 1,
-        "question": "Question 2",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "How do I transfer ticket(s)?",
+        "answer": "You can transfer tickets to your friend through your profile page."
       },
       {
         "idx": 2,
-        "question": "Question 3",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "How do I confirm that my booking has been made/is successful?",
+        "answer": "You can view your ticket bookings on your profile page."
       }
     ]
   },
@@ -48,17 +47,17 @@
       {
         "idx": 0,
         "question": "What payment options are available?",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "answer": "You can pay via Visa/Mastercard credit/debit cards and GrabPay"
       },
       {
         "idx": 1,
-        "question": "Question 2",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "What happens if an event is cancelled or postponed?",
+        "answer": "We will inform how to proceed via email."
       },
       {
         "idx": 2,
-        "question": "Question 3",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "The card used to purchase the ticket(s) has expired. Can I still get my refund?",
+        "answer": "Please submit a support ticket and proceed from there."
       }
     ]
   },
@@ -68,18 +67,18 @@
     [
       {
         "idx": 0,
-        "question": "How do I get a girlfriend?",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "Why should I use CrowwwdSync over other ticketing applications?",
+        "answer": "CrowwwdSync is the best ticketing application and provides fair and reliable ticketing."
       },
       {
         "idx": 1,
-        "question": "Question 2",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "What browser is recommended for the optimum use of the website?",
+        "answer": "Mozilla Firefox, Google Chrome, Safari, Opera"
       },
       {
         "idx": 2,
-        "question": "Question 3",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "Can CrowwwdSync make decisions pertaining to the event(s)?",
+        "answer": "CrowwwdSync does not make any decisions pertaining to the event and only acts as a ticket distributor."
       }
     ]
   },
@@ -90,17 +89,17 @@
       {
         "idx": 0,
         "question": "Can I delete my account?",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "answer": "Yes you are able to do so"
       },
       {
         "idx": 1,
-        "question": "Question 2",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "How to change my password for My Account?",
+        "answer": "You can do so via the update profile button on the profile page"
       },
       {
         "idx": 2,
-        "question": "Question 3",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "Can I change/amend my address?",
+        "answer": "You can do so via the update profile button on the profile page"
       }
     ]
   },
@@ -110,18 +109,18 @@
     [
       {
         "idx": 0,
-        "question": "Can I have your number please?",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "Is there a physical outlet where we can visit?",
+        "answer": "Not currently."
       },
       {
         "idx": 1,
-        "question": "Question 2",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "How to contact us?",
+        "answer": "You can contact us via email at crowwwdsync@gmail.com"
       },
       {
         "idx": 2,
-        "question": "Question 3",
-        "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        "question": "How do I submit a support ticket?",
+        "answer": "You can either send an email to crowwwdsync@gmail.com or submit a ticket via the submit ticket link."
       }
     ]
   }
