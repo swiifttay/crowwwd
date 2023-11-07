@@ -28,6 +28,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,17 +70,27 @@ public class EventServiceTest {
     void setUp() {
 
         // arrange
+        List<LocalDateTime> customDateList = new ArrayList<>();
+        List<LocalDateTime> customSalesDateList = new ArrayList<>();
+
+        customDateList.add(LocalDateTime.parse("2023-12-01T00:00:00"));
+        customDateList.add(LocalDateTime.parse("2023-12-02T00:00:00"));
+
+        customSalesDateList.add(LocalDateTime.parse("2023-11-01T00:00:00"));
+        customSalesDateList.add(LocalDateTime.parse("2023-11-02T00:00:00"));
+
         customEvent = Event.builder()
                 .id("1234")
+                .alias("alias")
                 .name("The Eras Tour")
                 .eventImageName("theerastourimage")
                 .description("description")
-                .dates(new ArrayList<LocalDateTime>())
+                .dates(customDateList)
                 .venue("1234")
                 .categories(new ArrayList<String>())
                 .artistId("1234")
                 .seatingImagePlan("theerastourseatingplanimage")
-                .ticketSalesDate(new ArrayList<LocalDateTime>())
+                .ticketSalesDate(customSalesDateList)
                 .build();
 
         customArtist = Artist.builder()
@@ -102,14 +113,14 @@ public class EventServiceTest {
     }
 
     @Test
-    void addEvent_NewEvent_ReturnSuccessResponse() {
+    void addFullEvent_NewEvent_ReturnSuccessResponse() {
 
         // arrange
         EventRequest eventRequest = EventRequest.builder()
                 .name("Music of Spheres Tour")
                 .eventImageName("musicofspherestourimage")
                 .description("description")
-                .dates(new String[]{"2023-11-01T00:00:00", "2023-11-02T00:00:00"})
+                .dates(new String[]{"2023-12-01T00:00:00", "2023-12-02T00:00:00"})
                 .venue(venue.getId())
                 .categories(new String[0])
                 .artistId("1234")
@@ -147,7 +158,7 @@ public class EventServiceTest {
     }
 
     @Test
-    void addEvent_ArtistNotFound_ReturnInvalidArtistIdException() {
+    void addFullEvent_ArtistNotFound_ReturnInvalidArtistIdException() {
 
         // arrange
         String invalidArtistId = "1235";
@@ -156,7 +167,7 @@ public class EventServiceTest {
                 .name("Music of Spheres Tour")
                 .eventImageName("musicofspherestourimage")
                 .description("description")
-                .dates(new String[]{"2023-11-01T00:00:00", "2023-11-02T00:00:00"})
+                .dates(new String[]{"2023-12-01T00:00:00", "2023-12-02T00:00:00"})
                 .venue(venue.getId())
                 .categories(new String[0])
                 .artistId(invalidArtistId)
@@ -176,18 +187,18 @@ public class EventServiceTest {
     }
 
     @Test
-    void addEvent_DuplicateEvent_ReturnDuplicatedEventException() {
+    void addFullEvent_DuplicateEvent_ReturnDuplicatedEventException() {
         // arrange
         EventRequest eventRequest = EventRequest.builder()
                 .name("The Eras Tour")
                 .eventImageName("theerastourimage")
                 .description("description")
-                .dates(new String[0])
+                .dates(new String[]{"2023-12-01T00:00:00", "2023-12-02T00:00:00"})
                 .venue(venue.getId())
                 .categories(new String[0])
                 .artistId("1234")
                 .seatingImagePlan("theerastourseatingplanimage")
-                .ticketSalesDate(new String[0])
+                .ticketSalesDate(new String[]{"2023-11-01T00:00:00", "2023-11-02T00:00:00"})
                 .build();
 
         // mock venueRepository "findById" operation
@@ -209,7 +220,7 @@ public class EventServiceTest {
     }
 
     @Test
-    void deleteEvent_ExistingEvent_ReturnSingleEventResponse() {
+    void deleteFullEvent_ExistingEvent_ReturnSingleEventResponse() {
 
         // arrange
         FullEvent customFullEvent = FullEvent.builder()
@@ -251,7 +262,7 @@ public class EventServiceTest {
     }
 
     @Test
-    void deleteEvent_InvalidEventId_ReturnInvalidEventIdException() {
+    void deleteFullEvent_InvalidEventId_ReturnInvalidEventIdException() {
 
         // arrange
         String invalidEventId = "1236";
@@ -270,7 +281,7 @@ public class EventServiceTest {
     }
 
     @Test
-    void deleteEvent_InvalidArtistId_ReturnInvalidArtistIdException() {
+    void deleteFullEvent_InvalidArtistId_ReturnInvalidArtistIdException() {
 
         // mock eventRepository "findById" operation
         when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
@@ -290,7 +301,7 @@ public class EventServiceTest {
     }
 
     @Test
-    void updateEventById_ValidUpdates_ReturnSingleEventResponse() {
+    void updateFullEventById_ValidUpdates_ReturnSingleEventResponse() {
 
         // arrange
         EventRequest updatedEventRequest = EventRequest.builder()
@@ -352,67 +363,140 @@ public class EventServiceTest {
         verify(eventRepository).save(eventCaptor.getValue());
     }
 
-//    @Test
-//    void findEventById_ExistingEvent_ReturnSingleEventResponse() {
-//
-//        // arrange
-//        OutputEvent outputEvent = customEvent.returnOutputEvent(customArtist);
-//
-//        // mock eventRepository "findById" operation
-//        when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
-//
-//        // mock artistRepository "findById" operation
-//        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(customArtist));
-//
-//        // act
-//        Response response = eventService.findEventById(customEvent.getId());
-//
-//        // assert
-//        assertTrue(response instanceof SingleEventResponse);
-//        SingleEventResponse singleEventResponse = (SingleEventResponse) response;
-//        assertEquals(outputEvent, singleEventResponse.getOutputEvent());
-//        verify(eventRepository).findById(customEvent.getId());
-//        verify(artistRepository).findById(customArtist.getId());
-//    }
-//
-//    @Test
-//    void findEventById_EventNotFound_ReturnInvalidEventIdException() {
-//
-//        // arrange
-//        String invalidEventId = "1236";
-//
-//        // mock eventRepository "findById" operation
-//        when(eventRepository.findById(any(String.class))).thenReturn(Optional.empty());
-//
-//        // act
-//        InvalidEventIdException e = assertThrows(InvalidEventIdException.class, () -> {
-//            eventService.findEventById(invalidEventId);
-//        });
-//
-//        // assert
-//        assertEquals("Event with eventId: 1236 does not exist", e.getMessage());
-//        verify(eventRepository).findById(invalidEventId);
-//    }
-//
-//    @Test
-//    void findEventById_ArtistNotFound_ReturnInvalidEventIdException() {
-//
-//        // mock eventRepository "findById" operation
-//        when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
-//
-//        // mock artistRepository "findById" operation
-//        when(artistRepository.findById(any(String.class))).thenReturn(Optional.empty());
-//
-//        // act
-//        InvalidArtistIdException e = assertThrows(InvalidArtistIdException.class, () -> {
-//            eventService.findEventById(customEvent.getArtistId());
-//        });
-//
-//        // assert
-//        assertEquals("Artist with artistId: 1234 does not exist", e.getMessage());
-//        verify(eventRepository).findById(customEvent.getArtistId());
-//    }
-//
+    @Test
+    void getFullEventById_ExistingEvent_ReturnSingleEventResponse() {
+
+        // arrange
+        List<String> dateList = new ArrayList<>();
+        for (LocalDateTime date : customEvent.getDates()) {
+            dateList.add(date.toString());
+        }
+
+        List<String> salesDateList = new ArrayList<>();
+        for (LocalDateTime date : customEvent.getTicketSalesDate()) {
+            salesDateList.add(date.toString());
+        }
+
+        FullEvent fullEvent = FullEvent.builder()
+                .eventId("1234")
+                .name("The Eras Tour")
+                .eventImageName("theerastourimage")
+                .description("description")
+                .dates(dateList)
+                .venue(venue)
+                .categories(new ArrayList<String>())
+                .artist(customArtist)
+                .seatingImagePlan("theerastourseatingplanimage")
+                .ticketSalesDate(salesDateList)
+                .build();
+
+        // mock eventRepository "findById" operation
+        when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
+
+        // mock artistRepository "findById" operation
+        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(customArtist));
+
+        // mock venueRepository "findById" operation
+        when(venueRepository.findById(any(String.class))).thenReturn((Optional.of(venue)));
+
+        // act
+        Response response = eventService.getFullEventById(customEvent.getId());
+
+        // assert
+        assertTrue(response instanceof SingleFullEventResponse);
+        SingleFullEventResponse singleFullEventResponse = (SingleFullEventResponse) response;
+        assertEquals(fullEvent, singleFullEventResponse.getFullEvent());
+        verify(eventRepository).findById(customEvent.getId());
+        verify(artistRepository).findById(customArtist.getId());
+        verify(venueRepository).findById(venue.getId());
+    }
+
+    @Test
+    void getFullEventById_EventNotFound_ReturnInvalidEventIdException() {
+
+        // arrange
+        String invalidEventId = "1236";
+
+        // mock eventRepository "findById" operation
+        when(eventRepository.findById(any(String.class))).thenReturn(Optional.empty());
+
+        // act
+        InvalidEventIdException e = assertThrows(InvalidEventIdException.class, () -> {
+            eventService.getFullEventById(invalidEventId);
+        });
+
+        // assert
+        assertEquals("Event with eventId: 1236 does not exist", e.getMessage());
+        verify(eventRepository).findById(invalidEventId);
+    }
+
+    @Test
+    void getFullEventById_ArtistNotFound_ReturnInvalidEventIdException() {
+
+        // mock eventRepository "findById" operation
+        when(eventRepository.findById(any(String.class))).thenReturn(Optional.of(customEvent));
+
+        // mock artistRepository "findById" operation
+        when(artistRepository.findById(any(String.class))).thenReturn(Optional.empty());
+
+        // act
+        InvalidArtistIdException e = assertThrows(InvalidArtistIdException.class, () -> {
+            eventService.getFullEventById(customEvent.getArtistId());
+        });
+
+        // assert
+        assertEquals("Artist with artistId: 1234 does not exist", e.getMessage());
+        verify(eventRepository).findById(customEvent.getId());
+        verify(artistRepository).findById(customEvent.getArtistId());
+    }
+
+
+    @Test
+    void getFullEventByAlias_ExistingEvent_ReturnSingleFullEventResponse() {
+
+        // arrange
+        String alias = "alias";
+
+        List<String> dateList = new ArrayList<>();
+        for (LocalDateTime date : customEvent.getDates()) {
+            dateList.add(date.toString());
+        }
+
+        List<String> salesDateList = new ArrayList<>();
+        for (LocalDateTime date : customEvent.getTicketSalesDate()) {
+            salesDateList.add(date.toString());
+        }
+
+        FullEvent fullEvent = FullEvent.builder()
+                .eventId("1234")
+                .alias("alias")
+                .name("The Eras Tour")
+                .eventImageName("theerastourimage")
+                .description("description")
+                .dates(dateList)
+                .venue(venue)
+                .categories(new ArrayList<String>())
+                .artist(customArtist)
+                .seatingImagePlan("theerastourseatingplanimage")
+                .ticketSalesDate(salesDateList)
+                .build();
+
+        // mock eventRepository "findByAlias" operation
+        when(eventRepository.findByAlias(any(String.class))).thenReturn(Optional.of(customEvent));
+
+        // mock artistRepository "findById" operation
+        when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(customArtist));
+
+        // mock venueRepository "findById"
+        when(venueRepository.findById(any(String.class))).thenReturn(Optional.of(venue));
+
+        Response response = eventService.getFullEventByAlias(alias);
+
+        assertTrue(response instanceof SingleFullEventResponse);
+        SingleFullEventResponse singleFullEventResponse = (SingleFullEventResponse) response;
+        assertEquals(fullEvent, singleFullEventResponse.getFullEvent());
+    }
+
 //    @Test
 //    void getAllEventsAfterToday_EventsAfterTodayFound_Return_EventResponse() {
 //

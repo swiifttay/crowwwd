@@ -9,6 +9,7 @@ import com.cs203.g1t4.backend.models.Artist;
 import com.cs203.g1t4.backend.models.exceptions.DuplicatedArtistException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidArtistIdException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
+import com.cs203.g1t4.backend.service.services.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

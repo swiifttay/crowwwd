@@ -254,7 +254,7 @@ public class EventServiceImpl implements EventService {
         Venue venue = venueRepository.findById(event.getVenue())
                 .orElseThrow(() -> new InvalidVenueException());
 
-        //Returns OutputEvent object from Event Object
+        //Returns FullEvent object from Event Object
         return event.returnFullEvent(artist, venue);
     }
 
@@ -271,7 +271,7 @@ public class EventServiceImpl implements EventService {
         Venue venue = venueRepository.findById(event.getVenue())
                 .orElseThrow(() -> new InvalidVenueException());
 
-        //Returns OutputEvent object from Event Object
+        //Returns FullEvent object from Event Object
         return event.returnFullEvent(artist, venue);
     }
 
@@ -292,7 +292,7 @@ public class EventServiceImpl implements EventService {
         Venue venue = venueRepository.findById(event.getVenue())
                 .orElseThrow(() -> new InvalidVenueException());
 
-        //Returns OutputEvent object from Event Object
+        //Returns FullEvent object from Event Object
         return event.returnFullEvent(artist, venue);
     }
 
@@ -308,7 +308,7 @@ public class EventServiceImpl implements EventService {
         Artist artist = artistRepository.findById(event.getArtistId())
                 .orElseThrow(() -> new InvalidArtistIdException(event.getArtistId()));
 
-        //Returns OutputEvent object from Event Object
+        //Returns FullEvent object from Event Object
         return event.returnExploreEvent(artist.getName());
 
     }
@@ -328,7 +328,7 @@ public class EventServiceImpl implements EventService {
         Venue venue = venueRepository.findById(event.getVenue())
                 .orElseThrow(() -> new InvalidVenueException());
 
-        //Returns OutputEvent object from Event Object
+        //Returns FullEvent object from Event Object
         return event.returnDetailsEvent(venue);
 
     }
@@ -441,9 +441,9 @@ public class EventServiceImpl implements EventService {
         List<ExploreEvent> outList = new ArrayList<>();
 
         for (Event event : eventList) {
-            //Use of private method getOutputEventFromEventId() to generate OutputEvent Object from eventId
+            //Use of private method getExploreEventFromEventId() to generate ExploreEvent Object from eventId
             ExploreEvent exploreEvent = getExploreEventFromEvent(event);
-            //Add outputEvent into outList
+            //Add exploreEvent into outList
             outList.add(exploreEvent);
         }
         return outList;
