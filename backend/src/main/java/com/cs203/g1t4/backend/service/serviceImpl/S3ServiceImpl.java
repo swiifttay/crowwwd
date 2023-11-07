@@ -15,6 +15,12 @@ public class S3ServiceImpl implements S3Service {
     @Autowired
     private AmazonS3 s3;
 
+    /**
+     * a method to put the object into the s3 bucket for access in the future
+     * @param bucketName a String object of the bucketname
+     * @param key a String object of the key to find the object again in the future
+     * @param file  a MultipartFile object that contains the image to be added to the s3 bucket
+     */
     public void putObject(String bucketName, String key, MultipartFile file) {
 
         try {

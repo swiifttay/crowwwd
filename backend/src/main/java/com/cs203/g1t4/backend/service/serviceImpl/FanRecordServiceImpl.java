@@ -48,6 +48,11 @@ public class FanRecordServiceImpl implements FanRecordService {
 //                .build();
 //    }
 
+    /**
+     * a method to return all the fan records under a particular user
+     * @param username a String object containing the username of the user to find the fan records related to the user
+     * @return a FanRecordResponse that contains information on all the fanRecords under the user
+     */
     public FanRecordResponse findAllFanRecordsUnderUser(String username) {
         // get the user
         User user = userRepository.findByUsername(username).orElseThrow(() -> new InvalidTokenException());
@@ -61,7 +66,12 @@ public class FanRecordServiceImpl implements FanRecordService {
 
     }
 
-    // helper method
+    /**
+     * a method to create and update the information on the fanrecords regarding the user's listens
+     * @param topListsOfArtist a List of String containing the artistId of the artists that the user
+     *                         listens to and therefore is a fan of
+     * @param username  a String object containing the username of the user to update the records from spotify for
+     */
     public void updateRecordsFromSpotify(List<String> topListsOfArtist, String username) {
         // check if the user exists
         User user = userRepository.findByUsername(username)

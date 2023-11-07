@@ -28,6 +28,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final CommonService commonService;
 
+    /**
+     *
+     * @param request a RegisterRequest object containing the new user info to be created
+     * @return a SuccessResponse containing information "User has been created successfully"
+     *      or throws the relevant exception from the getUserClassFromRequest method in commonService
+     */
     public Response register(RegisterRequest request) {
 
         User user = commonService.getUserClassFromRequest(request, null);
@@ -40,6 +46,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
+    /**
+     *
+     * @param request a AuthenticationRequest object containing the username and password of user to be authenticated
+     * @return an AuthenticationResponse with information on the jwt token to be returned to the user for
+     *      authenticated api path access
+     */
     public Response authenticate(AuthenticationRequest request) {
 
         //Rethink logic and fix it for better understandability
@@ -66,6 +78,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
+    /**
+     *
+     * @param username a String object containing the username to be checked
+     * @return a SuccessResponse "Username is available" if the username has not yet been used
+     *      and therefore can be utilised for creating a new user
+     *      otherwise throw DuplicatedUsernameException to show it has been used
+     */
     public Response findUsername(String username) {
         //If username exists, throw new DuplicatedUsernameException(username)
         if (userRepository.findByUsername(username).isPresent()) {

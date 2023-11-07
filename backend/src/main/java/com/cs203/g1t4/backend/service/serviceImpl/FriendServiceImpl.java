@@ -24,6 +24,14 @@ public class FriendServiceImpl implements FriendService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
 
+    /**
+     * a method that adds friends according to the username
+     * @param friendUsername a String object that contains information on the username of the friend to add
+     * @param username  a String object that contains information on the username of the user requesting
+     * @return a SingleFriendResponse object that contains information on who is the other user
+     *          and pending approval request
+     *          or else throws InvalidUsernameException if any of the usernames provided are invalid
+     */
     public Response addFriendByUsername(String friendUsername, String username) {
         // check if friend username is valid
         User friend = userRepository.findByUsername(friendUsername).orElseThrow(() -> new InvalidUsernameException(friendUsername));
@@ -39,6 +47,13 @@ public class FriendServiceImpl implements FriendService {
         return createFriendship(user, friend);
     }
 
+    /**
+     *
+     * @param user the user who is requesting for friend
+     * @param friend a User object that is the friend
+     * @return a SingleFriendResponse object that contains information on who is the other user
+     *      and pending approval request
+     */
     public Response createFriendship(User user, User friend) {
 
         //Create friend object from the friend userId
@@ -63,6 +78,12 @@ public class FriendServiceImpl implements FriendService {
 
     }
 
+    /**
+     *
+     * @param user the user who is requesting for friend
+     * @param friend a User object that is the friend
+     * @return a Friend object containing the userid and friend's userid and approval status
+     */
     private Friend buildFriendObject(User user, User friend) {
         return Friend.builder()
                 .userId(user.getId())
@@ -71,6 +92,14 @@ public class FriendServiceImpl implements FriendService {
                 .build();
     }
 
+    /**
+     *
+     * @param friendRequest a FriendRequest object containing the id of the friend
+     * @param username a String object containing the username of the user trying to delete friend
+     * @return a SingleFriendResponse if the user successfully deleted the friend association
+     * @throws InvalidTokenException if the user is not logged in correctly
+     * @throws InvalidUserIdException if the friend id provided is incorrect
+     */
     public Response deleteFriend(FriendRequest friendRequest, String username)
             throws InvalidTokenException, InvalidUserIdException{
 
@@ -100,7 +129,16 @@ public class FriendServiceImpl implements FriendService {
                 .build();
     }
 
-    public Response approveFriend(FriendRequest friendRequest, String username) {
+    /**
+     *
+     * @param friendRequest a FriendRequest object containing the id of the friend
+     * @param username a String object containing the username of the user trying to approve friend
+     * @return a SingleFriendResponse showing the friend that has been added and the status
+     * @throws InvalidTokenException if the user is not logged in correctly
+     * @throws InvalidUserIdException if the friend id provided is incorrect
+     */
+    public Response approveFriend(FriendRequest friendRequest, String username)
+            throws InvalidTokenException, InvalidUserIdException {
         //Check if user object is valid
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());
@@ -134,6 +172,12 @@ public class FriendServiceImpl implements FriendService {
                 .build();
     }
 
+    /**
+     *
+     * @param username a String object containing the username of the user to be searched
+     * @return a FriendResponse containing all the friends of the user
+     *      otherwise throws InvalidTokenException if username provided is invalid
+     */
     public Response getAllFriends(String username) {
 
         //Check if user object is valid
@@ -149,6 +193,11 @@ public class FriendServiceImpl implements FriendService {
                 .build();
     }
 
+    /**
+     *
+     * @param username a String object containing the username of the user to be searched
+     * @return a FriendResponse containing all the approved friends of the user
+     */
     public Response getApprovedFriends(String username) {
         //Check if user object is valid
         User user = userRepository.findByUsername(username)
@@ -164,6 +213,11 @@ public class FriendServiceImpl implements FriendService {
                 .build();
     }
 
+    /**
+     *
+     * @param username a String object containing the username of the user to be searched
+     * @return a FriendResponse containing all the pending approval friends of the user
+     */
     public Response getPendingFriends(String username) {
 
         //Check if user object is valid
@@ -180,6 +234,12 @@ public class FriendServiceImpl implements FriendService {
                 .build();
     }
 
+    /**
+     *
+     * @param list a List containing all the friends
+     * @param isApproved a boolean containing information if this filter is supposed to
+     *                   find the friends that are approved or not
+     */
     private void filterFriendList(List<Friend> list, boolean isApproved) {
         Iterator<Friend> iter = list.iterator();
         while (iter.hasNext()) {
@@ -190,6 +250,11 @@ public class FriendServiceImpl implements FriendService {
         }
     }
 
+    /**
+     *
+     * @param list a List containing the Friend objects to be converted to an OutputFriend object
+     * @return a List containing the OutputFriend objects converted
+     */
     private List<OutputFriend> convertFriendListToOutputFriendList(List<Friend> list) {
         List<OutputFriend> out = new ArrayList<>();
         for (Friend friend : list) {
