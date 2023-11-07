@@ -19,7 +19,7 @@ public class EventRequest {
     private String eventImageName; // imageName to look for in S3 Bucket
 
     @NotBlank(message = "Event Description is required")
-    @Size(max = 30, message = "Event Description must be at most {max} characters long")
+    @Size(max = 300, message = "Event Description must be at most {max} characters long")
     private String description;
 
     //Dates should be parsed it in String format of "<yyyy>-<MM>-<dd>T<HH>:<mm>:<ss>", example: 2011-12-03T10:15:30

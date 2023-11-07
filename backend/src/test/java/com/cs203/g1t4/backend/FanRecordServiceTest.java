@@ -39,7 +39,7 @@ public class FanRecordServiceTest {
 
     @InjectMocks
     private FanRecordServiceImpl fanRecordService;
-
+  
     private User existingUser;
     private FanRecord fanRecord1;
     private FanRecord fanRecord2;

@@ -30,16 +30,16 @@ export default function Navbar() {
         </a>
         <div
           className="hidden group-hover:block w-40 bg-opacity-70 my-2
-              transition-opacity duration-300 absolute z-10"
+              transition-opacity duration-300 absolute z-10 py-1"
         >
           <ul>
-            <li>
+            <li className="py-1">
               <a href="" className="hover:text-gray-300">
                 Our Verticals
               </a>
             </li>
             <li>
-              <a href="" className="hover:text-gray-300">
+              <a href="/faq" className="hover:text-gray-300">
                 FAQs
               </a>
             </li>

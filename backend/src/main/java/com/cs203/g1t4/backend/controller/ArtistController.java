@@ -5,6 +5,7 @@ import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.services.ArtistService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +20,7 @@ public class ArtistController {
     @PostMapping("/artist")
     public ResponseEntity<Response> addArtist(@Valid @RequestBody ArtistRequest request) {
 
-        Response response = artistService.addArtist(request);
+        Response response = artistService.addArtist(request, image);
 
         return ResponseEntity.ok(response);
     }
@@ -35,7 +36,7 @@ public class ArtistController {
     @PutMapping("/artist/{artistId}")
     public ResponseEntity<Response> updateArtist(@PathVariable String artistId, @Valid @RequestBody ArtistRequest request) {
 
-        Response response = artistService.updateArtistById(artistId, request);
+        Response response = artistService.updateArtistById(artistId, request, image);
 
         return ResponseEntity.ok(response);
     }
@@ -43,7 +44,7 @@ public class ArtistController {
     @GetMapping("artist/{artistId}")
     public ResponseEntity<Response> getArtistById(@PathVariable String artistId) {
 
-        Response response = artistService.findArtistById(artistId);
+        Response response = artistService.getArtistById(artistId);
 
         return ResponseEntity.ok(response);
     }

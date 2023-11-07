@@ -3,17 +3,16 @@ package com.cs203.g1t4.backend.service.serviceImpl;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.cs203.g1t4.backend.models.exceptions.InvalidImageException;
-import com.cs203.g1t4.backend.service.services.S3Service;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 @Service
-public class S3ServiceImpl implements S3Service {
-    @Autowired
-    private AmazonS3 s3;
+@RequiredArgsConstructor
+public class S3ServiceImpl {
+    private final AmazonS3 s3;
 
     /**
      * a method to put the object into the s3 bucket for access in the future
