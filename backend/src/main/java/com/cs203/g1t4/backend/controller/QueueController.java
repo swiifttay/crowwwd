@@ -7,20 +7,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/queue")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class QueueController {
     private final HoldingAreaService holdingAreaService;
 
-
-    @GetMapping("/join/{eventId}")
+    @PostMapping("/queue/{eventId}")
     public ResponseEntity<Response> joinQueue(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String eventId) {
 
         Response success = holdingAreaService.enterHoldingArea(userDetails.getUsername(), eventId);
@@ -28,14 +24,14 @@ public class QueueController {
         return ResponseEntity.ok(success);
     }
 
-    @GetMapping("/check/{eventId}")
+    @GetMapping("/queue/{eventId}")
     public ResponseEntity<Response> checkQueue(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String eventId) {
         Response isNextInQueue = holdingAreaService.getQueueStatus(userDetails.getUsername(), eventId);
 
         return ResponseEntity.ok(isNextInQueue);
     }
 
-    @GetMapping("/sizes/{eventId}")
+    @GetMapping("/queueSize/{eventId}")
     public ResponseEntity<Response> getSizesOfQueue(@PathVariable String eventId, @AuthenticationPrincipal UserDetails userDetails) {
         Response queueSizes = holdingAreaService.getQueueSizes(eventId, userDetails.getUsername());
 

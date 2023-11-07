@@ -27,13 +27,10 @@ import java.net.URI;
 @SecurityRequirement(name = "bearerAuth")
 public class SpotifyController {
 
-
     @Autowired
     private SpotifyApi spotifyAPI;
 
-
     private final SpotifyService spotifyService;
-
 
     @GetMapping("/login")
     @ResponseBody

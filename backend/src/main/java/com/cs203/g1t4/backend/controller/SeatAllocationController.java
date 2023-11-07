@@ -5,6 +5,7 @@ import com.cs203.g1t4.backend.data.request.seat.SeatCancelRequest;
 import com.cs203.g1t4.backend.data.request.seat.SeatsConfirmRequest;
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.service.services.SeatsService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class SeatAllocationController {
 
     private final SeatsService seatsService;

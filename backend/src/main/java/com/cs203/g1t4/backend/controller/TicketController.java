@@ -6,6 +6,7 @@ import com.cs203.g1t4.backend.service.services.ProfileService;
 import com.cs203.g1t4.backend.service.services.TicketService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,15 +14,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/ticket")
-@RequiredArgsConstructor
+@RequestMapping("/api")
+//@RequiredArgsConstructor
+@AllArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class TicketController {
 
     private final TicketService ticketService;
     private final ProfileService profileService;
 
-    @PostMapping("/createTicket")
+    @PostMapping("/ticket")
     public ResponseEntity<Response> createTicket(@Valid @RequestBody TicketRequest ticketRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
         // Get the username from the userDetails of the authenticated user
@@ -35,7 +37,7 @@ public class TicketController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/deleteTicket/{ticketId}")
+    @DeleteMapping("/ticket/{ticketId}")
     public ResponseEntity<Response> deleteTicket(@PathVariable String ticketId) {
 
         Response response = ticketService.deleteTicket(ticketId);
@@ -43,7 +45,7 @@ public class TicketController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/updateTicket/{ticketId}")
+    @PutMapping("/ticket/{ticketId}")
     public ResponseEntity<Response> updateTicket(@PathVariable String ticketId, @Valid @RequestBody TicketRequest ticketRequest, @AuthenticationPrincipal UserDetails userDetails) {
 
         // Get the username from the userDetails of the authenticated user
@@ -57,7 +59,7 @@ public class TicketController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/getTickets")
+    @GetMapping("/ticket")
     public ResponseEntity<Response> getTicketsByUser(@AuthenticationPrincipal UserDetails userDetails) {
 
         // Get the username from the userDetails of the authenticated user
@@ -71,7 +73,7 @@ public class TicketController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/getAllTicketsByEvent/{eventId}")
+    @GetMapping("/ticket/event/{eventId}")
     public ResponseEntity<Response> getTicketsByEvent(@PathVariable String eventId) {
 
         Response response = ticketService.getTicketByEvent(eventId);
@@ -79,7 +81,7 @@ public class TicketController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/getTicket/{ticketId}")
+    @GetMapping("/ticket/{ticketId}")
     public ResponseEntity<Response> getTicketById(@PathVariable String ticketId) {
         Response response = ticketService.getTicketById(ticketId);
 

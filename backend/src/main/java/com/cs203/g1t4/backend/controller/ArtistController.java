@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/artist")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ArtistController {
 
     private final ArtistService artistService;
 
-    @PostMapping("/addArtist")
+    @PostMapping("/artist")
     public ResponseEntity<Response> addArtist(@Valid @RequestBody ArtistRequest request) {
 
         Response response = artistService.addArtist(request);
@@ -24,7 +24,7 @@ public class ArtistController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("deleteArtist/{artistId}")
+    @DeleteMapping("/artist")
     public ResponseEntity<Response> deleteArtist(@PathVariable String artistId) {
 
         Response response = artistService.deleteArtistById(artistId);
@@ -32,7 +32,7 @@ public class ArtistController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/updateArtist/{artistId}")
+    @PutMapping("/artist/{artistId}")
     public ResponseEntity<Response> updateArtist(@PathVariable String artistId, @Valid @RequestBody ArtistRequest request) {
 
         Response response = artistService.updateArtistById(artistId, request);
@@ -40,7 +40,7 @@ public class ArtistController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("getArtist/{artistId}")
+    @GetMapping("artist/{artistId}")
     public ResponseEntity<Response> getArtistById(@PathVariable String artistId) {
 
         Response response = artistService.findArtistById(artistId);
@@ -48,7 +48,7 @@ public class ArtistController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/getAllArtists")
+    @GetMapping("/artist")
     public ResponseEntity<Response> getAllArtist() {
         Response response = artistService.getAllArtist();
 
@@ -56,7 +56,7 @@ public class ArtistController {
     }
 
 
-    @PostMapping("{artistId}/artist-image")
+    @PostMapping("artist/{artistId}/artist-image")
     public ResponseEntity<Response> uploadArtistImage(
             @PathVariable("artistId") String artistId,
             @RequestBody MultipartFile multipartFile) {
@@ -67,7 +67,7 @@ public class ArtistController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("{artistId}/artist-image")
+    @GetMapping("artist/{artistId}/artist-image")
     public ResponseEntity<Response> getArtistImage(@PathVariable("artistId") String artistId) {
 
         // Upload the artist image

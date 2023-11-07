@@ -24,25 +24,6 @@ public class FriendServiceImpl implements FriendService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
 
-    public Response addFriend(FriendRequest friendRequest, String username)
-            throws DuplicatedFriendException, FriendNotFoundException, InvalidTokenException {
-
-        //Check if user object is valid
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new InvalidTokenException());
-
-        //Check if friend object is valid
-        User friend = userRepository.findById(friendRequest.getFriendId())
-                .orElseThrow(() -> new InvalidUserIdException());
-
-        //Checks if the friendship exists already, if so throws DuplicatedFriendException()
-        if (friendRepository.findByUserIdAndFriendId(user.getId(), friend.getId()).isPresent()) {
-            throw new DuplicatedFriendException(friend.getUsername());
-        }
-
-        return createFriendship(user, friend);
-    }
-
     public Response addFriendByUsername(String friendUsername, String username) {
         // check if friend username is valid
         User friend = userRepository.findByUsername(friendUsername).orElseThrow(() -> new InvalidUsernameException(friendUsername));

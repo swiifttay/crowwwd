@@ -15,7 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/profile")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class ProfileController {
@@ -23,7 +23,7 @@ public class ProfileController {
     private final ProfileService profileService;
     private final CommonService commonService;
 
-    @PutMapping("/updateProfile")
+    @PutMapping("/profile")
     public ResponseEntity<Response> updateProfile(@Valid @RequestBody UpdateProfileRequest request, @AuthenticationPrincipal UserDetails userDetails) {
 
         // Get the username from the userDetails of the authenticated user
@@ -37,7 +37,7 @@ public class ProfileController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/findProfile")
+    @GetMapping("/profile")
     public ResponseEntity<Response> findProfile(@AuthenticationPrincipal UserDetails userDetails) {
 
         // Get the username from the userDetails of the authenticated user
@@ -51,8 +51,8 @@ public class ProfileController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/searchProfile/{username}")
-    public ResponseEntity<Response> searchProfile(@PathVariable String username) {
+    @GetMapping("/profile/{username}")
+    public ResponseEntity<Response> findProfileByUsername(@PathVariable String username) {
         // Find a profile based on the username provided
         // Throws a InvalidUsername if username cannot be found in repository
         Response response = profileService.searchProfile(username);
