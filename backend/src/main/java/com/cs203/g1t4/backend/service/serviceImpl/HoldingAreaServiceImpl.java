@@ -321,7 +321,13 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
                 .build();
     }
 
-    // give the user a queue number
+    /**
+     * a method that updates and stores into the database information regarding the user queueing status
+     * @param userId a String containing the id of the user
+     * @param queueId a int object containing information of the queuenumber provided to the user
+     * @param eventId a String object of the eventId that the user is getting a queuenumber for
+     *                otherwise throws MissingQueueException if the user has not been added to the queue
+     */
     public void enterQueue(String userId, int queueId, String eventId) {
         // query for the queueStatus
         QueueStatus queueStatus = queueStatusRepository.findQueueByUserIdAndEventId(userId, eventId)
@@ -333,6 +339,13 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
         queueStatusRepository.save(queueStatus);
     }
 
+    /**
+     *
+     * @param eventId a String containing the eventId the user is checking their queue position for
+     * @param username a String containing the username of the user checking
+     * @return a QueueSizesResponse that contains information on the user's queue position as well as the
+     *      total number of people in the queue
+     */
     public Response getQueueSizes(String eventId, String username) {
         // verify the event
         Event event = verifyEventId(eventId);
@@ -374,7 +387,14 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
                 .build();
     }
 
-    // helping methods
+    /**
+     *
+     * @param queueStatusId a String containing information on which queueStatus to check if they
+     *                      are valid for purchase now
+     * @param queuesToPurchase  a int containing information on the current queue numbers that are
+     *                          allowed to proceed to purchase
+     * @return  a QueueingStatusValues containing information on the user's queue status
+     */
     public QueueingStatusValues moveUserToPurchase(String queueStatusId, int queuesToPurchase) {
         // find for the queueStatus
         QueueStatus userQueueStatus = queueStatusRepository
@@ -394,6 +414,12 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
         return userQueueStatus.getQueueStatus();
     }
 
+    /**
+     * finds for the queueStauts of the user
+     * @param username a String object containing information on the username of the user
+     * @param eventId a String object containing information on the eventId of the event to check for
+     * @return the QueueStatus (in Optional) of the corresponding user and event
+     */
     public Optional<QueueStatus> findQueueStatusOfUser(String username, String eventId) {
 
         // get the user from the username
@@ -409,7 +435,12 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
         return userQueueStatus;
     }
 
-    // find the holding area for the event who's eventId is the parameter
+    /**
+     * find the holding area for the event who's eventId is the parameter
+     * otherwise it will create a new one
+     * @param eventId a String containing information on the eventId to be retrieving a holding area for
+     * @return a HoldingArea object for the event
+     */
     public HoldingArea getHoldingAreaForEvent(String eventId) {
         Optional<HoldingArea> holdingAreaForEvent = holdingAreaRepository.findHoldingAreaByEventId(eventId);
         if (holdingAreaForEvent.isEmpty()) {
@@ -433,22 +464,47 @@ public class HoldingAreaServiceImpl implements HoldingAreaService {
 
     }
 
+    /**
+     * verify the validity of the user given the username
+     * @param username a String object containing information on the username of the user
+     * @return a User object if the username provided is valid
+     *      otherwise a InvalidTokenException will be thrown
+     */
     public User verifyUsername(String username) {
         // determine if user exists
         User user = userRepository.findByUsername(username).orElseThrow(() -> new InvalidTokenException());
         return user;
     }
 
+    /**
+     * verify the validity of the eventId given the eventId
+     * @param eventId a String object containing information on the eventId of the eventId
+     * @return a Event object if the eventId provided is valid
+     *      otherwise a InvalidEventIdException will be thrown
+     */
     public Event verifyEventId(String eventId) {
         // determine if event id is valid
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new InvalidEventIdException(eventId));
         return event;
     }
 
+    /**
+     *
+     * @param current a LocalDateTime containing the current time
+     * @param start a LocalDateTime containing the start of the interval to check
+     * @param end a LocalDateTime containing the end of the interval to check
+     * @return a boolean if the current time is between the start and end
+     */
     public boolean timeBetween(LocalDateTime current, LocalDateTime start, LocalDateTime end) {
         return current.isBefore(end) && current.isAfter(start);
     }
 
+    /**
+     *
+     * @param userId a String object containing the userid of the user to verify for fan
+     * @param artistId a String object containig the artistId of the artist who is performing
+     * @return a boolean if the user is a fan of the artist performing
+     */
     public boolean verifyFan(String userId, String artistId) {
 
         // determine if the user is a fan

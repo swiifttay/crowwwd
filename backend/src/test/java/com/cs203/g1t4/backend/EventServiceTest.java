@@ -320,25 +320,26 @@ public class EventServiceTest {
                 .name("The Eras Tour Updated")
                 .eventImageName("theerastourimage")
                 .description("description")
-                .dates(new String[0])
+                .dates(new String[]{"2023-12-01T00:00:00", "2023-12-02T00:00:00"})
                 .venue(venue.getId())
                 .categories(new String[0])
                 .artistId("1234")
                 .seatingImagePlan("theerastourseatingplanimage")
-                .ticketSalesDate(new String[0])
+                .ticketSalesDate(new String[]{"2023-12-01T00:00:00", "2023-12-02T00:00:00"})
                 .build();
 
         Event updatedEvent = Event.builder()
                 .id("1234")
+                .alias("2023_TheErasTourUpdated_TaylorSwift")
                 .name("The Eras Tour Updated")
                 .eventImageName("theerastourimage")
                 .description("description")
-                .dates(new ArrayList<LocalDateTime>())
+                .dates(List.of(LocalDateTime.parse("2023-12-01T00:00:00"), LocalDateTime.parse("2023-12-02T00:00:00")))
                 .venue("National Stadium")
                 .categories(new ArrayList<String>())
                 .artistId("1234")
                 .seatingImagePlan("theerastourseatingplanimage")
-                .ticketSalesDate(new ArrayList<LocalDateTime>())
+                .ticketSalesDate(List.of(LocalDateTime.parse("2023-12-01T00:00:00"), LocalDateTime.parse("2023-12-02T00:00:00")))
                 .build();
 
         Artist artist = Artist.builder()
@@ -346,7 +347,7 @@ public class EventServiceTest {
                 .name("Taylor Swift")
                 .build();
 
-        FullEvent fullevent = customEvent.returnFullEvent(artist, venue);
+        FullEvent fullevent = updatedEvent.returnFullEvent(artist, venue);
         ArgumentCaptor<Event> eventCaptor = ArgumentCaptor.forClass(Event.class);
 
         // mock venueRepository "findById" operation
@@ -357,7 +358,7 @@ public class EventServiceTest {
         // mock artistRepository "findById" operation
         when(artistRepository.findById(any(String.class))).thenReturn(Optional.of(artist)).thenReturn(Optional.of(artist));
 
-        // mock eventRepository "findById" operation
+        // mock eventRepository "save" operation
         when(eventRepository.save(eventCaptor.capture())).thenAnswer(invocation -> {
             return eventCaptor.getValue();
         });

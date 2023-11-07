@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/artist")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ArtistController {
 
     private final ArtistService artistService;
 
-    @PostMapping(value = "/addArtist", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Response> addArtist(@Valid @ModelAttribute ArtistRequest request, @RequestPart MultipartFile image) {
+    @PostMapping("/artist")
+    public ResponseEntity<Response> addArtist(@Valid @RequestBody ArtistRequest request) {
 
         Response response = artistService.addArtist(request, image);
 
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("deleteArtist/{artistId}")
+    @DeleteMapping("/artist")
     public ResponseEntity<Response> deleteArtist(@PathVariable String artistId) {
 
         Response response = artistService.deleteArtistById(artistId);
@@ -33,15 +33,15 @@ public class ArtistController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping(value="/updateArtist/{artistId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Response> updateArtist(@PathVariable String artistId, @Valid @ModelAttribute ArtistRequest request, @RequestPart(required = false) MultipartFile image) {
+    @PutMapping("/artist/{artistId}")
+    public ResponseEntity<Response> updateArtist(@PathVariable String artistId, @Valid @RequestBody ArtistRequest request) {
 
         Response response = artistService.updateArtistById(artistId, request, image);
 
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("getArtist/{artistId}")
+    @GetMapping("artist/{artistId}")
     public ResponseEntity<Response> getArtistById(@PathVariable String artistId) {
 
         Response response = artistService.getArtistById(artistId);
@@ -49,9 +49,30 @@ public class ArtistController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/getAllArtists")
+    @GetMapping("/artist")
     public ResponseEntity<Response> getAllArtist() {
         Response response = artistService.getAllArtist();
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("artist/{artistId}/artist-image")
+    public ResponseEntity<Response> uploadArtistImage(
+            @PathVariable("artistId") String artistId,
+            @RequestBody MultipartFile multipartFile) {
+
+        // Upload the artist image
+        Response response = artistService.uploadArtistImage(artistId, multipartFile);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("artist/{artistId}/artist-image")
+    public ResponseEntity<Response> getArtistImage(@PathVariable("artistId") String artistId) {
+
+        // Upload the artist image
+        Response response = artistService.getArtistImageResponse(artistId);
 
         return ResponseEntity.ok(response);
     }

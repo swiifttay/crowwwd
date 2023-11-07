@@ -12,10 +12,7 @@ import com.cs203.g1t4.backend.data.response.ticket.SingleTicketResponse;
 import com.cs203.g1t4.backend.data.response.ticket.TicketResponse;
 import com.cs203.g1t4.backend.models.*;
 import com.cs203.g1t4.backend.models.event.EventSeatingDetails;
-import com.cs203.g1t4.backend.models.exceptions.InvalidCategoryException;
-import com.cs203.g1t4.backend.models.exceptions.InvalidOrderIdException;
-import com.cs203.g1t4.backend.models.exceptions.InvalidSeatingDetailsException;
-import com.cs203.g1t4.backend.models.exceptions.InvalidTokenException;
+import com.cs203.g1t4.backend.models.exceptions.*;
 import com.cs203.g1t4.backend.repository.OrderRepository;
 import com.cs203.g1t4.backend.repository.SeatingDetailsRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
@@ -44,6 +41,15 @@ public class SeatsServiceImpl implements SeatsService {
     private static final int NUM_SEATS_PER_ROW = 4;
     private static final int NUM_ROWS = 4;
 
+    /**
+     * Find seats for an event specific to eventDate
+     * If user cannot be found in the repository from token, throws InvalidTokenException.
+     * If eventSeatingDetails cannot be found in the repository from eventId, throws InvalidSeatingDetailsException
+     *
+     * @param username a String object containing the username of the token
+     * @param findSeatRequest a FindSeatRequest object containing the eventDetails and details of number of tickets
+     * @return a SingleOrderResponse object containing the Order which contains transaction details
+     */
     public Response findSeats(final String username, final FindSeatRequest findSeatRequest)
             throws InvalidCategoryException, InvalidSeatingDetailsException {
 
@@ -102,7 +108,18 @@ public class SeatsServiceImpl implements SeatsService {
                         .build();
     }
 
-    public Response confirmSeats(final String username, final SeatsConfirmRequest seatsConfirmRequest) {
+    /**
+     * Confirm seats for an event specific to eventDate
+     * If user cannot be found in the repository from token, throws InvalidTokenException.
+     * If order cannot be found in the repository from orderId, throws InvalidOrderIdException.
+     * If eventSeatingDetails cannot be found in the repository from eventId, throws InvalidSeatingDetailsException
+     *
+     * @param username a String object containing the username of the token
+     * @param seatsConfirmRequest a SeatsConfirmRequest object containing necessary details for building tickets
+     * @return a SingleOrderResponse object containing the Order which contains transaction details
+     */
+    public Response confirmSeats(final String username, final SeatsConfirmRequest seatsConfirmRequest)
+            throws InvalidTokenException, InvalidOrderIdException, InvalidSeatingDetailsException {
 
         Order order = orderRepository.findById(seatsConfirmRequest.getOrderId())
                 .orElseThrow(() -> new InvalidOrderIdException(seatsConfirmRequest.getOrderId()));
@@ -143,7 +160,16 @@ public class SeatsServiceImpl implements SeatsService {
                 .build();
     }
 
-    public Response cancelSeats(final SeatCancelRequest seatRequest) {
+    /**
+     * Cancel seats for an event specific to eventDate
+     * If order cannot be found in the repository from orderId, throws InvalidOrderIdException.
+     * If eventSeatingDetails cannot be found in the repository from eventId, throws InvalidSeatingDetailsException
+     *
+     * @param seatRequest a SeatCancelRequest object containing the orderId
+     * @return a SuccessResponse object containing successful response
+     */
+    public Response cancelSeats(final SeatCancelRequest seatRequest)
+            throws InvalidOrderIdException, InvalidSeatingDetailsException{
 
         Order order = orderRepository.findById(seatRequest.getOrderId())
                 .orElseThrow(() -> new InvalidOrderIdException(seatRequest.getOrderId()));
@@ -172,12 +198,26 @@ public class SeatsServiceImpl implements SeatsService {
                 .build();
     }
 
-    //Main Call (Wrapper) Method
+    /**
+     * Initial get seats call for any request
+     *
+     * @param numTickets a int containing the number of tickets bought
+     * @param seatsInformationString a String object containing the current Seats in the event
+     * @return a List<String> object containing seats
+     */
     private List<String> getSeats(int numTickets, String seatsInformationString) {
         List<Integer> combination = getCombi(numTickets);
         return getSeats(numTickets, seatsInformationString, combination);
     }
 
+    /**
+     * Subsequent get seats call for any request
+     *
+     * @param numTickets a int containing the number of tickets bought
+     * @param seatsInformationString a String object containing the current Seats in the event
+     * @param combination a List<String> containing the current combination to check for.
+     * @return a List<String> object containing seats
+     */
     private List<String> getSeats(int numTickets, String seatsInformationString, List<Integer> combination) {
         if (combination == null) {
             return null;
@@ -211,8 +251,14 @@ public class SeatsServiceImpl implements SeatsService {
         return allocatedSeatsInformation;
     }
 
-    // Positive result: represents the starting num in the seatsInformationString
-    // Negative result: no suitable seat found
+    /**
+     * Finding Seats in the seats information string
+     *
+     * @param numTickets a int containing the number of tickets bought
+     * @param seatsInformationString a String object containing the current Seats in the event
+     * @return a int object indicating whether seats can be found. Positive result represents the starting num
+     * in the seatsInformationString, Negative results represent no suitable seat found.
+     */
     private int find(int numTickets, String seatsInformationString) {
         // find the first occurrence of the empty seats
         int firstEmpty = seatsInformationString.indexOf('0');
@@ -246,13 +292,24 @@ public class SeatsServiceImpl implements SeatsService {
         return -1;
     }
 
-    // Initial getCombi
+    /**
+     * Initial call to get Combination
+     *
+     * @param numConsecutiveTickets a int containing the consecutive seatings
+     * @return a List<Integer> object indicating combination
+     */
     private List<Integer> getCombi(int numConsecutiveTickets) {
 
         return Arrays.asList(numConsecutiveTickets);
     }
 
-    // Subsequent getCombi
+    /**
+     * Subsequent call to get Combination
+     *
+     * @param numConsecutiveTickets a int containing the consecutive seatings
+     * @param previousCombi a List<Integer> of the previous combination used
+     * @return a List<Integer> object indicating combination
+     */
     private List<Integer> getCombi(List<Integer> previousCombi, int numConsecutiveTickets) {
         if (previousCombi.size() == numConsecutiveTickets) {
             return null;
@@ -286,6 +343,13 @@ public class SeatsServiceImpl implements SeatsService {
         return toReturn;
     }
 
+    /**
+     * Updates seats information to be updated
+     *
+     * @param seatsInformation a String object containing the seats information
+     * @param type a char containing the new element to be updated to.
+     * @return a List<Integer> object indicating combination
+     */
     private String returnUpdatedSeatsString(String seatsInformation, List<String> seats, char type) {
 //        char lookFor = (type == '1') ? '0' : '1';
         if (seats == null) {

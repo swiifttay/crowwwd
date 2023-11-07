@@ -35,7 +35,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/findUsername/{username}")
+    @GetMapping("/username/{username}")
     public ResponseEntity<Response> findUsername(@PathVariable String username) {
 
         //If error found, exception will be thrown

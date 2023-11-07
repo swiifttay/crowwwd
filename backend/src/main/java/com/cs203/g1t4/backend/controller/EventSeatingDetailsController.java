@@ -9,13 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/event")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class EventSeatingDetailsController {
 
     private final SeatingDetailsService seatingDetailsService;
 
-    @PostMapping("{eventId}/event-seating-details")
+    @PostMapping("/event-seating-details/{eventId}")
     public ResponseEntity<Response> addEventSeatingDetails(@PathVariable("eventId") String eventId,
                                                            @Valid @RequestBody SeatingDetailsRequest request) {
 
@@ -24,7 +24,7 @@ public class EventSeatingDetailsController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("{eventId}/event-seating-details")
+    @DeleteMapping("/event-seating-details/{eventId}")
     public ResponseEntity<Response> deleteEventSeatingDetails(@PathVariable("eventId") String eventId) {
 
         Response response = seatingDetailsService.deleteSeatingDetails(eventId);
@@ -32,7 +32,7 @@ public class EventSeatingDetailsController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("{eventId}/event-seating-details")
+    @PutMapping("/event-seating-details/{eventId}")
     public ResponseEntity<Response> updateEventSeatingDetails(@PathVariable("eventId") String eventId,
                                                               @Valid @RequestBody SeatingDetailsRequest request) {
 
@@ -41,7 +41,7 @@ public class EventSeatingDetailsController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("{eventId}/event-seating-details")
+    @GetMapping("/event-seating-details/{eventId}")
     public ResponseEntity<Response> getEventSeatingDetails(@PathVariable("eventId") String eventId) {
 
         Response response = seatingDetailsService.getSeatingDetailsById(eventId);

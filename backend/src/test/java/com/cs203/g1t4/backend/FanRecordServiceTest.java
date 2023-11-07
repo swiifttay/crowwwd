@@ -1,24 +1,5 @@
 package com.cs203.g1t4.backend;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.fanRecord.FanRecordResponse;
 import com.cs203.g1t4.backend.models.Artist;
@@ -29,7 +10,21 @@ import com.cs203.g1t4.backend.models.exceptions.InvalidUsernameException;
 import com.cs203.g1t4.backend.repository.ArtistRepository;
 import com.cs203.g1t4.backend.repository.FanRecordRepository;
 import com.cs203.g1t4.backend.repository.UserRepository;
-import com.cs203.g1t4.backend.service.services.FanRecordService;
+import com.cs203.g1t4.backend.service.serviceImpl.FanRecordServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FanRecordServiceTest {
@@ -43,8 +38,8 @@ public class FanRecordServiceTest {
     private ArtistRepository artistRepository;
 
     @InjectMocks
-    private FanRecordService fanRecordService;
-
+    private FanRecordServiceImpl fanRecordService;
+  
     private User existingUser;
     private FanRecord fanRecord1;
     private FanRecord fanRecord2;
@@ -231,7 +226,7 @@ public class FanRecordServiceTest {
         });
 
         // assert
-        assertEquals("Artist with artistId: 3460 does not exists", e.getMessage());
+        assertEquals("Artist with artistId: 3460 does not exist", e.getMessage());
         verify(userRepository).findByUsername(usernameRequest);
     }
 }

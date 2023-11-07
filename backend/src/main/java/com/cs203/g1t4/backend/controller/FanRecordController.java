@@ -9,12 +9,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/fanRecord")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class FanRecordController {
     private final FanRecordService fanRecordService;
 
-//    @PostMapping("/addFanRecord")
+//    @PostMapping("/fanRecord")
 //    public ResponseEntity<Response> addFanRecord(@Valid @RequestBody FanRecordRequest fanRecordRequest, @AuthenticationPrincipal UserDetails userDetails) {
 //
 //        String username = userDetails.getUsername();
@@ -25,8 +25,8 @@ public class FanRecordController {
 //
 //    }
 
-    @GetMapping("/myFanRecords")
-    public ResponseEntity<Response> getAllUnderUser(@AuthenticationPrincipal UserDetails userDetails) {
+    @GetMapping("/fanRecord")
+    public ResponseEntity<Response> getAllFanRecordsUnderUser(@AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
 
         Response response = fanRecordService.findAllFanRecordsUnderUser(username);

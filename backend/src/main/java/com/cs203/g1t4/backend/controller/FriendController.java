@@ -19,19 +19,6 @@ public class FriendController {
 
     private final FriendService friendService;
 
-    @PostMapping("/friend")
-    public ResponseEntity<Response> addFriend(@Valid @RequestBody FriendRequest friendRequest, @AuthenticationPrincipal UserDetails userDetails) {
-
-        //Get the username from the userDetails of the authenticated user
-        String username = userDetails.getUsername();
-
-        //Provide information for FriendService to perform addFriend
-        Response response = friendService.addFriend(friendRequest, username);
-
-        //Else, return ok response
-        return ResponseEntity.ok(response);
-    }
-
     @PostMapping("/friend/{friendUsername}")
     public ResponseEntity<Response> addFriend(@PathVariable String friendUsername, @AuthenticationPrincipal UserDetails userDetails) {
 

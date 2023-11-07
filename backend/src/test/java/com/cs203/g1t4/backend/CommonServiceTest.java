@@ -245,6 +245,9 @@ public class CommonServiceTest {
         // mock userRepository "findByName" method
         when(userRepository.findByUsername(any(String.class))).thenReturn(Optional.empty());
 
+        // mock passwordEncoder "encode" method
+        when(passwordEncoder.encode(any(String.class))).thenReturn("87654321");
+
         // act
         User userResponse = commonService.getUserClassFromRequest(userRequest, existingUser);
 

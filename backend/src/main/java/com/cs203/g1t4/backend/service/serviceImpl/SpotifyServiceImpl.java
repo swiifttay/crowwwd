@@ -27,6 +27,19 @@ public class SpotifyServiceImpl implements SpotifyService {
     private final FanRecordService fanRecordService;
     private final ProfileService profileService;
 
+    /**
+     *  this method will query the spotify api to determine who are the top artists of the users and from
+     *  there infer that the user is a fan of that artist. therefore, the fanRecord object will also be made for
+     *  the user. should the artist object have a match to our database, we will update the artist database with
+     *  the new information from spotify. otherwise, a new artist will be created in the database with details
+     *  extracted from the spotify artist object
+     * @param spotifyApi the spotifyApi as wired from the spotifyApi controller containing information on the
+     *                   user login details and for querying the spotify api
+     * @param username a String object containing information on the user requesting to update their fanrecords
+     * @return a SuccessResponse containing "Fan records have been updated successfully" if the fan records
+     *      were successfully created
+     *      otherwise will throw InvalidTokenException if the user login is wrong
+     */
     public Response spotifyGetMyTopArtists(SpotifyApi spotifyApi, String username) {
 
         final GetUsersTopArtistsRequest getUsersTopArtistsRequest = spotifyApi.getUsersTopArtists()
@@ -83,6 +96,17 @@ public class SpotifyServiceImpl implements SpotifyService {
 
     }
 
+    /**
+     * this method will determine if the user logged in via spotify matches their first login to prevent
+     * against users who borrow other peoples spotify account to take advantage of the priority service that fans
+     * get. it will either update the user records if this is the first spotify login, or it will check if it
+     * matches the user records in our database
+     * @param spotifyApi the spotifyApi as wired from the spotifyApi controller containing information on the
+     *                   user login details and for querying the spotify api
+     * @param username a String object containing the username of the user validating the login
+     * @return a SuccessResponse containing the spotify login accessToken
+     *      otherwise if the validation is false, throws InvalidTokenException and resets the spotifyApi object
+     */
     public Response validateAccount(SpotifyApi spotifyApi, String username) {
 
         // get the user account 

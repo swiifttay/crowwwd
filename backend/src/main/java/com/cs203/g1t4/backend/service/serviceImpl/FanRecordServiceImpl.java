@@ -26,7 +26,40 @@ public class FanRecordServiceImpl implements FanRecordService {
     private final UserRepository userRepository;
     private final ArtistRepository artistRepository;
 
-    public Response findAllFanRecordsUnderUser(String username) {
+    // not allowed to create a fan record manually because they should be via the spotify api
+//    public SuccessResponse createFanRecord(FanRecordRequest fanRecordRequest, String username) {
+//        // check if the user exists
+//        User user = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new InvalidTokenException());
+//
+//        String userId = user.getId();
+//
+//        String artistId = fanRecordRequest.getArtistId();
+//
+//        // check if there is such a record already
+//        Optional<FanRecord> duplicateFanRecord = fanRecordRepository.findFanRecordByUserIdAndArtistId(artistId, userId);
+//
+//        if (duplicateFanRecord.isPresent()) {
+//            throw new DuplicateFanRecordException(artistId);
+//        }
+//
+//        FanRecord fanRecord = FanRecord.builder()
+//                .artistId(artistId)
+//                .userId(userId)
+//                .registerDate(LocalDateTime.now())
+//                .build();
+//
+//        return SuccessResponse.builder()
+//                .response("Fan Record successfully created")
+//                .build();
+//    }
+
+    /**
+     * a method to return all the fan records under a particular user
+     * @param username a String object containing the username of the user to find the fan records related to the user
+     * @return a FanRecordResponse that contains information on all the fanRecords under the user
+     */
+    public FanRecordResponse findAllFanRecordsUnderUser(String username) {
         // get the user
         User user = userRepository.findByUsername(username).orElseThrow(() -> new InvalidUsernameException(username));
 
@@ -39,7 +72,12 @@ public class FanRecordServiceImpl implements FanRecordService {
 
     }
 
-    // helper method
+    /**
+     * a method to create and update the information on the fanrecords regarding the user's listens
+     * @param topListsOfArtist a List of String containing the artistId of the artists that the user
+     *                         listens to and therefore is a fan of
+     * @param username  a String object containing the username of the user to update the records from spotify for
+     */
     public void updateRecordsFromSpotify(List<String> topListsOfArtist, String username) {
         // check if the user exists
         User user = userRepository.findByUsername(username)

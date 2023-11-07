@@ -29,14 +29,16 @@ public class SecurityConfiguration {
         // normal user paths
         "/api/auth/register",
         "/api/auth/authenticate",
-        "/api/auth/findUsername/.*",
-        "/api/event/getEvent/.*",
-        "/api/event/getAllEvents",
-        "/api/event/getEventsBetween/start/.*?/end/.*?",
+        "/api/auth/username/.*",
+        "/api/event-seating-details/.*",
 
         // admin user (additional features in the future)
-        "/api/event/fullEvent/.*",
-        "/api/event/exploreEvent/all",
+        "/api/fullEvent/.*",
+        "/api/exploreEvent",
+        "/api/detailsEvent/*",
+        "/api/order/.*",
+        "/api/orderPayment/.*",
+        "api/venue/.*",
 
         // others
         "/api/spotify/get-user-code",

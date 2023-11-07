@@ -20,12 +20,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/venue")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class VenueController {
   private final VenueService venueService;
 
-  @PutMapping(value = "/createVenue", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+  @PutMapping(value = "/venue", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
   public ResponseEntity<Response> createVenue(@Valid @ModelAttribute VenueRequest venueRequest, @RequestPart MultipartFile image) {
     // Add Venue using createVenue method in venueService
     Response response = venueService.createVenue(venueRequest, image);
@@ -33,7 +33,7 @@ public class VenueController {
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/getVenue/{venueId}")
+  @GetMapping("/venue/{venueId}")
   public ResponseEntity<Response> getVenue(@PathVariable String venueId) {
     // Get venue using getVenue in venueService
     Response response = venueService.getVenue(venueId);
@@ -41,7 +41,7 @@ public class VenueController {
     return ResponseEntity.ok(response);
   }
 
-  @PutMapping(value = "/updateVenue/{venueId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+  @PutMapping(value = "/venue/{venueId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
   public ResponseEntity<Response> updateVenue(@PathVariable String venueId,@Valid @ModelAttribute VenueRequest venueRequest, @RequestPart(required = false) MultipartFile image) {
     // Update venue using updateVenue in venueService
     Response response = venueService.updateVenue(venueId, venueRequest, image);
@@ -49,7 +49,7 @@ public class VenueController {
     return ResponseEntity.ok(response);
   }
 
-  @DeleteMapping("/deleteVenue/{venueId}")
+  @DeleteMapping("/venue/{venueId}")
   public ResponseEntity<Response> deleteVenue(@PathVariable String venueId) {
     // Delete venue using removeVenue in venueService
     Response response = venueService.removeVenue(venueId);

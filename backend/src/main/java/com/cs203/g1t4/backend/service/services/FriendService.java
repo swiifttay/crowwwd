@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface FriendService {
 
-    Response addFriend(FriendRequest friendRequest, String username)
-            throws DuplicatedFriendException, FriendNotFoundException, InvalidTokenException;
-
     Response addFriendByUsername(String friendUsername, String username);
 
     Response deleteFriend(FriendRequest friendRequest, String username)

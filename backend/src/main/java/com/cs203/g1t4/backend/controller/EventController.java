@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/event")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class EventController {
 
@@ -28,7 +28,7 @@ public class EventController {
     }
 
     @GetMapping("/fullEvent/{eventId}")
-    public ResponseEntity<Response> getFullEvent(@PathVariable String eventId) {
+    public ResponseEntity<Response> getFullEventById(@PathVariable String eventId) {
         // Get event using getFulLEventById in eventService
         Response response = eventService.getFullEventById(eventId);
 
@@ -59,7 +59,7 @@ public class EventController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/exploreEvent/all")
+    @GetMapping("/exploreEvent")
     public ResponseEntity<Response> getAllExploreEventAfterToday() {
         // Get all events for the explore page
         Response response = eventService.getAllExploreEvents();
@@ -68,7 +68,7 @@ public class EventController {
     }
 
     @GetMapping("/detailsEvent/{eventId}")
-    public ResponseEntity<Response> getDetailsEvent(@PathVariable String eventId) {
+    public ResponseEntity<Response> getDetailsEventById(@PathVariable String eventId) {
         // Get event for details page
         Response response = eventService.getDetailsEventById(eventId);
 
