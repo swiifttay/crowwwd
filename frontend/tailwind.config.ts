@@ -22,7 +22,12 @@ const config: Config = {
         footer:
           "linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%)",
         login:
-          "radial-gradient(circle at center, rgba(5, 16, 33, 0.4) 20%, rgba(7, 23, 47, 1) 65%), url('/images/login-bg.jpg')",
+          "radial-gradient(circle at center, rgba(5, 16, 33, 0.4) 20%, rgba(6, 18, 38, 1) 65%), url('/images/login-bg.jpg')",
+        checkout:
+          "linear-gradient(to right, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.3) 90%), url('/videos/checkout.gif')",
+        failedpayment:
+          "linear-gradient(to right, rgba(0, 0, 0, 0.2) 10%, rgba(0, 0, 0, 0.3) 80%), url('/images/paymentfailed.jpg')"
+
       },
 
       fontFamily: {
@@ -51,6 +56,5 @@ const config: Config = {
   plugins: [],
 };
 export default config;
-
 
 //07172F

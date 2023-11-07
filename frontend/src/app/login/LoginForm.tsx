@@ -7,15 +7,18 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { authenticate } from "../axios/apiService";
 import { useFormState } from "../components/Login/FormContext";
+import { useGlobalState } from "../contexts/globalStateContext";
 
 type TFormValues = {
   username: string;
   password: string;
 };
+
 export default function LoginForm() {
   const router = useRouter();
-
+  const {storeToken} = useGlobalState();
   const [msg, setMsg] = useState("");
+
   const onHandleFormSubmit = async (data: TFormValues) => {
     setFormData((prev: any) => ({ ...prev, ...data }));
 
@@ -23,9 +26,10 @@ export default function LoginForm() {
     const response = await authenticate(data);
     // check if the status given is correct
     if (response.request?.status === 200) {
+      const { token } = response.data;
+      storeToken(token);
       setMsg("Loading...");
       router.push("/userprofile");
-
       // if it is incorrect,
     } else if (response?.status === 401) {
       setMsg("The username or password entered is incorrect.");

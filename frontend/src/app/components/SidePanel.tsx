@@ -3,7 +3,7 @@
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useState } from "react";
-import { useGlobalState } from "../globalStateContext";
+import { useGlobalState } from "../contexts/globalStateContext";
 
 const SidePanel = () => {
   const { isOpen, setIsOpen }: any = useGlobalState();
@@ -12,7 +12,7 @@ const SidePanel = () => {
   return (
     <div
       className={`absolute flex flex-col space-y-10 p-10 items-start text-white bg-theme-midnight bg-opacity-90 h-full z-50 w-1/2 transform transition-transform duration-300 ease-in-out ${
-        isOpen ? "translate-x-0" : "hidden"
+        isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
       onClick={() => setIsOpen(false)}
     >

@@ -1,31 +1,14 @@
 import axios from "axios";
+import { SeatsConfirmRequest } from "../components/Processing/ProcessingPage";
 // import { Event } from "../explore/page";
 // import { Concert } from "../explore/page";
 // import { User } from "../userprofile/page";
 
 const api = axios.create({
   //TODO: backend to provide
-  baseURL: "http://localhost:8080/api",
+  baseURL: `http://localhost:8080/api`,
 });
 
-// api interceptor to place the jwt token
-// api.interceptors.request.use(
-//   (config) => {
-//     const token = localStorage.getItem('token');
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   (error) => {
-//     console.log({error});
-//     if (error.response?.data?.status === 500) {
-//       console.log("here");
-//       localStorage.removeItem('token');
-//     }
-//     return Promise.reject(error)
-//   }
-// );
 api.interceptors.request.use(async (config) => {
   try {
     const token = localStorage.getItem("token");
@@ -46,7 +29,7 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.data?.status === 500) {
       console.log("Handling 500 error");
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
       // return a false value that shows that the token was invalid
       // return false;
     }
@@ -54,6 +37,7 @@ api.interceptors.response.use(
     return error.response;
   },
 );
+
 
 //Login
 export const authenticate = async (credentials: {
@@ -64,10 +48,6 @@ export const authenticate = async (credentials: {
   const response = await api.post("/auth/authenticate", credentials);
 
   // check if valid response
-  if (response.status === 200) {
-    const { token } = response.data;
-    localStorage.setItem("token", token);
-  }
 
   return response;
 };
@@ -130,13 +110,30 @@ export const getEvent = async (eventId: string) => {
       console.error(error.response);
     }
   }
-}
+};
 
 //User Profile Page
-
 export const getUserProfile = async () => {
   try {
     const response = await api.get("/profile/findProfile");
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const searchProfile = async (username: string) => {
+  try {
+    const response = await api.get(`/profile/searchProfile/${username}`);
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const addFriend = async (friendId: string) => {
+  try {
+    const response = await api.post(`/friend/${friendId}`);
     return response;
   } catch (error) {
     return Promise.reject(error);
@@ -188,30 +185,64 @@ export const updateFanRecords = async () => {
   }
 };
 
-export const updateUserProfile = async (updateDetails: {
-  firstName: string;
-  lastName: string;
-  username: string | null;
-  email: string;
-  oldPassword: string | null;
-  newPassword: string | null;
-  repeatNewPassword: string | null;
-  countryOfResidence: string;
-  city: string;
-  state: string;
-  address: string;
-  postalCode: string;
-  phoneNo: string;
-}) => {
+export const fetchOrderByOrderId = async (orderId: string) => {
   try {
-    const response = await api.put("/profile/updateProfile", updateDetails);
+    const response = await api.get(`/order/${orderId}`);
     return response;
-  } catch (error) {
+  } catch(error){
     return Promise.reject(error);
   }
-};
+
+}
+
+export const updateOrder = async (orderId: string, paymentId: string|undefined) => {
+  try {
+    const response = await api.put(`/order/${orderId}/payment/${paymentId}`);
+    return response;
+  } catch(error){
+    return Promise.reject(error);
+  }
+}
+
+export const fetchOrderByPaymentId = async (paymentId: string) => {
+  try {
+    const response = await api.get(`/orderPayment/${paymentId}`);
+    return response;
+  } catch(error){
+    return Promise.reject(error);
+  }
+}
+
+
+export const confirmSeats = async ({orderId, paymentId, userIdsAttending, noOfSurpriseTickets}: SeatsConfirmRequest) => {
+  try {
+    const response = await api.put("/seat", {orderId, paymentId, userIdsAttending, noOfSurpriseTickets});
+    return response;
+  } catch(error){
+    return Promise.reject(error);
+  }
+}
+
+  export const deleteOrderByOrderId = async (orderId:string|undefined) => {
+    try {
+      const response = await api.delete(`/order/${orderId}`)
+      return response;
+    } catch(error){
+      return Promise.reject(error);
+    }
+  }
+
+  export const approvedFriend = async () => {
+    try {
+      const response = await api.get("/approvedFriend")
+      return response;
+    } catch(error){
+      return Promise.reject(error);
+    }
+  }
 
 export const getCategoryPrice = async (eventId: string) => {
   const res = await api.get(`/event/${eventId}/event-seating-details`);
   return res.data;
-}
+};
+

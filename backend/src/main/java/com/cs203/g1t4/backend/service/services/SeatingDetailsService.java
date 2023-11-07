@@ -20,12 +20,12 @@ public interface SeatingDetailsService {
 
     Response getSeatingDetailsById(String eventId);
 
-    Category findCategoryFromEventSeatingDetails(EventSeatingDetails eventSeatingDetails, String category);
+    Category findCategoryFromEventSeatingDetails(EventSeatingDetails eventSeatingDetails, String category, String eventDate);
 
     //Public Helper methods
-    Response findAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats);
+    Response findAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats, String eventDate);
 
-    Response confirmAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString);
+    Response confirmAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, String eventDate);
 
-    Response deleteAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats);
+    Response deleteAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats, String eventDate);
 }
