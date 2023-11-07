@@ -5,6 +5,7 @@ import com.cs203.g1t4.backend.data.response.Response;
 import com.cs203.g1t4.backend.data.response.common.SuccessResponse;
 import com.cs203.g1t4.backend.data.response.venue.SingleVenueResponse;
 import com.cs203.g1t4.backend.models.Venue;
+import com.cs203.g1t4.backend.models.exceptions.InvalidArtistIdException;
 import com.cs203.g1t4.backend.models.exceptions.InvalidVenueException;
 import com.cs203.g1t4.backend.repository.VenueRepository;
 import com.cs203.g1t4.backend.service.services.S3Service;
@@ -24,12 +25,13 @@ public class VenueServiceImpl implements VenueService {
     private String bucketName;
 
     /**
-     * Finds a Venue from the repository based on the venueId
+     * Finds a Venue from the repository based on the venueId.
+     * If venue cannot be found in the repository, throws InvalidVenueException.
      * 
      * @param venueId a String object containing the venueId to be found
      * @return a SingleVenueResponse object containing the found Venue object
      */
-    public Response getVenue(String venueId) {
+    public Response getVenue(String venueId) throws InvalidVenueException {
         // find the venue from the repository
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new InvalidVenueException());
 
@@ -45,7 +47,8 @@ public class VenueServiceImpl implements VenueService {
     }
 
     /**
-     * 
+     * Creates a Venue object from a VenueRequest Object to be stored into repository
+     *
      * @param venueRequest a VenueRequest object containing the information of the new venue to be created
      * @param image a MultipartFile object containing the image of the venue
      * @return SuccessResponse "Venue has been created successfully"
@@ -79,13 +82,16 @@ public class VenueServiceImpl implements VenueService {
     }
 
     /**
-     * 
+     * Updates a Venue with new venue information and image based on its VenueId.
+     * If venue cannot be found in the repository, throws InvalidVenueException.
+     *
      * @param venueId a String object containing the venueId of the venue to be updated
      * @param venueRequest a VenueRequest object containing the new venue info to be updated
      * @param image a MultipartFile object containing the new image to be updated
      * @return a SingleVenueResponse object containing the updated Venue object
      */
-    public Response updateVenue(String venueId, VenueRequest venueRequest, MultipartFile image) {
+    public Response updateVenue(String venueId, VenueRequest venueRequest, MultipartFile image)
+            throws InvalidVenueException {
         
         // Find the venue within the venue repository
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new InvalidVenueException());
@@ -125,11 +131,13 @@ public class VenueServiceImpl implements VenueService {
     }
 
     /**
-     * 
+     * Removes a Venue from the repository based in its venueId.
+     * If venue cannot be found in the repository, throws InvalidVenueException.
+     *
      * @param venueId a String object containing the venueId of the venue to be removed
      * @return a SingleVenueResponse object containing the venue that was removed
      */
-    public Response removeVenue(String venueId) {
+    public Response removeVenue(String venueId) throws InvalidVenueException {
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new InvalidVenueException());
         venueRepository.deleteById(venueId);
 

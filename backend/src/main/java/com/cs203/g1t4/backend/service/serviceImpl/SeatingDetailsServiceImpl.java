@@ -31,6 +31,13 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
     private static final int NUM_SEATS_PER_ROW = 4;
     private static final int NUM_ROWS = 4;
 
+    /**
+     * Add Seating Details
+     *
+     * @param eventId a String object containing the eventId of the event
+     * @param request a SeatingDetailsRequest object holding new SeatingDetails information
+     * @return a SuccessResponse object containing "Seating Details have been added successfully"
+     */
     public SuccessResponse addSeatingDetails(String eventId, SeatingDetailsRequest request) {
 
         //Generates a seatingDetails for the specific event using the details from both the requestBody and the eventId.
@@ -44,7 +51,13 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
                 .build();
     }
 
-    public Response deleteSeatingDetails(String eventId) {
+    /**
+     * Delete Seating Details
+     *
+     * @param eventId a String object containing the eventId of the event
+     * @return a SeatingDetailsResponse object containing a seatingDetails object
+     */
+    public Response deleteSeatingDetails(String eventId) throws InvalidSeatingDetailsException {
 
         //Find the EventSeatingDetails from the repository, else throws InvalidSeatingDetailsException()
         EventSeatingDetails seatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
@@ -57,7 +70,14 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
                 .seatingDetails(seatingDetails)
                 .build();
     }
-    
+
+    /**
+     * Update Seating Details
+     *
+     * @param eventId a String object containing the eventId of the event
+     * @param request a SeatingDetailsRequest object holding updated SeatingDetails information
+     * @return a SeatingDetailsResponse object containing a seatingDetails object
+     */
     public Response updateSeatingDetails(String eventId, SeatingDetailsRequest request) {
 
         //Generates a seatingDetails for the specific event using the details from both the requestBody and the eventId
@@ -71,7 +91,13 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
                 .build();
     }
 
-    public Response getSeatingDetailsById(String eventId) {
+    /**
+     * Get Seating Details By eventId
+     *
+     * @param eventId a String object containing the eventId of the event
+     * @return a SeatingDetailsResponse object containing a seatingDetails object
+     */
+    public Response getSeatingDetailsById(String eventId) throws InvalidSeatingDetailsException{
 
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails seatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
@@ -83,7 +109,20 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
     }
 
     //Public Helper methods
-    public Response findAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats, String eventDate) {
+    /**
+     * Update Seating Details for FindSeats
+     *
+     * @param eventId a String object containing the eventId of the event
+     * @param category a String object containing the category of the event
+     * @param seatsInformationString a String object containing the available seats of the event
+     * @param numSeats an int containing the number of seats
+     * @param eventDate a String object containing the eventDate of the event
+     * @return a SeatingDetailsResponse object containing a seatingDetails object
+     */
+    public Response findAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString,
+                                                int numSeats, String eventDate)
+            throws InvalidSeatingDetailsException{
+
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
                 .orElseThrow(() -> new InvalidSeatingDetailsException(eventId));
@@ -103,6 +142,15 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
                 .build();
     }
 
+    /**
+     * Update Seating Details for ConfirmSeats
+     *
+     * @param eventId a String object containing the eventId of the event
+     * @param category a String object containing the category of the event
+     * @param seatsInformationString a String object containing the available seats of the event
+     * @param eventDate a String object containing the eventDate of the event
+     * @return a SeatingDetailsResponse object containing a seatingDetails object
+     */
     public Response confirmAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, String eventDate) {
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
@@ -122,6 +170,16 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
                 .build();
     }
 
+    /**
+     * Update Seating Details for CancelSeats
+     *
+     * @param eventId a String object containing the eventId of the event
+     * @param category a String object containing the category of the event
+     * @param seatsInformationString a String object containing the available seats of the event
+     * @param numSeats an int containing the number of seats
+     * @param eventDate a String object containing the eventDate of the event
+     * @return a SeatingDetailsResponse object containing a seatingDetails object
+     */
     public Response deleteAndUpdateSeatingDetails(String eventId, String category, String seatsInformationString, int numSeats, String eventDate) {
         //Find EventId in EventSeatingDetails, else throws InvalidSeatingDetailsException(eventId)
         EventSeatingDetails eventSeatingDetails = seatingDetailsRepository.findEventSeatingDetailsByEventId(eventId)
@@ -142,8 +200,18 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
                 .build();
     }
 
-    //Public Helper method
-    public Category findCategoryFromEventSeatingDetails(EventSeatingDetails eventSeatingDetails, String category, String eventDate) {
+    /**
+     * Find Category from eventSeatingDetails
+     *
+     * @param eventSeatingDetails a EventSeatingDetails object containing the eventSeatingDetails
+     * @param category a String object containing the category of the event
+     * @param eventDate a String object containing the eventDate of the event
+     * @return a SeatingDetailsResponse object containing a seatingDetails object
+     */
+    public Category findCategoryFromEventSeatingDetails(EventSeatingDetails eventSeatingDetails, String category,
+                                                        String eventDate)
+            throws InvalidCategoryException {
+
         //Find listOfCategories in eventSeatingDetails
         List<Category> listOfCategory = eventSeatingDetails.getCategories();
 
@@ -159,6 +227,14 @@ public class SeatingDetailsServiceImpl implements SeatingDetailsService {
     }
 
     //Private Helper methods
+    /**
+     * Get EventSeatingDetails from request
+     *
+     * @param eventId a String object containing the eventId
+     * @param request a SeatingDetailsRequest object containing the seatingDetailsRequest
+     * @param isUpdate a boolean object containing the boolean of whether it is for an update
+     * @return a SeatingDetailsResponse object containing a seatingDetails object
+     */
     private EventSeatingDetails getEventSeatingDetailsFromRequest(String eventId, SeatingDetailsRequest request, boolean isUpdate)
             throws InvalidEventIdException, InvalidSeatingDetailsException, DuplicateSeatingDetailsException {
 

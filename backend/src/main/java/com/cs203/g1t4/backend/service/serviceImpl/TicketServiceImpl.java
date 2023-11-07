@@ -24,7 +24,17 @@ public class TicketServiceImpl implements TicketService {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
-    public SingleTicketResponse createTicket(TicketRequest ticketRequest, String username) {
+    /**
+     * Creates a Ticket from the ticketRequest and username and saves it into repository
+     * If user cannot be found in the repository from token, throws InvalidTokenException.
+     * If user has already purchased more than 4 tickets for the concert, throws DuplicateTicketException.
+     *
+     * @param ticketRequest a TicketRequest object containing the new Ticket information
+     * @param username a String object containing the username of the token
+     * @return a SingleTicketResponse object containing the ticket that was created
+     */
+    public SingleTicketResponse createTicket(TicketRequest ticketRequest, String username)
+            throws InvalidTokenException, DuplicateTicketException{
         // Get the buying user's id
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());
@@ -47,7 +57,15 @@ public class TicketServiceImpl implements TicketService {
                 .build();
     }
 
-    public Response deleteTicket(String ticketId) {
+    /**
+     * Deletes a Ticket from the repository based on the ticketId
+     * If ticket cannot be found in the repository from token, throws InvalidTicketIdException.
+     * If user cannot be found in the repository from token, throws InvalidTokenException.
+     *
+     * @param ticketId a String object containing the ticketId of the ticket to be deleted
+     * @return a SingleTicketResponse object containing the ticket that was deleted
+     */
+    public Response deleteTicket(String ticketId) throws InvalidTicketIdException{
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new InvalidTicketIdException(ticketId));
@@ -59,7 +77,19 @@ public class TicketServiceImpl implements TicketService {
                 .build();
     }
 
-    public Response updateTicket(String ticketId, TicketRequest ticketRequest, String username) {
+
+    /**
+     * Updates a Ticket from the repository based on the ticketId using the TicketRequest
+     * If user cannot be found in the repository from token, throws InvalidTokenException.
+     * If ticket cannot be found in the repository from token, throws InvalidTicketIdException.
+     *
+     * @param ticketId a String object containing the ticketId of the ticket to be updated.
+     * @param ticketRequest a TicketRequest object containing the updated information of the ticket.
+     * @param username a String object containing the username of the user.
+     * @return a SingleTicketResponse object containing the ticket that was updated.
+     */
+    public Response updateTicket(String ticketId, TicketRequest ticketRequest, String username)
+            throws InvalidTokenException, InvalidTicketIdException{
         // Get the buying user's id
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());
@@ -86,7 +116,14 @@ public class TicketServiceImpl implements TicketService {
                 .build();
     }
 
-    public Response getTicketById(String ticketId) {
+    /**
+     * Get a Ticket from the repository based on the ticketId using the TicketRequest
+     * If ticket cannot be found in the repository from token, throws InvalidTicketIdException.
+     *
+     * @param ticketId a String object containing the ticketId of the ticket to be found.
+     * @return a SingleTicketResponse object containing the ticket that was updated.
+     */
+    public Response getTicketById(String ticketId) throws InvalidTicketIdException {
 
         // Obtain ticket from repository using its id
         Ticket ticket = ticketRepository.findById(ticketId)
@@ -98,7 +135,14 @@ public class TicketServiceImpl implements TicketService {
                 .build();
     }
 
-    public Response getTicketsByUser(String username) {
+    /**
+     * Get List of Tickets from the repository based on the user token
+     * If user cannot be found in the repository from token, throws InvalidTokenException.
+     *
+     * @param username a String object containing the username of the token
+     * @return a TicketResponse object containing the List of Tickets that was found.
+     */
+    public Response getTicketsByUser(String username) throws InvalidTokenException {
         // Get the buying user's id
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidTokenException());
@@ -112,7 +156,14 @@ public class TicketServiceImpl implements TicketService {
                 .build();
     }
 
-    public Response getTicketByEvent(String eventId) {
+    /**
+     * Get List of Tickets from the repository based on the eventId
+     * If event cannot be found in the repository from eventId, throws InvalidEventIdException.
+     *
+     * @param eventId a String object containing the eventId of the event
+     * @return a TicketResponse object containing the List of Tickets that was found.
+     */
+    public Response getTicketByEvent(String eventId) throws InvalidEventIdException {
 
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new InvalidEventIdException(eventId));
@@ -128,31 +179,31 @@ public class TicketServiceImpl implements TicketService {
     // helper methods
 
     // temporary method to create a seat value for the event
-    public String seatNoGenerator(String eventId) {
-        // first determine how many tickets are bought
-        List<Ticket> tickets = ticketRepository.findByEventId(eventId);
-
-        // fill 1 - 20 in each row first,
-        // then fill from a to j (total 10 rows) rows
-        // means each event seats 200 people
-
-        // first find the number of seats filled
-        int seatsFilled = tickets.size();
-        System.out.println(seatsFilled);
-
-        // check if this event still can buy tickets
-        if (seatsFilled == 200) {
-            throw new NoTicketsAvailableException(eventId);
-        }
-
-        // check what is the current row
-        int rowSeatsFilled = seatsFilled / 20;
-
-        // get new seatConfiguration
-        int newSeatNum = seatsFilled % 20 + 1;
-        char newSeatRow = (char) (seatsFilled % 20 < newSeatNum ? 'A' + rowSeatsFilled : 'A' + rowSeatsFilled + 1);
-
-        return String.format("%02d%s", newSeatNum, newSeatRow);
-    }
+//    public String seatNoGenerator(String eventId) {
+//        // first determine how many tickets are bought
+//        List<Ticket> tickets = ticketRepository.findByEventId(eventId);
+//
+//        // fill 1 - 20 in each row first,
+//        // then fill from a to j (total 10 rows) rows
+//        // means each event seats 200 people
+//
+//        // first find the number of seats filled
+//        int seatsFilled = tickets.size();
+//        System.out.println(seatsFilled);
+//
+//        // check if this event still can buy tickets
+//        if (seatsFilled == 200) {
+//            throw new NoTicketsAvailableException(eventId);
+//        }
+//
+//        // check what is the current row
+//        int rowSeatsFilled = seatsFilled / 20;
+//
+//        // get new seatConfiguration
+//        int newSeatNum = seatsFilled % 20 + 1;
+//        char newSeatRow = (char) (seatsFilled % 20 < newSeatNum ? 'A' + rowSeatsFilled : 'A' + rowSeatsFilled + 1);
+//
+//        return String.format("%02d%s", newSeatNum, newSeatRow);
+//    }
 
 }
